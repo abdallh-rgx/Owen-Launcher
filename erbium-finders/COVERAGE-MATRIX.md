@@ -1,0 +1,50 @@
+# Coverage Matrix — Erbium functions × Android versions
+
+function                                    |   5.41|   7.40|   9.41|  13.40|  17.50|  18.40|  19.10|  21.30|  22.40|  23.50|  30.00|
+--------------------------------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+ActivatePhase                               |   ·   |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+ApplyCharacterCustomization                 |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+CallPreReplication                          |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |  ✓✓  |   ·   |   ·   |   ·   |
+CanAffordToPlaceBuildableClass              |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+CloseActorChannel                           |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+CreateChannel                               |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+EnterAircraft                               |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+FinishWorldInitialization                   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+FinishedTargetSpline                        |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |  ✓✓  |   ·   |   ·   |   ·   |
+GameSessionPatch                            |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+GetMaxTickRate                              |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+GetNetMode                                  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+GetPlayerViewPoint                          |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |
+GetWorldContext                             |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |   ·   |   ·   |   ·   |
+GiveAbility                                 |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+GiveAbilityAndActivateOnce                  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+HandleMatchHasStarted                       |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+HandlePostSafeZonePhaseChanged              |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+InitializeBuildingActor                     |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+InitializeBuildingActor_next                |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+InitializePlayerGameplayAbilities           |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+InternalTryActivateAbility                  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+IsNetRelevantForVft                         |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+KickPlayer                                  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+LoadPlayset                                 |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+NotifyGameMemberAdded                       |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |   ·   |
+OnRep_ZiplineState                          |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |
+PickTeam                                    |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+PreSendUpdate                               |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |  ✓✓  |
+RemoveFromAlivePlayers                      |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |   ·   |
+ReplaceBuildingActor                        |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+ReplicateActor                              |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+SendDestructionInfo                         |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |
+SendRequestNow                              |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+ServerReplicateActors                       |   ·   |   ·   |   ·   |  ✓✓  |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+SetChannelActorForDestroy                   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |   ·   |   ·   |
+SetPickupTarget                             |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+SetState                                    |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+SetWorld                                    |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |   ·   |   ·   |
+ShouldAllowServerSpawnDecoVft               |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+SpawnDecoVft                                |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+StartAircraftPhase                          |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+StartStreamingAdditionalPlaylistLevel       |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
+StreamInMyBuilding                          |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+TickFlush                                   |   ·   |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |
+UnEquipVehicleWeapon                        |   ·   |   ·   |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |  ✓✓  |   ·   |
