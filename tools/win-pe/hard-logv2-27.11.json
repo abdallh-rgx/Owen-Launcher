@@ -1,0 +1,65 @@
+{
+ "FindFlushDormancy": [],
+ "FindStartBecomingDormant": [],
+ "FindEnterAircraft": [],
+ "FindHandleMatchHasStarted": [],
+ "FindSpawnInitialSafeZone": [],
+ "FindSelectAndSetupMyBuildingLevel": [],
+ "FindUpdateSafeZonesPhase": [],
+ "FindPreSendUpdate": [],
+ "FindSendClientAdjustment": [],
+ "FindGetWorldContext": [],
+ "FindQueueStatEvent": [],
+ "FindClientHasInitializedLevelFor": [],
+ "FindIsNetReady": [],
+ "FindInitializeFlightPath": [],
+ "FindPayBuildableClassPlacementCost": [],
+ "FindCantBuild": [
+  {
+   "string": "-skippatchcheck -buildidoverride -MCPRegion -windowed -fullscreen -setres -res -winx -winy -AUTH_LOGIN -AUTH_PASSWORD -AUTH_TYPE -subgame -noepicportal -epicportal -epicapp -epicenv -invitesession -invitefrom -party_joininfo_token -replay -buildlabeloverride -livespectator -replaysequencemode -replaytravellog -unicornreplaytravellog -tournamentmode -purgatorymallocproxy -culture -http -nobe -fromb",
+   "desc_rva": "0xbe66a98",
+   "refs": [
+    "0x34c4e77"
+   ],
+   "funcs": {
+    "0x34c4bdc": [
+     1,
+     811,
+     [
+      "0x34c4e77"
+     ]
+    ]
+   }
+  },
+  {
+   "string": "urn:epic:cfg:build-id\u0000\u0000\u0000NumAudioFramesDropped\u0000\u0000\u0000TimeElapsedUntilReady\u0000\u0000\u0000NumTimesMovedBackward\u0000\u0000\u0000NumBytesStreamedAudio\u0000\u0000\u0000NumVideoFramesDropped\u0000\u0000\u0000Electra.FinalMetrics\u0000\u0000\u0000\u0000NumTimesMovedForward\u0000\u0000\u0000\u0000NumQualityUpswitches\u0000\u0000\u0000\u0000FinalVideoResolution\u0000\u0000\u0000\u0000SubtitlesLastError\u0000\u0000PlayPosAtStart\u0000\u0000MessageHistory\u0000\u0000NumTimesLooped\u0000\u0000MipGeneration\u0000\u0000\u0000Stairs\u0000\u0000Floor\u0000\u0000\u0000Wall\u0000\u0000\u0000\u0000Roof\u0000\u0000\u6f42\u656es\u0000\u6843\u7461\u0000\u0000\u0000\u0000\u5508\u4193\u0001\u0000\u49f8\u4800\u0001\u0000\u484c\u4800\u0001\u0000\u4878\u4800\u0001\u0000\ucb30\u40c8\u0001\u0000\ubc80\u4435\u0001\u0000\u0210\u4435\u0001\u0000\ubc70\u4435\u0001\u0000\ubc60\u4435\u0001\u0000",
+   "desc_rva": "0xa6ee108",
+   "refs": [
+    "0x17dcfa1",
+    "0x4dfe438"
+   ],
+   "funcs": {
+    "0x17dcd1c": [
+     1,
+     1273,
+     [
+      "0x17dcfa1"
+     ]
+    ],
+    "0x4dfe1b0": [
+     1,
+     1122,
+     [
+      "0x4dfe438"
+     ]
+    ]
+   }
+  },
+  {
+   "string": "urn:epic:cfg:build-id\u0000\u0000\u0000NumAudioFramesDropped\u0000\u0000\u0000TimeElapsedUntilReady\u0000\u0000\u0000NumTimesMovedBackward\u0000\u0000\u0000NumBytesStreamedAudio\u0000\u0000\u0000NumVideoFramesDropped\u0000\u0000\u0000Electra.FinalMetrics\u0000\u0000\u0000\u0000NumTimesMovedForward\u0000\u0000\u0000\u0000NumQualityUpswitches\u0000\u0000\u0000\u0000FinalVideoResolution\u0000\u0000\u0000\u0000SubtitlesLastError\u0000\u0000PlayPosAtStart\u0000\u0000MessageHistory\u0000\u0000NumTimesLooped\u0000\u0000MipGeneration\u0000\u0000\u0000Stairs\u0000\u0000Floor\u0000\u0000\u0000Wall\u0000\u0000\u0000\u0000Roof\u0000\u0000\u6f42\u656es\u0000\u6843\u7461\u0000\u0000\u0000\u0000\u5508\u4193\u0001\u0000\u49f8\u4800\u0001\u0000\u484c\u4800\u0001\u0000\u4878\u4800\u0001\u0000\ucb30\u40c8\u0001\u0000\ubc80\u4435\u0001\u0000\u0210\u4435\u0001\u0000\ubc70\u4435\u0001\u0000\ubc60\u4435\u0001\u0000",
+   "desc_rva": "0xbe360a8",
+   "refs": [],
+   "funcs": {}
+  }
+ ]
+}

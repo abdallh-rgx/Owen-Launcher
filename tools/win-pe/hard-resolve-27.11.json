@@ -1,0 +1,71 @@
+{
+ "FindFlushDormancy": [],
+ "FindStartBecomingDormant": [],
+ "FindUpdateSafeZonesPhase": [],
+ "FindPreSendUpdate": [],
+ "FindSendClientAdjustment": [],
+ "FindGetWorldContext": [],
+ "FindQueueStatEvent": [],
+ "FindSetGamePhase": [
+  {
+   "string": "UFortGameStateComponent_BattleRoyaleGamePhaseLogic::SetGamePhase",
+   "func": "0xa4bd354",
+   "size": 2208,
+   "xrefs": 2,
+   "ref_rvas": [
+    "0xa4bd408",
+    "0xa4bd540",
+    "0xb7297e7"
+   ]
+  },
+  {
+   "string": "UFortGameStateComponent_BattleRoyaleGamePhaseLogic::SetGamePhase",
+   "func": "0xb72917c",
+   "size": 5380,
+   "xrefs": 1,
+   "ref_rvas": [
+    "0xa4bd408",
+    "0xa4bd540",
+    "0xb7297e7"
+   ]
+  }
+ ],
+ "FindInitializeFlightPath": [],
+ "FindFinishedTargetSpline": [
+  {
+   "string": "AFortPickup::FinishedTargetSpline",
+   "func": "0x5cc414e",
+   "size": 2688,
+   "xrefs": 1,
+   "ref_rvas": [
+    "0x5cc456d"
+   ]
+  }
+ ],
+ "FindClientHasInitializedLevelFor": [],
+ "FindIsNetReady": [],
+ "GIs-anchor": [],
+ "FindEnterAircraft": [],
+ "FindHandleMatchHasStarted": [],
+ "FindSpawnInitialSafeZone": [],
+ "FindSelectAndSetupMyBuildingLevel": [],
+ "FindPickSupplyDropLocation": [
+  {
+   "string": "AFortAthenaMapInfo::PickSupplyDropLocation",
+   "func": "0x9073524",
+   "size": 5088,
+   "xrefs": 6,
+   "ref_rvas": [
+    "0x9073b93",
+    "0x9073c4e",
+    "0x9073cb7",
+    "0x90744e4",
+    "0x90747e6",
+    "0x9074822"
+   ]
+  }
+ ],
+ "FindPayBuildableClassPlacementCost": [],
+ "FindCantBuild": [],
+ "FindOnRep_ZiplineState": []
+}

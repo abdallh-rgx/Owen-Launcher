@@ -1,0 +1,773 @@
+{
+ "FindGIsClient": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AllowCommandletRendering"
+   },
+   {
+    "wide": true,
+    "s": "llowCommandletRendering"
+   }
+  ]
+ },
+ "FindGIsServer": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AllowCommandletRendering"
+   },
+   {
+    "wide": true,
+    "s": "llowCommandletRendering"
+   }
+  ]
+ },
+ "FindGetNetMode": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "PREPHYSBONES"
+   }
+  ]
+ },
+ "FindGetWorldContext": {
+  "strings": [],
+  "custom": [
+   "if (!Result) Result = RT::WorldContextCalleeFrom(FindCreateNetDriverWorldContext()); // LDRSW + ADD LSL#3 \u062d\u0644\u0642\u0629 WorldContexts"
+  ]
+ },
+ "FindCreateNetDriver": {
+  "strings": []
+ },
+ "FindCreateNetDriverWorldContext": {
+  "strings": []
+ },
+ "FindInitListen": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "%s IpNetDriver listening on port %i"
+   }
+  ]
+ },
+ "FindSetWorld": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AOnlineBeaconHost::InitHost failed"
+   }
+  ],
+  "native": "K2_SetWorldLocation"
+ },
+ "FindTickFlush": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_NetTickFlush"
+   }
+  ]
+ },
+ "FindServerReplicateActors": {
+  "strings": [],
+  "custom": [
+   "if (!Result) Result = RT::BigCallerOf(FindReplicateActor(), 4); // \u0623\u0636\u062e\u0645 \u0645\u0633\u062a\u062f\u0639\u064d \u0644\u0640 ReplicateActor"
+  ]
+ },
+ "FindSendRequestNow": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "MCP-Profile: Dispatching request to %s"
+   },
+   {
+    "wide": true,
+    "s": "MCP-Profile: Dispatching request to %s - ContextCredentials: %s"
+   }
+  ]
+ },
+ "FindGetMaxTickRate": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Hitching by request!"
+   }
+  ]
+ },
+ "FindGiveAbility": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "GiveAbilityAndActivateOnce called on ability %s on the client, not allowed!"
+   }
+  ],
+  "native": "K2_GiveAbility"
+ },
+ "FindConstructAbilitySpec": {
+  "strings": [],
+  "custom": [
+   "if (!Result) { uint64_t _g = FindGiveAbility(); if (_g) { uint64_t _c[32]; uint32_t _n = RT::BLCallees(_g, _c, 32, 0xC0); if (_n >= 2) Result = _c[_n - 2]; } } // ConstructAbilitySpec \u0645\u0646 \u0636\u0645\u0646 callees \u0627\u0644\u0640 GiveAbility"
+  ]
+ },
+ "FindInternalTryActivateAbility": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "InternalTryActivateAbility called with invalid Handle! ASC: %s. AvatarActor: %s"
+   }
+  ]
+ },
+ "FindApplyCharacterCustomization": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AFortPlayerState::ApplyCharacterCustomization - Failed initialization, using default parts. Player Controller: %s PlayerState: %s, HeroId: %s"
+   }
+  ]
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "FortGameModeAthena: No MegaStorm on SafeZone[%d].  GridCellThickness is less than 1.0."
+   }
+  ]
+ },
+ "FindSpawnLoot": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "ABuildingContainer::SpawnLoot() called on %s (%s)..."
+   },
+   {
+    "wide": true,
+    "s": "ABuildingContainer::SpawnLoot() called on %s (%s)"
+   },
+   {
+    "wide": true,
+    "s": "ABuildingContainer::SpawnLoot() >>> START called on %s (%s)"
+   }
+  ]
+ },
+ "FindFinishedTargetSpline": {
+  "strings": [
+   {
+    "wide": false,
+    "s": "FinishedTargetSpline"
+   }
+  ]
+ },
+ "FindPickTeam": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "PickTeam for [%s] used beacon value [%d]"
+   },
+   {
+    "wide": true,
+    "s": "PickTeam for [%s] used beacon value [%s]"
+   }
+  ]
+ },
+ "FindCantBuild": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Cannot build; hitting build limit"
+   }
+  ]
+ },
+ "FindReplaceBuildingActor": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_Fort_BuildingSMActorReplaceBuildingActor"
+   }
+  ]
+ },
+ "FindKickPlayer": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Validation Failure: %s. kicking %s"
+   },
+   {
+    "wide": true,
+    "s": "Failed to kick player"
+   }
+  ],
+  "native": "ServerKickPlayer"
+ },
+ "FindEncryptionPatch": {
+  "strings": []
+ },
+ "FindRemoveInventoryItem": {
+  "strings": []
+ },
+ "FindRemoveInventoryStateValue": {
+  "strings": []
+ },
+ "FindSetInventoryStateValue": {
+  "strings": []
+ },
+ "FindOnRep_ZiplineState": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "ZIPLINES!! Role(%s)  AFortPlayerPawn::OnRep_ZiplineState ZiplineState.bIsZiplining=%d"
+   },
+   {
+    "wide": true,
+    "s": "ZIPLINES!! GetLocalRole()(%s)  AFortPlayerPawn::OnRep_ZiplineState ZiplineState.bIsZiplining=%d"
+   },
+   {
+    "wide": false,
+    "s": "AFortPlayerPawn::HandleZiplineStateChanged"
+   }
+  ],
+  "native": "OnRep_ZiplineState"
+ },
+ "FindGiveAbilityAndActivateOnce": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "GiveAbilityAndActivateOnce called on ability %s on the client, not allowed!"
+   }
+  ],
+  "native": "K2_GiveAbilityAndActivateOnce"
+ },
+ "FindClearAbility": {
+  "strings": [],
+  "native": "ClearAbility"
+ },
+ "FindGameSessionPatch": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Gamephase Step: %s"
+   },
+   {
+    "wide": true,
+    "s": "GameSession"
+   }
+  ]
+ },
+ "FindRemoveFromAlivePlayers": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "FortGameModeAthena: Player [%s] removed from alive players list (Team [%d]).  Player count is now [%d].  Team count is now [%d]."
+   },
+   {
+    "wide": true,
+    "s": "FortGameModeAthena: Player [%s] removed from alive players list (Team [%d]).  Player count is now [%d]. PlayerBots count is now [%d]. Team count is now [%d]."
+   },
+   {
+    "wide": true,
+    "s": "FortGameModeAthena::RemoveFromAlivePlayers: Player [%s] PC [%s] removed from alive players list (Team [%d]).  Player count is "
+   }
+  ]
+ },
+ "FindStartAircraftPhase": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STARTAIRCRAFT"
+   },
+   {
+    "wide": true,
+    "s": "STAT_StartAircraftPhase"
+   }
+  ]
+ },
+ "FindSetPickupItems": {
+  "strings": []
+ },
+ "FindCallPreReplication": {
+  "strings": [],
+  "custom": [
+   "if (!Result) Result = RT::VirtCallCalleeFrom(FindReplicateActor()); // \u0646\u062f\u0627\u0621 \u0627\u0641\u062a\u0631\u0627\u0636\u064a \u0648\u0627\u062d\u062f \u0635\u063a\u064a\u0631 \u0645\u0646 ReplicateActor: Actor->PreReplication"
+  ]
+ },
+ "FindSendClientAdjustment": {
+  "strings": []
+ },
+ "FindSetChannelActor": {
+  "strings": []
+ },
+ "FindSetChannelActorForDestroy": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "SetChannelActorForDestroy: Channel %d. NetGUID <%s> Path: %s. Bits: %d"
+   }
+  ]
+ },
+ "FindSendDestructionInfo": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_NetSendDestructionInfo"
+   }
+  ]
+ },
+ "FindCreateChannel": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_NetConnection_CreateChannelByName"
+   }
+  ]
+ },
+ "FindReplicateActor": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_NetReplicateActorTime"
+   }
+  ]
+ },
+ "FindCloseActorChannel": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "UActorChannel::Close: ChIndex: %d, Actor: %s"
+   },
+   {
+    "wide": true,
+    "s": "UActorChannel::Close: ChIndex: %d, Actor: %s, Reason: %s"
+   }
+  ]
+ },
+ "FindClientHasInitializedLevelFor": {
+  "strings": []
+ },
+ "FindStartBecomingDormant": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "StartBecomingDormant: %s"
+   },
+   {
+    "wide": true,
+    "s": "StartBecomingDormant: %s"
+   }
+  ]
+ },
+ "FindFlushDormancy": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "FlushDormancy: %s. Connection: %s"
+   },
+   {
+    "wide": true,
+    "s": "FlushDormancy: %s. Connection: %s"
+   }
+  ]
+ },
+ "FindEnterAircraft": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "EnterAircraft: [%s] is attempting to enter aircraft after having already exited."
+   },
+   {
+    "wide": true,
+    "s": "EnterAircraft: [%s] is attempting to enter aircraft after having already exited."
+   }
+  ]
+ },
+ "FindGetPlayerViewPoint": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "%s failed to spawn a pawn"
+   }
+  ]
+ },
+ "FindGetNamePool": {
+  "strings": []
+ },
+ "FindIsNetReady": {
+  "strings": []
+ },
+ "FindSpawnInitialSafeZone": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "FortGameModeAthena::SpawnInitialSafeZone bShouldSpawnSafeZoneIndicator == false, skipping spawning Safe Zone Indicator"
+   },
+   {
+    "wide": true,
+    "s": "FortGameModeAthena::SpawnInitialSafeZone bShouldSpawnSafeZoneIndicator == false, skipping spawning Safe Zone Indicator"
+   }
+  ]
+ },
+ "FindUpdateSafeZonesPhase": {
+  "strings": [
+   {
+    "wide": false,
+    "s": "AFortGameModeAthena::UpdateSafeZonesPhase"
+   },
+   {
+    "wide": true,
+    "s": "AFortGameModeAthena::UpdateSafeZonesPhase"
+   }
+  ]
+ },
+ "FindUpdateIrisReplicationViews": {
+  "strings": []
+ },
+ "FindPreSendUpdate": {
+  "strings": [
+   {
+    "wide": false,
+    "s": "ReplicationSystem_PreSendUpdate"
+   },
+   {
+    "wide": true,
+    "s": "ReplicationSystem_PreSendUpdate"
+   }
+  ]
+ },
+ "FindHandleMatchHasStarted": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AFortGameModeAthena::HandleMatchHasStarted: NumPlayers: %i"
+   },
+   {
+    "wide": true,
+    "s": "AFortGameModeAthena::HandleMatchHasStarted: Playlist: %s, NumPlayers: %i"
+   },
+   {
+    "wide": true,
+    "s": "AFortGameModeAthena::HandleMatchHasStarted: NumPlayers: %i"
+   }
+  ]
+ },
+ "FindInitializeBuildingActor": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "STAT_Fort_BuildingSMActorInitializeBuildingActor"
+   }
+  ]
+ },
+ "FindPostInitializeSpawnedBuildingActor": {
+  "strings": []
+ },
+ "FindInitializeFlightPath": {
+  "strings": [],
+  "native": "InitializeFlightPath",
+  "native_climb": true
+ },
+ "FindReset": {
+  "strings": []
+ },
+ "FindNotifyGameMemberAdded": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "%s: Adding Player state with UniqueId: %s, in team: %d, and in squad: %d"
+   },
+   {
+    "wide": true,
+    "s": "NotifyGameMemberAdded"
+   }
+  ]
+ },
+ "FindSetGamePhase": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "SetGamePhase"
+   }
+  ]
+ },
+ "FindPayBuildableClassPlacementCost": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Failed to remove item %s during pay building costs, item duplicated!"
+   }
+  ]
+ },
+ "FindCanAffordToPlaceBuildableClass": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Resource not found! Resource Type is %i, might be invalid"
+   }
+  ]
+ },
+ "FindCanPlaceBuildableClassInStructuralGrid": {
+  "strings": []
+ },
+ "FindSetState": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Time from Setup to InProgress: %6.2fms"
+   }
+  ]
+ },
+ "FindMinigameSettingsBuilding__BeginPlay": {
+  "strings": []
+ },
+ "FindPickSupplyDropLocation": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "PickSupplyDropLocation: Failed to find valid location using rejection.  Using safe zone location."
+   },
+   {
+    "wide": false,
+    "s": "AFortAthenaMapInfo::PickSupplyDropLocation"
+   },
+   {
+    "wide": false,
+    "s": "PickSupplyDropLocation"
+   }
+  ]
+ },
+ "FindSetPickupTarget": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "%s: Attempted to spawn non-world item %s!"
+   },
+   {
+    "wide": true,
+    "s": "Attempted to spawn non-world item %s!"
+   }
+  ]
+ },
+ "FindInitializePlayerGameplayAbilities": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "InitializePlayerGameplayAbilities with invalid PlayerStateOrProxy!"
+   }
+  ]
+ },
+ "FindListenCall": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "LoadMap: failed to Listen(%s)"
+   }
+  ]
+ },
+ "FindQueueStatEvent": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "UFortQuestManager::QueueStatEvent: %s tried to queue a stat event, but the player controller is null. \\n\\t Event: %s"
+   },
+   {
+    "wide": true,
+    "s": "QueueStatEvent: %s"
+   }
+  ]
+ },
+ "FindFinishWorldInitialization": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Can't find a FortAthenaMapInfo placed in map.  Skipping warmup and aircraft phases."
+   },
+   {
+    "wide": true,
+    "s": "bEnableMeshNetwork"
+   }
+  ]
+ },
+ "FindActivatePhase": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "[ASpecialEventScript::ActivatePhase()] [%s] New Phase [%s] OldPhase [%s] SequenceTimeOffset [%f]"
+   },
+   {
+    "wide": true,
+    "s": "[ASpecialEventScript::ActivatePhase()] [%s] New Phase [%s] OldPhase [%s]"
+   }
+  ],
+  "native": "ActivatePhase"
+ },
+ "FindSetIsDoorOpen": {
+  "strings": []
+ },
+ "FindSelectAndSetupMyBuildingLevel": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "ABuildingFoundation::SelectAndSetupMyBuildingLevel - Cannot get WorldManager!!"
+   },
+   {
+    "wide": true,
+    "s": "ABuildingFoundation::SelectAndSetupMyBuildingLevel"
+   }
+  ]
+ },
+ "FindStreamInMyBuilding": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "&ABuildingFoundation::OnLevelStreamedIn"
+   },
+   {
+    "wide": true,
+    "s": "%s.%s trying to load invalid level %s"
+   }
+  ]
+ },
+ "FindStartStreamingAdditionalPlaylistLevel": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "PLAYLIST: Failed to locate valid level to be streamed %s"
+   }
+  ]
+ },
+ "FindUnEquipVehicleWeapon": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "UFortVehicleSeatWeaponComponent::UnEquipVehicleWeapon failed to cleanup WeaponSeatDefinition.VehicleGrantedWeaponItem properly. PawnValid:%d"
+   }
+  ]
+ },
+ "Inline_ToDeathCauseNative": {
+  "strings": [],
+  "native": "ToDeathCause"
+ },
+ "Inline_ServerOnAttemptInteract": {
+  "strings": [],
+  "native": "ServerOnAttemptInteract"
+ },
+ "Inline_OnPawnEnterSeatFunc": {
+  "strings": [],
+  "native": "OnPawnEnterSeat"
+ },
+ "Inline_K2_OnUnEquipCaller": {
+  "strings": [],
+  "native": "K2_OnUnEquip"
+ },
+ "Inline_OnDamageServerCaller": {
+  "strings": [],
+  "native": "OnDamageServer"
+ },
+ "Inline_ClientOnPawnDiedCaller": {
+  "strings": [],
+  "native": "ClientOnPawnDied"
+ },
+ "Inline_OnAuthorityRandomUpgradeAppliedCaller": {
+  "strings": [],
+  "native": "OnAuthorityRandomUpgradeApplied"
+ },
+ "Inline_EquipVehicleWeaponFunc": {
+  "strings": [],
+  "native": "EquipVehicleWeapon"
+ },
+ "Inline_UnequipVehicleWeaponFunc": {
+  "strings": [],
+  "native": "UnEquipVehicleWeapon"
+ },
+ "__VT_DELTAS__": {
+  "FindIsNetReady": {
+   "anchor": "FindFlushDormancy",
+   "delta": -17,
+   "note": "proven 11/11 Android + Win 27.11 (5 vtables agree)"
+  },
+  "FindFlushDormancy": {
+   "anchor": "FindIsNetReady",
+   "delta": 17,
+   "note": "reverse of above"
+  },
+  "FindStartBecomingDormant": {
+   "anchor": "FindCloseActorChannel",
+   "delta": 11,
+   "note": "documented Android 10 versions"
+  },
+  "FindCloseActorChannel": {
+   "anchor": "FindStartBecomingDormant",
+   "delta": -11,
+   "note": "reverse"
+  },
+  "FindInitListen": {
+   "anchor": "FindTickFlush",
+   "delta": -15,
+   "note": "documented Android 6 versions"
+  },
+  "FindTickFlush": {
+   "anchor": "FindInitListen",
+   "delta": 15,
+   "note": "reverse"
+  },
+  "FindSendClientAdjustment": {
+   "anchor": "FindReset",
+   "delta": 270,
+   "delta_new": 276,
+   "since": 23.0,
+   "note": "Win 21.30=+270 (2 vtables), Win 27.11=+276 (4 vtables)"
+  },
+  "FindReset": {
+   "anchor": "FindSendClientAdjustment",
+   "delta": -270,
+   "delta_new": -276,
+   "since": 23.0,
+   "note": "reverse"
+  },
+  "FindCanAffordToPlaceBuildableClass": {
+   "anchor": "FindSendClientAdjustment",
+   "delta": 361,
+   "delta_new": 373,
+   "since": 23.0,
+   "note": "Win 21.30=+361 (3 vtables); 27.11=PayBuildable\u2212SCA=385 \u0648CanAfford=PayBuildable\u221212"
+  },
+  "FindPayBuildableClassPlacementCost": {
+   "anchor": "FindCanAffordToPlaceBuildableClass",
+   "delta": 12,
+   "note": "Win 21.30: 948\u2212936=+12 (3 vtables consistent); 27.11 consistent with \u221212"
+  }
+ },
+ "FindIsNetRelevantForVft": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Actor %s / %s has no root component in AActor::IsNetRelevantFor. (Make bAlwaysRelevant=true?)"
+   }
+  ]
+ },
+ "FindSpawnDecoVft": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "AFortTrapTool::SpawnDeco World is tearing down.  Early-ing out."
+   }
+  ]
+ },
+ "FindShouldAllowServerSpawnDecoVft": {
+  "strings": [
+   {
+    "wide": true,
+    "s": "Tried to place deco item %s %s that isn't actually in player inventory!"
+   }
+  ]
+ },
+ "Inline_GetSparseClassData": {
+  "strings": [],
+  "custom": [
+   "if (!Result) { uint64_t _c = FindCantBuild(); if (!_c) _c = FindCanAffordToPlaceBuildableClass(); Result = RT::TinySparseAccessorFrom(_c); } // \u0634\u0643\u0644 \u0627\u0644\u0644\u0627\u062d\u0642 \u0627\u0644\u0635\u063a\u064a\u0631: LDRB W,[X0]; LDR X0,[X0]; RET"
+  ]
+ },
+ "Inline_AttemptDeriveFromURL": {
+  "strings": [],
+  "custom": [
+   "if (!Result) Result = RT::BigCalleeFrom(FindGetNetMode(), 3); // \u0623\u0636\u062e\u0645 callee \u0644\u0640 GetNetMode (7-8 \u062d\u0641\u0638\u0627\u062a \u0639\u0644\u0649 x64) \u2014 \u0645\u0646\u0637\u0642 PatchAllNetModes \u0646\u0641\u0633\u0647"
+  ]
+ }
+}

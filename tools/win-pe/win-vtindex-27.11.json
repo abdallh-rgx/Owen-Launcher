@@ -1,0 +1,209 @@
+{
+ "FindApplyCharacterCustomization": {
+  "func": "0xa0b82b4",
+  "vts": []
+ },
+ "FindCallPreReplication": {
+  "func": "0x70470b8",
+  "vts": []
+ },
+ "FindCanPlaceBuildableClassInStructuralGrid": {
+  "func": "0x9161cf0",
+  "vts": []
+ },
+ "FindCantBuild": {
+  "func": "0x9980900",
+  "vts": []
+ },
+ "FindClientHasInitializedLevelFor": {
+  "func": "0x73d8370",
+  "vts": [
+   {
+    "vt": "0xc4a94d8",
+    "idx": 2223,
+    "n": 2664
+   },
+   {
+    "vt": "0xd2cffb0",
+    "idx": 120,
+    "n": 1482
+   },
+   {
+    "vt": "0xd3f33e8",
+    "idx": 115,
+    "n": 204
+   }
+  ]
+ },
+ "FindConstructAbilitySpec": {
+  "func": "0x7f255e8",
+  "vts": []
+ },
+ "FindCreateNetDriverWorldContext": {
+  "func": "0x2dcc396",
+  "vts": []
+ },
+ "FindGetMaxTickRate": {
+  "func": "0x17580c4",
+  "vts": [
+   {
+    "vt": "0xc5e20b8",
+    "idx": 98,
+    "n": 175
+   }
+  ]
+ },
+ "FindGetNamePool": {
+  "func": "0x13967e0",
+  "vts": []
+ },
+ "FindGetWorldContext": {
+  "func": "0x14187ac",
+  "vts": []
+ },
+ "FindGiveAbility": {
+  "func": "0x7eed830",
+  "vts": []
+ },
+ "FindInitListen": {
+  "func": "0x76e8f32",
+  "vts": []
+ },
+ "FindInitializeFlightPath": {
+  "func": "0x906efe0",
+  "vts": []
+ },
+ "FindKickPlayer": {
+  "func": "0x34cd388",
+  "vts": [
+   {
+    "vt": "0xc3800d8",
+    "idx": 1082,
+    "n": 1823
+   },
+   {
+    "vt": "0xc3800d8",
+    "idx": 1653,
+    "n": 1823
+   }
+  ]
+ },
+ "FindNotifyGameMemberAdded": {
+  "func": "0x19f2390",
+  "vts": []
+ },
+ "FindPreSendUpdate": {
+  "func": "0x67d25f4",
+  "vts": []
+ },
+ "FindReset": {
+  "func": "0x74be864",
+  "vts": [
+   {
+    "vt": "0xc38c7b8",
+    "idx": 1132,
+    "n": 1955
+   },
+   {
+    "vt": "0xc3a64d0",
+    "idx": 213,
+    "n": 670
+   },
+   {
+    "vt": "0xc3a79e8",
+    "idx": 492,
+    "n": 775
+   },
+   {
+    "vt": "0xc65fa78",
+    "idx": 321,
+    "n": 1250
+   },
+   {
+    "vt": "0xc83f280",
+    "idx": 525,
+    "n": 1455
+   },
+   {
+    "vt": "0xcbb37d0",
+    "idx": 463,
+    "n": 1242
+   }
+  ]
+ },
+ "FindSendClientAdjustment": {
+  "func": "0x74bf52c",
+  "vts": [
+   {
+    "vt": "0xc38c7b8",
+    "idx": 1408,
+    "n": 1955
+   },
+   {
+    "vt": "0xc3a64d0",
+    "idx": 489,
+    "n": 670
+   },
+   {
+    "vt": "0xc3a79e8",
+    "idx": 768,
+    "n": 775
+   },
+   {
+    "vt": "0xc65fa78",
+    "idx": 597,
+    "n": 1250
+   },
+   {
+    "vt": "0xc83f280",
+    "idx": 801,
+    "n": 1455
+   },
+   {
+    "vt": "0xcbb37d0",
+    "idx": 739,
+    "n": 1242
+   }
+  ]
+ },
+ "FindSetChannelActor": {
+  "func": "0x4053d30",
+  "vts": [
+   {
+    "vt": "0xdb3b068",
+    "idx": 36,
+    "n": 49
+   }
+  ]
+ },
+ "FindSetPickupItems": {
+  "func": "0x9b82444",
+  "vts": [
+   {
+    "vt": "0xc363d10",
+    "idx": 263,
+    "n": 848
+   },
+   {
+    "vt": "0xc363d10",
+    "idx": 734,
+    "n": 848
+   }
+  ]
+ },
+ "FindSetWorld": {
+  "func": "0x220c84c",
+  "vts": [
+   {
+    "vt": "0xc4a94d8",
+    "idx": 2371,
+    "n": 2664
+   },
+   {
+    "vt": "0xc4a94d8",
+    "idx": 2637,
+    "n": 2664
+   }
+  ]
+ }
+}

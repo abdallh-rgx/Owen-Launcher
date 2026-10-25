@@ -1,0 +1,132 @@
+{
+ "exe": "binaries/win/FortniteClient-27.11.exe",
+ "version": "27.11",
+ "found": {
+  "FindGetWorldContext": {
+   "rva": "0x14187ac",
+   "pat": "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 B8",
+   "how": "unique"
+  },
+  "FindCreateNetDriverWorldContext": {
+   "rva": "0x2dcc396",
+   "pat": "41 56 41 57 48 8B EC 48 83 EC ? 48 63 81 ? ? ? ? 48 8D ? ? ? ? ? 4C 8B B1",
+   "how": "unique"
+  },
+  "FindInitListen": {
+   "rva": "0x76e8f32",
+   "pat": "4D 8B C8 4C 8B C2 33 D2 FF 90 ? ? ? ? 84 C0 75 ? 80 3D",
+   "how": "unique"
+  },
+  "FindSetWorld": {
+   "rva": "0x220c84c",
+   "pat": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8D B9 ? ?",
+   "how": "unique"
+  },
+  "FindGetMaxTickRate": {
+   "rva": "0x17580c4",
+   "pat": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 41 54 41 56 48 83 EC ? 0F 29 70 ? 4",
+   "how": "unique"
+  },
+  "FindGiveAbility": {
+   "rva": "0x7eed830",
+   "pat": "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ?",
+   "how": "unique"
+  },
+  "FindConstructAbilitySpec": {
+   "rva": "0x7f255e8",
+   "pat": "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 41 83 CE ?",
+   "how": "unique"
+  },
+  "FindApplyCharacterCustomization": {
+   "rva": "0xa0b82b4",
+   "pat": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ",
+   "how": "unique"
+  },
+  "FindCantBuild": {
+   "rva": "0x9980900",
+   "pat": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B 1A 4D ",
+   "how": "unique"
+  },
+  "FindKickPlayer": {
+   "rva": "0x34cd388",
+   "pat": "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48",
+   "how": "unique"
+  },
+  "FindSetPickupItems": {
+   "rva": "0x9b82444",
+   "pat": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 B9 ? ? ? ",
+   "how": "unique"
+  },
+  "FindCallPreReplication": {
+   "rva": "0x70470b8",
+   "pat": "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 ",
+   "how": "unique"
+  },
+  "FindSendClientAdjustment": {
+   "rva": "0x74bf52c",
+   "pat": "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 91 ? ? ? ? 48 8B D9 83 FA",
+   "how": "unique"
+  },
+  "FindSetChannelActor": {
+   "rva": "0x4053d30",
+   "pat": "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70 E8 48 8B D9",
+   "how": "unique"
+  },
+  "FindClientHasInitializedLevelFor": {
+   "rva": "0x73d8370",
+   "pat": "40 53 48 83 EC ? 48 8B D9 48 8B CA E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 4C 8D 9B",
+   "how": "unique"
+  },
+  "FindGetNamePool": {
+   "rva": "0x13967e0",
+   "pat": "48 83 EC ? 80 3D ? ? ? ? ? 0F 84 ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3",
+   "how": "unique"
+  },
+  "FindPreSendUpdate": {
+   "rva": "0x67d25f4",
+   "pat": "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC ? 8B 02 48 8B F9",
+   "how": "unique"
+  },
+  "FindInitializeFlightPath": {
+   "rva": "0x906efe0",
+   "pat": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B E9 41 8A D9",
+   "how": "unique"
+  },
+  "FindReset": {
+   "rva": "0x74be864",
+   "pat": "48 89 5C 24 ? 57 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B F9 48 85 D2 74 ? 48 8B 01",
+   "how": "unique"
+  },
+  "FindNotifyGameMemberAdded": {
+   "rva": "0x19f2390",
+   "pat": "40 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8",
+   "how": "unique"
+  },
+  "FindCanPlaceBuildableClassInStructuralGrid": {
+   "rva": "0x9161cf0",
+   "pat": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? ",
+   "how": "unique"
+  }
+ },
+ "multi": {},
+ "miss": [
+  "FindGetNetMode",
+  "FindCreateNetDriver",
+  "FindTickFlush",
+  "FindHandlePostSafeZonePhaseChanged",
+  "FindFinishedTargetSpline",
+  "FindPickTeam",
+  "FindReplaceBuildingActor",
+  "FindEncryptionPatch",
+  "FindGiveAbilityAndActivateOnce",
+  "FindGameSessionPatch",
+  "FindCreateChannel",
+  "FindReplicateActor",
+  "FindIsNetReady",
+  "FindUpdateIrisReplicationViews",
+  "FindPayBuildableClassPlacementCost",
+  "FindCanAffordToPlaceBuildableClass",
+  "FindMinigameSettingsBuilding__BeginPlay",
+  "FindFinishWorldInitialization"
+ ]
+}

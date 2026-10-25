@@ -1,0 +1,139 @@
+{
+ "exe": "binaries/win/FortniteClient-27.11.exe",
+ "version": "27.11",
+ "cl": "29739262",
+ "image_base": 5368709120,
+ "sections": {
+  ".text": {
+   "va": "0x1000",
+   "vsize": "0xc14ac08",
+   "raw": "0x600",
+   "rsize": "0xc14ae00",
+   "chars": "0x60000020"
+  },
+  ".rdata": {
+   "va": "0xc14c000",
+   "vsize": "0x42eff28",
+   "raw": "0xc14b400",
+   "rsize": "0x42f0000",
+   "chars": "0x40000040"
+  },
+  ".data": {
+   "va": "0x1043c000",
+   "vsize": "0xaa16cc",
+   "raw": "0x1043b400",
+   "rsize": "0x514800",
+   "chars": "0xc0000040"
+  },
+  ".pdata": {
+   "va": "0x10ede000",
+   "vsize": "0x8c4b1c",
+   "raw": "0x1094fc00",
+   "rsize": "0x8c4c00",
+   "chars": "0x40000040"
+  },
+  ".msvcjmc": {
+   "va": "0x117a3000",
+   "vsize": "0x8",
+   "raw": "0x11214800",
+   "rsize": "0x200",
+   "chars": "0xc0000040"
+  },
+  "_RDATA": {
+   "va": "0x117a4000",
+   "vsize": "0x48b08",
+   "raw": "0x11214a00",
+   "rsize": "0x48c00",
+   "chars": "0x40000040"
+  },
+  ".rsrc": {
+   "va": "0x117ed000",
+   "vsize": "0xb338",
+   "raw": "0x1125d600",
+   "rsize": "0xb400",
+   "chars": "0x40000040"
+  },
+  ".reloc": {
+   "va": "0x117f9000",
+   "vsize": "0x7780f4",
+   "raw": "0x11268a00",
+   "rsize": "0x778200",
+   "chars": "0x42000040"
+  },
+  "": {
+   "va": "0x11f72000",
+   "vsize": "0x282a00",
+   "raw": "0x119e0c00",
+   "rsize": "0x282a00",
+   "chars": "0x68000020"
+  }
+ },
+ "n_natives": 28403,
+ "n_vtables": 0,
+ "n_funcs": 765951,
+ "hard_strings": {
+  "FindUpdateSafeZonesPhase": {
+   "string": "AFortGameModeAthena::UpdateSafeZonesPhase",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindPreSendUpdate": {
+   "string": "ReplicationSystem_PreSendUpdate",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindFlushDormancy": {
+   "string": "FlushDormancy: %s. Connection: %s",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindStartBecomingDormant": {
+   "string": "StartBecomingDormant: %s",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindEnterAircraft": {
+   "string": "EnterAircraft: [%s] is attempting to enter aircraft after having already exited.",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindHandleMatchHasStarted": {
+   "string": "AFortGameModeAthena::HandleMatchHasStarted: NumPlayers: %i",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindSpawnInitialSafeZone": {
+   "string": "FortGameModeAthena::SpawnInitialSafeZone bShouldSpawnSafeZoneIndicator == false, skipping spawning Safe Zone Indicator",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindSelectAndSetupMyBuildingLevel": {
+   "string": "AFortPlayerControllerAthena::SelectAndSetupMyBuildingLevel",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindPickSupplyDropLocation": {
+   "string": "PickSupplyDropLocation: Attempting to pick spawn location for air drop in zone",
+   "refs": [],
+   "nrefs": 0
+  },
+  "FindUpdateSafeZonesPhase2": {
+   "string": "UpdateSafeZonesPhase",
+   "refs": [],
+   "nrefs": 0
+  }
+ },
+ "vt_probes": {
+  "FindOnItemInstanceAddedVft": {},
+  "FindIsNetRelevantForVft": {},
+  "FindSpawnDecoVft": {},
+  "FindCloseActorChannel": {},
+  "FindInitListen": {},
+  "FindTickFlush": {},
+  "FindStartBecomingDormant": {},
+  "FindFlushDormancy": {},
+  "FindIsNetReady": {},
+  "FindSendClientAdjustment": {},
+  "FindCallPreReplication": {}
+ }
+}

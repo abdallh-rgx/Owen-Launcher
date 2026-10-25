@@ -1,0 +1,397 @@
+{
+ "version": "27.11",
+ "vt_index": {
+  "FindApplyCharacterCustomization": {
+   "func": "0xa0b82b4",
+   "vts": []
+  },
+  "FindCallPreReplication": {
+   "func": "0x70470b8",
+   "vts": []
+  },
+  "FindCanPlaceBuildableClassInStructuralGrid": {
+   "func": "0x9161cf0",
+   "vts": []
+  },
+  "FindCantBuild": {
+   "func": "0x9980900",
+   "vts": []
+  },
+  "FindClientHasInitializedLevelFor": {
+   "func": "0x73d8370",
+   "vts": [
+    {
+     "vt": "0xc4a94d8",
+     "idx": 2223,
+     "n": 2664
+    },
+    {
+     "vt": "0xd2cffb0",
+     "idx": 120,
+     "n": 1482
+    },
+    {
+     "vt": "0xd3f33e8",
+     "idx": 115,
+     "n": 204
+    }
+   ]
+  },
+  "FindConstructAbilitySpec": {
+   "func": "0x7f255e8",
+   "vts": []
+  },
+  "FindCreateNetDriverWorldContext": {
+   "func": "0x2dcc396",
+   "vts": []
+  },
+  "FindEnterAircraft": {
+   "func": "0x958f200",
+   "vts": []
+  },
+  "FindFinishedTargetSpline": {
+   "func": "0x5cc414e",
+   "vts": []
+  },
+  "FindFlushDormancy": {
+   "func": "0x73dac7c",
+   "vts": [
+    {
+     "vt": "0xc4a94d8",
+     "idx": 2227,
+     "n": 2664
+    },
+    {
+     "vt": "0xcc9b580",
+     "idx": 351,
+     "n": 360
+    },
+    {
+     "vt": "0xd027ad8",
+     "idx": 785,
+     "n": 3900
+    },
+    {
+     "vt": "0xd2cffb0",
+     "idx": 124,
+     "n": 1482
+    },
+    {
+     "vt": "0xd3f33e8",
+     "idx": 119,
+     "n": 204
+    }
+   ]
+  },
+  "FindGetMaxTickRate": {
+   "func": "0x17580c4",
+   "vts": [
+    {
+     "vt": "0xc5e20b8",
+     "idx": 98,
+     "n": 175
+    }
+   ]
+  },
+  "FindGetNamePool": {
+   "func": "0x13967e0",
+   "vts": []
+  },
+  "FindGetWorldContext": {
+   "func": "0x14187ac",
+   "vts": []
+  },
+  "FindGiveAbility": {
+   "func": "0x7eed830",
+   "vts": []
+  },
+  "FindHandleMatchHasStarted": {
+   "func": "0x90f5ee0",
+   "vts": [
+    {
+     "vt": "0xcc1e2b8",
+     "idx": 316,
+     "n": 482
+    },
+    {
+     "vt": "0xcd17e00",
+     "idx": 300,
+     "n": 774
+    }
+   ]
+  },
+  "FindInitListen": {
+   "func": "0x76e8f32",
+   "vts": []
+  },
+  "FindInitializeFlightPath": {
+   "func": "0x906efe0",
+   "vts": []
+  },
+  "FindKickPlayer": {
+   "func": "0x34cd388",
+   "vts": [
+    {
+     "vt": "0xc3800d8",
+     "idx": 1082,
+     "n": 1823
+    },
+    {
+     "vt": "0xc3800d8",
+     "idx": 1653,
+     "n": 1823
+    }
+   ]
+  },
+  "FindNotifyGameMemberAdded": {
+   "func": "0x19f2390",
+   "vts": []
+  },
+  "FindPayBuildableClassPlacementCost": {
+   "func": "0xa03c4f0",
+   "vts": [
+    {
+     "vt": "0xc38c7b8",
+     "idx": 1793,
+     "n": 1955
+    },
+    {
+     "vt": "0xc65fa78",
+     "idx": 982,
+     "n": 1250
+    },
+    {
+     "vt": "0xc83f280",
+     "idx": 1186,
+     "n": 1455
+    },
+    {
+     "vt": "0xcf84768",
+     "idx": 1889,
+     "n": 2677
+    },
+    {
+     "vt": "0xd391990",
+     "idx": 874,
+     "n": 1564
+    },
+    {
+     "vt": "0xd3f8390",
+     "idx": 874,
+     "n": 1456
+    },
+    {
+     "vt": "0xdf3e5c0",
+     "idx": 978,
+     "n": 1199
+    },
+    {
+     "vt": "0xdf66180",
+     "idx": 969,
+     "n": 1141
+    }
+   ]
+  },
+  "FindPickSupplyDropLocation": {
+   "func": "0x9073524",
+   "vts": []
+  },
+  "FindPreSendUpdate": {
+   "func": "0x67d25f4",
+   "vts": []
+  },
+  "FindQueueStatEvent": {
+   "func": "0xa1652d4",
+   "vts": []
+  },
+  "FindReset": {
+   "func": "0x74be864",
+   "vts": [
+    {
+     "vt": "0xc38c7b8",
+     "idx": 1132,
+     "n": 1955
+    },
+    {
+     "vt": "0xc3a64d0",
+     "idx": 213,
+     "n": 670
+    },
+    {
+     "vt": "0xc3a79e8",
+     "idx": 492,
+     "n": 775
+    },
+    {
+     "vt": "0xc65fa78",
+     "idx": 321,
+     "n": 1250
+    },
+    {
+     "vt": "0xc83f280",
+     "idx": 525,
+     "n": 1455
+    },
+    {
+     "vt": "0xcbb37d0",
+     "idx": 463,
+     "n": 1242
+    },
+    {
+     "vt": "0xcbb37d0",
+     "idx": 959,
+     "n": 1242
+    },
+    {
+     "vt": "0xcf84768",
+     "idx": 1228,
+     "n": 2677
+    }
+   ]
+  },
+  "FindSelectAndSetupMyBuildingLevel": {
+   "func": "0x944cc64",
+   "vts": []
+  },
+  "FindSendClientAdjustment": {
+   "func": "0x74bf52c",
+   "vts": [
+    {
+     "vt": "0xc38c7b8",
+     "idx": 1408,
+     "n": 1955
+    },
+    {
+     "vt": "0xc3a64d0",
+     "idx": 489,
+     "n": 670
+    },
+    {
+     "vt": "0xc3a79e8",
+     "idx": 768,
+     "n": 775
+    },
+    {
+     "vt": "0xc65fa78",
+     "idx": 597,
+     "n": 1250
+    },
+    {
+     "vt": "0xc83f280",
+     "idx": 801,
+     "n": 1455
+    },
+    {
+     "vt": "0xcbb37d0",
+     "idx": 739,
+     "n": 1242
+    },
+    {
+     "vt": "0xcbb37d0",
+     "idx": 1235,
+     "n": 1242
+    },
+    {
+     "vt": "0xcf84768",
+     "idx": 1504,
+     "n": 2677
+    }
+   ]
+  },
+  "FindSetChannelActor": {
+   "func": "0x4053d30",
+   "vts": [
+    {
+     "vt": "0xdb3b068",
+     "idx": 36,
+     "n": 49
+    }
+   ]
+  },
+  "FindSetGamePhase": {
+   "func": "0xa4bd354",
+   "vts": []
+  },
+  "FindSetPickupItems": {
+   "func": "0x9b82444",
+   "vts": [
+    {
+     "vt": "0xc363d10",
+     "idx": 263,
+     "n": 848
+    },
+    {
+     "vt": "0xc363d10",
+     "idx": 734,
+     "n": 848
+    }
+   ]
+  },
+  "FindSetWorld": {
+   "func": "0x220c84c",
+   "vts": [
+    {
+     "vt": "0xc4a94d8",
+     "idx": 2371,
+     "n": 2664
+    },
+    {
+     "vt": "0xc4a94d8",
+     "idx": 2637,
+     "n": 2664
+    }
+   ]
+  },
+  "FindStartBecomingDormant": {
+   "func": "0x71fa978",
+   "vts": [
+    {
+     "vt": "0xc2467f8",
+     "idx": 451,
+     "n": 485
+    }
+   ]
+  }
+ },
+ "deltas": {
+  "FindClientHasInitializedLevelFor->FindFlushDormancy": [
+   4
+  ],
+  "FindClientHasInitializedLevelFor->FindSetWorld": [
+   148,
+   414
+  ],
+  "FindFlushDormancy->FindSetWorld": [
+   144,
+   410
+  ],
+  "FindSetWorld->FindSetWorld": [
+   266
+  ],
+  "FindKickPlayer->FindKickPlayer": [
+   571
+  ],
+  "FindReset->FindPayBuildableClassPlacementCost": [
+   661
+  ],
+  "FindSendClientAdjustment->FindPayBuildableClassPlacementCost": [
+   385
+  ],
+  "FindReset->FindSendClientAdjustment": [
+   276,
+   772
+  ],
+  "FindReset->FindReset": [
+   496
+  ],
+  "FindSendClientAdjustment->FindReset": [
+   220
+  ],
+  "FindSendClientAdjustment->FindSendClientAdjustment": [
+   496
+  ],
+  "FindSetPickupItems->FindSetPickupItems": [
+   471
+  ]
+ }
+}
