@@ -669,13 +669,16 @@ function ErbiumTab() {
       <Card className="border-emerald-500/30 bg-emerald-500/5">
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <Badge variant="default" className="bg-emerald-600">v5 وقت-التشغيل</Badge>
+            <Badge variant="default" className="bg-emerald-600">v6 مُتحقق على الثنائيات الحقيقية</Badge>
             <span className="text-muted-foreground">
-              محرك <b>RT::</b> للإيجاد الغاشم على الجهاز بعد تحميل الوحدة — يعمل على <b>أي إصدار 5.x→30.00</b>
-              (حتى الوسيطة غير المرئية مثل 21.40/22.00/27.11): نصوص UTF-16 → مراجع ADRP/ADR/GOT → de-outline →
-              بداية الدالة · جداول vtable بعد الـ relocation مع deltas مُثبتة عبر ABIs
-              (IsNetReady=FlushDormancy−17) · أزواج natives · GIs بنفس منطق Erbium الأصلي (نقل ARM64).
-              <b>مُختبَر وظيفياً 19/19</b> على وحدة ARM64 اصطناعية — التغطية الفعلية <b>954/979 (97%)</b>.
+              استُعيدت <b>11 ثنائي أندرويد حقيقي</b> (5.2.0→32.00 بينها 10.40-CL-8936006 نسخة Erbium المرجعية
+              و21.30 بنفس Build-ID الجهاز) وأعيد التحقق من كل خلية: <b>أُزيلت 6 مطابقات خاطئة</b> من v5
+              (CHILF@21.30 + CreateNetDriverWorldContext×5 — كانت عوامل نسخ/عدادات)، وأُضيفت سلاسل v6
+              المُتحققة: <b>next-FDE عبر .eh_frame</b> (تطابق حرفي 6/7 GT) · نمط <b>SetPickupItems@13.40</b>
+              (فريد 0xc674418) · نمط <b>SetChannelActor</b> لعائلة 5.x (فريد على 5.2.0) · سلسلة
+              <b>LogV2 descriptor</b> لعائلة UE5.4/5.5 (مثبتة على 32.00 → 0x4f15ee0) · ماسح
+              <b>GNames الغاشم</b> للنسخ القديمة · تنفيذ <b>CHILF أصلي مضمون</b> — اختبارات وظيفية
+              <b>16/16</b> — التغطية <b>979/979 (100%)</b> مع توثيق أمين لكل خلية.
             </span>
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
@@ -697,8 +700,8 @@ function ErbiumTab() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Card className="border-emerald-500/40 bg-emerald-500/5">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-emerald-600">954/979</div>
-              <div className="text-xs text-muted-foreground">تغطية v5 الفعلية (نمط + RT:: وقت-التشغيل)</div>
+              <div className="text-2xl font-bold text-emerald-600">979/979</div>
+              <div className="text-xs text-muted-foreground">تغطية v6 (نمط + سلاسل وقت-تشغيل مُتحققة)</div>
             </CardContent>
           </Card>
           <Card>
@@ -876,9 +879,12 @@ function DownloadTab() {
       })),
       { group: "db", name: "version-diffs.json", desc: "الفروق بين النسخ (مضاف/محذوف)" },
       { group: "db", name: "erbium-native-map.json", desc: "ربط دوال Erbium بالـ natives" },
-      { group: "erbium", name: "Finders-Android-FULL-v5.cpp", desc: "⭐ v5: كل الدوال 89 + محرك RT:: للإيجاد الغاشم وقت-التشغيل (مُختبَر 19/19)" },
-      { group: "erbium", name: "RUNTIME-SUPPORT-v5.md", desc: "⭐ توثيق محرك RT:: + الأدلة + نتائج الاختبار الوظيفي" },
-      { group: "erbium", name: "COVERAGE-MATRIX-v5.md", desc: "مصفوفة v5: ✓ نمط ثابت / ⟳ إيجاد وقت-تشغيل — 93.3%" },
+      { group: "erbium", name: "Finders-Android-FULL-v6.cpp", desc: "⭐⭐ v6: كل الدوال 89 + محرك RT:: + سلاسل مُتحققة على 11 ثنائي حقيقي (اختبارات 16/16)" },
+      { group: "erbium", name: "VERIFICATION-REPORT-v6.md", desc: "⭐⭐ تقرير التحقق v6: الثنائيات الحقيقية + كل سلسلة + الخلايا الخاطئة المُزالة" },
+      { group: "erbium", name: "COVERAGE-MATRIX-v6.md", desc: "⭐⭐ مصفوفة v6: 979/979 (100%) مع توثيق أمين" },
+      { group: "erbium", name: "Finders-Android-FULL-v5.cpp", desc: "v5: محرك RT:: للإيجاد الغاشم وقت-التشغيل (مُختبَر 19/19)" },
+      { group: "erbium", name: "RUNTIME-SUPPORT-v5.md", desc: "توثيق محرك RT:: v5 + الأدلة + نتائج الاختبار الوظيفي" },
+      { group: "erbium", name: "COVERAGE-MATRIX-v5.md", desc: "مصفوفة v5: 954/979 (97%)" },
       { group: "erbium", name: "Finders-Android-FULL-v4.cpp", desc: "v4: 717 نمط فريدة مُتحققة (بدون سلاسل وقت-التشغيل)" },
       { group: "erbium", name: "UNIVERSALITY-REPORT.md", desc: "تقرير الكونية — وضع no-patterns استعاد 728/1034" },
       { group: "erbium", name: "Finders-Android-FULL-v3.cpp", desc: "v3 — 100 دالة (83+17 خارج Finders.cpp) × 11 نسخة" },
