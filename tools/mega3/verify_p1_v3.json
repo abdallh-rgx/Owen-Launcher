@@ -1,0 +1,245 @@
+{
+ "FindCantBuild": {
+  "win": "0x146bbce40",
+  "arm": "0x75363f8",
+  "how": "xwin",
+  "size_ratio": 2.08,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindConstructAbilitySpec": {
+  "win": "0x141574f2c",
+  "arm": "0xa3ec1a4",
+  "how": "xwin",
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 1.26,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSetPickupItems": {
+  "win": "0x140d4aedc",
+  "arm": "0x5c4263c",
+  "how": "xwin",
+  "size_ratio": 4.56,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindStartBecomingDormant": {
+  "win": "0x1484a61a8",
+  "arm": "0x92ff3c0",
+  "how": "xwin",
+  "size_ratio": 10.35,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindPickSupplyDropLocation": {
+  "win": "0x14667bce4",
+  "arm": "0x5ab8664",
+  "how": "xwin",
+  "strings_common": [
+   "FortTrajectoryBlocksWater"
+  ],
+  "strings_match": true,
+  "size_ratio": 1.14,
+  "size_ok": true,
+  "votes": 2
+ },
+ "FindReset": {
+  "win": "0x14864786c",
+  "arm": "0x4b52538",
+  "how": "xwin",
+  "size_ratio": 0.69,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSetChannelActor": {
+  "win": "0x14148922c",
+  "arm": "0x5e616d0",
+  "how": "xwin",
+  "size_ratio": 0.68,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindInitListen": {
+  "win": "0x1456e9280",
+  "arm": "0x3852a0c",
+  "how": "xwin",
+  "size_ratio": 1.24,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSpawnInitialSafeZone": {
+  "win": "0x1466c55dc",
+  "arm": "0x55064ec",
+  "how": "xwin",
+  "size_ratio": 14.98,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindSpawnLoot": {
+  "win": "0x1468e6c90",
+  "arm": "0x5414df4",
+  "how": "xwin",
+  "size_ratio": 10.69,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindCreateNetDriverWorldContext": {
+  "win": "0x141b45188",
+  "arm": "0x6ec3db8",
+  "how": "xwin",
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 1.51,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSendClientAdjustment": {
+  "win": "0x148648098",
+  "arm": "0x9688238",
+  "how": "xwin",
+  "size_ratio": 0.75,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindFlushDormancy": {
+  "win": "0x148594150",
+  "arm": "0x951d5e0",
+  "how": "xwin",
+  "size_ratio": 4.44,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindIsNetReady": {
+  "win": "0x1485a0730",
+  "arm": "0x9519a8c",
+  "how": "xwin",
+  "size_ratio": 1.2,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindUpdateSafeZonesPhase": {
+  "win": "0x1466e84a8",
+  "arm": "0x55079f8",
+  "how": "xwin",
+  "strings_common": [
+   "New safe zone phase will start",
+   "SetSafeZoneTimerPaused end phase not allowed",
+   "StartPlaylistInducedLastSafeZone",
+   "TriggerEndOfSafeZonePhasePause"
+  ],
+  "strings_match": true,
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 1.02,
+  "size_ok": true,
+  "votes": 2
+ },
+ "FindApplyCharacterCustomization": {
+  "win": "0x146fee40c",
+  "arm": "0x670dbdc",
+  "how": "winhard",
+  "size_ratio": 0.63,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindCanAffordToPlaceBuildableClass": {
+  "win": "0x146f8a5ec",
+  "arm": "0x665ab4c",
+  "how": "winhard",
+  "size_ratio": 1.43,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindCloseActorChannel": {
+  "win": "0x1484a5274",
+  "arm": "0x92f8d64",
+  "how": "winhard",
+  "size_ratio": 6.74,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindFinishedTargetSpline": {
+  "win": "0x146629d00",
+  "arm": "0x768a940",
+  "how": "winhard",
+  "size_ratio": 1.35,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindGetWorldContext": {
+  "win": "0x140e01a5c",
+  "arm": "0x905d300",
+  "how": "winhard",
+  "size_ratio": 3.84,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "win": "0x1466c6870",
+  "arm": "0x552ba6c",
+  "how": "winhard",
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 0.8,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindIsNetRelevantForVft": {
+  "win": "0x1483dc294",
+  "arm": "0x90784d8",
+  "how": "winhard",
+  "size_ratio": 11.62,
+  "size_ok": false,
+  "votes": 0
+ },
+ "FindKickPlayer": {
+  "win": "0x142febf18",
+  "arm": "0x62b187c",
+  "how": "native-thunk:OnEndGameKickPlayers",
+  "size_ratio": 3.35,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindNotifyGameMemberAdded": {
+  "win": "0x140e99330",
+  "arm": "0x5530a50",
+  "how": "winhard",
+  "strings_common": [],
+  "strings_match": false,
+  "size_ratio": 0.89,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindRemoveFromAlivePlayers": {
+  "win": "0x1466c674c",
+  "arm": "0x552d404",
+  "how": "winhard",
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 0.75,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSetWorld": {
+  "win": "0x141b4231c",
+  "arm": "0x9537820",
+  "how": "winhard",
+  "size_ratio": 1.18,
+  "size_ok": true,
+  "votes": 1
+ },
+ "FindSpawnDecoVft": {
+  "win": "0x14720b85c",
+  "arm": "0x6a91214",
+  "how": "winhard",
+  "strings_common": [],
+  "strings_match": false,
+  "natives_common": [],
+  "natives_match": null,
+  "size_ratio": 25.86,
+  "size_ok": false,
+  "votes": 0
+ }
+}

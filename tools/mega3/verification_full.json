@@ -1,0 +1,6714 @@
+{
+ "per_version": {
+  "5.41": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4e64af8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4e64af8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x237de00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x237de00",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2c4e8b4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2c4e8b4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3d43624"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3d43624",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2341f0c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2341f0c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5bed650"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5bed650",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5c79e8c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5c79e8c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e61fc4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e61fc4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x633901c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x633901c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x354d0e8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x354d0e8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6352188"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6352188",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5f37f4c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5f37f4c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5ad799c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5ad799c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindListenCall": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x422b1dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x422b1dc",
+    "p0_addr_match": true,
+    "is_func_start": false,
+    "containing_func": "0x422adfc"
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3b4eaec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3b4eaec",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x45cc1ec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x45cc1ec",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5b36830"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5b36830",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x45c39d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x45c39d0",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3d8f26c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3d8f26c",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2341f0c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2341f0c",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5814b98"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5814b98",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5430084"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5430084",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2340f00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2340f00",
+    "is_func_start": true
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5dc6e24"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5dc6e24",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5edd508"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5edd508",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x27b36fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x27b36fc",
+    "is_func_start": true
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5be9ab4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5be9ab4",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5c58520"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5c58520",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5b5a5c4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5b5a5c4",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5d24d2c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5d24d2c",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x567f4d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x567f4d8",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x560a580"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x560a580",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   }
+  },
+  "7.40": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6587ac4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6587ac4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x28a0c00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x28a0c00",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x32e2274"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x32e2274",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x48a9544"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x48a9544",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2863dd4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2863dd4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x629a0c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x629a0c0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65602b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65602b0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5d300ac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5d300ac",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6afaa20"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6afaa20",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3b5e570"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3b5e570",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6da10bc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6da10bc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6bcb920"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6bcb920",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61aa538"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61aa538",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5fca080"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5fca080",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindListenCall": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4664f54"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4664f54",
+    "p0_addr_match": true,
+    "is_func_start": false,
+    "containing_func": "0x46603a4"
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x63f6b80"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x63f6b80",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x27a380c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x27a380c",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4b51c04"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4b51c04",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67777d4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67777d4",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65b7bd0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65b7bd0",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4bac190"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4bac190",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5f5699c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5f5699c",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2863dd4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2863dd4",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x62e284c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x62e284c",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61f7710"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61f7710",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x691c224"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x691c224",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4c85970"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4c85970",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x60f8380"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x60f8380",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x68dc400"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x68dc400",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x64bee74"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x64bee74",
+    "is_func_start": true
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5febaa0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5febaa0",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5d857d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5d857d0",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2e38e74"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2e38e74",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4b37f00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4b37f00",
+    "is_func_start": true
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6016b8c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6016b8c",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5bf81f0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5bf81f0",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6755aac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6755aac",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6603c70"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6603c70",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5c2f4e8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5c2f4e8",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e02a10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e02a10",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   }
+  },
+  "9.41": {
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x321a8a8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x321a8a8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2fe1a64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2fe1a64",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x57f3804"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x57f3804",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x31df4cc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x31df4cc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73ee464"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73ee464",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x74e749c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x74e749c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x773c2a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x773c2a4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7f878f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7f878f8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7e59828"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7e59828",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7f73d88"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7f73d88",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x72db810"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x72db810",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x764d198"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x764d198",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindListenCall": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5a167dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5a167dc",
+    "p0_addr_match": true,
+    "is_func_start": false,
+    "containing_func": "0x5a16734"
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6f8c2e0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6f8c2e0",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x2eae460"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x2eae460",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5853fa8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5853fa8",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7293e98"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7293e98",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7382d08"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7382d08",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5ca2848"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5ca2848",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5344644"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5344644",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x74f5418"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x74f5418",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x31b34a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x31b34a4",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x31de360"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x31de360",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7c2c758"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7c2c758",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7689130"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7689130",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7bbc498"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7bbc498",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x31de544"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x31de544",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x56e4d20"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x56e4d20",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7092f2c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7092f2c",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7a734d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7a734d8",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x726dee0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x726dee0",
+    "is_func_start": true
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7ae2b64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7ae2b64",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7a26d3c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7a26d3c",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x350757c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x350757c",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5b04b64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5b04b64",
+    "is_func_start": true
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x76b2d88"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x76b2d88",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7098ef8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7098ef8",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7b7ff40"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7b7ff40",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x75a1048"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x75a1048",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7b146cc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7b146cc",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6e4fe14"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6e4fe14",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x74a62c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x74a62c0",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73f10dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73f10dc",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   }
+  },
+  "13.40": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdec4040"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdec4040",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67fd050"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67fd050",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf37d40"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf37d40",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67d3cd4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67d3cd4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa834ba8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa834ba8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa2fe5c8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa2fe5c8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa55020c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa55020c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb875408"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb875408",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryItem:thunk"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb875608"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb875608",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb8761f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb8761f8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa7448bc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa7448bc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9e32514"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9e32514",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5d79f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5d79f8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa546450"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa546450",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa859950"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa859950",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb099f94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb099f94",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb00348c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb00348c",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf30aa8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf30aa8",
+    "is_func_start": true
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc0eab64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc0eab64",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa93e874"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa93e874",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5bcf9c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5bcf9c",
+    "is_func_start": true
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5f7098"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5f7098",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc4133f4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc4133f4",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc1f5798"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc1f5798",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67d3cd4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67d3cd4",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67d2bec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67d2bec",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5baa5c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5baa5c",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5d8650"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5d8650",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa86f108"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa86f108",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa86fab4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa86fab4",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xab6c90c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xab6c90c",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67d2e20"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67d2e20",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb0a0b30"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb0a0b30",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xafc5b34"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xafc5b34",
+    "is_func_start": true
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5bdedc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5bdedc",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5cc63c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5cc63c",
+    "is_func_start": true
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa860560"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa860560",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf35ecc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf35ecc",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc1175a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc1175a4",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd046b7c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd046b7c",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf3299c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf3299c",
+    "is_func_start": true
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xacece94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xacece94",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xad3ca90"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xad3ca90",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc11b238"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc11b238",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb381b64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb381b64",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb39a758"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb39a758",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa5c3fa8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa5c3fa8",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xab3fac0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xab3fac0",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa831be8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa831be8",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc108ee0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc108ee0",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa6da880"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa6da880",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   }
+  },
+  "17.50": {
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xba34900"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xba34900",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdf9864c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdf9864c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x76978d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x76978d0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcf3942c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcf3942c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd59b380"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd59b380",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcce042c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcce042c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdbd5a38"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdbd5a38",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryItem:thunk"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdbd5c4c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdbd5c4c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdbd6b1c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdbd6b1c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd28e444"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd28e444",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcd38f28"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcd38f28",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xccc4c64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xccc4c64",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcf4feb0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcf4feb0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x86fd3f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x86fd3f8",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf1fe24"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf1fe24",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd59a084"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd59a084",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc2c0e5c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc2c0e5c",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd00f1fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd00f1fc",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 2,
+    "p0_hit_addrs": [
+     "0xbc6bab0",
+     "0xca3aeec"
+    ],
+    "p0": "BROKEN_2HITS"
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc318048"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc318048",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xe9e4390"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xe9e4390",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcd39bec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcd39bec",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 2,
+    "p0_hit_addrs": [
+     "0xa56f9cc",
+     "0xae6fe8c"
+    ],
+    "p0": "BROKEN_2HITS"
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x769525c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x769525c",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbc6cfe4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbc6cfe4",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf34d40"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf34d40",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xdf96bac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xdf96bac",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xe0c92c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xe0c92c0",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd2f4ce8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd2f4ce8",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd326a30"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd326a30",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xe0cad4c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xe0cad4c",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd8751a8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd8751a8",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd887244"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd887244",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc673190"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc673190",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "18.40": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xe2e843c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xe2e843c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x90049a0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x90049a0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x862009c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x862009c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc84180c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc84180c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6be0554"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6be0554",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb744da4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb744da4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbe08748"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbe08748",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb4fb72c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb4fb72c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc479178"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc479178",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryItem:thunk"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc47938c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc47938c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc47a25c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc47a25c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9772d94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9772d94",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xaed00fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xaed00fc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb541bb4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb541bb4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb4d4c7c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb4d4c7c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindCreateNetDriverWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb737690"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb737690",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb75b614"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb75b614",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x78164fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x78164fc",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbe77420"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbe77420",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbe072e8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbe072e8",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc83f704"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc83f704",
+    "is_func_start": true
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xaa830c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xaa830c0",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb81ae10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb81ae10",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb529928"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb529928",
+    "is_func_start": true
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 2,
+    "p0_hit_addrs": [
+     "0xa4170c8",
+     "0xb225444"
+    ],
+    "p0": "BROKEN_2HITS"
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcaecf78"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcaecf78",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xad094a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xad094a4",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6be0554"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6be0554",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb5273b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb5273b0",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb542874"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb542874",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb75abe0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb75abe0",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb75b614"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb75b614",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xba0ccbc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xba0ccbc",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6bdf738"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6bdf738",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc74da0c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc74da0c",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbc21188"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbc21188",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa4191e4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa4191e4",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb75dac8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb75dac8",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc83fd80"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc83fd80",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc971d88"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc971d88",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbb3dfa0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbb3dfa0",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbb72554"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbb72554",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc973890"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc973890",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc0f4d9c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc0f4d9c",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc9c8274"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc9c8274",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xb52e3f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xb52e3f8",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa471468"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa471468",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xae33598"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xae33598",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc0e7018"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc0e7018",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "19.10": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cde0dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cde0dc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcfa1844"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcfa1844",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7e0004c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7e0004c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc24b798"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc24b798",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x67430fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x67430fc",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8ca36ec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8ca36ec",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9929ec4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9929ec4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa2f7ea8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa2f7ea8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryItem:thunk"
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9a6fedc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9a6fedc",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "Reset:orig"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa2f7af4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa2f7af4",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa2f7c2c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa2f7c2c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc5a567c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc5a567c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6ed9974"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6ed9974",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x89420c4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x89420c4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8867ac0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8867ac0",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindCreateNetDriverWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8c758b8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8c758b8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8d007a0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8d007a0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7aced40"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7aced40",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x99aff04"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x99aff04",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8b2be98"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8b2be98",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc448e38"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc448e38",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8e6e39c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8e6e39c",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x895c7ac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x895c7ac",
+    "is_func_start": true
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 2,
+    "p0_hit_addrs": [
+     "0x8710d34",
+     "0x8993b24"
+    ],
+    "p0": "BROKEN_2HITS"
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc5a2f80"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc5a2f80",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6742154"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6742154",
+    "is_func_start": false,
+    "containing_func": "0x674210c"
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x894f15c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x894f15c",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8943df4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8943df4",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8ce97b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8ce97b0",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8ce96dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8ce96dc",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x91f8f64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x91f8f64",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6742310"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6742310",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9583574"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9583574",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x99c0c80"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x99c0c80",
+    "is_func_start": true
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8971fd0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8971fd0",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8d12324"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8d12324",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc2491dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc2491dc",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc462d94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc462d94",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6ec99bc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6ec99bc",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x94373d4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x94373d4",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x94a9554"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x94a9554",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cf048c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cf048c",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cfbe54"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cfbe54",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8ca046c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8ca046c",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc459c74"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc459c74",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9c9f8a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9c9f8a4",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "21.30": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x75363f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x75363f8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa3ec1a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa3ec1a4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5c4263c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5c4263c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92ff3c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92ff3c0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3177508"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3177508",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x587ae00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x587ae00",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x665ad20"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x665ad20",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5ab8664"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5ab8664",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7057168"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7057188",
+    "p0_addr_match": false,
+    "is_func_start": false,
+    "containing_func": "0x7057148"
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4b52538"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4b52538",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "Reset:orig"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7056e08"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7056e08",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7056f04"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7056f04",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e616d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e616d0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3852a0c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3852a0c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x55064ec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x55064ec",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5414df4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5414df4",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindCreateNetDriverWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6ec3db8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6ec3db8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSendClientAdjustment": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9688238"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9688238",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindFlushDormancy": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x951d5e0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x951d5e0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindIsNetReady": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9519a8c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9519a8c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClientHasInitializedLevelFor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3850e10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3850e10",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindUpdateSafeZonesPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x55079f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x55079f8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindQueueStatEvent": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x674a0c4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x674a0c4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x591d3d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x591d3d0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4862878"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4862878",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x66e4abc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x66e4abc",
+    "is_func_start": true
+   },
+   "FindCallPreReplication": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x90572b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x90572b0",
+    "is_func_start": true
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x665ab4c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x665ab4c",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92f8d64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92f8d64",
+    "is_func_start": true
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x951a8a0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x951a8a0",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5a8227c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5a8227c",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x551ba34"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x551ba34",
+    "is_func_start": true
+   },
+   "FindFinishedTargetSpline": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x768a940"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x768a940",
+    "is_func_start": true
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5554088"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5554088",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x905d300"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x905d300",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73d89c4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73d89c4",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3176514"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3176514",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x550dfcc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x550dfcc",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5504ac4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5504ac4",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x591c5e4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x591c5e4",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x591d030"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x591d030",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e81e10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e81e10",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3176718"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3176718",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x90784d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x90784d8",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x62b187c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x62b187c",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x66f61d0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x66f61d0",
+    "is_func_start": true
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5530a50"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5530a50",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x550d590"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x550d590",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5932630"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5932630",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92fce10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92fce10",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x36a0ef4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x36a0ef4",
+    "is_func_start": true
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3516ccc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3516ccc",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92fa114"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92fa114",
+    "is_func_start": true
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x60f4920"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x60f4920",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x618a734"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x618a734",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9537820"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9537820",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6a8463c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6a8463c",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6a91214"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6a91214",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e48430"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e48430",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5877748"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5877748",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x952ca44"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x952ca44",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6a1c864"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6a1c864",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "22.40": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4e970a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4e970a4",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x42801a8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x42801a8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x99fe6d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x99fe6d8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x34e7340"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x34e7340",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ClearAbility:orig"
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65855ac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65855ac",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x767006c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x767006c",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x603e4f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x603e4f8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "PickSupplyDropLocation:orig"
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x761f42c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x761f43c",
+    "p0_addr_match": false,
+    "is_func_start": false,
+    "containing_func": "0x761f41c"
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3fc940c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3fc940c",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "Reset:orig"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x761f154"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x761f154",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x761f228"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x761f228",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6fb7200"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6fb7200",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3b7cad8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3b7cad8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x476cb64"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x476cb64",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnInitialSafeZone:thunk"
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6001298"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6001298",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindCreateNetDriverWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9435530"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9435530",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindQueueStatEvent": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x77997ac"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x77997ac",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitializeFlightPath": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x47690b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x47690b0",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "InitializeFlightPath:thunk"
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65feec8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65feec8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4d2bdb4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4d2bdb4",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7708b34"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7708b34",
+    "is_func_start": true
+   },
+   "FindCallPreReplication": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x766fed4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x766fed4",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x99f6be0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x99f6be0",
+    "is_func_start": true
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9c9d3cc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9c9d3cc",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x675a8d4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x675a8d4",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61196f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61196f8",
+    "is_func_start": true
+   },
+   "FindFinishedTargetSpline": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x801bb74"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x801bb74",
+    "is_func_start": true
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6165934"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6165934",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa06e300"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa06e300",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa0edf1c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa0edf1c",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9e2773c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9e2773c",
+    "is_func_start": true
+   },
+   "FindGetWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x96eb280"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x96eb280",
+    "is_func_start": true
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x34fdc18"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x34fdc18",
+    "is_func_start": false,
+    "containing_func": "0x34fdbdc"
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x34fdbdc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x34fdbdc",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x610c28c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x610c28c",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x60fc388"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x60fc388",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65fe1f4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65fe1f4",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x65fec10"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x65fec10",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6c954fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6c954fc",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x34fddb4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x34fddb4",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x970c3c8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x970c3c8",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x71f1e60"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x71f1e60",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x771ea94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x771ea94",
+    "is_func_start": true
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6140e48"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6140e48",
+    "is_func_start": true
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x610b7fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x610b7fc",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6612c34"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6612c34",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x99fbbe0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x99fbbe0",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cb8a30"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cb8a30",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x39d6bc8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x39d6bc8",
+    "is_func_start": true
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6672b24"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6672b24",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6fbf744"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6fbf744",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x70634a8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x70634a8",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cbaccc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cbaccc",
+    "is_func_start": true
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7b78844"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7b78844",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7b87d94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7b87d94",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7de299c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7de299c",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6c3f0e0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6c3f0e0",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6582514"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6582514",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9cb0734"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9cb0734",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x7af1f48"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x7af1f48",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "23.50": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa33c950"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa33c950",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x36df2b8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x36df2b8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5dd9984"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5dd9984",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindStartBecomingDormant": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9c50614"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9c50614",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x35bd0c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x35bd0c0",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ClearAbility:orig"
+   },
+   "FindSelectAndSetupMyBuildingLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x578f328"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x578f328",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPayBuildableClassPlacementCost": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8987960"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8987960",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5474cf8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5474cf8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "PickSupplyDropLocation:orig"
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8955edc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8955eec",
+    "p0_addr_match": false,
+    "is_func_start": false,
+    "containing_func": "0x8955ecc"
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x71fe5f8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x71fe5f8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "Reset:orig"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8955c24"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8955c24",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8955cec"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8955cec",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x58e4058"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x58e4058",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitListen": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x39b4100"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x39b4100",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnInitialSafeZone": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4028668"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4028668",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnInitialSafeZone:thunk"
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x544b9f4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x544b9f4",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindQueueStatEvent": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8a36880"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8a36880",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindInitializeFlightPath": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4027dd0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4027dd0",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "InitializeFlightPath:thunk"
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x57d56e0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x57d56e0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x48e31fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x48e31fc",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x89e0904"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x89e0904",
+    "is_func_start": true
+   },
+   "FindCallPreReplication": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x89877b4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x89877b4",
+    "is_func_start": true
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9c4d2f4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9c4d2f4",
+    "is_func_start": true
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x653225c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x653225c",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x589acf4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x589acf4",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x54fb068"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x54fb068",
+    "is_func_start": true
+   },
+   "FindFinishedTargetSpline": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x669c00c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x669c00c",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9f6018c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9f6018c",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x63adfd4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x63adfd4",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGetWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x35bd0c0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x35bd0c0",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x35bc1d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x35bc1d8",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x54eecdc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x54eecdc",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x54e3968"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x54e3968",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x57d4af8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x57d4af8",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x57d5438"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x57d5438",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5b7a908"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5b7a908",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x35bc400"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x35bc400",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9b1b294"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9b1b294",
+    "is_func_start": true
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5e9c300"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5e9c300",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x89ed8d8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x89ed8d8",
+    "is_func_start": true
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x54ee344"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x54ee344",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x57dc9e8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x57dc9e8",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9c4dd28"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9c4dd28",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9daa560"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9daa560",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x3895d1c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x3895d1c",
+    "is_func_start": true
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x580f0fc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x580f0fc",
+    "is_func_start": true
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5d2fce8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5d2fce8",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5dae1a0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5dae1a0",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8cadb34"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8cadb34",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8cb7fa4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8cb7fa4",
+    "is_func_start": true
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61c39a4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61c39a4",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5b5ba94"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5b5ba94",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x578cc38"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x578cc38",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x690f454"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x690f454",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8c57eb8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8c57eb8",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindOnItemInstanceAddedVft": {
+    "kind": "none"
+   }
+  },
+  "30.00": {
+   "FindCantBuild": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x4f74824"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x4f74824",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindConstructAbilitySpec": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xf8a95b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xf8a95b0",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetPickupItems": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xd41c968"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xd41c968",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindClearAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73ebb48"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73ebb48",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ClearAbility:orig"
+   },
+   "FindPickSupplyDropLocation": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8daff30"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8daff30",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "PickSupplyDropLocation:orig"
+   },
+   "FindRemoveInventoryItem": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc7ec58c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc7ec59c",
+    "p0_addr_match": false,
+    "is_func_start": false,
+    "containing_func": "0xc7ec57c"
+   },
+   "FindReset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x53f6bcc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x53f6bcc",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "Reset:orig"
+   },
+   "FindRemoveInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc7ec6dc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc7ec6dc",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerRemoveInventoryStateValue:thunk"
+   },
+   "FindSetInventoryStateValue": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc7ed498"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc7ed498",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "ServerSetInventoryStateValue:thunk"
+   },
+   "FindSetChannelActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9160170"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9160170",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSpawnLoot": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8d82cb8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8d82cb8",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SpawnLoot:orig"
+   },
+   "FindCreateNetDriverWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xee5c1c8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xee5c1c8",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindSetGamePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcd2fc14"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcd2fc14",
+    "p0_addr_match": true,
+    "is_func_start": true,
+    "p2_native": "SetGamePhase:orig"
+   },
+   "FindPostInitializeSpawnedBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x91f5384"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x91f5384",
+    "p0_addr_match": true,
+    "is_func_start": true
+   },
+   "FindGetNamePool": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindActivatePhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xf1f6210"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xf1f6210",
+    "is_func_start": true
+   },
+   "FindApplyCharacterCustomization": {
+    "kind": "pattern",
+    "p0_hits": 2,
+    "p0_hit_addrs": [
+     "0x91a2644",
+     "0xc82355c"
+    ],
+    "p0": "BROKEN_2HITS"
+   },
+   "FindCallPreReplication": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCanAffordToPlaceBuildableClass": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCloseActorChannel": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindCreateChannel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa296ae4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa296ae4",
+    "is_func_start": true
+   },
+   "FindEnterAircraft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbb3b050"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbb3b050",
+    "is_func_start": true
+   },
+   "FindFinishWorldInitialization": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8e4ad50"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8e4ad50",
+    "is_func_start": true
+   },
+   "FindFinishedTargetSpline": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGameSessionPatch": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9845310"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9845310",
+    "is_func_start": true
+   },
+   "FindGetMaxTickRate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x6483040"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x6483040",
+    "is_func_start": true
+   },
+   "FindGetNetMode": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x9439034"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x9439034",
+    "is_func_start": true
+   },
+   "FindGetPlayerViewPoint": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x62d3f8c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x62d3f8c",
+    "is_func_start": true
+   },
+   "FindGetWorldContext": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindGiveAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92b77c8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92b77c8",
+    "is_func_start": true
+   },
+   "FindGiveAbilityAndActivateOnce": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73e9b0c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73e9b0c",
+    "is_func_start": true
+   },
+   "FindHandleMatchHasStarted": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8e42090"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8e42090",
+    "is_func_start": true
+   },
+   "FindHandlePostSafeZonePhaseChanged": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindInitializeBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x91f465c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x91f465c",
+    "is_func_start": true
+   },
+   "FindInitializeBuildingActor_next": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x91f51a0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x91f51a0",
+    "is_func_start": true
+   },
+   "FindInitializePlayerGameplayAbilities": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf7992c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf7992c",
+    "is_func_start": true
+   },
+   "FindInternalTryActivateAbility": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x73fc31c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x73fc31c",
+    "is_func_start": true
+   },
+   "FindIsNetRelevantForVft": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindKickPlayer": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc41c794"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc41c794",
+    "is_func_start": true
+   },
+   "FindLoadPlayset": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc8a8e6c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc8a8e6c",
+    "is_func_start": true
+   },
+   "FindNotifyGameMemberAdded": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindOnRep_ZiplineState": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindPickTeam": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x8e4179c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x8e4179c",
+    "is_func_start": true
+   },
+   "FindPreSendUpdate": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x534764c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x534764c",
+    "is_func_start": true
+   },
+   "FindRemoveFromAlivePlayers": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindReplaceBuildingActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x92012e8"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x92012e8",
+    "is_func_start": true
+   },
+   "FindReplicateActor": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x5fb5e2c"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x5fb5e2c",
+    "is_func_start": true
+   },
+   "FindSendDestructionInfo": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61bd0f4"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61bd0f4",
+    "is_func_start": true
+   },
+   "FindSendRequestNow": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x751b394"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x751b394",
+    "is_func_start": true
+   },
+   "FindServerReplicateActors": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetChannelActorForDestroy": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindSetPickupTarget": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc1fb1bc"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc1fb1bc",
+    "is_func_start": true
+   },
+   "FindSetState": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xc2bf018"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xc2bf018",
+    "is_func_start": true
+   },
+   "FindSetWorld": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindShouldAllowServerSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xccb70b0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xccb70b0",
+    "is_func_start": true
+   },
+   "FindSpawnDecoVft": {
+    "kind": "pattern",
+    "p0_hits": 0,
+    "p0_hit_addrs": [],
+    "p0": "NO_MATCH"
+   },
+   "FindStartAircraftPhase": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xa111f00"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xa111f00",
+    "is_func_start": true
+   },
+   "FindStartStreamingAdditionalPlaylistLevel": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xbf4e558"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xbf4e558",
+    "is_func_start": true
+   },
+   "FindStreamInMyBuilding": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x919cbe0"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x919cbe0",
+    "is_func_start": true
+   },
+   "FindTickFlush": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0x61b7764"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0x61b7764",
+    "is_func_start": true
+   },
+   "FindUnEquipVehicleWeapon": {
+    "kind": "pattern",
+    "p0_hits": 1,
+    "p0_hit_addrs": [
+     "0xcc32530"
+    ],
+    "p0": "UNIQUE",
+    "resolved_addr": "0xcc32530",
+    "is_func_start": true
+   },
+   "FindGIsServer": {
+    "kind": "global",
+    "p0": "skip_global"
+   },
+   "FindGIsClient": {
+    "kind": "global",
+    "p0": "skip_global"
+   }
+  }
+ },
+ "stats": {
+  "UNIQUE": 513,
+  "BROKEN": 5,
+  "NO_MATCH": 84,
+  "ADDR_MISMATCH": 4,
+  "native_id": 44,
+  "not_func_start": 9,
+  "globals": 30
+ },
+ "broken": [
+  [
+   "5.41",
+   "FindListenCall",
+   "not_func_start",
+   "0x422b1dc"
+  ],
+  [
+   "7.40",
+   "FindListenCall",
+   "not_func_start",
+   "0x4664f54"
+  ],
+  [
+   "7.40",
+   "FindGetNetMode",
+   "no_match",
+   null
+  ],
+  [
+   "7.40",
+   "FindInternalTryActivateAbility",
+   "no_match",
+   null
+  ],
+  [
+   "9.41",
+   "FindListenCall",
+   "not_func_start",
+   "0x5a167dc"
+  ],
+  [
+   "13.40",
+   "FindGetMaxTickRate",
+   "no_match",
+   null
+  ],
+  [
+   "13.40",
+   "FindIsNetRelevantForVft",
+   "no_match",
+   null
+  ],
+  [
+   "13.40",
+   "FindKickPlayer",
+   "no_match",
+   null
+  ],
+  [
+   "13.40",
+   "FindSendRequestNow",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindCloseActorChannel",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindFinishWorldInitialization",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindGameSessionPatch",
+   "BROKEN_2HITS",
+   [
+    "0xbc6bab0",
+    "0xca3aeec"
+   ]
+  ],
+  [
+   "17.50",
+   "FindGetMaxTickRate",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindGetNetMode",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindGiveAbility",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindGiveAbilityAndActivateOnce",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindInitializeBuildingActor",
+   "BROKEN_2HITS",
+   [
+    "0xa56f9cc",
+    "0xae6fe8c"
+   ]
+  ],
+  [
+   "17.50",
+   "FindInitializeBuildingActor_next",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindInitializePlayerGameplayAbilities",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindIsNetRelevantForVft",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindKickPlayer",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindLoadPlayset",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindPickTeam",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindSendRequestNow",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindServerReplicateActors",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindStartAircraftPhase",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindStartStreamingAdditionalPlaylistLevel",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindStreamInMyBuilding",
+   "no_match",
+   null
+  ],
+  [
+   "17.50",
+   "FindUnEquipVehicleWeapon",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindGameSessionPatch",
+   "BROKEN_2HITS",
+   [
+    "0xa4170c8",
+    "0xb225444"
+   ]
+  ],
+  [
+   "18.40",
+   "FindGetNetMode",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindGiveAbilityAndActivateOnce",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindLoadPlayset",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindPickTeam",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindSendRequestNow",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindServerReplicateActors",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "18.40",
+   "FindStartStreamingAdditionalPlaylistLevel",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindCloseActorChannel",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindGameSessionPatch",
+   "BROKEN_2HITS",
+   [
+    "0x8710d34",
+    "0x8993b24"
+   ]
+  ],
+  [
+   "19.10",
+   "FindGetMaxTickRate",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindGetNetMode",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindGiveAbility",
+   "not_func_start",
+   "0x6742154"
+  ],
+  [
+   "19.10",
+   "FindGiveAbilityAndActivateOnce",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindIsNetRelevantForVft",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindPickTeam",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindSendRequestNow",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindSetWorld",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindStartAircraftPhase",
+   "no_match",
+   null
+  ],
+  [
+   "19.10",
+   "FindStartStreamingAdditionalPlaylistLevel",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindRemoveInventoryItem",
+   "addr_mismatch",
+   "0x7057188"
+  ],
+  [
+   "21.30",
+   "FindRemoveInventoryItem",
+   "not_func_start",
+   "0x7057188"
+  ],
+  [
+   "21.30",
+   "FindGetMaxTickRate",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindGetNetMode",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindGetPlayerViewPoint",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindSendDestructionInfo",
+   "no_match",
+   null
+  ],
+  [
+   "21.30",
+   "FindStartAircraftPhase",
+   "no_match",
+   null
+  ],
+  [
+   "22.40",
+   "FindRemoveInventoryItem",
+   "addr_mismatch",
+   "0x761f43c"
+  ],
+  [
+   "22.40",
+   "FindRemoveInventoryItem",
+   "not_func_start",
+   "0x761f43c"
+  ],
+  [
+   "22.40",
+   "FindCallPreReplication",
+   "no_match",
+   null
+  ],
+  [
+   "22.40",
+   "FindGiveAbility",
+   "not_func_start",
+   "0x34fdc18"
+  ],
+  [
+   "22.40",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "22.40",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "22.40",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindRemoveInventoryItem",
+   "addr_mismatch",
+   "0x8955eec"
+  ],
+  [
+   "23.50",
+   "FindRemoveInventoryItem",
+   "not_func_start",
+   "0x8955eec"
+  ],
+  [
+   "23.50",
+   "FindCallPreReplication",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindFinishedTargetSpline",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindGetPlayerViewPoint",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindGetWorldContext",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindNotifyGameMemberAdded",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "23.50",
+   "FindSetWorld",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindRemoveInventoryItem",
+   "addr_mismatch",
+   "0xc7ec59c"
+  ],
+  [
+   "30.00",
+   "FindRemoveInventoryItem",
+   "not_func_start",
+   "0xc7ec59c"
+  ],
+  [
+   "30.00",
+   "FindApplyCharacterCustomization",
+   "BROKEN_2HITS",
+   [
+    "0x91a2644",
+    "0xc82355c"
+   ]
+  ],
+  [
+   "30.00",
+   "FindCallPreReplication",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindCanAffordToPlaceBuildableClass",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindCloseActorChannel",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindFinishedTargetSpline",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindGetWorldContext",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindHandlePostSafeZonePhaseChanged",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindIsNetRelevantForVft",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindNotifyGameMemberAdded",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindOnRep_ZiplineState",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindRemoveFromAlivePlayers",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindServerReplicateActors",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindSetChannelActorForDestroy",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindSetWorld",
+   "no_match",
+   null
+  ],
+  [
+   "30.00",
+   "FindSpawnDecoVft",
+   "no_match",
+   null
+  ]
+ ]
+}

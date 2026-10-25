@@ -1,0 +1,367 @@
+{
+ "5.41": {
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x5c4e724",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "E0 E5 00 6F 08 00 80 12 1F 00 00 39 00 40 80 3C 00 40 81 3C 08 40 02 F8 ?? ?? ?? ?? 08 71 43 F9"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x45a6f44",
+   "size": "0x4934",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "E8 0F 1B FC FC 07 00 F9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 07 40 D1"
+  }
+ },
+ "7.40": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x65c8e3c",
+   "size": "0x16e0",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF C3 00 D1 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 A8 05 80 52 F4 03 01 2A F3 03 00 AA E8 33 00 39"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x5eaabf0",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "E0 E5 00 6F 08 00 80 12 1F 00 00 39 00 40 80 3C 00 40 81 3C 08 40 02 F8 ?? ?? ?? ?? 08 75 40 F9"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x4dd81bc",
+   "size": "0x3a70",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "E9 23 B9 6D FC 6F 01 A9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 FF 07 40 D1 FF 03 06 D1"
+  }
+ },
+ "9.41": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x7816edc",
+   "size": "0x1884",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF C3 00 D1 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 E8 07 1C 32 F4 03 01 2A F3 03 00 AA E8 33 00 39"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x70cdbc0",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "1F 00 00 39 ?? ?? ?? ?? 29 1D 44 F9 E0 E5 00 6F 08 00 80 12 00 40 80 3C 00 40 81 3C 08 40 02 F8"
+  },
+  "Inline_EquipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x7df8ab4",
+   "size": "0x114",
+   "strategy": "native:EquipVehicleWeapon:thunk",
+   "pattern": "FF C3 01 D1 F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 BF 83 1E F8 28 10 40 F9 F3 03 01 AA F4 03 00 AA ?? ?? ?? B4"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x73f10dc",
+   "size": "0x330",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF 83 01 D1 F9 0B 00 F9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F7 03 00 AA 00 68 40 F9 F5 03 03 2A"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x60619bc",
+   "size": "0x6dc",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 83 02 D1 E9 23 03 6D FC 6F 04 A9 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 ?? ?? ?? ?? A8 46 44 F9 F3 03 01 2A"
+  }
+ },
+ "13.40": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0xa6ac6fc",
+   "size": "0x162c",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 56 D0 3B D5 C8 16 40 F9 49 06 80 52"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0xab9052c",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "E0 E5 00 6F 08 00 80 12 ?? ?? ?? ?? 1F 00 00 79 29 81 2E 91 00 40 80 3C 00 40 81 3C 08 40 02 F8"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0xa6da880",
+   "size": "0x374",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 F7 03 00 AA F5 03 03 2A F4 03 02 AA"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0xbca2074",
+   "size": "0x504",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 83 04 D1 E9 23 0B 6D FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? A8 03 19 F8 ?? ?? ?? ?? 08 51 53 39 ?? ?? ?? 34"
+  }
+ },
+ "17.50": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0xcde30ec",
+   "size": "0x1854",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 56 D0 3B D5 C8 16 40 F9 49 06 80 52"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0xbda7710",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "E0 E5 00 6F 08 00 80 12 ?? ?? ?? ?? 1F 00 00 79 29 C1 0F 91 00 40 80 3C 00 40 81 3C 08 40 02 F8"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0xce03858",
+   "size": "0x394",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 59 D0 3B D5 28 17 40 F9 F6 03 00 AA F5 03 03 2A F4 03 02 AA"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0xc18295c",
+   "size": "0x4fc",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 83 04 D1 E9 23 0B 6D FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? A8 03 19 F8 ?? ?? ?? ??"
+  },
+  "Inline_GetSparseClassData": {
+   "status": "OK",
+   "addr": "0xc558e9c",
+   "size": "0x18",
+   "strategy": "tiny-getter(imm=0x0,callers=1078)",
+   "pattern": "08 00 40 39 ?? ?? ?? 37 00 00 40 F9 ?? ?? ?? B5 C0 03 5F D6 ?? ?? ?? ??"
+  }
+ },
+ "18.40": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0xb5ef6f8",
+   "size": "0x1854",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 56 D0 3B D5 C8 16 40 F9 49 06 80 52"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0xa55a224",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "E0 E5 00 6F 08 00 80 12 ?? ?? ?? ?? 1F 00 00 79 29 41 25 91 00 40 80 3C 00 40 81 3C 08 40 02 F8"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0xc0e7018",
+   "size": "0x394",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 59 D0 3B D5 28 17 40 F9 F6 03 00 AA F5 03 03 2A F4 03 02 AA"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0xa966290",
+   "size": "0x33c",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 43 0A D1 59 D0 3B D5 28 17 40 F9 F3 03 01 AA"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0xa93c518",
+   "size": "0x4fc",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 83 04 D1 E9 23 0B 6D FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? A8 03 19 F8 ?? ?? ?? ??"
+  }
+ },
+ "19.10": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x8a81478",
+   "size": "0x1b48",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 56 D0 3B D5 C8 16 40 F9 49 06 80 52"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x9225be4",
+   "size": "0x34",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "1F 00 00 79 ?? ?? ?? ?? 29 75 40 F9 E0 E5 00 6F 08 00 80 12 00 40 80 3C 00 40 81 3C 08 40 02 F8"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x9c9f8a4",
+   "size": "0x38c",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 F6 03 00 AA F5 03 03 2A F4 03 02 AA"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0xa8bfc38",
+   "size": "0x39c",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 03 0D D1 59 D0 3B D5"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0xa800db4",
+   "size": "0x788",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF C3 05 D1 E9 23 10 6D FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 55 D0 3B D5"
+  }
+ },
+ "21.30": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x56407cc",
+   "size": "0x1b48",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 56 D0 3B D5 C8 16 40 F9 49 06 80 52"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x5eb2d70",
+   "size": "0x30",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "1F 00 00 79 1F 40 02 F8 ?? ?? ?? ?? 08 21 47 F9 00 E4 00 6F 00 40 80 3C 00 40 81 3C 09 09 40 F9"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x6a1c864",
+   "size": "0x47c",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 5B D0 3B D5 68 17 40 F9 F5 03 00 AA F6 03 03 2A"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0x7636050",
+   "size": "0x39c",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 03 0D D1 59 D0 3B D5"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x756fe88",
+   "size": "0x7f8",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 03 06 D1 E9 23 11 6D FC 6F 12 A9 FA 67 13 A9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 48 D0 3B D5 E8 0F 00 F9 08 15 40 F9"
+  },
+  "Inline_AttemptDeriveFromURL": {
+   "status": "OK",
+   "addr": "0x9ab1ae0",
+   "size": "0xfc",
+   "strategy": "win-fp",
+   "pattern": "?? ?? ?? 34 48 00 40 39 63 04 00 71 28 00 00 39 48 04 40 B9 28 04 00 B9 48 08 40 B9 28 08 00 B9"
+  }
+ },
+ "22.40": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x62808fc",
+   "size": "0x1a68",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 48 06 80 52 F4 03 01 2A F3 03 00 AA E8 33 00 39"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x6ccabb0",
+   "size": "0x30",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "1F 00 00 79 1F 40 02 F8 ?? ?? ?? ?? 08 21 46 F9 00 E4 00 6F 00 40 80 3C 00 40 81 3C 09 09 40 F9"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x7af1f48",
+   "size": "0x44c",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FB 0B 00 F9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F5 03 00 AA 00 4C 40 F9"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0x7fd1928",
+   "size": "0x37c",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FC 0F 1B F8 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF C3 0C D1 28 58 40 A9"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x7f01a50",
+   "size": "0x81c",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF C3 05 D1 E9 23 10 6D FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 E1 17 00 B9"
+  }
+ },
+ "23.50": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0x55c0ec4",
+   "size": "0x165c",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FD 7B BD A9 F5 0B 00 F9 FD 03 00 91 F4 4F 02 A9 48 06 80 52 F4 03 01 2A F3 03 00 AA A8 73 00 39"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x6d132b4",
+   "size": "0x30",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "?? ?? ?? ?? 00 E4 00 6F 08 0D 47 F9 1F 00 00 79 1F 40 02 F8 00 40 80 3C 00 40 81 3C 00 01 C0 3D"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0x8c57eb8",
+   "size": "0x484",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FD 7B 01 A9 FD 43 00 91 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 F6 03 03 2A F4 03 02 AA"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0x615d760",
+   "size": "0x334",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FD 7B BB A9 FC 0B 00 F9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FF 43 08 D1 28 54 40 A9"
+  },
+  "Inline_CollectGarbagePatch": {
+   "status": "OK",
+   "addr": "0x64a31d4",
+   "size": "0x970",
+   "strategy": "string:CollectGarbageInternal() is ",
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FD 7B 13 A9 FD C3 04 91 FC 6F 14 A9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 ?? ?? ?? ?? F3 03 00 2A"
+  }
+ },
+ "30.00": {
+  "Inline_ToDeathCauseNative": {
+   "status": "OK",
+   "addr": "0xa323678",
+   "size": "0x1368",
+   "strategy": "native:ToDeathCause:orig",
+   "pattern": "FF C3 00 D1 FD 7B 01 A9 FD 43 00 91 F4 4F 02 A9 48 06 80 52 F4 03 01 2A F3 03 00 AA A8 C3 1F 38"
+  },
+  "Inline_ServerOnAttemptInteract": {
+   "status": "OK",
+   "addr": "0x976398c",
+   "size": "0x30",
+   "strategy": "native:ServerOnAttemptInteract:orig",
+   "pattern": "?? ?? ?? ?? 00 E4 00 6F 08 5D 41 F9 1F 00 00 79 1F 40 02 F8 00 40 80 3C 00 40 81 3C 00 01 C0 3D"
+  },
+  "Inline_UnequipVehicleWeaponFunc": {
+   "status": "OK",
+   "addr": "0xcc32530",
+   "size": "0x470",
+   "strategy": "reuse:FindUnEquipVehicleWeapon",
+   "pattern": "FF C3 01 D1 FD 7B 01 A9 FD 43 00 91 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 F6 03 03 2A F4 03 02 AA"
+  },
+  "Inline_OnPawnEnterSeatFunc": {
+   "status": "OK",
+   "addr": "0x9382550",
+   "size": "0x378",
+   "strategy": "registrar:OnPawnEnterSeat:thunk->impl",
+   "pattern": "FD 7B BB A9 FC 0B 00 F9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FF C3 08 D1 28 58 40 A9"
+  }
+ }
+}
