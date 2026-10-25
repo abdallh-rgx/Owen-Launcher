@@ -1,0 +1,962 @@
+     1→#!/usr/bin/env python3
+     2→"""UNIVERSAL .so analyzer for Erbium function finding — works on ANY
+     3→Fortnite Android ARM64 binary (libUE4.so / libUnreal.so), versions 5.x–30.00.
+     4→
+     5→Everything is derived from the ELF itself — no external dumps, no per-version
+     6→knowledge, no symbol tables required:
+     7→
+     8→  * ELF parsing (program headers, sections, .dynamic)
+     9→  * Relocations: DT_RELA / DT_REL / DT_ANDROID_RELA(A) / DT_RELR / APS2 packed
+    10→  * Function boundaries: .eh_frame_hdr table + full .eh_frame CIE/FDE walk
+    11→  * Vectorized .text decodes (numpy):
+    12→      - ADRP+ADD  materialization refs   (rodata/data pointers)
+    13→      - ADRP+LDR  GOT / literal loads    (globals through GOT)
+    14→      - ADR       .text literal pools    (UTF-16 strings living in .text!)
+    15→      - BL/B      direct call graph
+    16→  * Strings: ASCII + UTF-16LE in .rodata and inside .text literal pools
+    17→  * VTable runs: relocation-slot runs in .data.rel.ro
+    18→  * Native UFunction table: {Name char* → exec thunk} relocation pairs
+    19→  * Version auto-detection from "Fortnite+Release-XX.XX-CL-YYYYYYY"
+    20→
+    21→This module is the foundation of erbium_solver.py (the universal Erbium
+    22→offset solver).  It is deliberately self-contained: numpy is the only
+    23→non-stdlib dependency.
+    24→"""
+    25→import os
+    26→import re
+    27→import struct
+    28→import bisect
+    29→import numpy as np
+    30→
+    31→R_AARCH64_RELATIVE = 1027
+    32→PT_LOAD, PT_DYNAMIC = 1, 2
+    33→
+    34→
+    35→def _sleb(buf, pos):
+    36→    result = 0
+    37→    shift = 0
+    38→    while True:
+    39→        b = buf[pos]
+    40→        pos += 1
+    41→        result |= (b & 0x7F) << shift
+    42→        shift += 7
+    43→        if not (b & 0x80):
+    44→            break
+    45→        if shift > 63:
+    46→            break
+    47→    # sign extension from the last byte
+    48→    if shift < 64 and (b & 0x40):
+    49→        result |= -(1 << shift)
+    50→    return result, pos
+    51→
+    52→
+    53→class SoAnalysis:
+    54→    """Universal analyzer.  Load once per binary; all indexes built lazily."""
+    55→
+    56→    def __init__(self, so_path):
+    57→        self.path = so_path
+    58→        with open(so_path, "rb") as f:
+    59→            self.elf = f.read()
+    60→        e = self.elf
+    61→        if e[:4] != b"\x7fELF" or e[4] != 2 or e[5] != 1:
+    62→            raise ValueError("not an ELF64 LE binary")
+    63→        (self.e_type, self.e_machine) = struct.unpack_from("<HH", e, 16)
+    64→        self.e_phoff, = struct.unpack_from("<Q", e, 32)
+    65→        self.e_shoff, = struct.unpack_from("<Q", e, 40)
+    66→        self.e_phentsize, self.e_phnum = struct.unpack_from("<HH", e, 54)
+    67→        self.e_shentsize, self.e_shnum, self.e_shstrndx = struct.unpack_from("<HHH", e, 58)
+    68→
+    69→        # ---------- program headers ----------
+    70→        self.phdrs = []
+    71→        for i in range(self.e_phnum):
+    72→            o = self.e_phoff + i * self.e_phentsize
+    73→            p_type, p_flags = struct.unpack_from("<II", e, o)
+    74→            p_offset, p_vaddr = struct.unpack_from("<QQ", e, o + 8)
+    75→            p_filesz, = struct.unpack_from("<Q", e, o + 32)
+    76→            self.phdrs.append((p_type, p_flags, p_offset, p_vaddr, p_filesz))
+    77→
+    78→        # ---------- sections ----------
+    79→        if self.e_shoff and self.e_shnum:
+    80→            sh = []
+    81→            for i in range(self.e_shnum):
+    82→                o = self.e_shoff + i * self.e_shentsize
+    83→                sh_name, sh_type = struct.unpack_from("<II", e, o)
+    84→                sh_flags, sh_addr, sh_offset, sh_size = struct.unpack_from("<QQQQ", e, o + 8)
+    85→                sh.append((sh_name, sh_type, sh_flags, sh_addr, sh_offset, sh_size))
+    86→            strtab_off = sh[self.e_shstrndx][4]
+    87→            self.sections = {}
+    88→            for sh_name, sh_type, sh_flags, sh_addr, sh_offset, sh_size in sh:
+    89→                end = e.index(b"\0", strtab_off + sh_name)
+    90→                nm = e[strtab_off + sh_name:end].decode()
+    91→                self.sections[nm] = (sh_addr, sh_offset, sh_size)
+    92→        else:
+    93→            self.sections = {}
+    94→        self._dyn = self._parse_dynamic()
+    95→
+    96→        # .text
+    97→        if ".text" in self.sections:
+    98→            self.text_va, self.text_off, self.text_size = self.sections[".text"]
+    99→        else:  # stripped section headers: find executable PT_LOAD
+   100→            for p_type, p_flags, p_offset, p_vaddr, p_filesz in self.phdrs:
+   101→                if p_type == PT_LOAD and (p_flags & 1):  # PF_X
+   102→                    self.text_va, self.text_off, self.text_size = p_vaddr, p_offset, p_filesz
+   103→                    break
+   104→        self.text_words = None  # lazy
+   105→
+   106→        # .rodata
+   107→        if ".rodata" in self.sections:
+   108→            self.ro_va, self.ro_off, self.ro_size = self.sections[".rodata"]
+   109→        else:
+   110→            self.ro_va = self.ro_off = self.ro_size = 0
+   111→
+   112→        # .data.rel.ro
+   113→        if ".data.rel.ro" in self.sections:
+   114→            self.drr_va, self.drr_off, self.drr_size = self.sections[".data.rel.ro"]
+   115→        else:
+   116→            self.drr_va = self.drr_off = self.drr_size = 0
+   117→
+   118→        # lazy indexes
+   119→        self._rels = None            # sorted (off, add) RELATIVE slots
+   120→        self._rels_by_off = None
+   121→        self._funcs = None           # sorted starts
+   122→        self._fends = None
+   123→        self._refs = None            # (tgt, pc) ADRP+ADD
+   124→        self._refl = None            # (tgt, pc) ADRP+LDR literal (GOT)
+   125→        self._adr = None             # (tgt, pc) ADR literal
+   126→        self._bl = None              # (pc, tgt)
+   127→        self._strings_ascii = None
+   128→        self._strings_utf16 = None
+   129→        self._vt_runs = None
+   130→        self._natives = None
+   131→        self._version = "?"
+   132→        self._detect_version()
+   133→
+   134→    # =========================== addressing ===========================
+   135→    def va2off(self, va):
+   136→        for p_type, _fl, p_offset, p_vaddr, p_filesz in self.phdrs:
+   137→            if p_type == PT_LOAD and p_vaddr <= va < p_vaddr + p_filesz:
+   138→                return p_offset + (va - p_vaddr)
+   139→        return None
+   140→
+   141→    def read(self, va, n):
+   142→        o = self.va2off(va)
+   143→        return None if o is None else self.elf[o:o + n]
+   144→
+   145→    def u32(self, va):
+   146→        o = self.va2off(va)
+   147→        return None if o is None else struct.unpack_from("<I", self.elf, o)[0]
+   148→
+   149→    def u64(self, va):
+   150→        o = self.va2off(va)
+   151→        return None if o is None else struct.unpack_from("<Q", self.elf, o)[0]
+   152→
+   153→    def in_text(self, va):
+   154→        return self.text_va <= va < self.text_va + self.text_size
+   155→
+   156→    def off2va_text(self, off):
+   157→        return self.text_va + (off - self.text_off)
+   158→
+   159→    # =========================== dynamic/relocs ===========================
+   160→    def _parse_dynamic(self):
+   161→        dyn = {"rela": 0, "relasz": 0, "relaent": 24, "rel": 0, "relsz": 0, "relent": 16,
+   162→               "arela": 0, "arelasz": 0, "arel": 0, "arelsz": 0, "relr": 0, "relrsz": 0}
+   163→        p = None
+   164→        for p_type, _fl, p_offset, p_vaddr, p_filesz in self.phdrs:
+   165→            if p_type == PT_DYNAMIC:
+   166→                p, sz = p_offset, p_filesz
+   167→                break
+   168→        if p is None:
+   169→            return dyn
+   170→        for k in range(0, sz - 15, 16):
+   171→            tag, val = struct.unpack_from("<QQ", self.elf, p + k)
+   172→            if tag == 0:
+   173→                break
+   174→            m = {7: "rela", 8: "relasz", 9: "relaent", 17: "rel", 18: "relsz", 19: "relent",
+   175→                 0x6FFFE000: "arela", 0x60000011: "arela", 0x6FFFE001: "arelasz",
+   176→                 0x6FFFF000: "arel", 0x6000000F: "arel", 0x6FFFF001: "arelsz",
+   177→                 0x6FFFE000 + 1: None, 36: "relr", 38: "relrsz"}
+   178→            key = m.get(tag)
+   179→            if key:
+   180→                dyn[key] = val
+   181→        return dyn
+   182→
+   183→    def _decode_relocs(self):
+   184→        """all R_AARCH64_RELATIVE slots → np array (off, add) sorted by off"""
+   185→        slots = []
+   186→        d = self._dyn
+   187→
+   188→        def add(off, val):
+   189→            slots.append((off, val))
+   190→
+   191→        # plain RELA / REL
+   192→        for base_key, sz_key, ent_key, is_rel in (("rela", "relasz", "relaent", False),
+   193→                                                  ("rel", "relsz", "relent", True)):
+   194→            off_v, sz_v = d[base_key], d[sz_key]
+   195→            if not off_v or not sz_v:
+   196→                continue
+   197→            o = self.va2off(off_v)
+   198→            if o is None:
+   199→                continue
+   200→            ent = d[ent_key]
+   201→            for k in range(0, sz_v - ent + 1, ent):
+   202→                ro, ri = struct.unpack_from("<QQ", self.elf, o + k)
+   203→                if (ri & 0xFFFFFFFF) != R_AARCH64_RELATIVE:
+   204→                    continue
+   205→                if is_rel:
+   206→                    q = self.va2off(ro)
+   207→                    if q is None:
+   208→                        continue
+   209→                    val, = struct.unpack_from("<Q", self.elf, q)
+   210→                else:
+   211→                    val, = struct.unpack_from("<Q", self.elf, o + k + 16)
+   212→                add(ro, val)
+   213→
+   214→        # Android packed APS2/APR2 (robust routine below)
+   215→        for base_key, sz_key in (("arela", "arelasz"), ("arel", "arelsz")):
+   216→            off_v, sz_v = d[base_key], d[sz_key]
+   217→            if not off_v or sz_v < 8:
+   218→                continue
+   219→            o = self.va2off(off_v)
+   220→            if o is None:
+   221→                continue
+   222→            buf = self.elf[o:o + sz_v]
+   223→            if buf[:4] not in (b"APS2", b"APR2"):
+   224→                continue
+   225→            slots.extend(self._decode_aps2_region(o, sz_v))
+   226→
+   227→        # RELR
+   228→        if d["relr"] and d["relrsz"]:
+   229→            o = self.va2off(d["relr"])
+   230→            if o is not None:
+   231→                base = 0
+   232→                for k in range(0, d["relrsz"] - 7, 8):
+   233→                    w, = struct.unpack_from("<Q", self.elf, o + k)
+   234→                    if w & 1:
+   235→                        base = w & ~1
+   236→                        q = self.va2off(base)
+   237→                        if q is not None:
+   238→                            add(base, struct.unpack_from("<Q", self.elf, q)[0])
+   239→                    else:
+   240→                        for b in range(63):
+   241→                            if w & (1 << b):
+   242→                                a = base + (b + 1) * 8
+   243→                                q = self.va2off(a)
+   244→                                if q is not None:
+   245→                                    add(a, struct.unpack_from("<Q", self.elf, q)[0])
+   246→
+   247→        if not slots:  # last-resort: any packed region even without dyn entries
+   248→            for nm in (".rela.dyn", ".rel.dyn"):
+   249→                if nm in self.sections:
+   250→                    va, off, size = self.sections[nm]
+   251→                    buf = self.elf[off:off + min(size, 16)]
+   252→                    if buf[:4] in (b"APS2", b"APR2"):
+   253→                        slots = self._decode_aps2_region(off, size)
+   254→                        if slots:
+   255→                            break
+   256→        arr = np.array(slots, dtype=np.uint64).reshape(-1, 2)
+   257→        order = np.argsort(arr[:, 0], kind="stable")
+   258→        arr = arr[order]
+   259→        # dedupe (keep first)
+   260→        keep = np.ones(len(arr), dtype=bool)
+   261→        if len(arr) > 1:
+   262→            keep[1:] = arr[1:, 0] != arr[:-1, 0]
+   263→        return arr[keep]
+   264→
+   265→    def _decode_aps2_region(self, off, sz):
+   266→        """decode one APS2/APR2 packed-relocation region → [(slot_va, addend)]"""
+   267→        slots = []
+   268→        buf = self.elf[off:off + sz]
+   269→        if len(buf) < 8 or buf[:4] not in (b"APS2", b"APR2"):
+   270→            return slots
+   271→        pos = 4
+   272→        count, pos = _sleb(buf, pos)
+   273→        offset, pos = _sleb(buf, pos)
+   274→        addend = 0
+   275→        done = 0
+   276→        while done < count and pos < len(buf):
+   277→            gsize, pos = _sleb(buf, pos)
+   278→            gflags, pos = _sleb(buf, pos)
+   279→            g_offdelta = g_info = g_addend = 0
+   280→            if gflags & 2:
+   281→                g_offdelta, pos = _sleb(buf, pos)
+   282→            if gflags & 1:
+   283→                g_info, pos = _sleb(buf, pos)
+   284→            if (gflags & 8) and (gflags & 4):
+   285→                g_addend, pos = _sleb(buf, pos)
+   286→            for _ in range(gsize):
+   287→                if done >= count or pos >= len(buf):
+   288→                    break
+   289→                if not (gflags & 2):
+   290→                    delta, pos = _sleb(buf, pos)
+   291→                    offset += delta
+   292→                else:
+   293→                    offset += g_offdelta
+   294→                if gflags & 1:
+   295→                    info = g_info
+   296→                else:
+   297→                    info, pos = _sleb(buf, pos)
+   298→                if gflags & 8:
+   299→                    if gflags & 4:
+   300→                        addend = g_addend
+   301→                    else:
+   302→                        dlt, pos = _sleb(buf, pos)
+   303→                        addend += dlt
+   304→                    val = addend & 0xFFFFFFFFFFFFFFFF
+   305→                    have = True
+   306→                else:
+   307→                    q = self.va2off(offset & 0xFFFFFFFFFFFFFFFF)
+   308→                    if q is None:
+   309→                        have = False
+   310→                    else:
+   311→                        val, = struct.unpack_from("<Q", self.elf, q)
+   312→                        have = True
+   313→                done += 1
+   314→                if have and (info & 0xFFFFFFFF) == R_AARCH64_RELATIVE:
+   315→                    slots.append((offset & 0xFFFFFFFFFFFFFFFF, val))
+   316→        return slots
+   317→
+   318→    @property
+   319→    def rels(self):
+   320→        if self._rels is None:
+   321→            self._rels = self._decode_relocs()
+   322→        return self._rels
+   323→
+   324→    def rel_value(self, off_va):
+   325→        """addend of the RELATIVE relocation at slot off_va (None if absent)"""
+   326→        r = self.rels
+   327→        s = np.searchsorted(r[:, 0], off_va, "left")
+   328→        e = np.searchsorted(r[:, 0], off_va, "right")
+   329→        return int(r[s, 1]) if e > s else None
+   330→
+   331→    # =========================== functions (.eh_frame) ===========================
+   332→    def _build_funcs(self):
+   333→        """function starts+ends from .eh_frame_hdr + .eh_frame"""
+   334→        ranges = {}
+   335→
+   336→        def add(start, end):
+   337→            if self.in_text(start):
+   338→                if start not in ranges or (end and (ranges[start] == 0 or end > ranges[start])):
+   339→                    if end == 0 or ranges.get(start, 0) == 0:
+   340→                        ranges[start] = end
+   341→                    else:
+   342→                        ranges[start] = max(ranges[start], end)
+   343→
+   344→        # --- .eh_frame_hdr binary search table ---
+   345→        if ".eh_frame_hdr" in self.sections:
+   346→            va, off, size = self.sections[".eh_frame_hdr"]
+   347→            p = self.elf[off:off + size]
+   348→            if size >= 12 and p[0] == 1:
+   349→                eptr_enc, cnt_enc, tab_enc = p[1], p[2], p[3]
+   350→                pos = 4
+   351→                hdr_va = va
+   352→                r = self._read_enc_ptr_simple(p, pos, eptr_enc, hdr_va + pos, hdr_va)
+   353→                if r:
+   354→                    pos = r[1]
+   355→                r = self._read_enc_ptr_simple(p, pos, cnt_enc, hdr_va + pos, hdr_va)
+   356→                if r:
+   357→                    cnt = r[0]
+   358→                    pos = r[1]
+   359→                    if 0 < cnt <= 4_000_000 and pos + cnt * 8 <= size:
+   360→                        for k in range(cnt):
+   361→                            a = self._read_enc_ptr_simple(p, pos, tab_enc, hdr_va + pos, hdr_va)
+   362→                            if not a:
+   363→                                break
+   364→                            pos = a[1]
+   365→                            b = self._read_enc_ptr_simple(p, pos, tab_enc, hdr_va + pos, hdr_va)
+   366→                            if not b:
+   367→                                break
+   368→                            pos = b[1]
+   369→                            add(a[0], 0)
+   370→
+   371→        # --- full .eh_frame walk ---
+   372→        if ".eh_frame" in self.sections:
+   373→            va, off, size = self.sections[".eh_frame"]
+   374→            p = self.elf[off:off + size]
+   375→            eh_va = va
+   376→            if size >= 8:
+   377→                # pass 1: CIEs (position → fde encoding)
+   378→                cies = {}
+   379→                pos = 0
+   380→                while pos + 4 <= size:
+   381→                    ln, = struct.unpack_from("<I", p, pos)
+   382→                    if ln == 0 or ln == 0xFFFFFFFF:
+   383→                        break
+   384→                    after = pos + 4 + ln
+   385→                    if after > size:
+   386→                        break
+   387→                    if struct.unpack_from("<I", p, pos + 4)[0] == 0:  # CIE
+   388→                        q = pos + 8
+   389→                        if q < size and p[q] != 1:
+   390→                            pos = after
+   391→                            continue
+   392→                        q += 1
+   393→                        aug = bytearray()
+   394→                        while q < size and p[q]:
+   395→                            aug.append(p[q]); q += 1
+   396→                        q += 1
+   397→                        # code align uleb / data align sleb / ret reg uleb
+   398→                        while q < size and (p[q] & 0x80):
+   399→                            q += 1
+   400→                        q += 1
+   401→                        while q < size:
+   402→                            b = p[q]; q += 1
+   403→                            if not (b & 0x80):
+   404→                                break
+   405→                        while q < size and (p[q] & 0x80):
+   406→                            q += 1
+   407→                        q += 1
+   408→                        fde_enc = 0x1B
+   409→                        if aug[:1] == b"z":
+   410→                            alen = 0
+   411→                            sh = 0
+   412→                            while q < size:
+   413→                                b = p[q]; q += 1
+   414→                                alen |= (b & 0x7F) << sh
+   415→                                sh += 7
+   416→                                if not (b & 0x80):
+   417→                                    break
+   418→                            aend = q + alen
+   419→                            for c in aug[1:]:
+   420→                                if c == ord("L"):
+   421→                                    q += 1
+   422→                                elif c == ord("P"):
+   423→                                    if q < size:
+   424→                                        pe = p[q]; q += 1
+   425→                                        r = self._read_enc_ptr_simple(p, q, pe, eh_va + q, eh_va)
+   426→                                        if r:
+   427→                                            q = r[1]
+   428→                                elif c == ord("R"):
+   429→                                    if q < size:
+   430→                                        fde_enc = p[q]; q += 1
+   431→                                else:
+   432→                                    break
+   433→                            q = aend
+   434→                        cies[pos] = fde_enc
+   435→                    pos = after
+   436→                # pass 2: FDEs
+   437→                pos = 0
+   438→                dr_base = eh_va
+   439→                hdr_va2 = self.sections.get(".eh_frame_hdr", (0, 0, 0))[0]
+   440→                while pos + 4 <= size:
+   441→                    ln, = struct.unpack_from("<I", p, pos)
+   442→                    if ln == 0 or ln == 0xFFFFFFFF:
+   443→                        break
+   444→                    after = pos + 4 + ln
+   445→                    if after > size:
+   446→                        break
+   447→                    cid = struct.unpack_from("<I", p, pos + 4)[0]
+   448→                    if cid != 0:
+   449→                        cie_pos = pos + 4 - cid
+   450→                        enc = cies.get(cie_pos, 0x1B)
+   451→                        q = pos + 8
+   452→                        ok = False
+   453→                        iloc = 0
+   454→                        if (enc & 0xF0) == 0x30:
+   455→                            for base in (eh_va, hdr_va2, 0):
+   456→                                r = self._read_enc_ptr_simple(p, q, enc, eh_va + q, base)
+   457→                                if r and self.in_text(r[0]):
+   458→                                    iloc = r[0]; q = r[1]; ok = True
+   459→                                    dr_base = base
+   460→                                    break
+   461→                        else:
+   462→                            r = self._read_enc_ptr_simple(p, q, enc, eh_va + q, dr_base)
+   463→                            if r and self.in_text(r[0]):
+   464→                                iloc = r[0]; q = r[1]; ok = True
+   465→                            if not ok:
+   466→                                r = self._read_enc_ptr_simple(p, q, enc, eh_va + q, 0)
+   467→                                if r and self.in_text(r[0]):
+   468→                                    iloc = r[0]; q = r[1]; ok = True
+   469→                        if ok:
+   470→                            fmt = enc & 0x0F
+   471→                            rng = 0
+   472→                            if fmt in (0x03, 0x0B, 0x09) and q + 4 <= size:
+   473→                                rng, = struct.unpack_from("<I", p, q)
+   474→                            elif fmt in (0x0A, 0x04) and q + 8 <= size:
+   475→                                rng, = struct.unpack_from("<Q", p, q)
+   476→                            elif fmt in (0x02, 0x0C) and q + 2 <= size:
+   477→                                rng, = struct.unpack_from("<H", p, q)
+   478→                            add(iloc, iloc + rng if rng else 0)
+   479→                    pos = after
+   480→
+   481→        starts = np.array(sorted(ranges), dtype=np.uint64)
+   482→        ends = np.array([ranges[int(s)] for s in starts], dtype=np.uint64)
+   483→        text_end = self.text_va + self.text_size
+   484→        for i in range(len(starts)):
+   485→            if ends[i] == 0 or ends[i] > text_end:
+   486→                ends[i] = starts[i + 1] if i + 1 < len(starts) and starts[i + 1] <= text_end else text_end
+   487→        self._funcs, self._fends = starts, ends
+   488→        return starts
+   489→
+   490→    def _read_enc_ptr_simple(self, buf, pos, enc, pc, datarel):
+   491→        """clean pointer-encoding decoder → (value, new_pos) | None"""
+   492→        if enc == 0xFF:
+   493→            return None
+   494→        base, fmt = enc & 0xF0, enc & 0x0F
+   495→        n = pos
+   496→        if fmt == 0x00:
+   497→            if n + 8 > len(buf):
+   498→                return None
+   499→            v, = struct.unpack_from("<Q", buf, n); n += 8
+   500→        elif fmt in (0x02, 0x0C):
+   501→            if n + 2 > len(buf):
+   502→                return None
+   503→            v, = struct.unpack_from("<H", buf, n); n += 2
+   504→        elif fmt in (0x03, 0x09, 0x0B):
+   505→            if n + 4 > len(buf):
+   506→                return None
+   507→            v, = struct.unpack_from("<i" if fmt in (0x09, 0x0B) else "<I", buf, n); n += 4
+   508→        elif fmt in (0x04, 0x0A):
+   509→            if n + 8 > len(buf):
+   510→                return None
+   511→            v, = struct.unpack_from("<q" if fmt == 0x0A else "<Q", buf, n); n += 8
+   512→        elif fmt == 0x01:
+   513→            if n >= len(buf):
+   514→                return None
+   515→            v = buf[n]; n += 1
+   516→        else:
+   517→            return None
+   518→        if base == 0x10:      # pcrel — stored value is relative to its own slot
+   519→            v = pc + v
+   520→        elif base == 0x30:    # datarel
+   521→            v = datarel + v
+   522→        return v & 0xFFFFFFFFFFFFFFFF, n
+   523→
+   524→    @property
+   525→    def funcs(self):
+   526→        if self._funcs is None:
+   527→            self._build_funcs()
+   528→        return self._funcs
+   529→
+   530→    def func_of(self, va):
+   531→        i = bisect.bisect_right(self.funcs, va) - 1
+   532→        return int(self.funcs[i]) if i >= 0 else None
+   533→
+   534→    def func_end(self, fstart):
+   535→        i = bisect.bisect_left(self.funcs, fstart)
+   536→        return int(self._fends[i]) if i < len(self.funcs) else None
+   537→
+   538→    def func_size(self, fstart):
+   539→        e = self.func_end(fstart)
+   540→        return (e - fstart) if e else 0
+   541→
+   542→    def is_func(self, va):
+   543→        i = bisect.bisect_left(self.funcs, va)
+   544→        return i < len(self.funcs) and int(self.funcs[i]) == va
+   545→
+   546→    def next_func(self, va):
+   547→        i = bisect.bisect_right(self.funcs, va)
+   548→        return int(self.funcs[i]) if i < len(self.funcs) else None
+   549→
+   550→    # =========================== .text decodes ===========================
+   551→    @property
+   552→    def words(self):
+   553→        if self.text_words is None:
+   554→            n = self.text_size // 4
+   555→            self.text_words = np.frombuffer(self.elf, dtype="<u4", count=n, offset=self.text_off)
+   556→        return self.text_words
+   557→
+   558→    def _scan_refs(self):
+   559→        """vectorized ADRP+ADD / ADRP+LDR / ADR decode across all of .text"""
+   560→        w = self.words.astype(np.uint64)
+   561→        n = len(w)
+   562→        pc = self.text_va + np.arange(n, dtype=np.uint64) * 4
+   563→
+   564→        # ---- ADRP ----
+   565→        adrp = (w & np.uint64(0x9F000000)) == np.uint64(0x90000000)
+   566→        ai = np.flatnonzero(adrp)
+   567→        if len(ai):
+   568→            wa = w[ai]
+   569→            rd = wa & np.uint64(0x1F)
+   570→            lo = (wa >> np.uint64(29)) & np.uint64(3)
+   571→            hi = (wa >> np.uint64(5)) & np.uint64(0x7FFFF)
+   572→            simm = ((hi << np.uint64(2)) | lo).astype(np.int64)
+   573→            simm = (simm ^ np.int64(1 << 20)) - np.int64(1 << 20)   # sext 21
+   574→            page = (pc[ai] & np.uint64(0xFFFFFFFFFFFFF000)) + (simm.astype(np.uint64) << np.uint64(12))
+   575→
+   576→            refs = []   # (tgt, pc)
+   577→            refl = []   # (tgt, pc) GOT loads
+   578→            KMAX = 8
+   579→            for k in range(1, KMAX + 1):
+   580→                j = ai + k
+   581→                valid = j < n
+   582→                if not valid.any():
+   583→                    break
+   584→                jj = j[valid]
+   585→                wk = w[jj]
+   586→                # ADD Xd, Xn, #imm (64-bit)
+   587→                is_add = (wk & np.uint64(0xFF800000)) == np.uint64(0x91000000)
+   588→                rn_add = (wk >> np.uint64(5)) & np.uint64(0x1F)
+   589→                sub_add = is_add & (rn_add == rd[valid])
+   590→                if sub_add.any():
+   591→                    match = np.zeros(len(ai), dtype=bool)
+   592→                    match[valid] = sub_add
+   593→                    idx = np.flatnonzero(match)
+   594→                    ii = ai[idx]
+   595→                    imm12 = (w[ii + k] >> np.uint64(10)) & np.uint64(0xFFF)
+   596→                    sh = (w[ii + k] >> np.uint64(22)) & np.uint64(3)
+   597→                    imm = np.where(sh == 1, imm12 << np.uint64(12), imm12)
+   598→                    tgt = page[idx] + imm
+   599→                    refs.append(np.stack([tgt, pc[ii]], axis=1))
+   600→                    rd[idx] = np.uint64(99)   # consumed
+   601→                # LDR Xt, [Xn, #imm] (adrp+ldr → GOT / literal)
+   602→                is_ldr = (wk & np.uint64(0xFFC00000)) == np.uint64(0xF9400000)
+   603→                rn_ldr = (wk >> np.uint64(5)) & np.uint64(0x1F)
+   604→                sub_ldr = is_ldr & (rn_ldr == rd[valid])
+   605→                if sub_ldr.any():
+   606→                    match = np.zeros(len(ai), dtype=bool)
+   607→                    match[valid] = sub_ldr
+   608→                    idx = np.flatnonzero(match)
+   609→                    ii = ai[idx]
+   610→                    imm12 = (w[ii + k] >> np.uint64(10)) & np.uint64(0xFFF)
+   611→                    tgt = page[idx] + imm12 * np.uint64(8)
+   612→                    refl.append(np.stack([tgt, pc[ii]], axis=1))
+   613→                    rd[idx] = np.uint64(99)   # consumed
+   614→            self._refs = np.concatenate(refs) if refs else np.zeros((0, 2), np.uint64)
+   615→            self._refl = np.concatenate(refl) if refl else np.zeros((0, 2), np.uint64)
+   616→            self._refs_by_tgt = np.argsort(self._refs[:, 0], kind="stable")
+   617→            self._refl_by_tgt = np.argsort(self._refl[:, 0], kind="stable")
+   618→        else:
+   619→            self._refs = np.zeros((0, 2), np.uint64)
+   620→            self._refl = np.zeros((0, 2), np.uint64)
+   621→            self._refs_by_tgt = np.zeros(0, int)
+   622→            self._refl_by_tgt = np.zeros(0, int)
+   623→
+   624→        # ---- ADR (literal pool strings inside .text) ----
+   625→        adr = (w & np.uint64(0x9F000000)) == np.uint64(0x10000000)
+   626→        if adr.any():
+   627→            idx = np.flatnonzero(adr)
+   628→            wa = w[idx]
+   629→            immlo = (wa >> np.uint64(29)) & np.uint64(3)
+   630→            immhi = (wa >> np.uint64(5)) & np.uint64(0x7FFFF)
+   631→            simm = ((immhi << np.uint64(2)) | immlo).astype(np.int64)
+   632→            simm = (simm ^ np.int64(1 << 20)) - np.int64(1 << 20)
+   633→            tgt = (pc[idx].astype(np.int64) + simm).astype(np.uint64)
+   634→            self._adr = np.stack([tgt, pc[idx]], axis=1)
+   635→            self._adr_by_tgt = np.argsort(self._adr[:, 0], kind="stable")
+   636→        else:
+   637→            self._adr = np.zeros((0, 2), np.uint64)
+   638→            self._adr_by_tgt = np.zeros(0, int)
+   639→
+   640→        # ---- BL / B ----
+   641→        bl = (w & np.uint64(0xFC000000)) == np.uint64(0x94000000)
+   642→        if bl.any():
+   643→            idx = np.flatnonzero(bl)
+   644→            imm = (w[idx] & np.uint64(0x03FFFFFF)).astype(np.int64)
+   645→            imm = (imm ^ np.int64(1 << 25)) - np.int64(1 << 25)
+   646→            tgt = (pc[idx].astype(np.int64) + (imm << np.int64(2))).astype(np.uint64)
+   647→            self._bl = np.stack([pc[idx], tgt], axis=1)
+   648→            self._bl_by_tgt = np.argsort(self._bl[:, 1], kind="stable")
+   649→            self._bl_by_pc = np.argsort(self._bl[:, 0], kind="stable")
+   650→        else:
+   651→            self._bl = np.zeros((0, 2), np.uint64)
+   652→            self._bl_by_tgt = self._bl_by_pc = np.zeros(0, int)
+   653→
+   654→    def _ensure_scan(self):
+   655→        if self._refs is None:
+   656→            self._scan_refs()
+   657→
+   658→    # ---- query API ----
+   659→    def refs_to(self, target):
+   660→        self._ensure_scan()
+   661→        s = np.searchsorted(self._refs[self._refs_by_tgt, 0], target, "left")
+   662→        e = np.searchsorted(self._refs[self._refs_by_tgt, 0], target, "right")
+   663→        return [(int(p), int(t)) for t, p in self._refs[self._refs_by_tgt][s:e]]
+   664→
+   665→    def refl_to(self, target):
+   666→        self._ensure_scan()
+   667→        s = np.searchsorted(self._refl[self._refl_by_tgt, 0], target, "left")
+   668→        e = np.searchsorted(self._refl[self._refl_by_tgt, 0], target, "right")
+   669→        return [(int(p), int(t)) for t, p in self._refl[self._refl_by_tgt][s:e]]
+   670→
+   671→    def adr_to(self, target):
+   672→        self._ensure_scan()
+   673→        s = np.searchsorted(self._adr[self._adr_by_tgt, 0], target, "left")
+   674→        e = np.searchsorted(self._adr[self._adr_by_tgt, 0], target, "right")
+   675→        return [(int(p), int(t)) for t, p in self._adr[self._adr_by_tgt][s:e]]
+   676→
+   677→    def callers_of(self, fn):
+   678→        self._ensure_scan()
+   679→        s = np.searchsorted(self._bl[self._bl_by_tgt, 1], fn, "left")
+   680→        e = np.searchsorted(self._bl[self._bl_by_tgt, 1], fn, "right")
+   681→        return [(int(p), int(t)) for p, t in self._bl[self._bl_by_tgt][s:e]]
+   682→
+   683→    def bls_in(self, fn):
+   684→        """BL sites inside function (pc-sorted)"""
+   685→        self._ensure_scan()
+   686→        fend = self.func_end(fn)
+   687→        s = np.searchsorted(self._bl[self._bl_by_pc, 0], fn, "left")
+   688→        e = np.searchsorted(self._bl[self._bl_by_pc, 0], fend, "left")
+   689→        return [(int(p), int(t)) for p, t in self._bl[self._bl_by_pc][s:e] if fn <= p < fend]
+   690→
+   691→    def refs_in(self, fn):
+   692→        """ADRP+ADD materializations inside function → [(tgt, pc)]"""
+   693→        self._ensure_scan()
+   694→        order = np.argsort(self._refs[:, 1], kind="stable")
+   695→        fend = self.func_end(fn)
+   696→        s = np.searchsorted(self._refs[order, 1], fn, "left")
+   697→        e = np.searchsorted(self._refs[order, 1], fend, "left")
+   698→        return [(int(t), int(p)) for t, p in self._refs[order][s:e] if fn <= p < fend]
+   699→
+   700→    def adr_in(self, fn):
+   701→        self._ensure_scan()
+   702→        order = np.argsort(self._adr[:, 1], kind="stable")
+   703→        fend = self.func_end(fn)
+   704→        s = np.searchsorted(self._adr[order, 1], fn, "left")
+   705→        e = np.searchsorted(self._adr[order, 1], fend, "left")
+   706→        return [(int(t), int(p)) for t, p in self._adr[order][s:e] if fn <= p < fend]
+   707→
+   708→    def read_string_at(self, va, minlen=4, maxlen=160):
+   709→        """ASCII or UTF-16LE string at va → ('A'|'W', str) | None"""
+   710→        raw = self.read(va, maxlen * 2 + 2)
+   711→        if not raw:
+   712→            return None
+   713→        a = raw.split(b"\0", 1)[0]
+   714→        if len(a) >= minlen and all(32 <= c < 127 for c in a):
+   715→            return ("A", a.decode())
+   716→        out = []
+   717→        for i in range(0, len(raw) - 1, 2):
+   718→            ch = raw[i] | (raw[i + 1] << 8)
+   719→            if ch == 0:
+   720→                break
+   721→            if not (32 <= ch < 127):
+   722→                return None
+   723→            out.append(chr(ch))
+   724→        if len(out) >= minlen:
+   725→            return ("W", "".join(out))
+   726→        return None
+   727→
+   728→    def find_strings(self, s, wide=True, limit=40):
+   729→        """all VAs where string s occurs (utf16 and/or ascii), searching
+   730→        .rodata AND .text literal pools."""
+   731→        res = []
+   732→        pats = []
+   733→        if wide:
+   734→            pats.append(s.encode("utf-16-le") + b"\0\0")
+   735→        pats.append(s.encode() + b"\0")
+   736→        regions = []
+   737→        if self.ro_size:
+   738→            regions.append(("ro", self.ro_off, self.ro_size, self.ro_va))
+   739→        regions.append(("text", self.text_off, self.text_size, self.text_va))
+   740→        for _rname, off, size, base in regions:
+   741→            data = self.elf[off:off + size]
+   742→            for pat in pats:
+   743→                i = data.find(pat)
+   744→                while i != -1 and len(res) < limit:
+   745→                    res.append(base + i)
+   746→                    i = data.find(pat, i + 2)
+   747→                if res:
+   748→                    return res
+   749→        return res
+   750→
+   751→    # =========================== vtables ===========================
+   752→    def vtable_runs(self, min_len=3):
+   753→        """relocation-slot runs (stride 8) in .data.rel.ro → list of runs;
+   754→        run = {base, slots:[funcVA...]}. Includes vtables + UFunction arrays."""
+   755→        if self._vt_runs is not None:
+   756→            return self._vt_runs
+   757→        rels = self.rels
+   758→        if not len(rels) or not self.drr_size:
+   759→            self._vt_runs = []
+   760→            return self._vt_runs
+   761→        lo, hi = self.drr_va, self.drr_va + self.drr_size
+   762→        m = (rels[:, 0] >= lo) & (rels[:, 0] < hi)
+   763→        sub = rels[m]
+   764→        runs = []
+   765→        if len(sub):
+   766→            cur_base = int(sub[0, 0])
+   767→            cur = [int(sub[0, 1])]
+   768→            for i in range(1, len(sub)):
+   769→                off, add = int(sub[i, 0]), int(sub[i, 1])
+   770→                if off == cur_base + len(cur) * 8:
+   771→                    cur.append(add)
+   772→                else:
+   773→                    if len(cur) >= min_len:
+   774→                        runs.append({"base": cur_base, "slots": cur})
+   775→                    cur_base, cur = off, [add]
+   776→            if len(cur) >= min_len:
+   777→                runs.append({"base": cur_base, "slots": cur})
+   778→        self._vt_runs = runs
+   779→        return runs
+   780→
+   781→    def vtable_of_func(self, fn):
+   782→        """runs containing slot == fn"""
+   783→        out = []
+   784→        for r in self.vtable_runs():
+   785→            try:
+   786→                idx = r["slots"].index(fn)
+   787→                out.append((r, idx))
+   788→            except ValueError:
+   789→                pass
+   790→        return out
+   791→
+   792→    # =========================== natives ===========================
+   793→    def native_table(self):
+   794→        """{UFunctionName → [thunk VAs]} — universal Path A:
+   795→        a string occurrence S gets a relocation slot pointing at it
+   796→        (in writable data); the slot's ±8 buddy pointing into .text is
+   797→        the native exec thunk.  Works on every version, no symbols needed."""
+   798→        if self._natives is not None:
+   799→            return self._natives
+   800→        natives = {}
+   801→        rels = self.rels
+   802→        if len(rels) >= 2:
+   803→            off_arr = rels[:, 0]
+   804→            add_arr = rels[:, 1]
+   805→            text_lo, text_hi = self.text_va, self.text_va + self.text_size
+   806→            # ---- pre-filter: slot pointing at readable string regions ----
+   807→            str_lo, str_hi = text_hi, text_lo  # empty by default
+   808→            regions = []
+   809→            if self.ro_size:
+   810→                regions.append((self.ro_va, self.ro_va + self.ro_size))
+   811→            regions.append((text_lo, text_hi))
+   812→            # candidate slots: add in a string region
+   813→            cand_mask = np.zeros(len(rels), dtype=bool)
+   814→            for lo, hi in regions:
+   815→                cand_mask |= (add_arr >= lo) & (add_arr < hi)
+   816→            ci = np.flatnonzero(cand_mask)
+   817→            if len(ci):
+   818→                # buddy lookup: for each candidate slot off, find slot off+8 and off-8
+   819→                # rels sorted by off → binary search
+   820→                plus = np.searchsorted(off_arr, off_arr[ci] + 8)
+   821→                plus_c = np.clip(plus, 0, len(off_arr) - 1)
+   822→                has_plus = off_arr[plus_c] == off_arr[ci] + 8
+   823→                plus_val = add_arr[plus_c]
+   824→                ok_plus = has_plus & (plus_val >= text_lo) & (plus_val < text_hi) & (plus_val != add_arr[ci])
+   825→                minus = np.searchsorted(off_arr, off_arr[ci] - 8)
+   826→                minus_c = np.clip(minus, 0, len(off_arr) - 1)
+   827→                has_minus = off_arr[minus_c] == off_arr[ci] - 8
+   828→                minus_val = add_arr[minus_c]
+   829→                ok_minus = has_minus & (minus_val >= text_lo) & (minus_val < text_hi) & (minus_val != add_arr[ci])
+   830→                hit_local = np.flatnonzero(ok_plus | ok_minus)
+   831→                for h in hit_local:
+   832→                    i = int(ci[h])
+   833→                    sva = int(add_arr[i])
+   834→                    s = self.read_string_at(sva, 4, 96)
+   835→                    if not s or s[0] != "A":
+   836→                        continue
+   837→                    nm = s[1]
+   838→                    if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", nm):
+   839→                        continue
+   840→                    if not (4 <= len(nm) <= 90):
+   841→                        continue
+   842→                    if ok_plus[h]:
+   843→                        natives.setdefault(nm, []).append(int(plus_val[h]))
+   844→                    if ok_minus[h]:
+   845→                        natives.setdefault(nm, []).append(int(minus_val[h]))
+   846→        self._natives = natives
+   847→        return natives
+   848→
+   849→    def native_addr(self, name):
+   850→        """primary thunk address for a UFunction name (None if unknown)"""
+   851→        nat = self.native_table()
+   852→        v = nat.get(name)
+   853→        return v[0] if v else None
+   854→
+   855→    # =========================== version ===========================
+   856→    def _detect_version(self):
+   857→        pats = [rb"Fortnite\+Release-(\d+\.\d+)-CL-(\d+)",
+   858→                rb"Fortnite/Release-(\d+\.\d+)",
+   859→                rb"Fortnite\+Release\+(\d+\.\d+)"]
+   860→        regions = []
+   861→        if self.ro_size:
+   862→            regions.append((self.ro_off, self.ro_size))
+   863→        regions.append((self.text_off, min(self.text_size, 20_000_000)))
+   864→        for off, size in regions:
+   865→            data = self.elf[off:off + size]
+   866→            for pat in pats:
+   867→                m = re.search(pat, data)
+   868→                if m:
+   869→                    self._version = m.group(1).decode()
+   870→                    return
+   871→        self._version = "?"
+   872→
+   873→    @property
+   874→    def version(self):
+   875→        return self._version
+   876→
+   877→    # =========================== pattern scan ===========================
+   878→    def scan_pattern(self, pat, limit=10):
+   879→        """masked hex pattern ("F9 0F ?? F8") over .text → [VAs] (regex-based)"""
+   880→        self._ensure_scan()
+   881→        parts = pat.split()
+   882→        rx_parts = []
+   883→        for p in parts:
+   884→            if p in ("?", "??"):
+   885→                rx_parts.append(b".")
+   886→            else:
+   887→                rx_parts.append(re.escape(bytes([int(p, 16)])))
+   888→        rx = re.compile(b"".join(rx_parts), re.DOTALL)
+   889→        m = len(parts)
+   890→        lo, hi = self.text_off, self.text_off + self.text_size
+   891→        hits = []
+   892→        for mt in rx.finditer(self.elf, lo, hi - m + 1):
+   893→            hits.append(self.text_va + (mt.start() - lo))
+   894→            if len(hits) >= limit:
+   895→                break
+   896→        return hits
+   897→
+   898→    # =========================== de-outline ===========================
+   899→    def deoutline(self, fn, stub_max=0x60, max_layers=4):
+   900→        """Android outlined-log awareness: tiny stub → B-thunk → real caller.
+   901→        Returns (real_func, layers)."""
+   902→        cur = fn
+   903→        layers = 0
+   904→        for _ in range(max_layers):
+   905→            sz = self.func_size(cur)
+   906→            if sz >= stub_max:
+   907→                break
+   908→            callers = set()
+   909→            for pc, _t in self.callers_of(cur):
+   910→                f = self.func_of(pc)
+   911→                if f is not None and f != cur:
+   912→                    callers.add(f)
+   913→            if not callers:
+   914→                break
+   915→            if len(callers) == 1:
+   916→                cur = next(iter(callers))
+   917→                layers += 1
+   918→                continue
+   919→            nxt = max(callers, key=lambda f: self.func_size(f))
+   920→            if self.func_size(nxt) <= sz:
+   921→                break
+   922→            cur = nxt
+   923→            layers += 1
+   924→        return cur, layers
+   925→
+   926→    def strings_of(self, fn, minlen=6):
+   927→        """every string (ADRP+ADD and ADR literal) referenced inside fn"""
+   928→        out = {}
+   929→        for tgt, pc in self.refs_in(fn):
+   930→            s = self.read_string_at(tgt, minlen)
+   931→            if s:
+   932→                out.setdefault(s[1], pc)
+   933→        for tgt, pc in self.adr_in(fn):
+   934→            s = self.read_string_at(tgt, minlen)
+   935→            if s:
+   936→                out.setdefault(s[1], pc)
+   937→        return out
+   938→
+   939→    def close(self):
+   940→        pass
+   941→
+   942→
+   943→if __name__ == "__main__":
+   944→    import sys, time
+   945→    path = sys.argv[1] if len(sys.argv) > 1 else "/tmp/work2/src/21.30/libUnreal.so"
+   946→    t0 = time.time()
+   947→    a = SoAnalysis(path)
+   948→    print(f"loaded {len(a.elf)/1e6:.0f}MB in {time.time()-t0:.1f}s — version detected: {a.version}")
+   949→    t0 = time.time()
+   950→    print(f"funcs: {len(a.funcs)} ({time.time()-t0:.1f}s)")
+   951→    t0 = time.time()
+   952→    a._ensure_scan()
+   953→    print(f"refs: {len(a._refs)}  refl(GOT): {len(a._refl)}  adr: {len(a._adr)}  bl: {len(a._bl)} ({time.time()-t0:.1f}s)")
+   954→    t0 = time.time()
+   955→    nat = a.native_table()
+   956→    print(f"natives: {len(nat)} ({time.time()-t0:.1f}s)")
+   957→    t0 = time.time()
+   958→    print(f"vtable runs: {len(a.vtable_runs())} ({time.time()-t0:.1f}s)")
+   959→    # smoke: find a known function via natives
+   960→    for probe in ("ClearAbility", "K2_GiveAbility", "ServerKickPlayer"):
+   961→        print(probe, "->", hex(a.native_addr(probe)) if a.native_addr(probe) else None)
+   962→

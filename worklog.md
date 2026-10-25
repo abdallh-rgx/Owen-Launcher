@@ -158,3 +158,30 @@ Stage Summary:
 - التغطية النهائية: 979/979 خلية (100%) = 755 نمط ثابت مُتحقق + 224 خلية سلاسل وقت-تشغيل تعمل على أي ثنائي
 - الأمانة العلمية: 6 خلايا خاطئة كشفها التحقق وأُزيلت مع التوثيق الكامل
 - المستودع محدّث: https://github.com/abdallh-rgx/Erbium-Android على commit 880b61a
+
+---
+Task ID: 15
+Agent: main (Z.ai Code)
+Task: Fork Erbium + نقل السيرفر الكامل إلى Android ARM64 + GitHub Actions (طلب المستخدم الأخير)
+
+Work Log:
+- عمل Fork لحساب المستخدم: https://github.com/abdallh-rgx/Erbium (من plooshi/Erbium)
+- اكتشاف عمل Android موجود في upstream (سقالة v1: flip+open فقط، 46/82 دالة على 21.30) — تفوقنا عليه بكامل كتالوج v6 (89 دالة × 11 نسخة)
+- تنزيل 11 ثنائي Android حقيقي من FNAndroidBuildsArchive (5.2.0/7.40/10.40/13.40/17.50/18.40/19.10/21.30/22.40/23.50/32.00) + استخراج libs
+- تعدين SDK bootstrap (المعالجات 1-3 + التحقق): ProcessEvent 11/11 (AccessNoneNoContext)، SpawnActor 11/11، FNameCtor 11/11 (مُتحقق عبر سياق FSQ)، SFO 10/11، SLO 9/11، GObjects 10/11 (ADRP+ADD+LDR من SFO — 5.2.0=0x945ff38 مُتحقق يدوياً)، GEngine 11/11 (3 أشكال: direct/GOT-indirect/ADRP+ADD — 21.30 يطابق upstream GT 0xde34970 حرفياً!)، AppendString 8/11 (مُصحح عبر شكل NamePool + LSR#13/16 — اكتشاف مصيدة __strlen_chk/PLT!)، Realloc 9/11 (wrapper scan: GMalloc→vtable slot 5 على UE4-5.2 وslot 7 على UE5.3+ — 13.40=0xba96110 مُتحقق يدوياً بالتفكيك)
+- بناء طبقة المنفذ الكاملة android/erbium/:
+  * win32_compat.h: Win32→POSIX شامل (VirtualProtect/mprotect, sprintf_s بقالب المصفوفة, GUID+CoCreateGuid, BitTest, FlushInstructionCache, IsBadReadPtr عبر /proc/self/maps, curl stubs, LARGE_INTEGER, __int64 macros)
+  * Memcury.h: ELF64 scanner بنفس API + FindFunctionCall/FindNameRef + PE-compat shims
+  * RT.h: محرك v6 كاملاً (مُصلَح لـ wchar=UTF-32 على Android)
+  * HookingARM64.cpp: inline hooks مع نقل تعليمات PC-relative كامل + Null/RetTrue/Nop/InvertBranch
+  * SDKBootstrap.cpp: SDK::Init (كشف الإصدار من السلسلة + bake سريع + سلاسل كونية)
+  * Finders-Android.cpp: جسم v6 كاملاً (89 دالة)
+  * dllmain-android.cpp: Main() الكامل (patches ARM64 + hooks + GIs flip + terrain)
+- إصلاحات SDK الجوهرية: FString=TArray<char> UTF-8 على Android + FName ctor بـ char* + ABIs دوال اللعبة (StaticFindObject/LoadObject) + إصلاحات clang الكثيرة (property puts by-value مع return للسلاسل، TMemoryAllocator operator==، const operator=، fn-ptr casts عبر memcpy/reinterpret_cast، FSetBitIterator operator--، ShlObj/curl/GUID/min&max/unsigned __int8)
+- بناء ناجح: liberbium.so × 11 نسخة (18.3MB لكل واحدة، ARM aarch64، NDK r27c) — 91K سطر تُجمَّع بالكامل!
+- CI: .github/workflows/android-full-server.yml (مصفوفة 11 نسخ + فحوصات sanity + artifacts) — انطلق على الفرع android-port
+
+Stage Summary:
+- الـ Fork مكتمل ويعمل: https://github.com/abdallh-rgx/Erbium/tree/android-port
+- كل النسخ الـ11 تُبنى: liberbium-<ver>.so جاهزة كـ artifacts
+- المتبقي: اختبار جهاز حقيقي (المستخدم سيجهز APK)، فجوات تعدين قليلة (32.00 SLO/SFO/GObjects، 7.40 SLO، Realloc/AppendString لـ 5.x/7.40 — تغطيها السلاسل وقت-التشغيل)
