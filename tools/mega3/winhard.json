@@ -1,0 +1,57 @@
+{
+ "FindCanAffordToPlaceBuildableClass": {
+  "win": "0x146f8a5ec",
+  "how": "pattern",
+  "size": "0x145"
+ },
+ "FindApplyCharacterCustomization": {
+  "win": "0x146fee40c",
+  "how": "string:AFortPlayerState::ApplyCharact",
+  "size": "0x4c"
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "win": "0x1466c6870",
+  "how": "string:FortGameModeAthena: No MegaSto",
+  "size": "0x32"
+ },
+ "FindRemoveFromAlivePlayers": {
+  "win": "0x1466c674c",
+  "how": "string:FortGameModeAthena::RemoveFrom",
+  "size": "0x7b"
+ },
+ "FindNotifyGameMemberAdded": {
+  "win": "0x140e99330",
+  "how": "pattern",
+  "size": "0x229"
+ },
+ "FindSetWorld": {
+  "win": "0x141b4231c",
+  "how": "pattern",
+  "size": "0xaa"
+ },
+ "FindCloseActorChannel": {
+  "win": "0x1484a5274",
+  "how": "string:UActorChannel::Close: ChIndex:",
+  "size": "0x4c"
+ },
+ "FindSpawnDecoVft": {
+  "win": "0x14720b85c",
+  "how": "string:AFortTrapTool::SpawnDeco World",
+  "size": "0x2b"
+ },
+ "FindIsNetRelevantForVft": {
+  "win": "0x1483dc294",
+  "how": "string:Actor %s / %s has no root comp",
+  "size": "0x40"
+ },
+ "FindGetWorldContext": {
+  "win": "0x140e01a5c",
+  "how": "pattern-mid",
+  "size": "0x4d"
+ },
+ "FindFinishedTargetSpline": {
+  "win": "0x146629d00",
+  "how": "pattern",
+  "size": "0x390"
+ }
+}

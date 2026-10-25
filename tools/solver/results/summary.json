@@ -1,0 +1,68 @@
+{
+ "5.41": {
+  "pattern_mode": 45,
+  "universal_mode": 45,
+  "total": 94,
+  "secs": 318
+ },
+ "7.40": {
+  "pattern_mode": 45,
+  "universal_mode": 45,
+  "total": 94,
+  "secs": 276
+ },
+ "9.41": {
+  "pattern_mode": 49,
+  "universal_mode": 49,
+  "total": 94,
+  "secs": 347
+ },
+ "13.40": {
+  "pattern_mode": 70,
+  "universal_mode": 70,
+  "total": 94,
+  "secs": 214
+ },
+ "17.50": {
+  "pattern_mode": 71,
+  "universal_mode": 71,
+  "total": 94,
+  "secs": 243
+ },
+ "18.40": {
+  "pattern_mode": 73,
+  "universal_mode": 73,
+  "total": 94,
+  "secs": 232
+ },
+ "19.10": {
+  "pattern_mode": 73,
+  "universal_mode": 73,
+  "total": 94,
+  "secs": 187
+ },
+ "21.30": {
+  "pattern_mode": 84,
+  "universal_mode": 84,
+  "total": 94,
+  "secs": 207
+ },
+ "22.40": {
+  "pattern_mode": 79,
+  "universal_mode": 79,
+  "total": 94,
+  "secs": 202
+ },
+ "23.50": {
+  "pattern_mode": 75,
+  "universal_mode": 75,
+  "total": 94,
+  "secs": 254
+ },
+ "30.00": {
+  "pattern_mode": 63,
+  "universal_mode": 64,
+  "total": 94,
+  "secs": 507
+ }
+}

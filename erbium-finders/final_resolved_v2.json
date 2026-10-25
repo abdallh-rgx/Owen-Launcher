@@ -1,0 +1,4308 @@
+{
+ "FindCantBuild": {
+  "5.41": {
+   "pattern": "F9 0F 1B F8 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 01 AA 88 0A 40 F9",
+   "offset": 0,
+   "addr": "0x4e64af8",
+   "size": "0x214",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "7.40": {
+   "pattern": "FF 83 04 D1 FC 63 00 F9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 F3 03 00 AA 74 3A 40 F9",
+   "offset": 0,
+   "addr": "0x6587ac4",
+   "size": "0x188",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "13.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA F3 03 00 AA 3F 00 00 EB 1F 00 00 F9 1F 08 00 B9 ?? ?? ?? 54 88 0A 40 B9 ?? ?? ?? 34 80 02 40 F9 ?? ?? ?? B4 08 00 40 F9 E1 03 13 AA 08 25 40 F9 00 01 3F D6 88 1A 40 B9",
+   "offset": 0,
+   "addr": "0xdec4040",
+   "size": "0xf4",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "18.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 01 AA F4 03 00 AA 3F 00 00 EB",
+   "offset": 0,
+   "addr": "0xe2e843c",
+   "size": "0x198",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "19.10": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 01 AA F4 03 00 AA 3F 00 00 EB",
+   "offset": 0,
+   "addr": "0x9cde0dc",
+   "size": "0x198",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "21.30": {
+   "pattern": "FC 0F 1B F8 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF C3 1C D1 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 AA A8 83 1B F8",
+   "offset": 0,
+   "addr": "0x75363f8",
+   "size": "0x218",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "22.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 AA F3 03 00 AA ?? ?? ?? ?? 68 52 40 F9 88 02 00 F9",
+   "offset": 0,
+   "addr": "0x4e970a4",
+   "size": "0xc0",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "23.50": {
+   "pattern": "FF 03 06 D1 FD 7B 12 A9 FD 83 04 91 FC 9B 00 F9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 15 38 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0xa33c950",
+   "size": "0x214",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "30.00": {
+   "pattern": "FD 7B BC A9 F8 5F 01 A9 FD 03 00 91 F6 57 02 A9 F4 4F 03 A9 28 00 40 F9 F5 03 00 AA E0 03 01 AA",
+   "offset": 0,
+   "addr": "0x4f74824",
+   "size": "0x21c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindConstructAbilitySpec": {
+  "5.41": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 AA 88 02 40 F9 F3 03 00 AA 6A 1F 80 52 60 62 07 91",
+   "offset": 0,
+   "addr": "0x237de00",
+   "size": "0x4bc",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "7.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 AA 88 02 40 F9 F3 03 00 AA 6A 1F 80 52 60 62 07 91",
+   "offset": 0,
+   "addr": "0x28a0c00",
+   "size": "0x4bc",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "9.41": {
+   "pattern": "F8 5F BC A9 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA 88 02 40 F9 F3 03 00 AA 7F 02 14 EB 68 02 00 F9 ?? ?? ?? 54 75 06 40 F9",
+   "offset": 0,
+   "addr": "0x321a8a8",
+   "size": "0x30c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 F9 13 00 F9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F4 03 01 AA F3 03 00 AA 1F 00 01 EB",
+   "offset": 0,
+   "addr": "0x67fd050",
+   "size": "0x458",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "18.40": {
+   "pattern": "FF C3 04 D1 E8 63 00 FD FC 6F 0D A9 FA 67 0E A9 F8 5F 0F A9 F6 57 10 A9 F4 4F 11 A9 FD 7B 12 A9 FD 83 04 91 48 D0 3B D5 E7 A3 00 A9 08 15 40 F9 ?? ?? ?? ?? 08 1C A0 4E F7 03 06 AA A8 03 19 F8 28 00 40 F9 F9 03 05 AA FA 03 04 2A F4 03 03 AA 16 11 40 F9 ?? ?? ?? ?? 08 A9 44 B9 F8 03 02 AA",
+   "offset": 0,
+   "addr": "0x90049a0",
+   "size": "0x300",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "19.10": {
+   "pattern": "FF 83 07 D1 FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 5C D0 3B D5 88 17 40 F9 F3 03 00 AA A8 03 1A F8",
+   "offset": 0,
+   "addr": "0xcfa1844",
+   "size": "0x464",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "21.30": {
+   "pattern": "FF 83 07 D1 FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 5C D0 3B D5 88 17 40 F9 F3 03 00 AA A8 03 1A F8",
+   "offset": 0,
+   "addr": "0xa3ec1a4",
+   "size": "0x46c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 FD 7B 04 A9 FD 03 01 91 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 F6 03 1F 2A",
+   "offset": 0,
+   "addr": "0x36df2b8",
+   "size": "0x4b8",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "30.00": {
+   "pattern": "FD 7B BB A9 FC 0B 00 F9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FF 43 08 D1 F3 03 00 AA E0 23 01 91 E1 03 13 AA",
+   "offset": 0,
+   "addr": "0xf8a95b0",
+   "size": "0x380",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindSetPickupItems": {
+  "5.41": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 68 82 4F 39 ?? ?? ?? 34 68 F2 43 B9 74 42 0F 91",
+   "offset": 0,
+   "addr": "0x2c4e8b4",
+   "size": "0x7c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "7.40": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 68 F2 43 B9 ?? ?? ?? 34 60 F6 41 F9 ?? ?? ?? B4 08 00 40 F9 08 11 40 F9 00 01 3F D6 ?? ?? ?? 36 60 F6 41 F9 08 00 40 F9",
+   "offset": 0,
+   "addr": "0x32e2274",
+   "size": "0x58",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "9.41": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F4 03 00 AA 88 BE 41 F9 F3 03 01 AA 89 A2 0D 91",
+   "offset": 0,
+   "addr": "0x2fe1a64",
+   "size": "0x16c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "17.50": {
+   "pattern": "F9 0F 1B F8 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F3 03 00 AA E0 03 01 AA",
+   "offset": 0,
+   "addr": "0xba34900",
+   "size": "0x154",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "18.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 02 AA F7 03 01 AA F4 03 00 AA ?? ?? ?? ?? E9 22 40 A9 F6 03 00 AA F5 03 01 AA 2A 61 40 F8 2B 01 40 F9",
+   "offset": 0,
+   "addr": "0x862009c",
+   "size": "0xd8",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "19.10": {
+   "pattern": "FF 03 02 D1 F7 23 00 F9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 57 D0 3B D5 E8 16 40 F9 00 E4 00 6F E2 03 00 AA",
+   "offset": 0,
+   "addr": "0x7e0004c",
+   "size": "0x154",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 54 D0 3B D5 88 16 40 F9 ?? ?? ?? ?? E8 17 00 F9 68 4A 41 F9 FF FF 01 A9 ?? ?? ?? B4 09 51 80 B9",
+   "offset": 0,
+   "addr": "0x5c4263c",
+   "size": "0x144",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F3 13 00 F9 FD 7B 03 A9 FD C3 00 91 A2 C3 1F 38 08 20 40 F9 E6 03 04 2A E5 03 03 2A",
+   "offset": 0,
+   "addr": "0x42801a8",
+   "size": "0xb4",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "23.50": {
+   "pattern": "FF 43 01 D1 FD 7B 03 A9 FD C3 00 91 F3 23 00 F9 F3 03 00 AA 08 F0 43 B9 ?? ?? ?? 35 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x5dd9984",
+   "size": "0x174",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "30.00": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 F3 03 00 AA F4 03 01 AA 20 18 40 F9 75 CA 41 F9",
+   "offset": 0,
+   "addr": "0xd41c968",
+   "size": "0x14c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindStartBecomingDormant": {
+  "5.41": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 68 62 40 79 09 00 80 92 69 C2 03 F8 7F 42 03 F8",
+   "offset": 0,
+   "addr": "0x3d43624",
+   "size": "0x198",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "7.40": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 68 42 42 39 09 00 80 92 69 1E 00 F9 09 1A 80 52",
+   "offset": 0,
+   "addr": "0x48a9544",
+   "size": "0x1a0",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "9.41": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 08 40 42 39 09 00 80 92 09 1C 00 F9 09 1A 80 52 08 01 09 0A",
+   "offset": 0,
+   "addr": "0x57f3804",
+   "size": "0x1a0",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "13.40": {
+   "pattern": "F8 5F BC A9 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 08 60 40 79 89 10 80 52 1F 01 09 6A",
+   "offset": 0,
+   "addr": "0xbf37d40",
+   "size": "0x220",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "17.50": {
+   "pattern": "FF 83 01 D1 F9 0B 00 F9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 54 D0 3B D5 88 16 40 F9 89 10 80 52",
+   "offset": 0,
+   "addr": "0xdf9864c",
+   "size": "0x204",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "18.40": {
+   "pattern": "FF 83 01 D1 F9 0B 00 F9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 54 D0 3B D5 88 16 40 F9 89 10 80 52",
+   "offset": 0,
+   "addr": "0xc84180c",
+   "size": "0x204",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "19.10": {
+   "pattern": "FF C3 00 D1 F3 0B 00 F9 FD 7B 02 A9 FD 83 00 91 53 D0 3B D5 68 16 40 F9 E8 07 00 F9 0D 60 40 79",
+   "offset": 0,
+   "addr": "0xc24b798",
+   "size": "0x240",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F9 0B 00 F9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 54 D0 3B D5 88 16 40 F9 89 10 80 52",
+   "offset": 0,
+   "addr": "0x92ff3c0",
+   "size": "0x210",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "22.40": {
+   "pattern": "F9 0F 1B F8 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 08 60 40 79 89 10 80 52",
+   "offset": 0,
+   "addr": "0x99fe6d8",
+   "size": "0x1fc",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 FD 7B 06 A9 FD 83 01 91 F5 3B 00 F9 F4 4F 08 A9 08 60 40 79 89 10 80 52 1F 01 09 6A",
+   "offset": 0,
+   "addr": "0x9c50614",
+   "size": "0x160",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  }
+ },
+ "FindClearAbility": {
+  "5.41": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 69 F2 43 39 68 0A 85 B9",
+   "offset": 0,
+   "addr": "0x2341f0c",
+   "size": "0x17c",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "7.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 69 12 44 39 68 1A 87 B9",
+   "offset": 0,
+   "addr": "0x2863dd4",
+   "size": "0x220",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "9.41": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 69 92 43 39 68 5A 87 B9",
+   "offset": 0,
+   "addr": "0x31df4cc",
+   "size": "0x2d8",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "13.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 09 F0 42 39 08 F8 86 B9 F4 03 01 AA",
+   "offset": 0,
+   "addr": "0x67d3cd4",
+   "size": "0x188",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "17.50": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 09 F0 42 39 08 58 87 B9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x76978d0",
+   "size": "0x19c",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "18.40": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 09 F0 42 39 08 58 87 B9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x6be0554",
+   "size": "0x19c",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "19.10": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 09 F0 42 39 08 58 87 B9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x67430fc",
+   "size": "0x19c",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "21.30": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 09 B0 42 39 08 30 87 B9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x3177508",
+   "size": "0x19c",
+   "strategy": "gaaco_body_bl",
+   "source": "waveC2"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 08 00 40 F9 F3 03 00 AA F4 03 01 AA 08 41 43 F9 00 01 3F D6",
+   "offset": 0,
+   "addr": "0x34e7340",
+   "size": "0x1e8",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FD 7B BD A9 F6 57 01 A9 FD 03 00 91 F4 4F 02 A9 08 00 40 F9 F4 03 01 AA F3 03 00 AA 08 41 43 F9",
+   "offset": 0,
+   "addr": "0x35bd0c0",
+   "size": "0x1c4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "FD 7B BC A9 F7 0B 00 F9 FD 03 00 91 F6 57 02 A9 F4 4F 03 A9 08 00 40 F9 F4 03 01 AA F3 03 00 AA 08 59 43 F9 00 01 3F D6",
+   "offset": 0,
+   "addr": "0x73ebb48",
+   "size": "0x1ec",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindSelectAndSetupMyBuildingLevel": {
+  "5.41": {
+   "pattern": "FF 83 01 D1 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F4 03 00 AA 88 02 40 F9 F5 03 01 AA",
+   "offset": 0,
+   "addr": "0x5bed650",
+   "size": "0x190",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "7.40": {
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 68 02 40 F9 F5 03 01 AA 08 A5 40 F9 00 01 3F D6 ?? ?? ?? ?? F4 03 00 AA ?? ?? ?? B4 E0 03 14 AA",
+   "offset": 0,
+   "addr": "0x629a0c0",
+   "size": "0x154",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "9.41": {
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 08 00 40 F9 F3 03 00 AA F5 03 01 AA 08 A5 40 F9 00 01 3F D6 ?? ?? ?? ?? F4 03 00 AA",
+   "offset": 0,
+   "addr": "0x73ee464",
+   "size": "0x154",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "13.40": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 08 00 40 F9 F3 03 00 AA F5 03 01 AA 08 AD 40 F9 00 01 3F D6 ?? ?? ?? ?? F4 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0xa834ba8",
+   "size": "0x110",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA E8 17 00 F9 FF 03 00 F9",
+   "offset": 0,
+   "addr": "0xcf3942c",
+   "size": "0x1c0",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA E8 17 00 F9 FF 03 00 F9",
+   "offset": 0,
+   "addr": "0xb744da4",
+   "size": "0x1c0",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA E8 17 00 F9 FF 13 00 F9 ?? ?? ?? ?? ?? ?? ?? ?? F4 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x8ca36ec",
+   "size": "0x1d0",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 01 AA F3 03 00 AA E8 17 00 F9 FF 23 00 B9 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x587ae00",
+   "size": "0x1c4",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "22.40": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F5 03 01 AA F3 03 00 AA BF 83 1E B8",
+   "offset": 0,
+   "addr": "0x65855ac",
+   "size": "0x19c",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "23.50": {
+   "pattern": "FF 43 01 D1 FD 7B 02 A9 FD 83 00 91 F5 1B 00 F9 F4 4F 04 A9 F5 03 01 AA F3 03 00 AA BF 1B 00 B9",
+   "offset": 0,
+   "addr": "0x578f328",
+   "size": "0x198",
+   "strategy": "waveB",
+   "source": "waveB"
+  }
+ },
+ "FindPayBuildableClassPlacementCost": {
+  "5.41": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 02 AA F5 03 01 AA F3 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x5c79e8c",
+   "size": "0x1e0",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "7.40": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 02 AA F5 03 01 AA F3 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x65602b0",
+   "size": "0x200",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "9.41": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 02 AA F5 03 01 AA",
+   "offset": 0,
+   "addr": "0x74e749c",
+   "size": "0x200",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "13.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 E8 0F 00 F9 ?? ?? ?? 36 08 FC 41 F9 F4 03 01 AA",
+   "offset": 0,
+   "addr": "0xa2fe5c8",
+   "size": "0x234",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "17.50": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 57 D0 3B D5 E8 16 40 F9 F4 03 02 AA F5 03 01 AA F3 03 00 AA E8 0F 00 F9",
+   "offset": 0,
+   "addr": "0xd59b380",
+   "size": "0x200",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "18.40": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 57 D0 3B D5 E8 16 40 F9 F4 03 02 AA F5 03 01 AA F3 03 00 AA E8 0F 00 F9 ?? ?? ?? B5 F6 03 1F AA",
+   "offset": 0,
+   "addr": "0xbe08748",
+   "size": "0x208",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "19.10": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 58 D0 3B D5 08 17 40 F9 F4 03 02 AA F5 03 01 AA F3 03 00 AA E8 0F 00 F9",
+   "offset": 0,
+   "addr": "0x9929ec4",
+   "size": "0x20c",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 58 D0 3B D5 08 17 40 F9 F4 03 02 AA F5 03 01 AA F3 03 00 AA E8 0F 00 F9 ?? ?? ?? B4 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x665ad20",
+   "size": "0x208",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "22.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F4 03 02 AA F5 03 01 AA F3 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x767006c",
+   "size": "0x1e8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "23.50": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 F4 03 02 AA F5 03 01 AA F3 03 00 AA ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x8987960",
+   "size": "0x1dc",
+   "strategy": "waveB",
+   "source": "waveB"
+  }
+ },
+ "FindPickSupplyDropLocation": {
+  "5.41": {
+   "pattern": "FF 83 02 D1 EB 2B 02 6D E9 23 03 6D FB 23 00 F9 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 F5 03 05 AA F4 03 04 AA",
+   "offset": 0,
+   "addr": "0x5e61fc4",
+   "size": "0x2d8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "7.40": {
+   "pattern": "FF 03 05 D1 EB 2B 0C 6D E9 23 0D 6D FC 6F 0E A9 FA 67 0F A9 F8 5F 10 A9 F6 57 11 A9 F4 4F 12 A9 FD 7B 13 A9 FD C3 04 91 F4 03 04 AA 98 1E 40 F9",
+   "offset": 0,
+   "addr": "0x5d300ac",
+   "size": "0x6f8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "9.41": {
+   "pattern": "FF 03 05 D1 EB 2B 0C 6D E9 23 0D 6D FC 6F 0E A9 FA 67 0F A9 F8 5F 10 A9 F6 57 11 A9 F4 4F 12 A9 FD 7B 13 A9 FD C3 04 91 98 1C 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x773c2a4",
+   "size": "0x6f8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "13.40": {
+   "pattern": "FF 43 03 D1 ED 33 04 6D EB 2B 05 6D E9 23 06 6D FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 49 1C A2 4E",
+   "offset": 0,
+   "addr": "0xa55020c",
+   "size": "0x2ac",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "17.50": {
+   "pattern": "FF 43 03 D1 ED 33 04 6D EB 2B 05 6D E9 23 06 6D FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5",
+   "offset": 0,
+   "addr": "0xcce042c",
+   "size": "0x2a8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "18.40": {
+   "pattern": "FF 43 03 D1 ED 33 04 6D EB 2B 05 6D E9 23 06 6D FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5",
+   "offset": 0,
+   "addr": "0xb4fb72c",
+   "size": "0x2a8",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "21.30": {
+   "pattern": "FF 43 06 D1 E9 23 13 6D FC A3 00 F9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 56 D0 3B D5 C8 16 40 F9 F3 03 01 AA F4 03 00 AA",
+   "offset": 0,
+   "addr": "0x5ab8664",
+   "size": "0x398",
+   "strategy": "xwin_string",
+   "source": "waveC"
+  },
+  "22.40": {
+   "pattern": "FF 83 07 D1 ED 33 15 6D EB 2B 16 6D E9 23 17 6D FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 08 5C 42 F9",
+   "offset": 0,
+   "addr": "0x603e4f8",
+   "size": "0x2c4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FF 83 07 D1 ED 33 15 6D EB 2B 16 6D E9 23 17 6D FD 7B 18 A9 FD 03 06 91 FC 6F 19 A9 FA 67 1A A9 F8 5F 1B A9 F6 57 1C A9 F4 4F 1D A9 08 5C 42 F9",
+   "offset": 0,
+   "addr": "0x5474cf8",
+   "size": "0x284",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "ED 33 B7 6D EB 2B 01 6D E9 23 02 6D FD 7B 03 A9 FD C3 00 91 FC 6F 04 A9 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FF 43 0A D1 F4 03 03 2A",
+   "offset": 0,
+   "addr": "0x8daff30",
+   "size": "0x3b0",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindRemoveInventoryItem": {
+  "5.41": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 01 AA FF 7F 01 A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 0F 00 B9 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 33 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 0B 00 B9 88 12 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x633901c",
+   "size": "0x18c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "7.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F4 03 01 AA FF 7F 01 A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 0F 00 B9",
+   "offset": 0,
+   "addr": "0x6afaa20",
+   "size": "0x18c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "9.41": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 7F 01 A9 28 10 40 F9 F4 03 01 AA F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 0F 00 B9",
+   "offset": 0,
+   "addr": "0x7f878f8",
+   "size": "0x18c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 01 A9",
+   "offset": 0,
+   "addr": "0xb875408",
+   "size": "0x200",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 01 A9",
+   "offset": 0,
+   "addr": "0xdbd5a38",
+   "size": "0x214",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 01 A9",
+   "offset": 0,
+   "addr": "0xc479178",
+   "size": "0x214",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 01 A9",
+   "offset": 0,
+   "addr": "0xa2f7ea8",
+   "size": "0x23c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "21.30": {
+   "pattern": "F3 03 00 AA E8 17 00 F9 FF FF 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 63 00 91 E0 03 14 AA ?? ?? ?? ?? FF 17 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 53 00 91 E0 03 14 AA ?? ?? ?? ?? FF 13 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? F6 13 40 B9 FF 0F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? E8 0F 40 B9 89 12 40 F9 DF 02 00 71 E4 07 9F 1A 1F 01 00 71",
+   "offset": 32,
+   "addr": "0x7057148",
+   "size": "0x198",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "22.40": {
+   "pattern": "FD 03 01 91 F4 03 01 AA F3 03 00 AA FF 0B 00 F9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? BF C3 1E B8 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 53 00 D1 E0 03 14 AA ?? ?? ?? ?? BF 83 1E B8 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 63 00 D1 E0 03 14 AA ?? ?? ?? ?? B5 83 5E B8 FF 0F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? E8 0F 40 B9 89 12 40 F9 BF 02 00 71 E4 07 9F 1A",
+   "offset": 16,
+   "addr": "0x761f41c",
+   "size": "0x178",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "23.50": {
+   "pattern": "F4 4F 04 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? BF 1F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 73 00 91 E0 03 14 AA ?? ?? ?? ?? BF 1B 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 63 00 91 E0 03 14 AA ?? ?? ?? ?? B5 1B 40 B9 FF 0F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? E8 0F 40 B9 BF 02 00 71 89 12 40 F9 E4 07 9F 1A",
+   "offset": 16,
+   "addr": "0x8955ecc",
+   "size": "0x160",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "30.00": {
+   "pattern": "F4 4F 04 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? BF 1F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 73 00 91 E0 03 14 AA ?? ?? ?? ?? BF 1B 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 A2 63 00 91 E0 03 14 AA ?? ?? ?? ?? B5 1B 40 B9 FF 0F 00 B9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? E8 0F 40 B9 BF 02 00 71 89 12 40 F9 E4 07 9F 1A",
+   "offset": 16,
+   "addr": "0xc7ec57c",
+   "size": "0x160",
+   "strategy": "waveB",
+   "source": "waveB"
+  }
+ },
+ "FindReset": {
+  "5.41": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 60 22 05 91 21 00 00 12 ?? ?? ?? ?? 60 9A 40 F9",
+   "offset": 0,
+   "addr": "0x354d0e8",
+   "size": "0x1a0",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "7.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 60 42 05 91 21 00 00 12 ?? ?? ?? ?? 60 9E 40 F9",
+   "offset": 0,
+   "addr": "0x3b5e570",
+   "size": "0x1a0",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "19.10": {
+   "pattern": "FF 83 02 D1 EF 3B 02 6D ED 33 03 6D EB 2B 04 6D E9 23 05 6D F7 33 00 F9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 F3 03 00 AA 00 54 40 F9",
+   "offset": 0,
+   "addr": "0x9a6fedc",
+   "size": "0x208",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "21.30": {
+   "pattern": "09 A8 40 B9 E8 03 01 AA 1F 01 00 F1 E1 03 1F 2A EA 03 1F AA EB 03 82 9A 0C 03 80 52 3F 01 01 6B",
+   "offset": 0,
+   "addr": "0x4b52538",
+   "size": "0x90",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "22.40": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F5 03 00 AA 00 00 40 F9 F3 03 02 AA F4 03 01 AA",
+   "offset": 0,
+   "addr": "0x3fc940c",
+   "size": "0xf8",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FD 7B BD A9 F5 0B 00 F9 FD 03 00 91 F4 4F 02 A9 F3 03 02 AA F5 03 00 AA F4 03 01 AA 00 00 40 F9",
+   "offset": 0,
+   "addr": "0x71fe5f8",
+   "size": "0xf4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "FD 7B BD A9 F5 0B 00 F9 FD 03 00 91 F4 4F 02 A9 14 4C 40 A9 ?? ?? ?? B4 61 22 00 91 20 00 80 52",
+   "offset": 0,
+   "addr": "0x53f6bcc",
+   "size": "0x120",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindRemoveInventoryStateValue": {
+  "5.41": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA FF 7F 01 A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 33 00 39 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 33 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0x6352188",
+   "size": "0xec",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "7.40": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA FF 7F 01 A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 33 00 39 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 33 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0x6da10bc",
+   "size": "0xec",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "9.41": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 FF 7F 01 A9 28 10 40 F9 F4 03 01 AA F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 33 00 39 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 33 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0x7e59828",
+   "size": "0xec",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "13.40": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 0F 00 F9 FF FF 00 A9 28 10 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 23 00 91 E0 03 14 AA 48 10 40 F9 88 42 00 F9 ?? ?? ?? ?? FF 13 00 39 88 12 40 F9",
+   "offset": 0,
+   "addr": "0xb875608",
+   "size": "0x114",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "17.50": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 0F 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B5 82 42 40 F9 E1 23 00 91 E0 03 14 AA 48 10 40 F9 88 42 00 F9 ?? ?? ?? ?? ?? ?? ?? ?? 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? FF 13 00 39 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9",
+   "offset": 0,
+   "addr": "0xdbd5c4c",
+   "size": "0x11c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "18.40": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 0F 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B5 82 42 40 F9 E1 23 00 91 E0 03 14 AA 48 10 40 F9 88 42 00 F9 ?? ?? ?? ?? ?? ?? ?? ?? 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? FF 13 00 39 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9",
+   "offset": 0,
+   "addr": "0xc47938c",
+   "size": "0x11c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "19.10": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 0F 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? FF 13 00 39 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 13 00 91 E0 03 14 AA ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA 1F 01 00 F1 08 05 88 9A 88 12 00 F9 68 02 40 F9",
+   "offset": 0,
+   "addr": "0xa2f7af4",
+   "size": "0x138",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "21.30": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 0F 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? FF 13 00 39 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 13 00 91 E0 03 14 AA ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0x7056e08",
+   "size": "0xfc",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? FF 33 00 39 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x761f154",
+   "size": "0xd4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FF 03 01 D1 FD 7B 02 A9 FD 83 00 91 F4 4F 03 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? FF 33 00 39 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x8955c24",
+   "size": "0xc8",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "FF 03 01 D1 FD 7B 02 A9 FD 83 00 91 F4 4F 03 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? FF 33 00 39 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 33 00 91 E0 03 14 AA ?? ?? ?? ?? 88 12 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0xc7ec6dc",
+   "size": "0xc8",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindSetInventoryStateValue": {
+  "5.41": {
+   "pattern": "FF 03 02 D1 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F4 03 01 AA BF 7F 3E A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 A2 83 00 D1 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 A1 83 00 D1 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? E0 E3 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0x5f37f4c",
+   "size": "0x114",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "7.40": {
+   "pattern": "FF 83 01 D1 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F4 03 01 AA BF 7F 3E A9 88 12 40 F9 F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 A2 83 00 D1 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 A1 83 00 D1 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? E0 83 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0x6bcb920",
+   "size": "0x124",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "9.41": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 FF 7F 01 A9 28 10 40 F9 F4 03 01 AA F3 03 00 AA ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? ?? ?? ?? ?? 82 42 40 F9 E1 43 00 91 E0 03 14 AA 48 14 40 F9 88 42 00 F9 ?? ?? ?? ?? E0 03 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0x7f73d88",
+   "size": "0xf4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "13.40": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 00 A9 28 10 40 F9",
+   "offset": 0,
+   "addr": "0xb8761f8",
+   "size": "0x11c",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "17.50": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? E0 63 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0xdbd6b1c",
+   "size": "0x124",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "18.40": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? E0 63 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0xc47a25c",
+   "size": "0x124",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "19.10": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 00 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 23 00 91 E0 03 14 AA ?? ?? ?? ?? E0 63 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0xa2f7c2c",
+   "size": "0x134",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 55 D0 3B D5 A8 16 40 F9 F4 03 01 AA F3 03 00 AA E8 17 00 F9 FF FF 00 A9 ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x7056f04",
+   "size": "0xfc",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? E0 03 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0x761f228",
+   "size": "0xd4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FF 03 01 D1 FD 7B 02 A9 FD 83 00 91 F4 4F 03 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? E0 03 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0x8955cec",
+   "size": "0xd4",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "FF 03 01 D1 FD 7B 02 A9 FD 83 00 91 F4 4F 03 A9 F4 03 01 AA F3 03 00 AA FF 7F 01 A9 ?? ?? ?? ?? 88 12 40 F9 ?? ?? ?? B4 81 0E 40 F9 E2 43 00 91 E0 03 14 AA ?? ?? ?? ?? E0 03 00 91 E1 03 1F 2A",
+   "offset": 0,
+   "addr": "0xc7ed498",
+   "size": "0xd4",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindSetChannelActor": {
+  "7.40": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F4 03 02 AA F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x61aa538",
+   "size": "0x1b0",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "9.41": {
+   "pattern": "FB 0F 1A F8 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 14 64 41 F9",
+   "offset": 0,
+   "addr": "0x72db810",
+   "size": "0x290",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "13.40": {
+   "pattern": "FF 43 01 D1 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 01 2A F4 03 00 AA",
+   "offset": 0,
+   "addr": "0xa7448bc",
+   "size": "0x1b8",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "17.50": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? 15 8C 40 F9 ?? ?? ?? B5 E0 03 1F 2A FD 7B 43 A9",
+   "offset": 0,
+   "addr": "0xd28e444",
+   "size": "0x104",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "18.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 ?? ?? ?? ?? 08 81 0B 91 F3 03 00 AA 08 00 00 F9 ?? ?? ?? ?? 60 66 43 F9 ?? ?? ?? B5",
+   "offset": 0,
+   "addr": "0x9772d94",
+   "size": "0x1e0",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "19.10": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 01 BC 46 B9 F3 03 00 AA 3F 04 00 31 ?? ?? ?? 54 68 C6 46 B9",
+   "offset": 0,
+   "addr": "0xc5a567c",
+   "size": "0x118",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "21.30": {
+   "pattern": "E8 0F 1D FC F5 07 00 F9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? ?? ?? ?? ?? 08 35 47 F9 F4 03 00 AA",
+   "offset": 0,
+   "addr": "0x5e616d0",
+   "size": "0x108",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "22.40": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 ?? ?? ?? ?? 08 01 15 91 0A 41 24 91 40 01 67 9E",
+   "offset": 0,
+   "addr": "0x6fb7200",
+   "size": "0x2b8",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "23.50": {
+   "pattern": "FF 03 01 D1 FD 7B 01 A9 FD 43 00 91 F5 13 00 F9 F4 4F 03 A9 F3 03 00 AA 08 58 41 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "addr": "0x58e4058",
+   "size": "0x1f0",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "30.00": {
+   "pattern": "FD 7B BB A9 F9 0B 00 F9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 16 40 0A 91 F4 03 00 AA",
+   "offset": 0,
+   "addr": "0x9160170",
+   "size": "0x164",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindInitListen": {
+  "13.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 04 AA",
+   "offset": 0,
+   "addr": "0x9e32514",
+   "size": "0x148",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "18.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 04 AA F3 03 02 AA E2 03 01 AA",
+   "offset": 0,
+   "addr": "0xaed00fc",
+   "size": "0x150",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "19.10": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 04 AA F3 03 02 AA E2 03 01 AA",
+   "offset": 0,
+   "addr": "0x6ed9974",
+   "size": "0x164",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "21.30": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 04 AA F3 03 02 AA E2 03 01 AA",
+   "offset": 0,
+   "addr": "0x3852a0c",
+   "size": "0x164",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F5 0B 00 F9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 08 00 40 F9 F5 03 04 AA F3 03 02 AA",
+   "offset": 0,
+   "addr": "0x3b7cad8",
+   "size": "0x134",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  },
+  "23.50": {
+   "pattern": "FF 03 01 D1 FD 7B 01 A9 FD 43 00 91 F6 57 02 A9 F4 4F 03 A9 08 00 40 F9 F6 03 04 AA F4 03 02 AA",
+   "offset": 0,
+   "addr": "0x39b4100",
+   "size": "0x128",
+   "strategy": "vtable_delta",
+   "source": "waveC2"
+  }
+ },
+ "FindSpawnInitialSafeZone": {
+  "13.40": {
+   "pattern": "FF 83 05 D1 E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 54 D0 3B D5",
+   "offset": 0,
+   "addr": "0xa5d79f8",
+   "size": "0xc58",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "17.50": {
+   "pattern": "FF 83 05 D1 E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "addr": "0xcd38f28",
+   "size": "0xcc4",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "18.40": {
+   "pattern": "FF 83 05 D1 E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "addr": "0xb541bb4",
+   "size": "0xcc0",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "19.10": {
+   "pattern": "FF 03 04 D1 E9 23 09 6D FC 6F 0A A9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x89420c4",
+   "size": "0xd50",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "21.30": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA F5 43 00 91",
+   "offset": 0,
+   "addr": "0x55064ec",
+   "size": "0x284",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "22.40": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 28 10 40 F9 F3 03 02 AA 1F 01 00 F1 08 05 88 9A 28 10 00 F9 ?? ?? ?? ?? 08 3A 82 52",
+   "offset": 0,
+   "addr": "0x476cb64",
+   "size": "0x60",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FD 7B BE A9 F3 0B 00 F9 FD 03 00 91 28 10 40 F9 F3 03 02 AA 1F 01 00 F1 08 05 88 9A 28 10 00 F9 ?? ?? ?? ?? 08 3A 82 52",
+   "offset": 0,
+   "addr": "0x4028668",
+   "size": "0x5c",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindSpawnLoot": {
+  "13.40": {
+   "pattern": "FF 43 03 D1 EA 2B 00 FD E9 23 06 6D FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 57 D0 3B D5 E8 16 40 F9 E8 27 00 F9 08 C8 88 B9",
+   "offset": 0,
+   "addr": "0xa546450",
+   "size": "0x170",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "17.50": {
+   "pattern": "FF 43 03 D1 EA 2B 00 FD E9 23 06 6D FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 57 D0 3B D5 E8 16 40 F9 E8 27 00 F9 08 B8 89 B9",
+   "offset": 0,
+   "addr": "0xccc4c64",
+   "size": "0x174",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "18.40": {
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 AA A8 03 18 F8 08 D8 89 B9",
+   "offset": 0,
+   "addr": "0xb4d4c7c",
+   "size": "0x280",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "19.10": {
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 AA A8 03 18 F8 08 F0 89 B9",
+   "offset": 0,
+   "addr": "0x8867ac0",
+   "size": "0x2ac",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "21.30": {
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 AA",
+   "offset": 0,
+   "addr": "0x5414df4",
+   "size": "0x2ac",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "22.40": {
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 08 40 8B B9 F3 03 00 AA",
+   "offset": 0,
+   "addr": "0x6001298",
+   "size": "0x280",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FF 03 06 D1 EA 83 00 FD E9 23 11 6D FD 7B 12 A9 FD 83 04 91 FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 F3 03 00 AA 08 40 8B B9",
+   "offset": 0,
+   "addr": "0x544b9f4",
+   "size": "0x264",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "30.00": {
+   "pattern": "FF 43 05 D1 EA 7B 00 FD E9 23 10 6D FD 7B 11 A9 FD 43 04 91 FC 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 08 00 40 F9 F4 03 01 AA",
+   "offset": 0,
+   "addr": "0x8d82cb8",
+   "size": "0x218",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindCreateNetDriverWorldContext": {
+  "18.40": {
+   "pattern": "E8 0F 1B FC FC 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF C3 0F D1 55 D0 3B D5",
+   "offset": 0,
+   "addr": "0xb737690",
+   "size": "0x2e4",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "19.10": {
+   "pattern": "E8 0F 1C FC FC 07 00 F9 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 FF C3 0F D1 55 D0 3B D5 A8 16 40 F9 F3 03 00 AA A8 83 1C F8 ?? ?? ?? ?? 68 E2 43 39 1F 0D 00 71",
+   "offset": 0,
+   "addr": "0x8c758b8",
+   "size": "0x2f0",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "21.30": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F4 03 01 AA F3 03 00 AA ?? ?? ?? ?? 60 82 00 91 81 82 00 91 ?? ?? ?? ?? 7F 02 14 EB ?? ?? ?? 54 60 36 40 F9",
+   "offset": 0,
+   "addr": "0x6ec3db8",
+   "size": "0x254",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "22.40": {
+   "pattern": "FF 03 05 D1 FC 57 11 A9 F4 4F 12 A9 FD 7B 13 A9 FD C3 04 91 F3 03 00 AA ?? ?? ?? ?? ?? ?? ?? ?? 01 91 41 B9 E0 03 13 AA",
+   "offset": 0,
+   "addr": "0x9435530",
+   "size": "0x1fc",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  },
+  "30.00": {
+   "pattern": "FD 7B BD A9 F5 0B 00 F9 FD 03 00 91 F4 4F 02 A9 20 00 40 BD F4 03 01 AA F3 03 00 AA 1F 00 01 EB 00 00 00 BD 28 E8 40 79",
+   "offset": 0,
+   "addr": "0xee5c1c8",
+   "size": "0x204",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindSendClientAdjustment": {
+  "21.30": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 01 B4 47 B9 F3 03 00 AA 3F 04 00 31 ?? ?? ?? 54",
+   "offset": 0,
+   "addr": "0x9688238",
+   "size": "0x13c",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindFlushDormancy": {
+  "21.30": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 F3 03 00 AA E2 03 13 AA",
+   "offset": 0,
+   "addr": "0x951d5e0",
+   "size": "0x11c",
+   "strategy": "isnetready_vt_delta",
+   "source": "waveC3"
+  }
+ },
+ "FindIsNetReady": {
+  "21.30": {
+   "pattern": "FD 7B BF A9 FD 03 00 91 ?? ?? ?? 36 08 98 46 B9 E8 03 08 4B 08 F8 01 B9 08 52 86 52 08 68 68 38",
+   "offset": 0,
+   "addr": "0x9519a8c",
+   "size": "0x64",
+   "strategy": "imm_fingerprint",
+   "source": "waveC3"
+  }
+ },
+ "FindClientHasInitializedLevelFor": {
+  "21.30": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 02 2A F4 03 01 AA F5 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 DD 44 F9 08 01 40 39",
+   "offset": 0,
+   "addr": "0x3850e10",
+   "size": "0xec",
+   "strategy": "isnetready_vt_delta",
+   "source": "waveC3"
+  }
+ },
+ "FindUpdateSafeZonesPhase": {
+  "21.30": {
+   "pattern": "FF 03 06 D1 E8 9B 00 FD FC 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 55 D0 3B D5",
+   "offset": 0,
+   "addr": "0x55079f8",
+   "size": "0x3cc",
+   "strategy": "xwin_string",
+   "source": "waveC"
+  }
+ },
+ "FindQueueStatEvent": {
+  "21.30": {
+   "pattern": "FF 43 04 D1 FC 6F 0B A9 FA 67 0C A9 F8 5F 0D A9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 E5 03 00 F9 48 D0 3B D5",
+   "offset": 0,
+   "addr": "0x674a0c4",
+   "size": "0x368",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "22.40": {
+   "pattern": "FF 43 02 D1 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 A8 13 40 B9 A9 63 00 D1 F3 03 00 AA A7 83 1E B8",
+   "offset": 0,
+   "addr": "0x77997ac",
+   "size": "0x144",
+   "strategy": "waveB",
+   "source": "waveB"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 FD 7B 07 A9 FD C3 01 91 F4 4F 08 A9 A8 23 00 D1 F3 03 00 AA A7 83 1F B8 E1 A3 00 39",
+   "offset": 0,
+   "addr": "0x8a36880",
+   "size": "0x134",
+   "strategy": "waveB",
+   "source": "waveB"
+  }
+ },
+ "FindInitializeFlightPath": {
+  "22.40": {
+   "pattern": "FF 83 02 D1 F3 43 00 F9 FD 7B 09 A9 FD 43 02 91 F3 03 01 AA BF 83 1F F8 ?? ?? ?? ?? 68 12 40 F9 ?? ?? ?? B4 61 0E 40 F9 A2 23 00 D1 E0 03 13 AA ?? ?? ?? ?? E0 23 00 91",
+   "offset": 0,
+   "addr": "0x47690b0",
+   "size": "0xb0",
+   "strategy": "waveA",
+   "source": "waveA"
+  },
+  "23.50": {
+   "pattern": "FF 83 02 D1 FD 7B 08 A9 FD 03 02 91 F3 4B 00 F9 F3 03 01 AA BF 0F 00 F9 ?? ?? ?? ?? 68 12 40 F9 ?? ?? ?? B4 61 0E 40 F9 A2 63 00 91 E0 03 13 AA ?? ?? ?? ?? E0 23 00 91",
+   "offset": 0,
+   "addr": "0x4027dd0",
+   "size": "0xb0",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindSetGamePhase": {
+  "30.00": {
+   "pattern": "FF 03 06 D1 FD 7B 14 A9 FD 03 05 91 FC 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 F4 03 01 2A F3 03 00 AA",
+   "offset": 0,
+   "addr": "0xcd2fc14",
+   "size": "0x20c",
+   "strategy": "waveA",
+   "source": "waveA"
+  }
+ },
+ "FindPostInitializeSpawnedBuildingActor": {
+  "5.41": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA ?? ?? ?? ?? 68 12 42 39 69 82 40 B9 09 1D 60 B3 ?? ?? ?? B6 60 9A 43 F9",
+   "offset": 0,
+   "addr": "0x5ad799c",
+   "size": "0x5c",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "7.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 12 42 39 69 82 40 B9",
+   "offset": 0,
+   "addr": "0x5fca080",
+   "size": "0x68",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "9.41": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 12 42 39 69 82 40 B9",
+   "offset": 0,
+   "addr": "0x764d198",
+   "size": "0x68",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "13.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 72 41 39 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0xa859950",
+   "size": "0x88",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "17.50": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 72 41 39 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0xcf4feb0",
+   "size": "0x8c",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "18.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 72 41 39 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0xb75b614",
+   "size": "0x8c",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "19.10": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 BA 40 79 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0x8d007a0",
+   "size": "0x98",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "21.30": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 BA 40 79 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0x591d3d0",
+   "size": "0x9c",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "22.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 BA 40 79 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0x65feec8",
+   "size": "0x94",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "23.50": {
+   "pattern": "FD 7B BE A9 F4 4F 01 A9 FD 03 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 BA 40 79 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0x57d56e0",
+   "size": "0x90",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  },
+  "30.00": {
+   "pattern": "FD 7B BE A9 F4 4F 01 A9 FD 03 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 BA 40 79 69 5A 40 B9",
+   "offset": 0,
+   "addr": "0x91f5384",
+   "size": "0x98",
+   "strategy": "vtable_next_of_IBA",
+   "source": "gapfill"
+  }
+ },
+ "FindListenCall": {
+  "5.41": {
+   "pattern": "?? ?? ?? ?? ?? ?? ?? 34 ?? ?? ?? ?? 5F 01 00 F9 88 82 42 B9 ?? ?? ?? ?? ?? ?? ?? ?? 01 F1 1C 91",
+   "offset": 0,
+   "addr": "0x422b1dc",
+   "size": "0xa854",
+   "strategy": "listen_string_bl",
+   "source": "gapfill"
+  },
+  "7.40": {
+   "pattern": "?? ?? ?? ?? ?? ?? ?? 34 ?? ?? ?? ?? 35 01 40 F9 39 09 80 B9 69 76 40 F9 22 05 41 B9 39 01 01 B9",
+   "offset": 0,
+   "addr": "0x4664f54",
+   "size": "0x6b90",
+   "strategy": "listen_string_bl",
+   "source": "gapfill"
+  },
+  "9.41": {
+   "pattern": "?? ?? ?? ?? ?? ?? ?? 34 ?? ?? ?? ?? B5 02 38 91 E0 03 15 AA ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??",
+   "offset": 0,
+   "addr": "0x5a167dc",
+   "size": "0x1904",
+   "strategy": "listen_string_bl",
+   "source": "gapfill"
+  }
+ },
+ "FindGetNamePool": {
+  "13.40": {
+   "global": "0x12B008C0",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "17.50": {
+   "global": "0x136E0380",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "18.40": {
+   "global": "0x1150C940",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "19.10": {
+   "global": "0x10357A40",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "21.30": {
+   "global": "0xDC960C0",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "22.40": {
+   "global": "0xE2DA300",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "23.50": {
+   "global": "0xDFE2000",
+   "strategy": "namepool_mode",
+   "verified": true
+  },
+  "30.00": {
+   "global": "0x13C56800",
+   "strategy": "namepool_mode",
+   "verified": true
+  }
+ },
+ "FindActivatePhase": {
+  "17.50": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 2A E8 17 00 F9 00 38 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 2A E8 17 00 F9 00 34 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 2A E8 17 00 F9 00 34 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F4 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F3 03 00 AA 00 70 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 F3 03 00 AA 00 70 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 02 D1 E8 1B 00 FD FD 7B 04 A9 FD 03 01 91 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 08 40 20 1E F3 03 00 AA 00 70 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindApplyCharacterCustomization": {
+  "7.40": {
+   "pattern": "FF 83 03 D1 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 F3 03 00 AA 68 62 44 39 F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 03 D1 F9 43 00 F9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 08 60 44 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 04 D1 FC 6F 0A A9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 5A D0 3B D5 48 17 40 F9 A8 83 1A F8 08 C0 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 02 D1 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 54 D0 3B D5 88 16 40 F9 A8 83 1C F8 08 C0 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 02 D1 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 59 D0 3B D5 28 17 40 F9 A8 83 1B F8 08 C0 43 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 02 D1 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 59 D0 3B D5 28 17 40 F9 A8 83 1B F8 08 E0 43 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 02 D1 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 59 D0 3B D5 28 17 40 F9 A8 83 1B F8 08 10 45 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 02 D1 F9 2B 00 F9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 08 30 45 39 1F 0D 00 71 ?? ?? ?? 54 F3 03 00 AA 00 70 43 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 02 D1 FD 7B 05 A9 FD 43 01 91 F9 33 00 F9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 08 30 45 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 02 D1 FD 7B 05 A9 FD 43 01 91 F9 33 00 F9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 08 30 45 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindCallPreReplication": {
+  "21.30": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 0F 00 F9 ?? ?? ?? B4 09 B8 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 0F 00 F9 ?? ?? ?? B4 09 B8 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 0F 00 F9 ?? ?? ?? B4 09 B8 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 0F 00 F9 ?? ?? ?? B4 09 B8 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindCanAffordToPlaceBuildableClass": {
+  "5.41": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 09 00 40 F9 F3 03 08 AA ?? ?? ?? B4 28 31 41 79 ?? ?? ?? 36",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 83 02 D1 FB 23 00 F9 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 F5 03 00 AA F3 03 08 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF C3 02 D1 FB 2B 00 F9 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 F5 03 00 AA F3 03 08 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "F8 5F BC A9 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 ?? ?? ?? B4 F3 03 02 AA F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 ?? ?? ?? B5 E0 03 1F 2A FD 7B 43 A9 F4 4F 42 A9 F6 57 41 A9 F7 07 44 F8 C0 03 5F D6 F3 03 02 AA F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 17 00 F9 ?? ?? ?? B5 E0 03 1F 2A E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 17 00 F9 ?? ?? ?? B5 E0 03 1F 2A E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 58 D0 3B D5 08 17 40 F9 E8 0F 00 F9 ?? ?? ?? B4 F3 03 02 AA F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 ?? ?? ?? B4 F3 03 02 AA F4 03 01 AA F5 03 00 AA ?? ?? ?? ?? ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 ?? ?? ?? B4 F3 03 02 AA F4 03 01 AA F5 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 ?? ?? ?? B4 F3 03 02 AA F4 03 01 AA F5 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindCloseActorChannel": {
+  "5.41": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 ?? ?? ?? ?? 08 81 45 39 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 ?? ?? ?? ?? 08 A1 64 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 01 D1 F7 0B 00 F9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 ?? ?? ?? ?? 08 21 6C 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 F9 13 00 F9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F5 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 F9 13 00 F9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F5 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA F4 03 01 2A E8 0F 00 F9 17 14 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA F4 03 01 2A E8 0F 00 F9 17 14 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA F5 03 01 2A E8 0F 00 F9 17 14 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 01 D1 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 16 14 40 F9 F3 03 00 AA F5 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 01 D1 FD 7B 01 A9 FD 43 00 91 F5 13 00 F9 F4 4F 03 A9 F5 03 01 2A F3 03 00 AA 01 14 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 01 D1 FD 7B 01 A9 FD 43 00 91 F5 13 00 F9 F4 4F 03 A9 F5 03 01 2A F3 03 00 AA 01 14 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindCreateChannel": {
+  "13.40": {
+   "pattern": "FF 43 02 D1 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 17 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 02 D1 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 17 00 F9 28 D3 47 39 F5 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 02 D1 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 17 00 F9 28 33 5D 39 F5 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 02 D1 FB 1B 00 F9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 17 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 02 D1 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 17 00 F9 39 8B 47 F9 F4 03 03 2A F7 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 01 D1 F9 13 00 F9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 ?? ?? ?? ?? 18 87 46 F9 ?? ?? ?? ?? 29 ?? ?? 91 F4 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 01 D1 FD 7B 02 A9 FD 83 00 91 F9 1B 00 F9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 F4 03 03 2A F7 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 02 D1 FD 7B 03 A9 FD C3 00 91 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 F6 03 03 2A F7 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindEnterAircraft": {
+  "5.41": {
+   "pattern": "FF 03 04 D1 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 56 D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 03 04 D1 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 83 03 D1 F7 53 00 F9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 56 D0 3B D5 C8 16 40 F9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 03 D1 FC 6F 08 A9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 58 D0 3B D5 08 17 40 F9 A8 83 1A F8 15 50 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF C3 07 D1 58 D0 3B D5 08 17 40 F9 A8 83 1B F8 15 50 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 03 08 D1 58 D0 3B D5 08 17 40 F9 A8 83 1B F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 03 08 D1 58 D0 3B D5 08 17 40 F9 A8 83 1B F8 15 50 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 83 08 D1 59 D0 3B D5 28 17 40 F9 A8 83 1B F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FC 67 BB A9 F8 5F 01 A9 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 FF 83 08 D1 16 48 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FD 7B BB A9 FC 0B 00 F9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FF 83 08 D1 16 48 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BB A9 FC 67 01 A9 FD 03 00 91 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FF 43 07 D1 16 48 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindFinishWorldInitialization": {
+  "7.40": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 03 D1 F7 43 00 F9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F5 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F5 03 01 AA A8 83 1C F8 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA F5 03 01 AA A8 83 1C F8 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA A8 83 1C F8 ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 02 D1 F7 3B 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA F3 03 00 AA A8 83 1C F8 ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 02 D1 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 F5 03 01 AA F3 03 00 AA ?? ?? ?? ?? F4 03 00 AA E0 03 13 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 FD 7B 06 A9 FD 83 01 91 F6 57 07 A9 F4 4F 08 A9 F5 03 01 AA F3 03 00 AA ?? ?? ?? ?? F4 03 00 AA E0 03 13 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 02 D1 FD 7B 07 A9 FD C3 01 91 F6 57 08 A9 F4 4F 09 A9 F5 03 01 AA F4 03 00 AA ?? ?? ?? ?? 88 72 41 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindFinishedTargetSpline": {
+  "21.30": {
+   "pattern": "EF 3B B9 6D ED 33 01 6D EB 2B 02 6D E9 23 03 6D F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "EF 3B B9 6D ED 33 01 6D EB 2B 02 6D E9 23 03 6D F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "EF 3B B9 6D ED 33 01 6D EB 2B 02 6D E9 23 03 6D F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "EF 3B B9 6D ED 33 01 6D EB 2B 02 6D E9 23 03 6D F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGameSessionPatch": {
+  "13.40": {
+   "pattern": "FF 83 02 D1 EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 56 D0 3B D5 C8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 02 D1 EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 56 D0 3B D5 C8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 02 D1 EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 56 D0 3B D5 C8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 02 D1 EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 56 D0 3B D5 C8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 02 D1 EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 56 D0 3B D5 C8 16 40 F9 09 1C A0 4E F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 02 D1 EB 2B 03 6D E9 23 04 6D F7 2B 00 F9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 09 1C A0 4E F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 EB 2B 03 6D E9 23 04 6D FD 7B 05 A9 FD 43 01 91 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 09 40 20 1E F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 02 D1 EB 2B 03 6D E9 23 04 6D FD 7B 05 A9 FD 43 01 91 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 08 40 20 1E F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGetMaxTickRate": {
+  "7.40": {
+   "pattern": "EA 0F 1B FC E9 23 01 6D F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 09 1C A0 4E F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "EA 0F 1B FC E9 23 01 6D F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 09 1C A0 4E E8 03 27 1E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "EA 0F 1B FC E9 23 01 6D F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 09 1C A0 4E E8 03 27 1E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "EA 0F 1B FC E9 23 01 6D F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 09 1C A0 4E E8 03 27 1E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "EB 2B BA 6D E9 23 01 6D F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 09 1C A0 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "EB 2B BA 6D E9 23 01 6D F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 09 1C A0 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "EB 2B BA 6D E9 23 01 6D F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 09 1C A0 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "EA 0F 1C FC E9 23 01 6D F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 09 1C A0 4E E8 03 27 1E 0A 10 2E 1E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "E9 23 BD 6D FD 7B 01 A9 FD 43 00 91 F4 4F 02 A9 09 40 20 1E 08 E4 00 2F ?? ?? ?? 36 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "E9 23 BD 6D FD 7B 01 A9 FD 43 00 91 F4 4F 02 A9 09 40 20 1E 08 E4 00 2F ?? ?? ?? 36 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGetNetMode": {
+  "5.41": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 E0 07 00 32 C0 03 5F D6 08 84 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 E0 07 00 32 C0 03 5F D6 08 84 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 E0 07 00 32 C0 03 5F D6 08 70 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 60 00 80 52 C0 03 5F D6 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 60 00 80 52 C0 03 5F D6 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 60 00 80 52 C0 03 5F D6 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 60 00 80 52 C0 03 5F D6 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B4 60 00 80 52 C0 03 5F D6 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B5 08 70 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ?? ?? ?? ?? ?? 60 00 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "08 1C 40 F9 ?? ?? ?? B5 08 78 40 F9 ?? ?? ?? B4 E0 03 08 AA ?? ?? ?? ?? ?? ?? ?? ?? 60 00 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BE A9 F3 0B 00 F9 FD 03 00 91 08 1C 40 F9 ?? ?? ?? B5 F3 03 00 AA 00 78 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGetPlayerViewPoint": {
+  "5.41": {
+   "pattern": "FC 5F BC A9 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 FF ?? ?? D1 57 D0 3B D5 E8 16 40 F9 F5 03 01 AA 41 28 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "F3 0F 1E F8 FD 7B 01 A9 FD 43 00 91 08 AC 43 F9 F3 03 02 AA ?? ?? ?? B4 49 1C 82 52 09 69 69 38",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 02 D1 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 08 64 43 F9 F3 03 02 AA F6 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 02 D1 F7 23 00 F9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 57 D0 3B D5 E8 16 40 F9 F6 03 00 AA 40 28 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 02 D1 F7 23 00 F9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 57 D0 3B D5 E8 16 40 F9 F6 03 00 AA 40 28 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 02 D1 F7 23 00 F9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 56 D0 3B D5 C8 16 40 F9 F5 03 00 AA E0 83 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F6 03 00 AA 40 28 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F6 03 00 AA 40 28 80 52",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 02 D1 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F6 03 00 AA 40 28 80 52 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 02 D1 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F6 03 00 AA 40 28 80 52 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 02 D1 FD 7B 05 A9 FD 43 01 91 F6 57 06 A9 F4 4F 07 A9 F6 03 00 AA 40 28 80 52 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGetWorldContext": {
+  "21.30": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? 08 04 00 51 1F 05 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? 08 04 00 51 1F 05 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? 08 04 00 51 1F 05 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? 08 04 00 51 1F 05 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGiveAbility": {
+  "5.41": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 69 F2 43 39 68 0A 85 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 69 12 44 39 68 1A 87 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 F3 03 00 AA 68 A2 45 B9 F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 09 F0 42 39 08 F8 86 B9 F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "F7 0F 1C F8 F6 57 01 A9 F4 4F 02 A9 FD 7B 03 A9 FD C3 00 91 09 F0 42 39 08 F8 86 B9 F4 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "F6 57 BD A9 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 09 F0 42 39 08 58 87 B9 F4 03 01 AA F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "13 00 80 12 C8 16 40 F9 A9 83 5D F8 1F 01 09 EB ?? ?? ?? 54 60 7E 40 92 FD 7B 46 A9 F4 4F 45 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 0B 40 D1 FF 43 04 D1 E5 9B 09 A9 E7 57 00 F9 E0 87 00 AD",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "14 00 80 12 80 7E 40 92 FD 7B 45 A9 F4 4F 44 A9 F5 1B 40 F9 FF 83 01 91 C0 03 5F D6 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FD 7B BD A9 F6 57 01 A9 FD 03 00 91 F4 4F 02 A9 08 00 40 F9 F4 03 01 AA F3 03 00 AA 08 41 43 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BC A9 FC 5F 01 A9 FD 03 00 91 F6 57 02 A9 F4 4F 03 A9 FF 43 12 D1 ?? ?? ?? ?? ?? ?? ?? ?? 29 91 03 91 F3 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGiveAbilityAndActivateOnce": {
+  "9.41": {
+   "pattern": "FF C3 01 D1 F5 23 00 F9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F5 03 01 AA A8 0A 40 F9 F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 E8 0F 00 F9 28 08 40 F9 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 E8 0F 00 F9 28 08 40 F9 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 E8 0F 00 F9 28 08 40 F9 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 01 D1 F5 13 00 F9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 55 D0 3B D5 A8 16 40 F9 E8 0F 00 F9 28 08 40 F9 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 56 D0 3B D5 C8 16 40 F9 A8 83 1D F8 28 08 40 F9 09 3D 43 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 01 D1 F5 1B 00 F9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 28 08 40 F9 ?? ?? ?? B4 09 2D 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 01 D1 FD 7B 03 A9 FD C3 00 91 F5 23 00 F9 F4 4F 05 A9 28 08 40 F9 ?? ?? ?? B4 09 2D 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 28 08 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindHandleMatchHasStarted": {
+  "5.41": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 ?? ?? ?? ?? 08 23 7A 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 83 04 D1 E8 5B 00 FD FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? F3 03 00 AA A8 83 19 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 83 05 D1 E8 7B 00 FD FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 48 D0 3B D5 E8 07 00 F9 08 15 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 05 D1 E8 7B 00 FD FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 48 D0 3B D5 E8 0B 00 F9 08 15 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 05 D1 E8 7B 00 FD FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 48 D0 3B D5 E8 0B 00 F9 08 15 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 05 D1 E8 73 00 FD FC 6F 0F A9 FA 67 10 A9 F8 5F 11 A9 F6 57 12 A9 F4 4F 13 A9 FD 7B 14 A9 FD 03 05 91 59 D0 3B D5 28 17 40 F9 ?? ?? ?? ?? F3 03 00 AA A8 03 19 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 03 05 D1 E8 6B 00 FD FC 6F 0E A9 FA 67 0F A9 F8 5F 10 A9 F6 57 11 A9 F4 4F 12 A9 FD 7B 13 A9 FD C3 04 91 59 D0 3B D5 28 17 40 F9 F3 03 00 AA A8 03 19 F8 ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 07 D1 E8 B3 00 FD FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 FD 7B 1C A9 FD 03 07 91 59 D0 3B D5 28 17 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 06 D1 E8 9B 00 FD FC 6F 14 A9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 FD 7B 19 A9 FD 43 06 91 ?? ?? ?? ?? 08 E5 44 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 06 D1 E8 A3 00 FD FD 7B 15 A9 FD 43 05 91 FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 ?? ?? ?? ?? F3 03 00 AA 7B 97 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 07 D1 E8 BB 00 FD FD 7B 18 A9 FD 03 06 91 FC 6F 19 A9 FA 67 1A A9 F8 5F 1B A9 F6 57 1C A9 F4 4F 1D A9 ?? ?? ?? ?? F3 03 00 AA 18 FF 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "5.41": {
+   "pattern": "FF C3 01 D1 E8 1B 00 FD F7 1F 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F3 03 00 AA 74 C6 41 F9 ?? ?? ?? B4 ?? ?? ?? ?? 88 0A 40 F9 09 90 80 B9 0A 91 40 B9 3F 01 0A 6B ?? ?? ?? 54 F5 03 1F AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF C3 05 D1 EC 73 00 FD EB 2B 0F 6D E9 23 10 6D FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 F3 03 00 AA 79 CA 41 F9 FA 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 06 D1 EC 7B 00 FD EB 2B 10 6D E9 23 11 6D FC 6F 12 A9 FA 67 13 A9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 16 50 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 07 D1 EC AB 00 FD EB 2B 16 6D E9 23 17 6D FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 59 D0 3B D5 28 17 40 F9 A8 03 17 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 07 D1 EC AB 00 FD EB 2B 16 6D E9 23 17 6D FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 58 D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF 03 08 D1 59 D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF C3 06 D1 59 D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 05 D1 FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 59 D0 3B D5 28 17 40 F9 F3 03 00 AA A8 03 1A F8 ?? ?? ?? ?? 74 6A 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 05 D1 FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 F3 03 00 AA FB 83 02 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 05 D1 E9 23 0F 6D FD 7B 10 A9 FD 03 04 91 FC 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 F3 03 00 AA B9 83 01 D1",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 05 D1 E9 23 0F 6D FD 7B 10 A9 FD 03 04 91 FC 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 F3 03 00 AA B9 83 01 D1",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindInitializeBuildingActor": {
+  "13.40": {
+   "pattern": "FF 83 05 D1 EB 2B 0E 6D E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 5B D0 3B D5 68 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 05 D1 EB 2B 0E 6D E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 5B D0 3B D5 68 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 05 D1 EB 2B 0F 6D E9 23 10 6D FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 5C D0 3B D5 88 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 05 D1 EB 2B 0F 6D E9 23 10 6D FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 5C D0 3B D5 88 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 A8 03 18 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 05 D1 EB 2B 0E 6D E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 5C D0 3B D5 88 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 05 D1 EB 2B 0E 6D E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 ?? ?? ?? ?? 9C 87 46 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 05 D1 EB 2B 0E 6D E9 23 0F 6D FD 7B 10 A9 FD 03 04 91 FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 F7 03 05 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 06 D1 EB 2B 11 6D E9 23 12 6D FD 7B 13 A9 FD C3 04 91 FC 6F 14 A9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 F7 03 05 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindInitializeBuildingActor_next": {
+  "13.40": {
+   "pattern": "FF 03 07 D1 FC 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 FD 7B 1B A9 FD C3 06 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 07 D1 FC 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 FD 7B 1B A9 FD C3 06 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 2A F3 03 00 AA ?? ?? ?? ?? 68 72 41 39 69 5A 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 A5 00 00 12 F4 03 04 AA F3 03 00 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 02 D1 E8 3B 00 FD F7 3F 00 F9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 57 D0 3B D5 E8 16 40 F9 A8 83 1C F8 08 10 45 39 1F 0D 00 71 ?? ?? ?? 54 F4 03 00 AA 3F 1C 00 72 01 80 22 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 02 D1 E8 33 00 FD F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 08 30 45 39 1F 0D 00 71 ?? ?? ?? 54 F4 03 00 AA 3F 1C 00 72 01 1C 23 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 02 D1 E8 3B 00 FD FD FB 07 A9 FD E3 01 91 F7 47 00 F9 F6 57 09 A9 F4 4F 0A A9 08 30 45 39 1F 0D 00 71 ?? ?? ?? 54 F3 03 00 AA 3F 1C 00 72",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 02 D1 E8 43 00 FD FD FB 08 A9 FD 23 02 91 F5 4F 00 F9 F4 4F 0A A9 08 30 45 39 1F 0D 00 71 ?? ?? ?? 54 F3 03 00 AA 3F 1C 00 72 01 18 1F 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindInitializePlayerGameplayAbilities": {
+  "7.40": {
+   "pattern": "FF 43 01 D1 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 F3 03 00 AA ?? ?? ?? B4 68 02 40 F9 E0 03 13 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 01 D1 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 ?? ?? ?? B4 08 00 40 F9 F3 03 00 AA 08 0D 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 02 D1 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 55 D0 3B D5 A8 16 40 F9 A8 83 1D F8 ?? ?? ?? B4 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 02 D1 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 55 D0 3B D5 A8 16 40 F9 A8 83 1D F8 ?? ?? ?? B4 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 03 D1 FB 43 00 F9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 56 D0 3B D5 C8 16 40 F9 A8 83 1A F8 ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 03 D1 FB 43 00 F9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 56 D0 3B D5 C8 16 40 F9 A8 83 1A F8 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 03 D1 FB 43 00 F9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 56 D0 3B D5 C8 16 40 F9 A8 83 1A F8 ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 03 D1 FB 3B 00 F9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 ?? ?? ?? ?? F3 03 00 AA 21 E8 03 91 A0 23 01 D1",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 03 D1 FD 7B 0A A9 FD 83 02 91 F7 5B 00 F9 F6 57 0C A9 F4 4F 0D A9 ?? ?? ?? ?? F3 03 00 AA 21 D8 10 91 A0 63 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 03 D1 FD 7B 0A A9 FD 83 02 91 F9 5B 00 F9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 ?? ?? ?? ?? F3 03 00 AA 21 50 09 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindInternalTryActivateAbility": {
+  "5.41": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 ?? ?? ?? ?? 08 ?? ?? 91 08 FD DF 08 F7 03 05 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 ?? ?? ?? ?? 08 ?? ?? 91 08 FD DF 08 F7 03 05 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 ?? ?? ?? ?? 08 ?? ?? 91 08 FD DF 08 F6 03 05 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 43 0D D1 57 D0 3B D5 E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 43 0D D1 57 D0 3B D5 E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 83 10 D1 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 83 10 D1 5A D0 3B D5 48 17 40 F9 F7 03 05 AA F9 03 04 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 83 10 D1 5A D0 3B D5 48 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF 43 10 D1 FA 03 05 AA F5 03 04 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FD 7B BA A9 FC 6F 01 A9 FD 03 00 91 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FF 03 10 D1 F7 03 05 AA FA 03 04 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BA A9 FC 6F 01 A9 FD 03 00 91 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FF 83 0B D1 ?? ?? ?? ?? F9 03 06 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindIsNetRelevantForVft": {
+  "7.40": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F3 03 00 AA 69 12 42 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 09 10 42 39 08 80 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 09 10 42 39 08 80 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 09 10 42 39 08 80 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 17 00 F9 09 70 41 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 17 00 F9 09 70 41 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 17 00 F9 08 B8 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 08 B8 40 79 09 58 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 09 B8 40 79 08 58 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 01 D1 FD 7B 02 A9 FD 83 00 91 F7 1B 00 F9 F6 57 04 A9 F4 4F 05 A9 09 B8 40 79 08 58 40 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindKickPlayer": {
+  "7.40": {
+   "pattern": "FF 83 02 D1 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? 88 02 40 F9 E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 03 D1 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? 88 02 40 F9 E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 43 03 D1 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? 88 02 40 F9 E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 03 D1 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? 88 02 40 F9 E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 04 D1 FC 6F 0D A9 FA 67 0E A9 F8 5F 0F A9 F6 57 10 A9 F4 4F 11 A9 FD 7B 12 A9 FD 83 04 91 5A D0 3B D5 48 17 40 F9 F3 03 01 AA F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 04 D1 FC 6F 0D A9 FA 67 0E A9 F8 5F 0F A9 F6 57 10 A9 F4 4F 11 A9 FD 7B 12 A9 FD 83 04 91 5A D0 3B D5 48 17 40 F9 F3 03 01 AA F4 03 00 AA A8 03 1A F8 ?? ?? ?? ?? E0 03 14 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 04 D1 FC 6F 0D A9 FA 67 0E A9 F8 5F 0F A9 F6 57 10 A9 F4 4F 11 A9 FD 7B 12 A9 FD 83 04 91 5A D0 3B D5 48 17 40 F9 F3 03 01 AA F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 05 D1 FC 6F 0F A9 FA 67 10 A9 F8 5F 11 A9 F6 57 12 A9 F4 4F 13 A9 FD 7B 14 A9 FD 03 05 91 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 04 D1 FD 7B 0D A9 FD 43 03 91 FC 67 0E A9 F8 5F 0F A9 F6 57 10 A9 F4 4F 11 A9 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? E0 03 14 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 04 D1 FD 7B 0C A9 FD 03 03 91 FC 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 F3 03 01 AA F4 03 00 AA ?? ?? ?? ?? E0 03 14 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindLoadPlayset": {
+  "7.40": {
+   "pattern": "FF 83 03 D1 EA 33 00 FD E9 23 07 6D FC 6F 08 A9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 F3 03 00 AA 74 76 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 03 D1 EA 23 00 FD E9 23 05 6D FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 14 64 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 03 D1 EA 23 00 FD E9 23 05 6D FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA E8 1F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 03 D1 EA 23 00 FD E9 23 05 6D FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA E8 1F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 03 D1 EA 23 00 FD E9 23 05 6D FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA E8 1F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 02 D1 E9 23 03 6D FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA E8 17 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 03 D1 E9 23 06 6D FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA E8 2F 00 F9 14 48 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 02 D1 E9 23 05 6D F9 33 00 F9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 14 48 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 03 D1 E9 23 05 6D FD 7B 06 A9 FD 83 01 91 FB 3B 00 F9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 03 D1 E9 23 05 6D FD 7B 06 A9 FD 83 01 91 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 F3 03 00 AA 14 48 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindNotifyGameMemberAdded": {
+  "17.50": {
+   "pattern": "FF 03 06 D1 FC 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 57 D0 3B D5 E8 16 40 F9 F5 03 03 AA F6 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 06 D1 FC A3 00 F9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 56 D0 3B D5 C8 16 40 F9 F4 03 03 AA F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 03 06 D1 FC 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 57 D0 3B D5 E8 16 40 F9 F5 03 03 AA F6 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 06 D1 FC 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 57 D0 3B D5 E8 16 40 F9 F4 03 03 AA F6 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 05 D1 FC 9B 00 F9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 A1 C3 1D 38 E1 03 03 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 05 D1 FC 9B 00 F9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 A1 C3 1D 38 E1 03 03 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 05 D1 FC 9B 00 F9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 A1 C3 1D 38 E1 03 03 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindOnRep_ZiplineState": {
+  "7.40": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 ?? ?? ?? ?? 08 C9 45 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 83 01 D1 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 ?? ?? ?? ?? 08 09 41 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 01 D1 F6 57 02 A9 F4 4F 03 A9 FD 7B 04 A9 FD 03 01 91 56 D0 3B D5 C8 16 40 F9 F3 03 00 AA E8 0F 00 F9 ?? ?? ?? ?? 08 E5 4D B9 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindPickTeam": {
+  "5.41": {
+   "pattern": "FF C3 02 D1 F9 33 00 F9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 F6 03 00 AA D7 C6 41 F9 F5 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 03 02 D1 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F5 03 00 AA B6 CA 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 02 D1 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 16 50 41 F9 F3 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA F5 03 00 AA F4 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA F5 03 00 AA F4 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA F5 03 00 AA F4 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 59 D0 3B D5 28 17 40 F9 F3 03 02 AA F5 03 00 AA F4 03 01 2A E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 5B D0 3B D5 68 17 40 F9 F4 03 02 AA F5 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 16 6C 41 F9 F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 02 D1 FD 7B 02 A9 FD 83 00 91 FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 F4 03 02 AA F3 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 02 D1 FD 7B 02 A9 FD 83 00 91 FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 F4 03 02 AA F5 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindPreSendUpdate": {
+  "30.00": {
+   "pattern": "FF C3 02 D1 FD 7B 05 A9 FD 43 01 91 FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 ?? ?? ?? ?? F9 03 00 AA ?? ?? ?? ?? ?? ?? ?? ?? F5 03 01 AA 00 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindRemoveFromAlivePlayers": {
+  "5.41": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 F8 03 00 AA 1C C7 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 03 03 D1 FC 6F 06 A9 FA 67 07 A9 F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91 F8 03 00 AA 19 CB 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 83 03 D1 FC 6F 08 A9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 19 50 41 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 03 D1 FC 6F 07 A9 FA 67 08 A9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 5B D0 3B D5 68 17 40 F9 A8 83 1A F8 19 40 41 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindReplaceBuildingActor": {
+  "13.40": {
+   "pattern": "EA 0F 18 FC E9 23 01 6D FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 FF 83 06 D1 5B D0 3B D5 68 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "EA 0F 18 FC E9 23 01 6D FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 FF 83 06 D1 5B D0 3B D5 68 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "E8 0F 19 FC FC 6F 01 A9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 FF 43 06 D1 5B D0 3B D5 68 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "E8 0F 19 FC FC 6F 01 A9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 FF 83 06 D1 5B D0 3B D5 68 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 5B D0 3B D5 68 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 A8 03 1A F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 ?? ?? ?? ?? 7B 87 46 F9 ?? ?? ?? ?? 29 ?? ?? 91 68 03 40 39 1F 01 00 71 28 01 9F 9A A8 83 17 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "E8 0F 19 FC FD 7B 01 A9 FD 43 00 91 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FF ?? ?? D1 ?? ?? ?? ?? ?? ?? ?? ?? 29 09 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BA A9 FC 6F 01 A9 FD 03 00 91 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FF ?? ?? D1 ?? ?? ?? ?? ?? ?? ?? ?? 08 ?? ?? 91 F5 03 1F AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindReplicateActor": {
+  "13.40": {
+   "pattern": "E8 0F 19 FC FC 6F 01 A9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 FF ?? ?? D1 59 D0 3B D5 28 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 99 04 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "E8 0F 19 FC FC 6F 01 A9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 FF ?? ?? D1 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 89 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 57 D0 3B D5 E8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 A8 03 1A F8 88 33 5D 39 F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 A8 03 1A F8 39 BF 46 F9 F4 03 00 AA F3 03 00 AA 28 03 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 58 D0 3B D5 08 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 A8 03 1A F8 7B 8B 47 F9 F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FC 6F BA A9 FA 67 01 A9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 FF ?? ?? D1 ?? ?? ?? ?? 18 87 46 F9 ?? ?? ?? ?? 29 ?? ?? 91 F4 03 00 AA 08 03 40 39 F3 03 00 AA 1F 01 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FD 7B BA A9 FC 6F 01 A9 FD 03 00 91 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FF ?? ?? D1 F3 03 00 91 ?? ?? ?? ?? F5 03 00 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "E8 0F 19 FC FD 7B 01 A9 FD 43 00 91 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FF 83 07 D1 F3 03 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSendDestructionInfo": {
+  "13.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 0F 00 F9 E8 D2 47 39 ?? ?? ?? ?? 00 ?? ?? 91 F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 29 04 91 E8 0F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 0F 00 F9 F7 BE 46 F9 ?? ?? ?? ?? 00 ?? ?? 91 F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 01 D1 F7 13 00 F9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91 E8 0F 00 F9 F7 BE 46 F9 ?? ?? ?? ?? 00 ?? ?? 91 F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 ?? ?? ?? ?? 7B 87 46 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 06 D1 FD 7B 14 A9 FD 03 05 91 FC AB 00 F9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 ?? ?? ?? ?? ?? ?? ?? ?? 08 ?? ?? 91 ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 06 D1 FD 7B 14 A9 FD 03 05 91 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 ?? ?? ?? ?? ?? ?? ?? ?? 08 09 02 91 F3 03 01 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSendRequestNow": {
+  "5.41": {
+   "pattern": "FF C3 01 D1 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F3 03 01 AA 68 02 40 F9 F4 03 00 AA ?? ?? ?? B4 09 01 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 04 D1 FC 6B 00 F9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 ?? ?? ?? ?? C8 22 5D 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 ?? ?? ?? ?? E8 22 59 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 ?? ?? ?? ?? E8 22 59 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 ?? ?? ?? ?? E8 22 59 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 ?? ?? ?? ?? E8 22 59 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 03 04 D1 F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 ?? ?? ?? ?? E8 22 59 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 04 D1 F9 5B 00 F9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 56 D0 3B D5 C8 16 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 03 D1 F8 5F 0B A9 F6 57 0C A9 F4 4F 0D A9 FD 7B 0E A9 FD 83 03 91 ?? ?? ?? ?? C8 C2 58 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 03 D1 FD 7B 0A A9 FD 83 02 91 F6 57 0B A9 F4 4F 0C A9 ?? ?? ?? ?? F5 03 02 2A F3 03 01 AA F4 03 00 AA C8 C2 65 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 02 D1 FD 7B 08 A9 FD 03 02 91 F6 57 09 A9 F4 4F 0A A9 ?? ?? ?? ?? 29 31 36 91 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindServerReplicateActors": {
+  "13.40": {
+   "pattern": "FC 4F BE A9 FD 7B 01 A9 FD 43 00 91 FF 03 33 D1 F3 03 01 AA E0 2F 00 F9 F3 2B 00 F9 E0 27 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FC 4F BE A9 FD 7B 01 A9 FD 43 00 91 FF 03 33 D1 F3 03 01 AA E0 2F 00 F9 F3 2B 00 F9 E0 27 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FC 4F BE A9 FD 7B 01 A9 FD 43 00 91 FF 03 33 D1 F3 03 01 AA E0 2F 00 F9 F3 2B 00 F9 E0 27 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 ?? ?? ?? ?? D6 C2 11 91 ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 01 D1 F9 13 00 F9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 ?? ?? ?? ?? 56 D0 3B D5 00 05 C2 3D",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 02 D1 E8 23 00 FD FC 6F 05 A9 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 FD 7B 0A A9 FD 83 02 91 14 A0 00 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 03 D1 E9 23 0A 6D FD 7B 0B A9 FD C3 02 91 F6 57 0C A9 F4 4F 0D A9 15 80 06 91 28 60 40 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 03 D1 E9 23 0A 6D FD 7B 0B A9 FD C3 02 91 F6 57 0C A9 F4 4F 0D A9 15 80 06 91 28 60 40 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSetChannelActorForDestroy": {
+  "7.40": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 F3 03 00 AA 68 C2 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 08 C0 40 39 ?? ?? ?? 37",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 5A D0 3B D5 48 17 40 F9 A8 03 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 5A D0 3B D5 48 17 40 F9 A8 03 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 5A D0 3B D5 48 17 40 F9 A8 03 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 06 D1 FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 5A D0 3B D5 48 17 40 F9 A8 03 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 83 06 D1 FC A3 00 F9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 FD 7B 19 A9 FD 43 06 91 5A D0 3B D5 48 17 40 F9 A8 83 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 83 06 D1 FC A3 00 F9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 FD 7B 19 A9 FD 43 06 91 5A D0 3B D5 48 17 40 F9 A8 83 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 83 06 D1 FC A3 00 F9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 FD 7B 19 A9 FD 43 06 91 5A D0 3B D5 48 17 40 F9 A8 83 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 06 D1 FC A3 00 F9 FA 67 15 A9 F8 5F 16 A9 F6 57 17 A9 F4 4F 18 A9 FD 7B 19 A9 FD 43 06 91 5A D0 3B D5 48 17 40 F9 A8 83 1A F8 08 C0 40 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSetPickupTarget": {
+  "5.41": {
+   "pattern": "FF 43 04 D1 ED 33 08 6D EB 2B 09 6D E9 23 0A 6D FC 6F 0B A9 FA 67 0C A9 F8 5F 0D A9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 04 D1 EC 43 00 FD EB 2B 09 6D E9 23 0A 6D FC 6F 0B A9 FA 67 0C A9 F8 5F 0D A9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 04 D1 EC 43 00 FD EB 2B 09 6D E9 23 0A 6D FC 6F 0B A9 FA 67 0C A9 F8 5F 0D A9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 08 60 44 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "ED 33 B7 6D EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF 03 09 D1 5C D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF C3 08 D1 5C D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF 03 09 D1 5A D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 FF 03 09 D1 5B D0 3B D5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "EB 2B B8 6D E9 23 01 6D FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 FF 03 0A D1 5A D0 3B D5 48 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "EB 2B B8 6D E9 23 01 6D FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 FF 03 0A D1",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "EB 2B B8 6D E9 23 01 6D FD 7B 02 A9 FD 83 00 91 FC 6F 03 A9 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FF 43 0A D1 08 30 45 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "EC 0F 17 FC EB 2B 01 6D E9 23 02 6D FD 7B 03 A9 FD C3 00 91 FC 6F 04 A9 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FF 83 0A D1 08 30 45 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSetState": {
+  "9.41": {
+   "pattern": "FF 43 03 D1 E8 43 00 FD F9 47 00 F9 F8 5F 09 A9 F6 57 0A A9 F4 4F 0B A9 FD 7B 0C A9 FD 03 03 91 58 D0 3B D5 08 17 40 F9 A8 83 1B F8 08 60 44 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 05 D1 E8 83 00 FD FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 59 D0 3B D5 28 17 40 F9 A8 03 19 F8 08 C0 43 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 05 D1 E8 7B 00 FD FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 58 D0 3B D5 08 17 40 F9 A8 03 19 F8 08 C0 43 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 05 D1 E8 83 00 FD FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 57 D0 3B D5 E8 16 40 F9 A8 03 19 F8 08 C0 43 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 05 D1 E8 83 00 FD FC 6F 11 A9 FA 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 57 D0 3B D5 E8 16 40 F9 A8 03 19 F8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF C3 06 D1 E8 A3 00 FD FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 58 D0 3B D5 08 17 40 F9 A8 03 19 F8 08 10 45 39 1F 0D 00 71",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 07 D1 E8 AB 00 FD FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 FD 7B 1B A9 FD C3 06 91 08 30 45 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 07 D1 E8 AB 00 FD FD 7B 16 A9 FD 83 05 91 FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 08 30 45 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 07 D1 E8 BB 00 FD FD 7B 18 A9 FD 03 06 91 FC 6F 19 A9 FA 67 1A A9 F8 5F 1B A9 F6 57 1C A9 F4 4F 1D A9 08 30 45 39 1F 0D 00 71 ?? ?? ?? 54 F4 4F 5D A9 F6 57 5C A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSetWorld": {
+  "13.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 14 A0 0C 91 F3 03 00 AA E0 03 14 AA ?? ?? ?? ?? E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 14 C0 0C 91 F3 03 00 AA E0 03 14 AA ?? ?? ?? ?? E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 14 C0 0C 91 F3 03 00 AA E0 03 14 AA ?? ?? ?? ?? E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 14 C0 0C 91 F3 03 00 AA E0 03 14 AA ?? ?? ?? ?? E0 03 14 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 08 A0 40 F9 F4 03 00 AA F3 03 01 AA ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 08 A0 40 F9 F4 03 00 AA F3 03 01 AA ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 08 A0 40 F9 F4 03 00 AA F3 03 01 AA ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 08 A0 40 F9 F4 03 00 AA F3 03 01 AA ?? ?? ?? B5",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindShouldAllowServerSpawnDecoVft": {
+  "5.41": {
+   "pattern": "FF 83 01 D1 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F3 03 00 AA 74 A2 40 F9 ?? ?? ?? B4",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 02 D1 EA 23 00 FD E9 23 05 6D F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 F4 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 03 03 D1 EA 33 00 FD E9 23 07 6D F8 5F 08 A9 F6 57 09 A9 F4 4F 0A A9 FD 7B 0B A9 FD C3 02 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA E8 17 00 F9 ?? ?? ?? ?? ?? ?? ?? B4 F4 03 00 AA ?? ?? ?? ?? 88 0A 40 F9 09 38 80 B9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA E8 17 00 F9 ?? ?? ?? ?? ?? ?? ?? B4 E0 03 13 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 02 D1 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA A8 83 1C F8 ?? ?? ?? ?? ?? ?? ?? B4 E0 03 13 AA ?? ?? ?? ?? 08 88 55 39 ?? ?? ?? 36",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 02 D1 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 57 D0 3B D5 E8 16 40 F9 F3 03 00 AA A8 83 1C F8 ?? ?? ?? ?? ?? ?? ?? B5 E0 03 13 AA ?? ?? ?? ?? ?? ?? ?? 37 F6 03 1F 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 06 D1 ED 33 10 6D EB 2B 11 6D E9 23 12 6D FC 9B 00 F9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 05 D1 ED 33 0F 6D EB 2B 10 6D E9 23 11 6D FC 67 12 A9 F8 5F 13 A9 F6 57 14 A9 F4 4F 15 A9 FD 7B 16 A9 FD 83 05 91 48 1C A2 4E 29 1C A1 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 05 D1 ED 33 0F 6D EB 2B 10 6D E9 23 11 6D FD 7B 12 A9 FD 83 04 91 FC 67 13 A9 F8 5F 14 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 05 D1 ED 33 0F 6D EB 2B 10 6D E9 23 11 6D FD 7B 12 A9 FD 83 04 91 FC 9B 00 F9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 48 40 60 1E 29 40 60 1E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindSpawnDecoVft": {
+  "5.41": {
+   "pattern": "FF 83 01 D1 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F4 03 00 AA E0 07 04 2D E2 2B 00 BD",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 02 D1 ED 33 03 6D EB 2B 04 6D E9 23 05 6D F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 4B 1C A2 4E 2C 1C A1 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 02 D1 ED 33 02 6D EB 2B 03 6D E9 23 04 6D F7 2B 00 F9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 E0 07 02 2D E2 1B 00 BD 08 00 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 02 D1 ED 33 03 6D EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9 FD 43 02 91 58 D0 3B D5 08 17 40 F9 F4 03 04 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 02 D1 ED 33 03 6D EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 02 D1 ED 33 03 6D EB 2B 04 6D E9 23 05 6D F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 FD 7B 09 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 04 D1 ED 33 0A 6D EB 2B 0B 6D E9 23 0C 6D FC 6B 00 F9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 04 D1 ED 33 09 6D EB 2B 0A 6D E9 23 0B 6D F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 04 D1 ED 33 09 6D EB 2B 0A 6D E9 23 0B 6D F7 63 00 F9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 03 04 D1 ED 33 09 6D EB 2B 0A 6D E9 23 0B 6D FD 7B 0C A9 FD 03 03 91 F7 6B 00 F9 F6 57 0E A9 F4 4F 0F A9 F3 03 04 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 03 04 D1 ED 33 09 6D EB 2B 0A 6D E9 23 0B 6D FD 7B 0C A9 FD 03 03 91 F7 6B 00 F9 F6 57 0E A9 F4 4F 0F A9 F3 03 04 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindStartAircraftPhase": {
+  "5.41": {
+   "pattern": "FF 83 03 D1 E8 3B 00 FD FC 6F 08 A9 FA 67 09 A9 F8 5F 0A A9 F6 57 0B A9 F4 4F 0C A9 FD 7B 0D A9 FD 43 03 91 F4 03 00 AA 88 E2 6A 39 ?? ?? ?? 34",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 03 04 D1 E8 4B 00 FD FC 6F 0A A9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 F3 03 00 AA 68 02 40 F9 F9 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 04 D1 E8 53 00 FD FC 6F 0B A9 FA 67 0C A9 F8 5F 0D A9 F6 57 0E A9 F4 4F 0F A9 FD 7B 10 A9 FD 03 04 91 08 00 40 F9 F3 03 00 AA F9 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 06 D1 E8 8B 00 FD FC 6F 12 A9 FA 67 13 A9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 5B D0 3B D5 68 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 06 D1 E8 8B 00 FD FC 6F 12 A9 FA 67 13 A9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 5B D0 3B D5 68 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 06 D1 E8 93 00 FD FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 5C D0 3B D5 88 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 06 D1 E8 93 00 FD FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 5C D0 3B D5 88 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 06 D1 E8 93 00 FD FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 5C D0 3B D5 88 17 40 F9 ?? ?? ?? ?? ?? ?? ?? ?? 29 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F3 03 00 AA 00 00 40 F9 08 00 40 79 1F 25 00 71 ?? ?? ?? 54",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FD 7B BE A9 F4 4F 01 A9 FD 03 00 91 F3 03 00 AA 00 00 40 F9 08 00 40 79 1F 25 00 71 ?? ?? ?? 54",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FD 7B BD A9 F5 0B 00 F9 FD 03 00 91 F4 4F 02 A9 F4 03 01 AA F3 03 00 AA 00 00 40 F9 08 00 40 79",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindStartStreamingAdditionalPlaylistLevel": {
+  "5.41": {
+   "pattern": "FF 43 02 D1 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 F4 03 00 AA E1 1F 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 43 02 D1 F9 23 00 F9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 F3 03 00 AA A1 83 1C F8 68 02 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 02 D1 F9 23 00 F9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 A1 83 1C F8 08 00 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 03 04 D1 FB 53 00 F9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 03 04 D1 FB 53 00 F9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 03 04 D1 FB 53 00 F9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 03 04 D1 FB 53 00 F9 FA 67 0B A9 F8 5F 0C A9 F6 57 0D A9 F4 4F 0E A9 FD 7B 0F A9 FD C3 03 91 58 D0 3B D5 08 17 40 F9 F3 03 00 AA F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 02 D1 FA 67 04 A9 F8 5F 05 A9 F6 57 06 A9 F4 4F 07 A9 FD 7B 08 A9 FD 03 02 91 57 D0 3B D5 E8 16 40 F9 F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 02 D1 F9 1B 00 F9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 F5 03 02 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF 43 02 D1 FD 7B 04 A9 FD 03 01 91 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 F5 03 02 2A F3 03 00 AA A1 83 1F B8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 43 02 D1 FD 7B 04 A9 FD 03 01 91 FA 67 05 A9 F8 5F 06 A9 F6 57 07 A9 F4 4F 08 A9 F5 03 02 2A F3 03 00 AA A1 83 1F B8",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindStreamInMyBuilding": {
+  "5.41": {
+   "pattern": "FF 43 06 D1 EA 93 00 FD E9 A3 12 6D FC 9F 00 F9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 57 D0 3B D5 E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "7.40": {
+   "pattern": "FF 03 06 D1 EA 8B 00 FD E9 A3 11 6D FC 97 00 F9 FA 67 13 A9 F8 5F 14 A9 F6 57 15 A9 F4 4F 16 A9 FD 7B 17 A9 FD C3 05 91 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "9.41": {
+   "pattern": "FF 43 06 D1 EA 8B 00 FD E9 23 12 6D FC 6F 13 A9 FA 67 14 A9 F8 5F 15 A9 F6 57 16 A9 F4 4F 17 A9 FD 7B 18 A9 FD 03 06 91 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF 83 04 D1 EA 53 00 FD E9 23 0B 6D FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 83 04 D1 EA 53 00 FD E9 23 0B 6D FC 6F 0C A9 FA 67 0D A9 F8 5F 0E A9 F6 57 0F A9 F4 4F 10 A9 FD 7B 11 A9 FD 43 04 91 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 43 05 D1 E9 23 0F 6D FC 67 10 A9 F8 5F 11 A9 F6 57 12 A9 F4 4F 13 A9 FD 7B 14 A9 FD 03 05 91 57 D0 3B D5 E8 16 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 83 05 D1 EA 73 00 FD E9 23 0F 6D FC 6F 10 A9 FA 67 11 A9 F8 5F 12 A9 F6 57 13 A9 F4 4F 14 A9 FD 7B 15 A9 FD 43 05 91 58 D0 3B D5 08 17 40 F9 F5 03 01 2A F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 07 D1 EA AB 00 FD E9 23 16 6D FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 FD 7B 1C A9 FD 03 07 91 58 D0 3B D5 08 17 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF 03 07 D1 EA A3 00 FD E9 23 15 6D FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 FD 7B 1B A9 FD C3 06 91 08 30 45 39 F5 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 06 D1 EA 9B 00 FD E9 23 14 6D FD 7B 15 A9 FD 43 05 91 FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 08 30 45 39 F5 03 01 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 06 D1 EA 9B 00 FD E9 23 14 6D FD 7B 15 A9 FD 43 05 91 FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 08 30 45 39 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindTickFlush": {
+  "13.40": {
+   "pattern": "FF 03 07 D1 EA A3 00 FD E9 23 15 6D FC 6F 16 A9 FA 67 17 A9 F8 5F 18 A9 F6 57 19 A9 F4 4F 1A A9 FD 7B 1B A9 FD C3 06 91 48 D0 3B D5 E8 1B 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF 43 07 D1 EA AB 00 FD E9 23 16 6D FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 FD 7B 1C A9 FD 03 07 91 48 D0 3B D5 E8 0B 00 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF 83 07 D1 E9 23 17 6D FC 6F 18 A9 FA 67 19 A9 F8 5F 1A A9 F6 57 1B A9 F4 4F 1C A9 FD 7B 1D A9 FD 43 07 91 48 D0 3B D5 E8 0F 00 F9 08 15 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF 43 07 D1 E9 23 16 6D FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 FD 7B 1C A9 FD 03 07 91 48 D0 3B D5 E8 07 00 F9 08 15 40 F9 F3 03 00 AA 08 1C A0 4E",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 43 07 D1 E9 23 16 6D FC 6F 17 A9 FA 67 18 A9 F8 5F 19 A9 F6 57 1A A9 F4 4F 1B A9 FD 7B 1C A9 FD 03 07 91 5B D0 3B D5 68 17 40 F9 F3 03 00 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 06 D1 E8 A3 00 FD FC 6F 15 A9 FA 67 16 A9 F8 5F 17 A9 F6 57 18 A9 F4 4F 19 A9 FD 7B 1A A9 FD 83 06 91 1B 80 48 39",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 07 D1 EA BB 00 FD E9 23 18 6D FD 7B 19 A9 FD 43 06 91 FC 6F 1A A9 FA 67 1B A9 F8 5F 1C A9 F6 57 1D A9 F4 4F 1E A9 F3 03 00 AA ?? ?? ?? ??",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF 83 02 D1 E9 23 03 6D FD 7B 04 A9 FD 03 01 91 FC 6F 05 A9 FA 67 06 A9 F8 5F 07 A9 F6 57 08 A9 F4 4F 09 A9 18 ?? ?? 91",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindUnEquipVehicleWeapon": {
+  "9.41": {
+   "pattern": "FF 83 01 D1 F9 0B 00 F9 F8 5F 02 A9 F6 57 03 A9 F4 4F 04 A9 FD 7B 05 A9 FD 43 01 91 F7 03 00 AA 00 68 40 F9 F5 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "13.40": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 F7 03 00 AA F5 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "17.50": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 F7 03 00 AA F5 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "18.40": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 59 D0 3B D5 28 17 40 F9 F6 03 00 AA F5 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "19.10": {
+   "pattern": "FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 5A D0 3B D5 48 17 40 F9 F6 03 00 AA F5 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "21.30": {
+   "pattern": "FF 03 02 D1 FC 6F 02 A9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 FD 7B 07 A9 FD C3 01 91 5B D0 3B D5 68 17 40 F9 F5 03 00 AA F6 03 03 2A",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "22.40": {
+   "pattern": "FF C3 01 D1 FB 0B 00 F9 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 F5 03 00 AA 00 4C 40 F9",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "23.50": {
+   "pattern": "FF C3 01 D1 FD 7B 01 A9 FD 43 00 91 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 F6 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  },
+  "30.00": {
+   "pattern": "FF C3 01 D1 FD 7B 01 A9 FD 43 00 91 FB 13 00 F9 FA 67 03 A9 F8 5F 04 A9 F6 57 05 A9 F4 4F 06 A9 F6 03 03 2A F4 03 02 AA",
+   "offset": 0,
+   "strategy": "session1",
+   "source": "recovered47"
+  }
+ },
+ "FindGIsServer": {
+  "5.41": {
+   "global": "0x97ff490",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "7.40": {
+   "global": "0xa8fb3a0",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "9.41": {
+   "global": "0xcfac770",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "13.40": {
+   "global": "0x12aefdfe",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "17.50": {
+   "global": "0x136cb13d",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "18.40": {
+   "global": "0x114f7695",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "19.10": {
+   "global": "0x103421fa",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "21.30": {
+   "global": "0xdc80832",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "22.40": {
+   "global": "0xe2ccfe3",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "23.50": {
+   "global": "0xdfd33dc",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "30.00": {
+   "global": "0x13c47d7b",
+   "strategy": "gis_got",
+   "verified": true
+  }
+ },
+ "FindGIsClient": {
+  "5.41": {
+   "global": "0x9714ba0",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "7.40": {
+   "global": "0xa86e0a0",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "9.41": {
+   "global": "0xce9c590",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "13.40": {
+   "global": "0x12aefdfd",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "17.50": {
+   "global": "0x136cb13c",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "18.40": {
+   "global": "0x114f7694",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "19.10": {
+   "global": "0x103421ec",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "21.30": {
+   "global": "0xdc80824",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "22.40": {
+   "global": "0xe2ccfe2",
+   "strategy": "gis_got",
+   "verified": true
+  },
+  "23.50": {
+   "global": "0x1678c10",
+   "strategy": "gis_got",
+   "verified": false
+  },
+  "30.00": {
+   "global": "0x13c47d7a",
+   "strategy": "gis_got",
+   "verified": true
+  }
+ },
+ "FindOnItemInstanceAddedVft": {
+  "17.50": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  },
+  "18.40": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  },
+  "19.10": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  },
+  "21.30": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  },
+  "22.40": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  },
+  "23.50": {
+   "vtable_index": 143,
+   "strategy": "win_abi_parity",
+   "verified": true
+  }
+ }
+}

@@ -1,0 +1,2154 @@
+{
+ "FindActivatePhase": {
+  "file": "Finders.cpp",
+  "line": 3076,
+  "strings": [
+   "[ASpecialEventScript::ActivatePhase()] [%s] New Phase [%s] OldPhase [%s] SequenceTimeOffset [%f]",
+   "[ASpecialEventScript::ActivatePhase()] [%s] New Phase [%s] OldPhase [%s]"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   17.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 41,
+  "vft": false
+ },
+ "FindApplyCharacterCustomization": {
+  "file": "Finders.cpp",
+  "line": 810,
+  "strings": [
+   "AFortPlayerState::ApplyCharacterCustomization - Failed initialization, using default parts. Player Controller: %s PlayerState: %s, HeroId: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 B9 ? ? ? ? ? 4C 8B EA",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 80 B9 ? ? ? ? ? 48 8B F1",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 80 B9 ? ? ? ? ? 48 8B C2",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8B EC 48 81 EC ? ? ? ? 80 B9",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8B EC 48 81 EC ? ? ? ? 80 B9",
+   "48 8B C4 48 89 50 10 55 57 48 8D 68 A1 48 81 EC ? ? ? ? 80 B9"
+  ],
+  "branches": [
+   24.0,
+   17.0,
+   15.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 57,
+  "vft": false
+ },
+ "FindCallPreReplication": {
+  "file": "Finders.cpp",
+  "line": 1732,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 85 D2 0F 84 ? ? ? ? 48 8B C4 55 57 41 57 48 8D 68 A1 48 81 EC",
+   "48 85 D2 0F 84 ? ? ? ? 48 8B C4 55 57 41 54 48 8D 68 A1 48 81 EC ? ? ? ? 48 89 58 08 4C",
+   "48 85 D2 0F 84 ? ? ? ? 56 41 56 48 83 EC 38 4C 8B F2",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 40 F6 41 58 30 48 8B EA 48 8B D9 40 B6 01",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 40 F6 41 58 30 48 8B EA 48 8B D9 75",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 40 F6 41 58 30 4C 8B F2",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? F6 41",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC ? F6 41",
+   "48 85 D2 0F 84 ? ? ? ? 48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 60 ? 55 41 56 41 57 48 8B EC 48 83 EC ? F6 41 ? ? 4C 8B FA 48 8B",
+   "48 85 D2 0F 84 ? ? ? ? 48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8B EC 48 83 EC ? F6 41"
+  ],
+  "branches": [
+   22.4,
+   2.5
+  ],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 39,
+  "vft": false
+ },
+ "FindCanAffordToPlaceBuildableClass": {
+  "file": "Finders.cpp",
+  "line": 2619,
+  "strings": [
+   "Resource not found! Resource Type is %i, might be invalid"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 33 DB 4C 8B F2 48 8B F9 48 39 1A",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 33 DB 4C 8B F2 48 8B F9 48 39 1A",
+   "40 53 56 41 56 48 83 EC ? 48 8B 1A 4C 8B F2"
+  ],
+  "branches": [
+   18.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 41,
+  "vft": false
+ },
+ "FindCanPlaceBuildableClassInStructuralGrid": {
+  "file": "Finders.cpp",
+  "line": 2662,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 54 41 56 41 57 48 83 EC ? 4D 8B E1 4D 8B F8 48 8B F2",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B 1A 4D 8B E9"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 16,
+  "vft": false
+ },
+ "FindCantBuild": {
+  "file": "Finders.cpp",
+  "line": 1112,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 5C 24 10 48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC ? 49 8B E9 4D 8B F0",
+   "48 89 54 24 ? 55 56 41 56 48 83 EC 50",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 60 4D 8B F1 4D 8B F8",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 60 49 8B E9 4D 8B F8 48 8B DA 48 8B F9 BE ? ? ? ? 48",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 70 49 8B E9 4D 8B F8 48 8B DA 48 8B F9",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B 1A 4D 8B F1"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 28,
+  "vft": false
+ },
+ "FindClearAbility": {
+  "file": "Finders.cpp",
+  "line": 1513,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindGiveAbilityAndActivateOnce"
+  ],
+  "hooks": [],
+  "n_lines": 29,
+  "vft": false
+ },
+ "FindClientHasInitializedLevelFor": {
+  "file": "Finders.cpp",
+  "line": 2017,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 8B 5A 20 48 8B F1 4C 8B C3 48 8D",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 8B 5A 20 48 8B F1 4C 8B C3",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 8B F9 48 85 D2 74 35 48",
+   "48 89 5C 24 ? 57 48 83 EC 20 48 8B DA 48 8B F9 E8 ? ? ? ? 48 8B D0 48 8B CB E8 ? ? ? ? 48 8B C8",
+   "40 53 48 83 EC ? 48 8B D9 48 8B CA E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 4C 8D 9B",
+   "48 89 5C 24 ? 57 48 83 EC 20 8B 81 ? ? ? ? 48 8B F9 48 8B 5A ? 3B 81"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 28,
+  "vft": false
+ },
+ "FindCloseActorChannel": {
+  "file": "Finders.cpp",
+  "line": 1986,
+  "strings": [
+   "UActorChannel::Close: ChIndex: %d, Actor: %s",
+   "UActorChannel::Close: ChIndex: %d, Actor: %s, Reason: %s"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 29,
+  "vft": false
+ },
+ "FindConstructAbilitySpec": {
+  "file": "Finders.cpp",
+  "line": 735,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "80 61 29 F8 48 8B 44 24 ?",
+   "48 8B 44 24 ? 80 61 29 F8 80 61 31 FE 48 89 41 20 33 C0 89 41",
+   "80 61 29 F8 48 8B 44 24 ?",
+   "80 61 31 FE 0F 57 C0 80 61 29 F0 48 8B 44 24 ? 48",
+   "48 8B 44 24 ? 80 61",
+   "80 61 31 FE 41 83 C9 FF 80 61 29 F0 48 8B 44 24 ? 48 89 41",
+   "4C 8B C9 48 8B 44 24 ? 83 C9 FF 41 80 61 ? ? 41 80 61 ? ? 49 89 41 20 33 C0 41 88 41 30 49 89 41",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 41 83 CE ? 33 ED 40 38 2D ? ? ? ? 41 8B F8",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 41 83 CE",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 48 8B 44 24 ? 41 83 CE",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 44 89 48 ? 57 48 83 EC ? 48 8B 44 24"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 46,
+  "vft": false
+ },
+ "FindCreateChannel": {
+  "file": "Finders.cpp",
+  "line": 1918,
+  "strings": [
+   "STAT_NetConnection_CreateChannelByName"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "40 56 57 41 54 41 55 41 57 48 83 EC 60 48 8B 01 41 8B F9 45 0F B6 E0"
+  ],
+  "branches": [
+   20.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 29,
+  "vft": false
+ },
+ "FindCreateNetDriver": {
+  "file": "Finders.cpp",
+  "line": 201,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "49 8B D8 48 8B F9 E8 ?? ?? ?? ?? 48 8B D0 4C 8B C3 48 8B CF 48 8B 5C 24 ?? 48 83 C4 ?? 5F E9 ?? ?? ?? ??",
+   "E8 ?? ?? ?? ?? 4C 8B 44 24 ?? 48 8B D0 48 8B CB E8 ?? ?? ?? ?? 48 83 C4 ?? 5B C3",
+   "33 D2 E8 ?? ?? ?? ?? 48 8B D0 4C 8B C3 48 8B CF E8 ?? ?? ?? ?? 48 8B 5C 24 ?? 48 83 C4 ?? 5F C3"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 38,
+  "vft": false
+ },
+ "FindCreateNetDriverWorldContext": {
+  "file": "Finders.cpp",
+  "line": 241,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "41 56 48 83 EC ? 48 63 81 ? ? ? ? 48 8D ? ? ? ? ? 48 8B B9 ? ? ? ? 4C 8B F2",
+   "41 56 41 57 48 83 EC ? 48 63 81 ? ? ? ? 48 8D ? ? ? ? ? 48 8B B9",
+   "41 56 41 57 48 8B EC 48 83 EC ? 48 63 81 ? ? ? ? 48 8D ? ? ? ? ? 48 8B B1",
+   "41 56 41 57 48 8B EC 48 83 EC ? 48 63 81 ? ? ? ? 48 8D ? ? ? ? ? 4C 8B B1",
+   "41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 48 63 81 ? ? ? ? 4C 8D 3D",
+   "41 56 41 57 48 83 EC ? 4C 8B EA 4C 8B E1 48 81 C1",
+   "41 56 41 57 48 83 EC ? 48 63 81 ? ? ? ? 4C 8D 35",
+   "C7 44 24 ? 00 20 00 00 33 D2 48 8B C8 E8 ? ? ? ? 48 ?? 4C",
+   "C7 44 24 ? 00 20 00 00 48 8B C8 E8 ? ? ? ? 48 ?? 4C"
+  ],
+  "branches": [
+   25.0,
+   20.0
+  ],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 69,
+  "vft": false
+ },
+ "FindEncryptionPatch": {
+  "file": "Finders.cpp",
+  "line": 1263,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "83 BD ? ? ? ? 01 7F 18 49 8D 4D D8 48 8B D6 E8 ? ? ? ? 48",
+   "83 BD ? ? ? ? ? 7F 18 49 8D 4D D8 48 8B D7 E8",
+   "83 7D 88 01 7F 0D 48 8B CE E8",
+   "83 7C 24 ?? 01 7F 0D 48 8B CF E8",
+   "83 7C 24 ? ? 7F 0D 49 8B CE",
+   "83 7C 24 ? ? 7F 0D 48 8B CE",
+   "83 7D ? ? 7F 14 48 8D 8B"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 35,
+  "vft": false
+ },
+ "FindEnterAircraft": {
+  "file": "Finders.cpp",
+  "line": 2099,
+  "strings": [
+   "EnterAircraft: [%s] is attempting to enter aircraft after having already exited."
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0,
+   15.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 52,
+  "vft": false
+ },
+ "FindFinishWorldInitialization": {
+  "file": "Finders.cpp",
+  "line": 2978,
+  "strings": [
+   "Can't find a FortAthenaMapInfo placed in map.  Skipping warmup and aircraft phases.",
+   "bEnableMeshNetwork"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 ? 48 8B F9 E8 ? ? ? ? 48 8B CF 4C 8B F0"
+  ],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindPointerRef",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 96,
+  "vft": false
+ },
+ "FindFinishedTargetSpline": {
+  "file": "Finders.cpp",
+  "line": 944,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "4C 8B DC 53 55 56 48 83 EC 60 48 8B F1 48 8B 89 ? ? ? ? 48 85 C9",
+   "4C 8B DC 53 55 56 48 83 EC 60 48 8B F1 48 8B 89",
+   "48 89 5C 24 ? 57 48 83 EC 20 48 8B D9 48 8B 89 ? ? ? ? 48 85 C9 74 20 48 8D 44 24",
+   "40 53 56 48 83 EC 38 4C 89 6C 24 ? 48 8B F1 4C 8B A9",
+   "40 53 56 57 48 83 EC 30 4C 89 6C 24 ? 48 8B F1 4C 8B A9 ? ? ? ? 4D 85 ED 0F 84",
+   "40 53 56 57 48 83 EC 30 4C 89 6C 24 ? 48 8B F1 4C 8B A9 ? ? ? ? 4D 85 ED 0F 84",
+   "40 53 56 48 83 EC 38 4C 89 6C 24 ? 48 8B F1 4C 8B A9 ? ? ? ? 4D 85 ED",
+   "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 54 41 56 41 57 48 83 EC 20 48 8B B1 ? ? ? ? 48 8B D9 48 85 F6",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 ",
+   "48 8B C4 48 89 58 10 48 89 68 18 57 48 83 EC 20 48 8B D9 48 8B 89 ? ? ? ? 48 85",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 48 8B B9",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 48 8D AC 24 ? ? ? ? 48 81 EC A0 01 00 00",
+   "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 ",
+   "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 ",
+   "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 89 ? ? ? ? 45 33 ED",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 91",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 81 ? ? ? ? 48 8B F9",
+   "48 89 5C ?? ?? 48 89 74 ?? ?? 55 57 41 55 41 56 41 57 48 8D AC ?? ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 81",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 89",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 55 41 56 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 89",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 89 ? ? ? ? 45 33 ED",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 44 8B 81 ? ? ? ? 48 8B D9 BE",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B ",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B ",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B "
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 130,
+  "vft": false
+ },
+ "FindFlushDormancy": {
+  "file": "Finders.cpp",
+  "line": 2073,
+  "strings": [
+   "FlushDormancy: %s. Connection: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 24,
+  "vft": false
+ },
+ "FindGIsClient": {
+  "file": "Finders.cpp",
+  "line": 5,
+  "strings": [
+   "AllowCommandletRendering",
+   "llowCommandletRendering"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 58,
+  "vft": false
+ },
+ "FindGIsServer": {
+  "file": "Finders.cpp",
+  "line": 65,
+  "strings": [
+   "AllowCommandletRendering",
+   "llowCommandletRendering"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 58,
+  "vft": false
+ },
+ "FindGameSessionPatch": {
+  "file": "Finders.cpp",
+  "line": 1544,
+  "strings": [
+   "Gamephase Step: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 57 48 83 EC 20 E8 ? ? ? ? 48 8B D8 48 85 C0 0F 84 ? ? ? ? E8"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 42,
+  "vft": false
+ },
+ "FindGetMaxTickRate": {
+  "file": "Finders.cpp",
+  "line": 651,
+  "strings": [
+   "Hitching by request!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 41 55 41 56 48 83 EC ? 0F 29 70 ? 48 8B D9 0F 29",
+   "40 53 48 83 EC 50 0F 29 74 24 ? 48 8B D9 0F 29 7C 24 ? 0F 28 F9 44 0F 29",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 41 54 41 56 48 83 EC ? 0F 29 70 ? 48 8B D9",
+   "40 53 48 83 EC 60 0F 29 74 24 ? 48 8B D9 0F 29 7C 24 ? 0F 28"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 46,
+  "vft": false
+ },
+ "FindGetNamePool": {
+  "file": "Finders.cpp",
+  "line": 2243,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 83 EC ? 80 3D ? ? ? ? ? 0F 84 ? ? ? ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3",
+   "48 83 EC ? 80 3D ? ? ? ? ? 74 ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 48 8D 0D"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 16,
+  "vft": false
+ },
+ "FindGetNetMode": {
+  "file": "Finders.cpp",
+  "line": 125,
+  "strings": [
+   "PREPHYSBONES"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 83 EC 28 48 83 79 ? ? 75 20 48 8B 91 ? ? ? ? 48 85 D2 74 1E 48 8B 02 48 8B CA FF 90"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 42,
+  "vft": false
+ },
+ "FindGetPlayerViewPoint": {
+  "file": "Finders.cpp",
+  "line": 2153,
+  "strings": [
+   "%s failed to spawn a pawn"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   20.0,
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 42,
+  "vft": false
+ },
+ "FindGetWorldContext": {
+  "file": "Finders.cpp",
+  "line": 169,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 80 02 00 00 75 ? 48 8B C1 C3",
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 B8 02 00 00 75 ? 48 8B C1 C3",
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 70 02 00 00 75 ? 48 8B C1 C3",
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 ? ? ? ? 75 ? 48 8B C1 C3",
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 B8 02 00 00 74 ? 48 83 C0 08 EB ??",
+   "48 8B 81 ? ? ? ? 48 63 89 ? ? ? ? 4C 8D 04 C8 49 3B C0 74 ? 48 8B 08 48 39 91 ? ? ? ? 74 ? 48 83 C0 08 EB ??",
+   "40 53 48 83 EC ?? F6 41 08 10 48 8B D9 75 ?? 48 8B 41 20"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 30,
+  "vft": false
+ },
+ "FindGiveAbility": {
+  "file": "Finders.cpp",
+  "line": 699,
+  "strings": [
+   "GiveAbilityAndActivateOnce called on ability %s on the client, not allowed!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 56 57 41 56 48 83 EC 20 83 B9",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 7C 24 ? 41 56 48 83 EC 20 83 B9 ? ? ? ? ? 49 8B E8 4C 8B F2",
+   "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 49 8B 40 ? 45 33 E4",
+   "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC 20 8B 81 ? ? ? ? 49 8B E8 4C",
+   "48 89 5C 24 ? 55 56 57 41 56 41 57 48 8B EC 48 83 EC ? 49 8B 40",
+   "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC 30 49 8B 40 10 45 33 F6 49 8B E8 48 8B F2 48 8B"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 34,
+  "vft": false
+ },
+ "FindGiveAbilityAndActivateOnce": {
+  "file": "Finders.cpp",
+  "line": 1478,
+  "strings": [
+   "GiveAbilityAndActivateOnce called on ability %s on the client, not allowed!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 40 49 8B 40 10 49 8B D8 48 8B FA 48 8B F1",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 49 8B 40 10 49"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 33,
+  "vft": false
+ },
+ "FindHandleMatchHasStarted": {
+  "file": "Finders.cpp",
+  "line": 2412,
+  "strings": [
+   "AFortGameModeAthena::HandleMatchHasStarted: NumPlayers: %i",
+   "AFortGameModeAthena::HandleMatchHasStarted: Playlist: %s, NumPlayers: %i"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 30,
+  "vft": false
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "file": "Finders.cpp",
+  "line": 869,
+  "strings": [
+   "FortGameModeAthena: No MegaStorm on SafeZone[%d].  GridCellThickness is less than 1.0."
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B B9 ? ? ? ? 33 DB 0F 29 74 24",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 70 48 8B B9 ? ? ? ? 33 DB 0F 29 74 24 ? 48 8B F1 48 85 FF 74 2C E8",
+   "E8 ? ? ? ? EB 31 80 B9 ? ? ? ? ?",
+   "E9 ? ? ? ? 48 8B C1 40 38 B9",
+   "E8 ? ? ? ? EB 42 80 BA"
+  ],
+  "branches": [
+   7.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 39,
+  "vft": false
+ },
+ "FindInitListen": {
+  "file": "Finders.cpp",
+  "line": 312,
+  "strings": [
+   "%s IpNetDriver listening on port %i"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "4D 8B C8 4C 8B C2 33 D2 FF 90 ? ? ? ? 84 C0 75 ? 80 3D",
+   "4C 8B DC 49 89 5B ? 49 89 73 ? 57 48 83 EC ? 48 8B BC 24",
+   "4C 8B DC 49 89 5B 08 49 89 73 10 57 48 83 EC 40 48 8B 7C 24 ? 49 8B F0 48 8B 01 48 8B D9 49 89 7B E0 45",
+   "4C 8B DC 49 89 5B 08 49 89 73 10 57 48 83 EC 50 48 8B BC 24 ? ? ? ? 49 8B F0 48 8B 01 48 8B"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 47,
+  "vft": false
+ },
+ "FindInitializeBuildingActor": {
+  "file": "Finders.cpp",
+  "line": 2444,
+  "strings": [
+   "STAT_Fort_BuildingSMActorInitializeBuildingActor"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 18,
+  "vft": false
+ },
+ "FindInitializeFlightPath": {
+  "file": "Finders.cpp",
+  "line": 2495,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B E9 41 8A D9",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 81 EC ? ? ? ? 48 8B E9 41 0F B6 D9"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 16,
+  "vft": false
+ },
+ "FindInitializePlayerGameplayAbilities": {
+  "file": "Finders.cpp",
+  "line": 2900,
+  "strings": [
+   "InitializePlayerGameplayAbilities with invalid PlayerStateOrProxy!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 22,
+  "vft": false
+ },
+ "FindInternalTryActivateAbility": {
+  "file": "Finders.cpp",
+  "line": 783,
+  "strings": [
+   "InternalTryActivateAbility called with invalid Handle! ASC: %s. AvatarActor: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   25.0,
+   16.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 25,
+  "vft": false
+ },
+ "FindIsNetReady": {
+  "file": "Finders.cpp",
+  "line": 2261,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "84 D2 74 ? 8B 81 ? ? ? ? F7 D8"
+  ],
+  "branches": [
+   20.0
+  ],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 25,
+  "vft": false
+ },
+ "FindIsNetRelevantForVft": {
+  "file": "Finders.cpp",
+  "line": 492,
+  "strings": [
+   "Actor %s / %s has no root component in AActor::IsNetRelevantFor. (Make bAlwaysRelevant=true?)"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 50,
+  "vft": true
+ },
+ "FindKickPlayer": {
+  "file": "Finders.cpp",
+  "line": 1166,
+  "strings": [
+   "Validation Failure: %s. kicking %s",
+   "Failed to kick player"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [
+   "40 53 56 48 81 EC ? ? ? ? 48 8B DA 48 8B F1 E8 ? ? ? ? 48 8B 06 48 8B CE",
+   "48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8B EC 48 83 EC 60 48 83 65 ? ? 4C 8B F2 83 65 E8 00 4C 8B E1 83 65 EC",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 E4 48 8B FA 41 8B DC",
+   "48 89 5C 24 ? 55 56 57 48 8B EC 48 83 EC 60 48 8B FA 48 8B F1 E8",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 ? 45 33 ED 48 8B FA 41 8B DD",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 ? 33 DB 48 8B FA 89 5C 24",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 33 FF 48 8B F2 89 7C 24",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 45 33 E4 48 8B F2 41 8B FC",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 ? 45 33 E4 48 8B FA 41 8B DC",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 45 33 F6 48 89 4C 24 ? 45 8B FE",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 45 33 ED 48 89 55 ? 41 8B FD",
+   "48 89 5C ?? ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 ?? 45 33 E4 48 8B FA 41 8B DC",
+   "48 89 5C ?? ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 ?? 45 33 FF 48 8B FA 41 8B DF",
+   "48 89 5C ?? ?? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 ?? 45 33 ED 48 8B FA 41 8B DD",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 45 33 ED 48 8B FA 41 8B DD",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 ? 33 DB 48 8B FA",
+   "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC ? 49 8B F0 48 8B DA 48 85 D2",
+   "40 53 41 56 48 81 EC ? ? ? ? 48 8B 01 48 8B DA 4C 8B F1 FF 90"
+  ],
+  "branches": [
+   19.0,
+   17.0,
+   7.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 95,
+  "vft": false
+ },
+ "FindListenCall": {
+  "file": "Finders.cpp",
+  "line": 2924,
+  "strings": [
+   "LoadMap: failed to Listen(%s)"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 29,
+  "vft": false
+ },
+ "FindLoadPlayset": {
+  "file": "Finders.cpp",
+  "line": 2680,
+  "strings": [
+   "UPlaysetLevelStreamComponent::LoadPlayset Error: no owner for %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 4C 8B B1 ? ? ? ? 45",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B B1 ? ? ? ? 45",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B A9",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B B9",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D 68 ? 48 81 EC ? ? ? ? 4C 8B A9",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B A1"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 65,
+  "vft": false
+ },
+ "FindMinigameSettingsBuilding__BeginPlay": {
+  "file": "Finders.cpp",
+  "line": 2851,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "40 55 57 41 56 41 57 48 8B EC 48 83 EC ? 80 3D"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 3,
+  "vft": false
+ },
+ "FindNotifyGameMemberAdded": {
+  "file": "Finders.cpp",
+  "line": 2528,
+  "strings": [
+   "%s: Adding Player state with UniqueId: %s, in team: %d, and in squad: %d"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "40 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 88 54 24",
+   "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 88 54 24",
+   "40 55 53 56 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 88 54 24"
+  ],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 40,
+  "vft": false
+ },
+ "FindNullsAndRetTrues": {
+  "file": "Finders.cpp",
+  "line": 3401,
+  "strings": [
+   "Widget Class %s - Running Initialize On Archetype, %s.",
+   "Widget Class %s - Running Initialize On Archetype, %s.",
+   "Widget Class %s - Running Initialize On Archetype, %s.",
+   "Changing GameSessionId from '%s' to '%s'",
+   "STAT_CollectGarbageInternal",
+   "CollectGarbageInternal() is flushing async loading",
+   "CanActivateAbility %s failed, blueprint refused",
+   "CanActivateAbility %s failed, called with invalid Handle",
+   "AFortPlayerControllerAthena::HasStreamingLevelsCompletedLoadingUnLoading(): %s still not visible",
+   "STAT_FortCurieVoxelFirePropagationManager_IgniteGrassInBounds"
+  ],
+  "wide": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "patterns": [
+   "4C 89 44 24 ? 88 54 24 ? 48 89 4C 24 ? 56 57 48 81 EC ? ? ? ? 33 C0 83 F8 ? 0F 84 ? ? ? ? B8",
+   "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B 41 08 C1 E8 05",
+   "48 89 54 24 ? 48 89 4C 24 ? 55 53 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 8B 41 ? C1 E8 ? A8 ? 0F 84 ? ? ? ? 80 3D",
+   "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 49 89 5B 10 48 8D 05\n            //     ? ? ? ? 48 8B 1D ? ? ? ? 49 89 73 18 33 F6 40",
+   "48 8B C4 57 48 81 EC ? ? ? ? 4C 8B 82 ? ? ? ? 48 8B F9 0F 29 70 E8 0F 29 78 D8",
+   "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 49 89 5B 10 48 8D 05 ? ?\n            // ? ? 48 8B 1D ? ? ? ? 49 89 73 18 33 F6 40",
+   "E8 ? ? ? ? F0 FF 0D ? ? ? ? 0F B6 C3",
+   "48 8B C4 48 89 58 08 48 89 70 10 57 48 81 EC ? ? ? ? 48 8B BA ? ? ? ? 48 8B DA 0F 29",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC 30 41 0F B6 F0 48 8D 15 ? ? ? ? 48 8B F9 41 B8",
+   "40 53 57 48 83 EC ? 48 8B 01 48 8B F9 FF 90 ? ? ? ? 48 8B C8",
+   "40 57 41 56 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 0F B6 FA 44 8B F1 74 3A 80 3D ? ? ? ? ? 0F 82",
+   "48 89 5C 24 ? 57 48 83 EC 30 48 8B 41 28 48 8B DA 48 8B F9 48 85 C0 74 34 48 8B 4B 08 48 8D",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 48 8B FA 4C 8B F9",
+   "48 89 5C 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 45 20 4C 8B A5",
+   "40 55 57 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 80 3D ? ? ? ? ? 0F B6 FA 44 8B F9 74 3B 80 3D ? ? ? ? ? 0F",
+   "48 89 5C 24 10 48 89 6C 24 20 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 65 48 8B 04 25 ? ? ? ? 4C 8B F9",
+   "48 8B C4 48 89 70 08 48 89 78 10 55 41 54 41 55 41 56 41 57 48 8D 68 A1 48 81 EC ? ? ? ? 45 33 ED",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 55 41 56 48 8B EC 48 83 EC 50 83 65 28 00 40 B6 05 40 38 35 ? ? ? ? 4C",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 56 48 8B EC 48 83 EC ? 83 65 ? ? 40 B6",
+   "48 8B C4 48 89 58 08 4C 89 40 18 48 89 50 10 55 56 57 41 54 41 55 41 56 41 57 48 8D 68 98 48 81 EC ? ? ? ? 49 8B 48 20 45 33",
+   "48 89 5C 24 ? 57 48 83 EC 20 48 8B 41 20 48 8B FA 48 8B D9 BA ? ? ? ? 83 78 08 03 0F 8D",
+   "4C 89 44 24 ? 53 55 56 57 41 54 41 55 41 56 41 57 48 83 EC 68 48 8D 05 ? ? ? ? 0F",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 30 48 8B F9 48 8B CA E8",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 ? 41 ? 48 83 EC 60 45 33 F6 4C 8D ? ? ? ? ? 48 8B DA",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? B8 ? ? ? ? E8 ? ? ? ? 48 2B E0 48 8B 05 ? ? ? ?\n        //     48 33 C4 48 89 85 ? ? ? ? 4D 8B F1",
+   "48 8B C4 48 89 58 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 0F 29 70 ? 48 8D 6C 24 ? 48 83 E5 ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 4C 8B F2",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 81 EC",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 55 57 41 54 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 45 33 FF",
+   "40 55 56 41 56 48 8B EC 48 81 EC ? ? ? ? 48 8B 01 4C 8B F2",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 50 4C 8B FA 48 8B F1 E8",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 55 41 56 48 8B EC 48 83 EC ? 4C 8B F2",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC ? 4C 8B E2 4C 8B F1 E8 ? ? ? ? 48 8B 0D",
+   "48 89 5C ? ? 55 56 57 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC ? 4C 8B E2 48 8B F1",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 4C 8B FA 48 8B F1 E8 ? ? ? ? 48 8B 0D",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 70 4C 8B FA 4C",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC ? 4C 8B FA 4C 8B F1 E8 ? ? ? ? 48 8B 0D",
+   "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 0F B6 FA",
+   "48 89 5C 24 ? 48 89 6C 24 ? 57 41 56 41 57 48 81 EC ? ? ? ? 48 8B 01 49 8B E9 45 0F B6 F8",
+   "48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8B EC 48 83 EC 60 4D 8B F9 41 8A F0 4C 8B F2 48 8B F9 45 32 E4",
+   "48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8B EC 48 83 EC 60 49 8B D9 45 8A",
+   "48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8B EC 48 83 EC 60 49 8B D9 45 8A",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC ? 4C 8B E2 4C 8B F1",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 49 8B F0 48 8B DA 48 85 D2 74 ? 48 83 BA",
+   "40 53 48 83 EC ? 80 3D ? ? ? ? ? 0F B6 D9 72 ? 48 8D 05 ? ? ? ? 89 5C 24 ? 41 B9 ? ? ? ? 48 89 44 24 ? 4C 8D 05 ? ? ? ? 33 D2 33 C9 E8 ? ? ? ? 48 8D 0D",
+   "88 4C 24 ? 53 48 83 EC ? 80 3D ? ? ? ? ? 8A D9",
+   "40 53 48 83 EC ? 41 B9 ? ? ? ? 0F B6 D9",
+   "40 53 48 83 EC ? 80 3D ? ? ? ? ? 0F B6 D9",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 33 DB 0F B6 F9",
+   "48 89 5C 24 ? 57 48 83 EC 40 41 B9 ? ? ? ? 0F B6 F9 44 38 0D ? ? ? ? 0F B6 DA 72 24 89 5C 24 30 48 8D 05 ? ",
+   "4C 8B DC 49 89 5B 08 49 89 6B 10 49 89 73 18 49 89 7B 20 41 56 48 83 EC 30 80 3D ? ? ? ? ? 49 8B",
+   "48 8B C4 48 89 58 18 88 50 10 88 48 08 57 48 83 EC 30",
+   "4C 89 4C 24 20 55 56 57 41 56 48 8D 6C 24 D1",
+   "8B ? E8 ? ? ? ? 84 C0 75 ? 80 3D ? ? ? ? 03 0F 82 ? ? ? ? ? 8B ? 18 ? 8D 54",
+   "8B ? E8 ? ? ? ? 84 C0 0F 85 ? ? ? ? 80 3D ? ? ? ? 03 0F 82 ? ? ? ? ? 8B ? 18 ? 8D 54",
+   "8B ? E8 ? ? ? ? 84 C0 75 ? 80 3D ? ? ? ? 03 72 ? ? 8B ? 18 ? 8D 54"
+  ],
+  "branches": [
+   23.0,
+   20.0,
+   19.0,
+   17.0,
+   16.0,
+   2.2
+  ],
+  "uses": [
+   "FindKickPlayer",
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 297,
+  "vft": false
+ },
+ "FindOnItemInstanceAddedVft": {
+  "file": "Finders.cpp",
+  "line": 2197,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "41 57 48 83 EC ? 48 8B 01 4C 8B F2 48 8B F1 FF 90 ? ? ? ? 4C 8B F8",
+   "41 56 48 83 EC ? 48 8B 01 4C 8B F2 48 8B F1 FF 90 ? ? ? ? 48 8B F8"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 44,
+  "vft": true
+ },
+ "FindOnRep_ZiplineState": {
+  "file": "Finders.cpp",
+  "line": 1444,
+  "strings": [
+   "ZIPLINES!! Role(%s)  AFortPlayerPawn::OnRep_ZiplineState ZiplineState.bIsZiplining=%d",
+   "ZIPLINES!! GetLocalRole()(%s)  AFortPlayerPawn::OnRep_ZiplineState ZiplineState.bIsZiplining=%d",
+   "AFortPlayerPawn::HandleZiplineStateChanged"
+  ],
+  "wide": [
+   true,
+   true,
+   false
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 32,
+  "vft": false
+ },
+ "FindPayBuildableClassPlacementCost": {
+  "file": "Finders.cpp",
+  "line": 2587,
+  "strings": [
+   "Failed to remove item %s during pay building costs, item duplicated!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8B EC 48 81 EC ? ? ? ? 48 8B 1A 33 FF",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 41 56 41 57 48 8B EC 48 83 EC ? 48 8B 1A 33 FF",
+   "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 83 EC ? 48 8B 1A 33 F6"
+  ],
+  "branches": [
+   18.0,
+   10.2,
+   10.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 30,
+  "vft": false
+ },
+ "FindPickSupplyDropLocation": {
+  "file": "Finders.cpp",
+  "line": 2856,
+  "strings": [
+   "PickSupplyDropLocation: Failed to find valid location using rejection.  Using safe zone location.",
+   "AFortAthenaMapInfo::PickSupplyDropLocation"
+  ],
+  "wide": [
+   true,
+   false
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 18,
+  "vft": false
+ },
+ "FindPickTeam": {
+  "file": "Finders.cpp",
+  "line": 1076,
+  "strings": [
+   "PickTeam for [%s] used beacon value [%d]",
+   "PickTeam for [%s] used beacon value [%s]"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [
+   "88 54 24 10 53 56 41 54 41 55 41 56 48 83 EC 60 4C 8B A1",
+   "88 54 24 10 53 55 56 41 55 41 ? 48 83 EC 70 48",
+   "89 54 24 10 53 56 41 54 41 55 41 56 48 81 EC"
+  ],
+  "branches": [
+   19.0,
+   16.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 34,
+  "vft": false
+ },
+ "FindPostInitializeSpawnedBuildingActor": {
+  "file": "Finders.cpp",
+  "line": 2464,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindInitializeBuildingActor"
+  ],
+  "hooks": [],
+  "n_lines": 29,
+  "vft": false
+ },
+ "FindPreSendUpdate": {
+  "file": "Finders.cpp",
+  "line": 2384,
+  "strings": [
+   "ReplicationSystem_PreSendUpdate"
+  ],
+  "wide": [
+   false
+  ],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 02 48 8B F9 4C 8B 41",
+   "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC ? 8B 02 48 8B F9",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B 71 ? 0F 57 C0",
+   "4C 8B DC 49 89 4B ? 55"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 26,
+  "vft": false
+ },
+ "FindQueueStatEvent": {
+  "file": "Finders.cpp",
+  "line": 2955,
+  "strings": [
+   "UFortQuestManager::QueueStatEvent: %s tried to queue a stat event, but the player controller is null. \\n\\t Event: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 21,
+  "vft": false
+ },
+ "FindRemoveFromAlivePlayers": {
+  "file": "Finders.cpp",
+  "line": 1588,
+  "strings": [
+   "FortGameModeAthena: Player [%s] removed from alive players list (Team [%d]).  Player count is now [%d].  Team count is now [%d].",
+   "FortGameModeAthena: Player [%s] removed from alive players list (Team [%d]).  Player count is now [%d]. PlayerBots count is now [%d]. Team count is now [%d].",
+   "FortGameModeAthena::RemoveFromAlivePlayers: Player [%s] PC [%s] removed from alive players list (Team [%d]).  Player count is "
+  ],
+  "wide": [
+   true,
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   16.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 44,
+  "vft": false
+ },
+ "FindRemoveInventoryItem": {
+  "file": "Finders.cpp",
+  "line": 1300,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [
+   22.0,
+   16.0
+  ],
+  "uses": [
+   "FindNameRef",
+   "FindPointerRef"
+  ],
+  "hooks": [],
+  "n_lines": 54,
+  "vft": false
+ },
+ "FindRemoveInventoryStateValue": {
+  "file": "Finders.cpp",
+  "line": 1356,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [
+   22.0,
+   16.0
+  ],
+  "uses": [
+   "FindNameRef"
+  ],
+  "hooks": [],
+  "n_lines": 42,
+  "vft": false
+ },
+ "FindReplaceBuildingActor": {
+  "file": "Finders.cpp",
+  "line": 1142,
+  "strings": [
+   "STAT_Fort_BuildingSMActorReplaceBuildingActor"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "4C 89 44 24 ? 55 56 57 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 22,
+  "vft": false
+ },
+ "FindReplicateActor": {
+  "file": "Finders.cpp",
+  "line": 1949,
+  "strings": [
+   "STAT_NetReplicateActorTime"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "40 55 53 57 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8D 59 68 4C 8B F1 48 8B",
+   "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 A8 0F 29 78 98 48 89 70 E8 4C",
+   "40 55 56 57 41 54 41 55 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C",
+   "40 55 56 41 54 41 55 41 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 4C 8B E9 48 8B 49 68 48"
+  ],
+  "branches": [
+   20.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 35,
+  "vft": false
+ },
+ "FindReset": {
+  "file": "Finders.cpp",
+  "line": 2513,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 5C 24 ? 57 48 83 EC ? 48 8B 91 ? ? ? ? 48 8B F9 48 85 D2 74 ? 48 8B 01"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 13,
+  "vft": false
+ },
+ "FindSelectAndSetupMyBuildingLevel": {
+  "file": "Finders.cpp",
+  "line": 3228,
+  "strings": [
+   "ABuildingFoundation::SelectAndSetupMyBuildingLevel - Cannot get WorldManager!!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 37,
+  "vft": false
+ },
+ "FindSendClientAdjustment": {
+  "file": "Finders.cpp",
+  "line": 1773,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B F9 E8 ? ? ? ? 48 8B D8 48 85 C0 74 ? 80 78",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 91 ? ? ? ? 48 8B D9 83 FA",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B D9 E8 ? ? ? ? 80 B8 ? ? ? ? ? 75 ? 8B 93",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 3D ? ? ? ? ? 48 8B D9 75",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 83 3D ? ? ? ? ? 48 8B D9 75",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 83 3D ? ? ? ? ? 48 8B F1",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B 91 ? ? ? ? 48 8B D9 83 FA",
+   "40 53 48 83 EC 20 48 8B 99 ? ? ? ? 48 39 99 ? ? ? ? 74 0A 48 83 B9"
+  ],
+  "branches": [
+   25.0,
+   23.0,
+   20.0
+  ],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 37,
+  "vft": false
+ },
+ "FindSendDestructionInfo": {
+  "file": "Finders.cpp",
+  "line": 1886,
+  "strings": [
+   "STAT_NetSendDestructionInfo"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 30,
+  "vft": false
+ },
+ "FindSendRequestNow": {
+  "file": "Finders.cpp",
+  "line": 615,
+  "strings": [
+   "MCP-Profile: Dispatching request to %s",
+   "MCP-Profile: Dispatching request to %s - ContextCredentials: %s"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 34,
+  "vft": false
+ },
+ "FindServerReplicateActors": {
+  "file": "Finders.cpp",
+  "line": 544,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [
+   19.2,
+   11.0,
+   7.4,
+   3.4
+  ],
+  "uses": [],
+  "hooks": [],
+  "n_lines": 69,
+  "vft": false
+ },
+ "FindSetChannelActor": {
+  "file": "Finders.cpp",
+  "line": 1812,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "4C 8B DC 55 53 57 41 54 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 45 33",
+   "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70 10 48 8B D9 48 89 78 18 48 8D 35",
+   "48 8B C4 55 53 57 41 54 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 E4 48 89 70",
+   "48 8B C4 55 53 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 89 70 E8 48 8B D9",
+   "40 55 53 56 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 E4 48 8D 3D ? ? ? ? 44 89 A5",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 FF 48 8D 35",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 33 FF 4C 8D 35 ? ? ? ? 89 BD",
+   "48 89 5C 24 ? 55 56 57 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6",
+   "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 45 33 ",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 33 F6 4C 8D 3D",
+   "40 55 53 56 57 41 55 41 56 41 57 48 8D AC ? ? ? ? ? 48 81 EC ? ? ? ? 45 33 F6 48 8D 3D",
+   "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 33 FF"
+  ],
+  "branches": [
+   27.0,
+   21.0
+  ],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 48,
+  "vft": false
+ },
+ "FindSetChannelActorForDestroy": {
+  "file": "Finders.cpp",
+  "line": 1862,
+  "strings": [
+   "SetChannelActorForDestroy: Channel %d. NetGUID <%s> Path: %s. Bits: %d"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 22,
+  "vft": false
+ },
+ "FindSetGamePhase": {
+  "file": "Finders.cpp",
+  "line": 2570,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 "
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 15,
+  "vft": false
+ },
+ "FindSetInventoryStateValue": {
+  "file": "Finders.cpp",
+  "line": 1400,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [
+   22.0,
+   16.0
+  ],
+  "uses": [
+   "FindNameRef"
+  ],
+  "hooks": [],
+  "n_lines": 42,
+  "vft": false
+ },
+ "FindSetIsDoorOpen": {
+  "file": "Finders.cpp",
+  "line": 3182,
+  "strings": [],
+  "wide": [],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindCmpRef"
+  ],
+  "hooks": [],
+  "n_lines": 44,
+  "vft": false
+ },
+ "FindSetPickupItems": {
+  "file": "Finders.cpp",
+  "line": 1679,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 80 B9 ? ? ? ? ? 41 0F B6 E9",
+   "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 80 B9 ? ? ? ? ? 41 0F B6 E9 49 8B F8 48 8B F1 0F 85 ? ? ? ? 48 83 7A",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC 20 80 B9 ? ? ? ? ? 45 0F B6 F1 49 8B E8",
+   "48 89 5C 24 ? 55 57 41 57 48 83 EC 30 80 B9 ? ? ? ? ? 41 0F B6",
+   "48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 80 B9 ? ? ? ? ? 41 0F B6 E9",
+   "48 89 5C 24 ? 57 41 56 41 57 48 83 EC 30 80 B9 ? ? ? ? ? 45 0F B6 F1",
+   "48 89 5C 24 ? 57 41 56 41 57 48 83 EC 30 80 B9 ? ? ? ? ? 45 0F B6 F1 4D",
+   "48 89 5C 24 ? 55 57 41 57 48 83 EC ? 80 B9",
+   "48 89 5C 24 ? 55 57 41 57 48 83 EC ? 80 B9",
+   "48 89 5C 24 ? 56 57 41 57 48 83 EC ? 80 B9",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 B9 ? ? ? ? ? 45 8A",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 B9 ? ? ? ? ? 45 8A F9",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 B9 ? ? ? ? ? 45 8A F1"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 51,
+  "vft": false
+ },
+ "FindSetPickupTarget": {
+  "file": "Finders.cpp",
+  "line": 2876,
+  "strings": [
+   "%s: Attempted to spawn non-world item %s!",
+   "Attempted to spawn non-world item %s!"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   16.0,
+   15.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 22,
+  "vft": false
+ },
+ "FindSetState": {
+  "file": "Finders.cpp",
+  "line": 2831,
+  "strings": [
+   "Time from Setup to InProgress: %6.2fms"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 18,
+  "vft": false
+ },
+ "FindSetWorld": {
+  "file": "Finders.cpp",
+  "line": 361,
+  "strings": [
+   "AOnlineBeaconHost::InitHost failed"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 4C 89 70 ? 41 57 48 83 EC ? 48 8B FA 4C 8D B1 ? ? ? ? 48 8B 91",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 4C 8D B9 ? ? ? ? 48 8B FA",
+   "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 8B 91 ? ? ? ? 48 85 D2 75"
+  ],
+  "branches": [
+   25.0,
+   19.0,
+   15.3,
+   14.0
+  ],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 63,
+  "vft": false
+ },
+ "FindShouldAllowServerSpawnDecoVft": {
+  "file": "Finders.cpp",
+  "line": 2780,
+  "strings": [
+   "Tried to place deco item %s %s that isn't actually in player inventory!"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 49,
+  "vft": true
+ },
+ "FindSpawnDecoVft": {
+  "file": "Finders.cpp",
+  "line": 2747,
+  "strings": [
+   "AFortTrapTool::SpawnDeco World is tearing down.  Early-ing out."
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 31,
+  "vft": true
+ },
+ "FindSpawnInitialSafeZone": {
+  "file": "Finders.cpp",
+  "line": 2288,
+  "strings": [
+   "FortGameModeAthena::SpawnInitialSafeZone bShouldSpawnSafeZoneIndicator == false, skipping spawning Safe Zone Indicator"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 34,
+  "vft": false
+ },
+ "FindSpawnLoot": {
+  "file": "Finders.cpp",
+  "line": 910,
+  "strings": [
+   "ABuildingContainer::SpawnLoot() called on %s (%s)...",
+   "ABuildingContainer::SpawnLoot() called on %s (%s)",
+   "ABuildingContainer::SpawnLoot() >>> START called on %s (%s)"
+  ],
+  "wide": [
+   true,
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 32,
+  "vft": false
+ },
+ "FindStartAircraftPhase": {
+  "file": "Finders.cpp",
+  "line": 1634,
+  "strings": [
+   "STARTAIRCRAFT",
+   "STAT_StartAircraftPhase"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 43,
+  "vft": false
+ },
+ "FindStartBecomingDormant": {
+  "file": "Finders.cpp",
+  "line": 2047,
+  "strings": [
+   "StartBecomingDormant: %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 24,
+  "vft": false
+ },
+ "FindStartStreamingAdditionalPlaylistLevel": {
+  "file": "Finders.cpp",
+  "line": 3312,
+  "strings": [
+   "PLAYLIST: Failed to locate valid level to be streamed %s"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 40,
+  "vft": false
+ },
+ "FindStreamInMyBuilding": {
+  "file": "Finders.cpp",
+  "line": 3267,
+  "strings": [
+   "&ABuildingFoundation::OnLevelStreamedIn",
+   "%s.%s trying to load invalid level %s"
+  ],
+  "wide": [
+   true,
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   17.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 43,
+  "vft": false
+ },
+ "FindTickFlush": {
+  "file": "Finders.cpp",
+  "line": 426,
+  "strings": [
+   "STAT_NetTickFlush"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [
+   "4C 8B DC 55 53 56 57 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 41 0F 29 7B",
+   "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 45 0F 29 43 ? 45 0F 29 4B ? 48 8B 05 ? ? ? ? 48",
+   "48 8B C4 48 89 58 18 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 B8 0F 29 78 A8 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 8A",
+   "48 8B C4 48 89 58 18 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 B8 0F 29 78 A8 48 8B ",
+   "48 8B C4 48 89 58 18 55 56 57 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F 29 70 B8 0F 29 78 A8 48 8B ",
+   "4C 8B DC 55 49 8D AB ? ? ? ? 48 81 EC ? ? ? ? 45 0F 29 43 ? 45 0F 29 4B ? 48 8B 05 ? ? ? ? 48"
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern",
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 64,
+  "vft": false
+ },
+ "FindUnEquipVehicleWeapon": {
+  "file": "Finders.cpp",
+  "line": 3354,
+  "strings": [
+   "UFortVehicleSeatWeaponComponent::UnEquipVehicleWeapon failed to cleanup WeaponSeatDefinition.VehicleGrantedWeaponItem properly. PawnValid:%d"
+  ],
+  "wide": [
+   true
+  ],
+  "patterns": [],
+  "branches": [
+   19.0
+  ],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 45,
+  "vft": false
+ },
+ "FindUpdateIrisReplicationViews": {
+  "file": "Finders.cpp",
+  "line": 2358,
+  "strings": [],
+  "wide": [],
+  "patterns": [
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B ",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 85 ? ? ? ? 0F 10 0D",
+   "48 8B C4 48 89 58 ? 48 89 70 ? 48 89 78 ? 55 41 54 41 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F "
+  ],
+  "branches": [],
+  "uses": [
+   "FindPattern"
+  ],
+  "hooks": [],
+  "n_lines": 24,
+  "vft": false
+ },
+ "FindUpdateSafeZonesPhase": {
+  "file": "Finders.cpp",
+  "line": 2324,
+  "strings": [
+   "AFortGameModeAthena::UpdateSafeZonesPhase"
+  ],
+  "wide": [
+   false
+  ],
+  "patterns": [],
+  "branches": [],
+  "uses": [
+   "FindStringRef"
+  ],
+  "hooks": [],
+  "n_lines": 32,
+  "vft": false
+ },
+ "Inline_GetSparseClassData": {
+  "file": "FortniteGame/Private/BuildingSMActor.cpp",
+  "line": 591,
+  "target_var": "GetSparseClassData_",
+  "patterns": [
+   "48 83 EC ? 48 8B 81 ? ? ? ? 45 33 C0 4C 8B C9",
+   "48 83 EC ? 48 8B 81 ? ? ? ? 48 85 C0 74 ? 48 83 C4 ? C3",
+   "48 83 EC ? 48 8B 81 ? ? ? ? 45 33 C0 48 85 C0 75"
+  ],
+  "condition": "!GetDefaultObj()->HasBuildingResourceAmountOverride()",
+  "mechanism": "FindPattern",
+  "purpose": "call-target",
+  "semantic": "USparseClassData getter: sub rsp,X; mov rax,[rcx+imm32]; xor r8d,r8d; mov r9,rcx \u2014 tiny function returning SparseClassData ptr at fixed class offset",
+  "note": "hooked? no \u2014 stored and CALLED directly",
+  "inline": true
+ },
+ "Inline_SetOwningInventory": {
+  "file": "FortniteGame/Private/FortInventory.cpp",
+  "line": 678,
+  "target_var": "SetOwningInventory",
+  "patterns": [
+   "48 85 D2 74 ? 80 BA ? ? ? ? ? 75 ? 48 89 91",
+   "48 83 EC ? 48 85 D2 74 ? 80 BA ? ? ? ? ? 75 ? 48 81 C1",
+   "48 85 D2 74 ? 48 89 5C 24 ? 57 48 83 EC ? 48 8B F9 48 8B DA 48 8B CA E8 ? ? ? ? 83 F8 ? 75"
+  ],
+  "condition": "always",
+  "mechanism": "FindPattern",
+  "purpose": "vtable-slot-finder",
+  "semantic": "test rdx,rdx; jz; cmp byte [rdx+imm32],?; jne; mov [rcx+imm32],rdx \u2014 sets OwningInventory field w/ temporary-item check",
+  "note": "pattern finds a CALLER/inlined-site; then vtable of UFortWorldItem is scanned for the function that matches; actually: pattern = the real function? NO \u2014 used to find SetOwningInventory vtable index by comparing function bytes",
+  "inline": true
+ },
+ "Inline_ToDeathCauseNative": {
+  "file": "FortniteGame/Private/FortPlayerControllerAthena.cpp",
+  "line": 1059,
+  "target_var": "ToDeathCauseNative",
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 41 0F B6 F8 48 8B DA 48 8B F1 E8 ? ? ? ? 33 ED",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 FA 48 8B D9 E8 ? ? ? ? 33 F6 48 89 74 24",
+   "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 FA 48 8B D9 E8 ? ? ? ? 33"
+  ],
+  "condition": "EngineVersion >= 4.19 (and < 4.22 native path)",
+  "mechanism": "FindPattern",
+  "purpose": "call-target",
+  "semantic": "ToDeathCause(TagContainer, bDBNO) native impl \u2014 prologue saves rbx/rsi/rdi, movzx edi,r8b (bDBNO), mov rdx/rdx? rdx=Tags, call GetTagCount\u2026",
+  "note": "Android versions available are UE4.21+ (5.41=UE4.21) so only pattern 3 relevant for 5.41; 7.40/9.41 are UE4.21/4.22/4.23 era",
+  "inline": true
+ },
+ "Inline_SetIsInsideSafeZoneBase": {
+  "file": "FortniteGame/Private/FortPlayerPawnAthena.cpp",
+  "line": 642,
+  "target_var": "SetIsInsideSafeZoneBase",
+  "patterns": [
+   "74 ? 33 D2 48 8B ? E8 ? ? ? ? 48 8B ? 41 8A ? 48 8B ? FF 90",
+   "74 ? 33 D2 48 8B ? E8 ? ? ? ? 48 8B ? B2 01 48 8B ? FF 90",
+   "0F 84 ? ? ? ? 33 D2 48 8B ? E8 ? ? ? ? 48 8B ? B2 01 48 8B ? FF 90"
+  ],
+  "condition": "always",
+  "mechanism": "FindPattern",
+  "purpose": "patch-site(virtual-call-slot)",
+  "semantic": "jz; xor edx,edx; mov rax,[?]; call IsInsideSafeZone-ish; mov rax,[rax]; mov cl/dl,[r?+..]; mov rax,[rax]; call [rax+vt] \u2014 inlined safe-zone containment check with virtual call",
+  "note": "the site is INSIDE a function (not a function start) \u2014 patch semantics",
+  "inline": true
+ },
+ "Inline_OnPawnEnterSeatFunc": {
+  "file": "FortniteGame/Private/FortVehicleSeatWeaponComponent.cpp",
+  "line": 134,
+  "target_var": "OnPawnEnterSeatFunc",
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B 99 ? ? ? ? 41 8B F0",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 48 89 78 ? 41 56 48 83 EC ? 48 63 A9 ? ? ? ? 41 8B F0"
+  ],
+  "condition": "always",
+  "mechanism": "FindPattern",
+  "purpose": "vtable-index-extraction",
+  "semantic": "OnPawnEnterSeat(this, Pawn, ?) \u2014 saves regs, mov rbx,[rcx+imm32] (SeatComponent->Vehicle), mov esi,r8d; TWO virtual calls FF 90 used to read GetMountedWeaponOperatorSeatIndexIdx & GetPlayerSlotsIdx",
+  "note": "after match: ScanFor FF 90 \u00d72 \u2192 vtable offsets /8",
+  "inline": true
+ },
+ "Inline_EquipVehicleWeaponFunc": {
+  "file": "FortniteGame/Private/FortVehicleSeatWeaponComponent.cpp",
+  "line": 150,
+  "target_var": "EquipVehicleWeaponFunc",
+  "patterns": [
+   "48 89 5C 24 ? 57 48 83 EC ? 41 80 78 ? ? 48 8B DA 48 8B F9"
+  ],
+  "condition": "always",
+  "mechanism": "FindPattern",
+  "purpose": "call-target",
+  "semantic": "cmp byte [r8+?],? early check then mov rbx,rdx; mov rdi,rcx \u2014 EquipVehicleWeapon-ish",
+  "inline": true
+ },
+ "Inline_UnequipVehicleWeaponFunc": {
+  "file": "FortniteGame/Private/FortVehicleSeatWeaponComponent.cpp",
+  "line": 156,
+  "target_var": "UnequipVehicleWeaponFunc",
+  "patterns": [
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 45 33 F6 45 8A E9",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 44 88 48 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B 81",
+   "48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 44 88 48 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 4D 8B E8"
+  ],
+  "condition": "always",
+  "mechanism": "FindPattern",
+  "purpose": "call-target",
+  "semantic": "UnequipVehicleWeapon(this, bool) \u2014 big prologue, xor r14d, mov r13b,r9b",
+  "note": "pattern3 is for newest; related FindUnEquipVehicleWeapon() in Finders.cpp",
+  "inline": true
+ },
+ "Inline_AttemptDeriveFromURL": {
+  "file": "Erbium/Private/Misc.cpp",
+  "line": 530,
+  "target_var": "AttemptDeriveFromURL",
+  "patterns": [
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B C1",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8B D1",
+   "48 89 5C 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B D1",
+   "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 4C 8B D1"
+  ],
+  "condition": "GetNetMode hook setup",
+  "mechanism": "FindPattern",
+  "purpose": "patch-site(caller-of-GetNetMode)",
+  "semantic": "UEngine::AttemptDeriveFromURL \u2014 full-frame prologue 8 regs + mov r8,rcx / mov rdx,rcx \u2014 the CALLER of GetNetMode that gets patched for netmode fix",
+  "note": "hook: the call to GetNetMode inside this func is patched to return NM_DedicatedServer",
+  "inline": true
+ },
+ "Inline_CollectGarbagePatch": {
+  "file": "FortniteGame/Private/FortGameMode.cpp",
+  "line": 838,
+  "target_var": "pattern",
+  "patterns": [
+   "E8 ? ? ? ? EB 26 40 38 3D ? ? ? ?",
+   "E8 ? ? ? ? F0 FF 0D ? ? ? ? 0F B6 C3"
+  ],
+  "condition": "EngineVersion <= 4.20",
+  "mechanism": "FindPattern+RelativeOffset(1)",
+  "purpose": "patch-site(call\u2192ret)",
+  "semantic": "call CollectGarbage; jmp+0x26; cmp [rip+X],spl \u2014 the E8 call target gets patched to 0xC3 (ret) to disable GC during startup",
+  "note": "only ancient versions; Android 5.41 is UE4.21 \u2014 likely N/A for our versions (verify)",
+  "inline": true
+ },
+ "Inline_IrisBool": {
+  "file": "ErbiumClient/Private/dllmain.cpp",
+  "line": 56,
+  "target_var": "IrisBool",
+  "patterns": [
+   "83 3D ? ? ? ? ? 0F 8E ? ? ? ? 49 8B B9",
+   "44 39 25 ? ? ? ? 0F 9F C0 45 84 FF"
+  ],
+  "condition": "Iris replication versions",
+  "mechanism": "FindPattern+RelativeOffset(2/3)",
+  "purpose": "global-bool-patch",
+  "semantic": "cmp dword [rip+imm32],?; jle \u2014 FReplicationFlags/iris-enabled global bool forced to 1",
+  "note": "ACTIVE in ErbiumClient/dllmain.cpp (commented in main dllmain.cpp); used in VerifyIris()",
+  "inline": true
+ },
+ "Inline_OnDamageServerCaller": {
+  "file": "FortniteGame/Private/BuildingSMActor.cpp",
+  "line": 605,
+  "ufunc_name": "OnDamageServer",
+  "prologue_variants": {
+   "4.16": "4C 89 4C",
+   "4.19||>=4.27": "48 8B C4",
+   "else": "40 55"
+  },
+  "mechanism": "FindFunctionCall",
+  "purpose": "hook-target",
+  "semantic": "the function that CALLS OnDamageServer UFunction (via ProcessEvent ref) \u2014 hooked with OnDamageServer OG trampoline",
+  "note": "OnDamageServer is a UFunction of ABuildingSMActor \u2014 find its native exec + its callers",
+  "inline": true
+ },
+ "Inline_ClientOnPawnDiedCaller": {
+  "file": "FortniteGame/Private/FortPlayerControllerAthena.cpp",
+  "line": 3615,
+  "ufunc_name": "ClientOnPawnDied",
+  "prologue_variants": {
+   "4.16": "48 89 54",
+   ">=24<25": "48 8B C4",
+   "else": "48 89 5C"
+  },
+  "mechanism": "FindFunctionCall",
+  "purpose": "hook-target",
+  "semantic": "the server function that calls ClientOnPawnDied (Client RPC sender) \u2014 hooked",
+  "inline": true
+ },
+ "Inline_K2_OnUnEquipCaller": {
+  "file": "FortniteGame/Private/FortPlayerControllerAthena.cpp",
+  "line": 3638,
+  "ufunc_name": "K2_OnUnEquip",
+  "prologue_variants": {
+   "else": "48 89 5C"
+  },
+  "condition": "FortniteVersion >= 14.00",
+  "mechanism": "FindFunctionCall",
+  "purpose": "hook-target",
+  "semantic": "caller of K2_OnUnEquip UFunction (FortWeaponComponent) \u2014 hooked with OnUnEquip",
+  "inline": true
+ },
+ "Inline_OnAuthorityRandomUpgradeAppliedCaller": {
+  "file": "FortniteGame/Private/FortLootPackage.cpp",
+  "line": 690,
+  "ufunc_name": "OnAuthorityRandomUpgradeApplied",
+  "prologue_variants": {
+   "else": "48 89 5C"
+  },
+  "mechanism": "FindFunctionCall",
+  "purpose": "hook-target",
+  "semantic": "caller of OnAuthorityRandomUpgradeApplied \u2014 hooked for loot upgrade logic",
+  "inline": true
+ },
+ "Inline_PostUpdate": {
+  "file": "FortniteGame/Private/FortLootPackage.cpp",
+  "line": 679,
+  "target_var": "PostUpdate_",
+  "strings": [
+   "ABuildingSMActor::PostUpdate() Building: %s, AltMeshIdx: %d"
+  ],
+  "wide": [
+   true
+  ],
+  "wide_arg": true,
+  "condition": "FortniteVersion >= 19",
+  "mechanism": "FindStringRef+backscan",
+  "purpose": "call-target",
+  "semantic": "ABuildingSMActor::PostUpdate \u2014 logs building/altmeshidx then updates mesh",
+  "inline": true
+ },
+ "Inline_ServerOnAttemptInteract": {
+  "file": "FortniteGame/Private/FortLootPackage.cpp",
+  "line": 696,
+  "target_var": "ServerOnAttemptInteractRef",
+  "strings": [
+   "ABuildingContainer::ServerOnAttemptInteract %s failed for %s"
+  ],
+  "wide": [
+   true
+  ],
+  "mechanism": "FindStringRef+ScanFor(48 89 5C backscan)",
+  "purpose": "hook-target",
+  "semantic": "ABuildingContainer::ServerOnAttemptInteract \u2014 the real interact handler",
+  "inline": true
+ },
+ "Inline_CanGrappleToComponent": {
+  "file": "FortniteGame/Private/FortPhysicsPawn.cpp",
+  "line": 241,
+  "target_var": "CanGrappleToComponent_",
+  "anchor_vfunc": "FortOctopusTowhookAttachableProjectile:OnRep_ReplicatedAttachedInfo",
+  "mechanism": "vtable-impl+ScanFor(FF 90)+backscan(48 8B+E8/FF 90)",
+  "purpose": "call-target",
+  "semantic": "from OnRep_ReplicatedAttachedInfo impl, find the virtual call slot, then scan back for mov rax,[..]; call/jmp \u2192 CanGrappleToComponent function or vtable slot",
+  "inline": true
+ }
+}
