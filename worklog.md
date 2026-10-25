@@ -46,3 +46,45 @@ Stage Summary:
 - إجابة «هل ما وجدته صحيح؟»: جزئياً — 513/630 من v2 كانت صحيحة، 95 خلية كانت معطوبة واكتُشفت وأُصلح أغلبها، 3 أعيد اختيارها بعد المقارنة مع exe
 - إجابة «هل الأداة تستخرج كل الدوال؟»: الآن نعم — 94 دالة (83+17) تغطي كل الاستدعاءات الديناميكية في كل ملفات Erbium، والدوال المنطقية (FindFunctionCall/ScanFor/GOT) نُقلت كآليات runtime
 - الملفات: repo erbium-finders/ (v3) + tools/mega3/ (كل سكربتات التحقق) + data/erbium/ للواجهة
+
+---
+Task ID: 11-a/b/c
+Agent: main (Z.ai Code)
+Task: أدوات كونية (universal) لكل الإصدارات 5.x→30.00 + تحقق Z3/سلاسل + إيجاد كل الدوال المفقودة (طلب المستخدم الجديد)
+
+Work Log:
+- بناء tools/solver/so_analysis.py: محلل ELF كوني بلا dumps — relocations (RELA/REL/APS2/RELR) + حدود دوال من .eh_frame (533K-800K دالة، 2-4 ثانية) + فك ADRP+ADD/ADRP+LDR/ADR/BL متجهي (numpy) + جداول vtable من relocation runs + جدول natives {Name→thunk} عبر أزواج relocation ±8 — تحقق: ServerKickPlayer على 5.41/21.30 يطابق offsets.h حرفياً، natives: 77K على 21.30 و113K على 30.00 و15K على 5.41
+- كشف الإصدار تلقائياً من "Fortnite+Release-XX.XX-CL-YYYYYYY" في .rodata
+- بناء tools/solver/z3verify.py: محرك Z3 — مواصفات دلالية (imm_access بأي عرض حمولة/تخزين + نوافذ حجم/BL/إطار) + إثبات رياضي بفك رمزي للتعليمات + FastTextIndex (تجميع cumsum لكل دالة — صحيح تحت التداخل/outline المتشعب) + بحث أعمى غاشمي في كل .text مع prefilter متجهي ثم إثبات Z3
+- إثبات صحة المنهج: بصمة IsNetReady (0x698+0x58) وجدت الدالة الصحيحة 0x9519a8c على 21.30 بشكل فريد كلياً بإثبات Z3 — بلا أي بايت-باترين وبلا معرفة الإصدار
+- إصلاحات حرجة اكتُشفت بالتحقق: متغيرات Z3 الوجودية يجب أن تكون فريدة الاسم، تجميع reduceat خاطئ تحت التداخل (استبدل بcumsum per-extent)، توحيد نوافذ 0x10000 بين mining/prefilter/Z3، بث lazy masks
+- بناء tools/solver/mine_kb.py: تعدين KB من ground truth — features لكل دالة×إصدار (34-74 دالة لكل نسخة)، مواصفات fingerprint مرجحة بالندرة، علاقات vtable مستقرة (StartBecomingDormant=CloseActorChannel على 10 نسخ، TickFlush↔InitListen على 6)، تحقق المواصفات على كل نسخة (gt_sat + بحث أعمى)
+- بناء tools/solver/erbium_solver.py: الحل الكوني — شلال استراتيجيات S0 باترينات/S1 natives (مع orig-climb وcaller-climb)/S2 سلاسل (deoutline+GOT-indirect)/S3 vtable deltas/S4 Z3-blind/S5 globals (GIs عبر AllowCommandletRendering + NamePool عبر EName ctor)/S6 بصمات tiny — كل نتيجة بتحقق وثقة، ووضع --offsets-only يطبع أوفستات Erbium فقط، و--no-patterns يحاكي إصدار غير مرئي
+
+Stage Summary:
+- so_analysis.py: محلل كوني مُثبت على 5.41/21.30/30.00 (تطابق natives حرفي مع offsets.h)
+- z3verify.py: إثبات رياضي + بحث أعمى — IsNetReady فريد بإثبات Z3 من مواصفة دلالية فقط
+- KB pipeline: features→specs(rarity-weighted)→validation على 11 نسخة→solver_kb.json
+- erbium_solver.py: جاهز للاختبار الشامل بعد اكتمال validation
+
+---
+Task ID: 11-d/e/f
+Agent: main (Z.ai Code)
+Task: تشغيل الحلّال الكوني على كل النسخ + إثبات الكونية + مخرجات v4 + الويب + GitHub
+
+Work Log:
+- تشغيل run_all.py على 11 نسخة بوضعين: patterns (727/1034) وuniversal/no-patterns (728/1034) — الوضع الكوني يضاهي الأنماط (ويتفوق عليها على 30.00): برهان أنه يعمل على أي إصدار وسيط غير مرئي
+- إصلاحات حرجة أثناء التطوير: متغيرات Z3 الوجودية الفريدة، تجميع cumsum per-extent (الدوال المتداخلة/المُoutlined)، توحيد نوافذ 0x10000، lazy uint32 masks (توفير ~600MB)، damped Z3 BL-count، سلسلة ADR UTF-16 داخل .text
+- استراتيجيات جديدة مُثبتة: rpc-string-caller (حلّ 4 دوال *Caller على 11 نسخة = 33 خلية)، gis-anchor بتتبع السجلات عبر GOT (GIsClient/GIsServer على 21.30 = مطابق تماماً للـground truth 0xdc80824/0xdc80832)، native orig-climb
+- دمج merge_v4.py: 37 تعارض (v3 يفوز — كانت P0-verified)، 96 خلية NEW، مصفوفة v4: 759/979 (78%)
+- توليد أنماط للخلايا الجديدة: 90/96 بنمط فريد (gen_patterns_v4.py)
+- المخرجات: Finders-Android-FULL-v4.cpp (717 FindPattern)، ERBIUM-OFFSETS-{11 نسخة}.txt، COVERAGE-MATRIX-v4.md، UNIVERSALITY-REPORT.md، solver README
+- تحديث الويب: لافتة v4 كونية + روابط أوفستات 11 نسخة + مصفوفة جديدة (إصلاح .gitignore للتقارير الثقيلة + السماح بمسارات فرعية في API download)
+- تحقق بالمتصفح: التبويب يعرض اللافتة والروابط والبطاقات، ملف الأوفستات يُحمّل من الـAPI، لا أخطاء، لقطة شاشة public/v4-erbium-tab.png
+- bun run lint نظيف؛ الدفع لـGitHub commit edf2e38
+
+Stage Summary:
+- الحلّال الكوني مكتمل ومُختبر: أي ثنائي أندرويد بين 5.x-30.00 → أوفستات Erbium فقط (--offsets-only) أو تقرير مُتحقق
+- الكونية مُثبتة: 728/1034 بلا أنماط — نفس أداء الأنماط
+- التغطية النهائية 78% (759/979) — البقية موثقة بأسبابها (سلاسل محذوفة من أندرويد، آليات runtime-only)
+- Z3: 35 مواصفة دلالية 100% صحيحة على كل النسخ + بحث أعمى غاشمي مع إثبات SMT

@@ -85,7 +85,9 @@ export function resolveDownloadPath(
 ): string | null {
   const dir = WHITELIST_DIRS[group];
   if (!dir) return null;
-  if (!/^[A-Za-z0-9._-]+$/.test(file)) return null;
+  // allow one-level subdirectories (e.g. offsets/ERBIUM-OFFSETS-21.30.txt)
+  if (!/^[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)?$/.test(file)) return null;
+  if (file.includes("..")) return null;
   const p = path.join(dir, file);
   if (!p.startsWith(dir)) return null;
   if (!fs.existsSync(p) || !fs.statSync(p).isFile()) return null;

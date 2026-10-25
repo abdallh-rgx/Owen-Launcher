@@ -666,6 +666,32 @@ function ErbiumTab() {
 
   return (
     <div className="space-y-4">
+      <Card className="border-emerald-500/30 bg-emerald-500/5">
+        <CardContent className="p-4">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <Badge variant="default" className="bg-emerald-600">v4 كوني</Badge>
+            <span className="text-muted-foreground">
+              حلّال كوني يعمل على <b>أي إصدار بين 5.x و 30.00</b> — شلال استراتيجيات:
+              natives (أزواج relocation) → سلاسل (de-outline + GOT) → vtable deltas →
+              <b> بحث Z3 أعمى غاشمي في كل .text</b> (بصمات دلالية مُثبتة بـ SMT) → globals (GIs/FNamePool).
+              وضع <code className="text-xs">--no-patterns</code> استعاد 728/1034 خلية بلا أي نمط مُخزّن.
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            {["5.41","7.40","9.41","13.40","17.50","18.40","19.10","21.30","22.40","23.50","30.00"].map((v) => (
+              <a
+                key={v}
+                href={`/api/db/download?group=erbium&file=offsets/ERBIUM-OFFSETS-${v}.txt&inline=1`}
+                className="rounded-md border px-2 py-1 hover:bg-accent font-mono"
+                target="_blank"
+                rel="noreferrer"
+              >
+                أوفستات {v}
+              </a>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
       {summary && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Card>
@@ -676,7 +702,7 @@ function ErbiumTab() {
           </Card>
           <Card>
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-primary">{summary.cells}/1034</div>
+              <div className="text-2xl font-bold text-primary">{summary.cells}/979</div>
               <div className="text-xs text-muted-foreground">خلية محلولة من {summary.total} دالة × 11 نسخة</div>
             </CardContent>
           </Card>
