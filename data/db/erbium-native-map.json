@@ -1,0 +1,141 @@
+{
+ "FindActivatePhase": [],
+ "FindApplyCharacterCustomization": [],
+ "FindCallPreReplication": [],
+ "FindCanAffordToPlaceBuildableClass": [],
+ "FindCanPlaceBuildableClassInStructuralGrid": [],
+ "FindCantBuild": [],
+ "FindClearAbility": [
+  "ClearAbility",
+  "ClearAbility"
+ ],
+ "FindClientHasInitializedLevelFor": [],
+ "FindCloseActorChannel": [],
+ "FindConstructAbilitySpec": [],
+ "FindCreateChannel": [],
+ "FindCreateNetDriver": [],
+ "FindCreateNetDriverWorldContext": [],
+ "FindEncryptionPatch": [],
+ "FindEnterAircraft": [
+  "EnterAircraftClient",
+  "ClientEnterAircraft",
+  "OnEnterAircraft"
+ ],
+ "FindFinishWorldInitialization": [],
+ "FindFinishedTargetSpline": [],
+ "FindFlushDormancy": [],
+ "FindGIsClient": [],
+ "FindGIsServer": [],
+ "FindGameSessionPatch": [],
+ "FindGetMaxTickRate": [],
+ "FindGetNamePool": [],
+ "FindGetNetMode": [
+  "GetNetModel"
+ ],
+ "FindGetPlayerViewPoint": [
+  "GetPlayerViewPoint",
+  "GetPlayerViewPoint"
+ ],
+ "FindGetWorldContext": [],
+ "FindGiveAbility": [
+  "K2_GiveAbility",
+  "K2_GiveAbilityAndActivateOnce"
+ ],
+ "FindGiveAbilityAndActivateOnce": [
+  "K2_GiveAbilityAndActivateOnce"
+ ],
+ "FindHandleMatchHasStarted": [],
+ "FindHandlePostSafeZonePhaseChanged": [],
+ "FindInitListen": [],
+ "FindInitializeBuildingActor": [],
+ "FindInitializeFlightPath": [
+  "InitializeFlightPath",
+  "InitializeFlightPath"
+ ],
+ "FindInitializePlayerGameplayAbilities": [],
+ "FindInternalTryActivateAbility": [],
+ "FindIsNetReady": [],
+ "FindIsNetRelevantForVft": [],
+ "FindKickPlayer": [
+  "OnEndGameKickPlayers",
+  "ServerKickPlayer",
+  "ServerKickPlayer_2"
+ ],
+ "FindListenCall": [],
+ "FindLoadPlayset": [],
+ "FindMinigameSettingsBuilding__BeginPlay": [],
+ "FindNotifyGameMemberAdded": [],
+ "FindNullsAndRetTrues": [],
+ "FindOnItemInstanceAddedVft": [],
+ "FindOnRep_ZiplineState": [
+  "OnRep_ZiplineState"
+ ],
+ "FindPayBuildableClassPlacementCost": [],
+ "FindPickSupplyDropLocation": [
+  "PickSupplyDropLocation",
+  "PickSupplyDropLocation"
+ ],
+ "FindPickTeam": [],
+ "FindPostInitializeSpawnedBuildingActor": [],
+ "FindPreSendUpdate": [],
+ "FindQueueStatEvent": [],
+ "FindRemoveFromAlivePlayers": [],
+ "FindRemoveInventoryItem": [
+  "ServerRemoveInventoryItem"
+ ],
+ "FindRemoveInventoryStateValue": [
+  "ServerRemoveInventoryStateValue"
+ ],
+ "FindReplaceBuildingActor": [],
+ "FindReplicateActor": [],
+ "FindReset": [
+  "Reset",
+  "Reset"
+ ],
+ "FindSelectAndSetupMyBuildingLevel": [],
+ "FindSendClientAdjustment": [],
+ "FindSendDestructionInfo": [],
+ "FindSendRequestNow": [],
+ "FindServerReplicateActors": [],
+ "FindSetChannelActor": [],
+ "FindSetChannelActorForDestroy": [],
+ "FindSetGamePhase": [
+  "SetGamePhase",
+  "SetGamePhase"
+ ],
+ "FindSetInventoryStateValue": [
+  "ServerSetInventoryStateValue"
+ ],
+ "FindSetIsDoorOpen": [],
+ "FindSetPickupItems": [],
+ "FindSetPickupTarget": [
+  "BlueprintSetPickupTarget"
+ ],
+ "FindSetState": [
+  "SetState",
+  "SetState"
+ ],
+ "FindSetWorld": [
+  "K2_SetWorldLocation",
+  "K2_SetWorldLocationAndRotation",
+  "K2_SetWorldRotation"
+ ],
+ "FindShouldAllowServerSpawnDecoVft": [],
+ "FindSpawnDecoVft": [],
+ "FindSpawnInitialSafeZone": [
+  "SpawnInitialSafeZone",
+  "SpawnInitialSafeZone"
+ ],
+ "FindSpawnLoot": [
+  "SpawnLoot",
+  "SpawnLoot"
+ ],
+ "FindStartAircraftPhase": [],
+ "FindStartBecomingDormant": [],
+ "FindStartStreamingAdditionalPlaylistLevel": [],
+ "FindStreamInMyBuilding": [],
+ "FindTickFlush": [],
+ "FindUnEquipVehicleWeapon": [],
+ "FindUpdateIrisReplicationViews": [],
+ "FindUpdateSafeZonesPhase": []
+}

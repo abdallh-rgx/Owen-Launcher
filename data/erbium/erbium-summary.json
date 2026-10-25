@@ -1,0 +1,3346 @@
+{
+ "FindCantBuild": {
+  "5.41": {
+   "addr": "0x4e64af8",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x6587ac4",
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xdec4040",
+   "len": 119,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xe2e843c",
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x9cde0dc",
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x75363f8",
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x4e970a4",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0xa33c950",
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x4f74824",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindConstructAbilitySpec": {
+  "5.41": {
+   "addr": "0x237de00",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x28a0c00",
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x321a8a8",
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0x67fd050",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x90049a0",
+   "len": 143,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xcfa1844",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0xa3ec1a4",
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x36df2b8",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xf8a95b0",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindSetPickupItems": {
+  "5.41": {
+   "addr": "0x2c4e8b4",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x32e2274",
+   "len": 83,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x2fe1a64",
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xba34900",
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x862009c",
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x7e0004c",
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x5c4263c",
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x42801a8",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x5dd9984",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xd41c968",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindStartBecomingDormant": {
+  "5.41": {
+   "addr": "0x3d43624",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x48a9544",
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x57f3804",
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xbf37d40",
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xdf9864c",
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xc84180c",
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xc24b798",
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x92ff3c0",
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x99fe6d8",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x9c50614",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindClearAbility": {
+  "5.41": {
+   "addr": "0x2341f0c",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x2863dd4",
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x31df4cc",
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0x67d3cd4",
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0x76978d0",
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x6be0554",
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x67430fc",
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x3177508",
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x34e7340",
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x35bd0c0",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x73ebb48",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindSelectAndSetupMyBuildingLevel": {
+  "5.41": {
+   "addr": "0x5bed650",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x629a0c0",
+   "len": 83,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x73ee464",
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xa834ba8",
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xcf3942c",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xb744da4",
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x8ca36ec",
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x587ae00",
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x65855ac",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x578f328",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindPayBuildableClassPlacementCost": {
+  "5.41": {
+   "addr": "0x5c79e8c",
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x65602b0",
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x74e749c",
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xa2fe5c8",
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xd59b380",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xbe08748",
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x9929ec4",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x665ad20",
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x767006c",
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x8987960",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindPickSupplyDropLocation": {
+  "5.41": {
+   "addr": "0x5e61fc4",
+   "len": 71,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x5d300ac",
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x773c2a4",
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xa55020c",
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xcce042c",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xb4fb72c",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x5ab8664",
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x603e4f8",
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x5474cf8",
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x8daff30",
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindRemoveInventoryItem": {
+  "5.41": {
+   "addr": "0x633901c",
+   "len": 227,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x6afaa20",
+   "len": 131,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x7f878f8",
+   "len": 131,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xb875408",
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xdbd5a38",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xc479178",
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xa2f7ea8",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x7057148",
+   "len": 239,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x761f41c",
+   "len": 239,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x8955ecc",
+   "len": 239,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xc7ec57c",
+   "len": 239,
+   "verified": true
+  }
+ },
+ "FindReset": {
+  "5.41": {
+   "addr": "0x354d0e8",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x3b5e570",
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x9a6fedc",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x4b52538",
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x3fc940c",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x71fe5f8",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x53f6bcc",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindRemoveInventoryStateValue": {
+  "5.41": {
+   "addr": "0x6352188",
+   "len": 215,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x6da10bc",
+   "len": 215,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x7e59828",
+   "len": 215,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xb875608",
+   "len": 155,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xdbd5c4c",
+   "len": 179,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xc47938c",
+   "len": 179,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xa2f7af4",
+   "len": 191,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x7056e08",
+   "len": 167,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x761f154",
+   "len": 95,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x8955c24",
+   "len": 95,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xc7ec6dc",
+   "len": 143,
+   "verified": true
+  }
+ },
+ "FindSetInventoryStateValue": {
+  "5.41": {
+   "addr": "0x5f37f4c",
+   "len": 131,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x6bcb920",
+   "len": 131,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x7f73d88",
+   "len": 131,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xb8761f8",
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xdbd6b1c",
+   "len": 119,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xc47a25c",
+   "len": 119,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xa2f7c2c",
+   "len": 119,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x7056f04",
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x761f228",
+   "len": 95,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x8955cec",
+   "len": 95,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xc7ed498",
+   "len": 95,
+   "verified": true
+  }
+ },
+ "FindSetChannelActor": {
+  "7.40": {
+   "addr": "0x61aa538",
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x72db810",
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xa7448bc",
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xd28e444",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x9772d94",
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0xc5a567c",
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x5e616d0",
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x6fb7200",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x58e4058",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x9160170",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindInitListen": {
+  "13.40": {
+   "addr": "0x9e32514",
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xaed00fc",
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x6ed9974",
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x3852a0c",
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x3b7cad8",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x39b4100",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindSpawnInitialSafeZone": {
+  "13.40": {
+   "addr": "0xa5d79f8",
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xcd38f28",
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xb541bb4",
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x89420c4",
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x55064ec",
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x476cb64",
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x4028668",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindSpawnLoot": {
+  "13.40": {
+   "addr": "0xa546450",
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xccc4c64",
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xb4d4c7c",
+   "len": 95,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x8867ac0",
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x5414df4",
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x6001298",
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x544b9f4",
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x8d82cb8",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindCreateNetDriverWorldContext": {
+  "18.40": {
+   "addr": "0xb737690",
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x8c758b8",
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x6ec3db8",
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x9435530",
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0xee5c1c8",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindSendClientAdjustment": {
+  "21.30": {
+   "addr": "0x9688238",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindFlushDormancy": {
+  "21.30": {
+   "addr": "0x951d5e0",
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindIsNetReady": {
+  "21.30": {
+   "addr": "0x9519a8c",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindClientHasInitializedLevelFor": {
+  "21.30": {
+   "addr": "0x3850e10",
+   "len": 83,
+   "verified": true
+  }
+ },
+ "FindUpdateSafeZonesPhase": {
+  "21.30": {
+   "addr": "0x55079f8",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindQueueStatEvent": {
+  "21.30": {
+   "addr": "0x674a0c4",
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x77997ac",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x8a36880",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindInitializeFlightPath": {
+  "22.40": {
+   "addr": "0x47690b0",
+   "len": 83,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x4027dd0",
+   "len": 83,
+   "verified": true
+  }
+ },
+ "FindSetGamePhase": {
+  "30.00": {
+   "addr": "0xcd2fc14",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindPostInitializeSpawnedBuildingActor": {
+  "5.41": {
+   "addr": "0x5ad799c",
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x5fca080",
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x764d198",
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": "0xa859950",
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0xcf4feb0",
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0xb75b614",
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x8d007a0",
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0x591d3d0",
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0x65feec8",
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x57d56e0",
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x91f5384",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindListenCall": {
+  "5.41": {
+   "addr": "0x422b1dc",
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": "0x4664f54",
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": "0x5a167dc",
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindGetNamePool": {
+  "13.40": {
+   "addr": "0x12B008C0",
+   "len": null,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0x136E0380",
+   "len": null,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x1150C940",
+   "len": null,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x10357A40",
+   "len": null,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0xDC960C0",
+   "len": null,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0xE2DA300",
+   "len": null,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0xDFE2000",
+   "len": null,
+   "verified": true
+  },
+  "30.00": {
+   "addr": "0x13C56800",
+   "len": null,
+   "verified": true
+  }
+ },
+ "FindActivatePhase": {
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindApplyCharacterCustomization": {
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindCallPreReplication": {
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindCanAffordToPlaceBuildableClass": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindCloseActorChannel": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindCreateChannel": {
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindEnterAircraft": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindFinishWorldInitialization": {
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindFinishedTargetSpline": {
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindGameSessionPatch": {
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindGetMaxTickRate": {
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindGetNetMode": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindGetPlayerViewPoint": {
+  "5.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindGetWorldContext": {
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindGiveAbility": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindGiveAbilityAndActivateOnce": {
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindHandleMatchHasStarted": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindHandlePostSafeZonePhaseChanged": {
+  "5.41": {
+   "addr": null,
+   "len": 107,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindInitializeBuildingActor": {
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  }
+ },
+ "FindInitializeBuildingActor_next": {
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindInitializePlayerGameplayAbilities": {
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindInternalTryActivateAbility": {
+  "5.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindIsNetRelevantForVft": {
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindKickPlayer": {
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindLoadPlayset": {
+  "7.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindNotifyGameMemberAdded": {
+  "17.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindOnRep_ZiplineState": {
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindPickTeam": {
+  "5.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindPreSendUpdate": {
+  "30.00": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  }
+ },
+ "FindRemoveFromAlivePlayers": {
+  "5.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindReplaceBuildingActor": {
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindReplicateActor": {
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 107,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindSendDestructionInfo": {
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindSendRequestNow": {
+  "5.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindServerReplicateActors": {
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindSetChannelActorForDestroy": {
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindSetPickupTarget": {
+  "5.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindSetState": {
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  }
+ },
+ "FindSetWorld": {
+  "13.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindShouldAllowServerSpawnDecoVft": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 95,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindSpawnDecoVft": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindStartAircraftPhase": {
+  "5.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  }
+ },
+ "FindStartStreamingAdditionalPlaylistLevel": {
+  "5.41": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 47,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindStreamInMyBuilding": {
+  "5.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "7.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "9.41": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  }
+ },
+ "FindTickFlush": {
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 83,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindUnEquipVehicleWeapon": {
+  "9.41": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "13.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "17.50": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": 71,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  },
+  "30.00": {
+   "addr": null,
+   "len": 59,
+   "verified": true
+  }
+ },
+ "FindGIsServer": {
+  "5.41": {
+   "addr": "0x97ff490",
+   "len": null,
+   "verified": false
+  },
+  "7.40": {
+   "addr": "0xa8fb3a0",
+   "len": null,
+   "verified": false
+  },
+  "9.41": {
+   "addr": "0xcfac770",
+   "len": null,
+   "verified": false
+  },
+  "13.40": {
+   "addr": "0x12aefdfe",
+   "len": null,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0x136cb13d",
+   "len": null,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x114f7695",
+   "len": null,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x103421fa",
+   "len": null,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0xdc80832",
+   "len": null,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0xe2ccfe3",
+   "len": null,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0xdfd33dc",
+   "len": null,
+   "verified": false
+  },
+  "30.00": {
+   "addr": "0x13c47d7b",
+   "len": null,
+   "verified": true
+  }
+ },
+ "FindGIsClient": {
+  "5.41": {
+   "addr": "0x9714ba0",
+   "len": null,
+   "verified": false
+  },
+  "7.40": {
+   "addr": "0xa86e0a0",
+   "len": null,
+   "verified": false
+  },
+  "9.41": {
+   "addr": "0xce9c590",
+   "len": null,
+   "verified": false
+  },
+  "13.40": {
+   "addr": "0x12aefdfd",
+   "len": null,
+   "verified": true
+  },
+  "17.50": {
+   "addr": "0x136cb13c",
+   "len": null,
+   "verified": true
+  },
+  "18.40": {
+   "addr": "0x114f7694",
+   "len": null,
+   "verified": true
+  },
+  "19.10": {
+   "addr": "0x103421ec",
+   "len": null,
+   "verified": true
+  },
+  "21.30": {
+   "addr": "0xdc80824",
+   "len": null,
+   "verified": true
+  },
+  "22.40": {
+   "addr": "0xe2ccfe2",
+   "len": null,
+   "verified": true
+  },
+  "23.50": {
+   "addr": "0x1678c10",
+   "len": null,
+   "verified": false
+  },
+  "30.00": {
+   "addr": "0x13c47d7a",
+   "len": null,
+   "verified": true
+  }
+ },
+ "FindOnItemInstanceAddedVft": {
+  "17.50": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  },
+  "18.40": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  },
+  "19.10": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  },
+  "21.30": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  },
+  "22.40": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  },
+  "23.50": {
+   "addr": null,
+   "len": null,
+   "verified": true
+  }
+ }
+}
