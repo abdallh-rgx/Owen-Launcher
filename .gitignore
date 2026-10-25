@@ -51,4 +51,5 @@ prompt
 
 server.log
 # Skills directory
-/skills/
+/skills/win-funcs-27.11.json
+win-natives-27.11.json
