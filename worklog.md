@@ -23,3 +23,26 @@ Stage Summary:
 - كل دالة Erbium المطلوبة إما محلولة بنمط فريد أو موثقة بسب عدم الحل (8 دوال لها أسباب هيكلية: تحتاج exes ويندوز قديمة أو مواقع patch)
 - المنهجيات الست موثقة وقابلة للتكرار بالأدوات المرفقة
 - الملفات: Erbium-Android/erbium-finders/ (v2) + tools/mega2/
+
+---
+Task ID: 10
+Agent: main (Z.ai Code)
+Task: التحقق الشامل من نتائج v2 + استخراج كل الدوال بما فيها خارج Finders.cpp + المقارنة مع FortniteClient-Win64-Shipping.exe (طلب المستخدم)
+
+Work Log:
+- بناء catalog_v3.json: 100 هدف (83 Finders.cpp + 17 دالة inline من BuildingSMActor/FortInventory/FortPlayerControllerAthena/FortPlayerPawnAthena/FortVehicleSeatWeaponComponent/Misc/FortGameMode/FortLootPackage/FortPhysicsPawn/ErbiumClient)
+- اكتشاف حرج: 422 خلية من v2 كانت أنماط recovered_47 بلا أي تحقق — P0 أعاد مسحها كلها: 513 فريدة فقط، 95 معطوبة (84 لا تطابق، 5 مزدوجة، 4 عناوين خاطئة، 9 وسط دالة)
+- إصلاح 94 خلية معطوبة: fixcells (17 native + 48 transfer + 9 string) + deepresolve (vtable-delta + fp2130) + targeted (tst30+bfi fingerprint عبر زحف SendServerRpc حلّ CallPreReplication على 22.40/23.50/30.00)
+- P1 cross-arch ضد exe ويندوز 21.30: 27 دالة قورنت (نصوص/natives/حجم) — 2 قوية (UpdateSafeZonesPhase، PickSupplyDropLocation) + 14 بنيوياً سليمة + اكتشاف 3 دوال over-climbed أعيد اختيارها بنسبة 0.63-0.80
+- إثبات صحة العناوين الافتراضية عبر vtable runs (CloseActorChannel=90، IsNetRelevantFor=155، SpawnDeco=395) — الـ anchors في ويندوز كانت دوال logging صغيرة
+- P2 native-identity: 44+ خلية تطابق عناوين dumps حرفياً
+- حل الـ 17 دالة inline: registrar pair-scan جديد (اسم UFunction → زوج {name,thunk} في .data.rel.ro عبر relocations) حلّ OnPawnEnterSeat/K2_OnUnEquip/OnDamageServer/OnAuthorityRandomUpgradeApplied
+- فهارس vtable محسوبة فعلياً: IsNetRelevantFor 135(7.40)→135(9.41)→143(18.40)→155(21.30)→156(22.40)→157(23.50)
+- توليد Finders-Android-FULL-v3.cpp (627 نمط مُتحقق + فهارس + globals + fallbacks انعكاسية) + COVERAGE-MATRIX-v3 + VERIFICATION-REPORT-v3
+- تحديث واجهة الويب: بطاقات ملخص + شارات P1 + عرض G:/VT: + فلتر دوال خارج Finders.cpp — تحقق بالمتصفح agent-browser
+- الدفع لـ GitHub (commit 40dab15)
+
+Stage Summary:
+- إجابة «هل ما وجدته صحيح؟»: جزئياً — 513/630 من v2 كانت صحيحة، 95 خلية كانت معطوبة واكتُشفت وأُصلح أغلبها، 3 أعيد اختيارها بعد المقارنة مع exe
+- إجابة «هل الأداة تستخرج كل الدوال؟»: الآن نعم — 94 دالة (83+17) تغطي كل الاستدعاءات الديناميكية في كل ملفات Erbium، والدوال المنطقية (FindFunctionCall/ScanFor/GOT) نُقلت كآليات runtime
+- الملفات: repo erbium-finders/ (v3) + tools/mega3/ (كل سكربتات التحقق) + data/erbium/ للواجهة

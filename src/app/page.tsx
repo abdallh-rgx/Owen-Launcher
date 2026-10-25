@@ -74,7 +74,25 @@ interface Stats {
   inAll: number;
 }
 interface ErbiumEntry {
-  [ver: string]: { addr: string | null; len: number | null };
+  [ver: string]: {
+    addr?: string | null;
+    len?: number | null;
+    pattern?: string;
+    strategy?: string;
+    global?: string;
+    vtable_index?: number;
+    verified?: boolean;
+  };
+}
+interface P1Info {
+  win?: string;
+  arm?: string;
+  how?: string;
+  size_ratio?: number;
+  strings_match?: boolean | null;
+  natives_match?: boolean | null;
+  strings_common?: string[];
+  votes?: number;
 }
 
 function shortAddr(a?: string | null): string {
@@ -602,11 +620,16 @@ function VersionsTab({ stats }: { stats: Stats | null }) {
 
 function ErbiumTab() {
   const [data, setData] = useState<Record<string, ErbiumEntry> | null>(null);
+  const [p1, setP1] = useState<Record<string, P1Info> | null>(null);
 
   useEffect(() => {
     fetch("/api/db/download?group=erbium&file=erbium-summary.json&inline=1")
       .then((r) => r.json())
       .then(setData)
+      .catch(() => {});
+    fetch("/api/db/download?group=erbium&file=verify_p1_v3.json&inline=1")
+      .then((r) => r.json())
+      .then(setP1)
       .catch(() => {});
   }, []);
 
@@ -615,39 +638,100 @@ function ErbiumTab() {
     return Object.keys(data).sort();
   }, [data]);
 
+  const summary = useMemo(() => {
+    if (!data) return null;
+    let cells = 0, patterns = 0, globals = 0, vtidx = 0, full = 0;
+    let inline = 0, inlineCells = 0;
+    for (const f of Object.keys(data)) {
+      let ok = 0;
+      for (const v of Object.keys(data[f])) {
+        const e = data[f][v];
+        if (e?.pattern && e?.addr) { cells++; patterns++; ok++; }
+        else if (e?.global) { cells++; globals++; ok++; }
+        else if (e?.vtable_index != null) { cells++; vtidx++; ok++; }
+      }
+      if (ok === 11) full++;
+      if (f.startsWith("Inline_")) { inline++; inlineCells += ok; }
+    }
+    return { cells, patterns, globals, vtidx, full, total: Object.keys(data).length, inline, inlineCells };
+  }, [data]);
+
   const [filter, setFilter] = useState("");
+  const [onlyInline, setOnlyInline] = useState(false);
   const filtered = funcs.filter(
-    (f) => !filter || f.toLowerCase().includes(filter.toLowerCase())
+    (f) =>
+      (!filter || f.toLowerCase().includes(filter.toLowerCase())) &&
+      (!onlyInline || f.startsWith("Inline_"))
   );
 
   return (
     <div className="space-y-4">
+      {summary && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-primary">{summary.patterns}</div>
+              <div className="text-xs text-muted-foreground">نمط ARM64 مُتحقق (مطابقة واحدة بالضبط)</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-primary">{summary.cells}/1034</div>
+              <div className="text-xs text-muted-foreground">خلية محلولة من {summary.total} دالة × 11 نسخة</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-primary">{summary.full}</div>
+              <div className="text-xs text-muted-foreground">دالة مغطاة 11/11 نسخة</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-primary">{summary.inline}</div>
+              <div className="text-xs text-muted-foreground">دالة إضافية من خارج Finders.cpp ({summary.inlineCells} خلية)</div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Crosshair className="h-4 w-4" />
-            دوال Erbium — أنماط ARM64 مُتحققة (مطابقة واحدة بالضبط)
+            دوال Erbium — تحقق ثلاثي: P0 (مطابقة فريدة) + P1 (مقارنة ويندوز) + P2 (native-identity)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <p>
-            كل دالة من دوال Erbium المطلوب هوكها لها نمط بايتات ARM64 مطابق{" "}
-            <b>مرة واحدة بالضبط</b> في ثنائية نسختها (تحقق آلي VERIFIED-UNIQUE).
-            الأنماط الكاملة في ملف <code dir="ltr">Finders-Android-FULL.cpp</code>.
+            كل دالة لها نمط بايتات ARM64 مطابق <b>مرة واحدة بالضبط</b> في ثنائية نسختها (تحقق آلي P0)،
+            ومقارنة سماتها (نصوص/natives/حجم) ضد <code dir="ltr">FortniteClient-Win64-Shipping.exe</code> (P1)،
+            ومطابقة عناوين natives من الـ dumps (P2). الأنماط الكاملة في{" "}
+            <code dir="ltr">Finders-Android-FULL-v3.cpp</code>.
           </p>
           <p className="text-xs">
-            القيم في الجدول = العنوان (RVA) الذي يطابقه النمط في كل نسخة · ✕ =
-            لا نمط لهذه النسخة (الدالة غير موجودة أو تعذر نمط فريد)
+            القيم = العنوان (RVA) · G = global عبر GOT · VT = فهرس vtable محسوب · ✕ = غير محلول ·
+            الدوال المسبوقة <code dir="ltr">Inline_</code> من ملفات Erbium الأخرى (خارج Finders.cpp)
           </p>
-          <div className="relative w-64">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              dir="ltr"
-              className="pr-9 font-mono text-left"
-              placeholder="FindServerMove..."
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            />
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="relative w-64">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                dir="ltr"
+                className="pr-9 font-mono text-left"
+                placeholder="FindServerMove... / Inline_"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+            </div>
+            <label className="flex items-center gap-2 text-xs cursor-pointer">
+              <input
+                type="checkbox"
+                checked={onlyInline}
+                onChange={(e) => setOnlyInline(e.target.checked)}
+                className="accent-primary"
+              />
+              دوال خارج Finders.cpp فقط
+            </label>
           </div>
         </CardContent>
       </Card>
@@ -676,31 +760,67 @@ function ErbiumTab() {
                     </TableCell>
                   </TableRow>
                 )}
-                {filtered.map((f) => (
+                {filtered.map((f) => {
+                  const p = p1?.[f];
+                  const p1Badge = p
+                    ? p.votes != null && p.votes >= 2
+                      ? "P1✓"
+                      : typeof p.size_ratio === "number" && p.size_ratio <= 4
+                        ? "P1≈"
+                        : "P1?"
+                    : "";
+                  return (
                   <TableRow key={f}>
                     <TableCell
                       dir="ltr"
                       className="sticky right-0 z-10 bg-background font-mono text-xs text-left whitespace-nowrap border-l text-primary"
+                      title={p ? `P1: win=${p.win} ratio=${p.size_ratio} strs=${p.strings_match} · ${p.strings_common?.join(" | ") ?? ""}` : ""}
                     >
-                      {f}
+                      <span className={f.startsWith("Inline_") ? "text-amber-600 dark:text-amber-400" : ""}>{f}</span>
+                      {p1Badge && (
+                        <span
+                          className={`ms-2 inline-block rounded px-1 text-[9px] font-bold ${
+                            p1Badge === "P1✓"
+                              ? "bg-green-500/15 text-green-600"
+                              : p1Badge === "P1≈"
+                                ? "bg-emerald-500/10 text-emerald-600"
+                                : "bg-amber-500/15 text-amber-600"
+                          }`}
+                        >
+                          {p1Badge}
+                        </span>
+                      )}
                     </TableCell>
                     {VERSIONS.map((v) => {
                       const e = data?.[f]?.[v];
+                      const label = e?.addr
+                        ? shortAddr(e.addr)
+                        : e?.global
+                          ? `G:${shortAddr(e.global)}`
+                          : e?.vtable_index != null
+                            ? `VT:${e.vtable_index}`
+                            : e
+                              ? "✓"
+                              : "✕";
+                      const tip = e
+                        ? `${e.addr ?? e.global ?? e.vtable_index ?? ""} · ${e.strategy ?? ""}${e.verified === false ? " · ⚠️ غير مُتحقق" : ""}`
+                        : "";
                       return (
                         <TableCell
                           key={v}
                           className={`text-center font-mono text-[10px] whitespace-nowrap ${
                             e ? "cursor-pointer hover:bg-accent" : "text-muted-foreground/40"
                           }`}
-                          onClick={() => e && copyText(e.addr ?? "")}
-                          title={e ? `${e.addr} — اضغط للنسخ` : ""}
+                          onClick={() => e && copyText(e.addr ?? e.global ?? String(e.vtable_index ?? ""))}
+                          title={tip || undefined}
                         >
-                          {e ? (e.addr ? shortAddr(e.addr) : "✓") : "✕"}
+                          {label}
                         </TableCell>
                       );
                     })}
                   </TableRow>
-                ))}
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
@@ -723,10 +843,13 @@ function DownloadTab() {
       })),
       { group: "db", name: "version-diffs.json", desc: "الفروق بين النسخ (مضاف/محذوف)" },
       { group: "db", name: "erbium-native-map.json", desc: "ربط دوال Erbium بالـ natives" },
-      { group: "erbium", name: "Finders-Android-FULL.cpp", desc: "منفذ Erbium الكامل — كل الدوال × 11 نسخة" },
-      { group: "erbium", name: "COVERAGE-MATRIX.md", desc: "مصفوفة تغطية دوال Erbium" },
+      { group: "erbium", name: "Finders-Android-FULL-v3.cpp", desc: "منفذ Erbium الكامل v3 — 100 دالة (83+17 خارج Finders.cpp) × 11 نسخة" },
+      { group: "erbium", name: "VERIFICATION-REPORT-v3.md", desc: "تقرير التحقق v3 — المقارنة مع FortniteClient-Win64-Shipping.exe" },
+      { group: "erbium", name: "COVERAGE-MATRIX-v3.md", desc: "مصفوفة تغطية v3 (94 دالة × 11 نسخة)" },
+      { group: "erbium", name: "final_resolved_v3.json", desc: "كل الحلول النهائية (عناوين/أنماط/فهارس) — JSON" },
+      { group: "erbium", name: "verify_p1_v3.json", desc: "نتائج التحقق cross-arch ضد exe ويندوز" },
+      { group: "erbium", name: "COVERAGE-MATRIX.md", desc: "مصفوفة التغطية (النسخة القديمة)" },
       { group: "erbium", name: "FINAL-REPORT.md", desc: "التقرير النهائي والمنهجية" },
-      { group: "erbium", name: "VERIFICATION_REPORT.md", desc: "تقرير التحقق من التواقيع اليدوية" },
     ],
     []
   );
