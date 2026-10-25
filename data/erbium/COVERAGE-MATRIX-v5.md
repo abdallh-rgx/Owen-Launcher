@@ -1,7 +1,7 @@
 # COVERAGE MATRIX v5 — أنماط ثابتة (✓) + إيجاد وقت-التشغيل (⟳)
 
 **الخلايا:** 11 نسخة × 89 دالة = 979
-**✓ نمط ثابت (v4):** 759 | **⟳ إيجاد وقت-تشغيل (v5 RT::):** 154 | **· لا شيء:** 66
+**✓ نمط ثابت (v4):** 759 | **⟳ إيجاد وقت-تشغيل (v5 RT::):** 195 | **· لا شيء:** 25
 
 ⟳ = تعمل على أي إصدار (حتى غير المرئية 6.31/12.41/20.10/27.11...) عبر:
 string-anchor (نص→مرجع→de-outline→بداية الدالة) أو native-pair أو vtable-delta
@@ -10,13 +10,13 @@ string-anchor (نص→مرجع→de-outline→بداية الدالة) أو nati
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | FindActivatePhase | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string,native |
 | FindApplyCharacterCustomization | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | string |
-| FindCallPreReplication | · | · | · | · | · | · | · | ✓ | ✓ | ✓ | ✓ | - |
+| FindCallPreReplication | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | vtable |
 | FindCanAffordToPlaceBuildableClass | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | string,vtable |
 | FindCantBuild | ✓ | ✓ | ⟳ | ✓ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
 | FindClearAbility | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 | FindClientHasInitializedLevelFor | · | · | · | · | · | · | · | ✓ | · | · | · | - |
 | FindCloseActorChannel | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | string,vtable |
-| FindConstructAbilitySpec | ✓ | ✓ | ✓ | ✓ | · | ✓ | ✓ | ✓ | · | ✓ | ✓ | - |
+| FindConstructAbilitySpec | ✓ | ✓ | ✓ | ✓ | ⟳ | ✓ | ✓ | ✓ | ⟳ | ✓ | ✓ | vtable |
 | FindCreateChannel | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
 | FindCreateNetDriverWorldContext | · | · | · | · | · | ✓ | ✓ | ✓ | ✓ | · | ✓ | - |
 | FindEnterAircraft | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
@@ -30,7 +30,7 @@ string-anchor (نص→مرجع→de-outline→بداية الدالة) أو nati
 | FindGetNamePool | · | · | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | - |
 | FindGetNetMode | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
 | FindGetPlayerViewPoint | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
-| FindGetWorldContext | · | · | · | · | · | · | · | ✓ | ✓ | · | ✓ | - |
+| FindGetWorldContext | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ⟳ | ✓ | vtable |
 | FindGiveAbility | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string,native |
 | FindGiveAbilityAndActivateOnce | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string,native |
 | FindHandleMatchHasStarted | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
@@ -65,7 +65,7 @@ string-anchor (نص→مرجع→de-outline→بداية الدالة) أو nati
 | FindSendClientAdjustment | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ⟳ | ⟳ | ⟳ | vtable |
 | FindSendDestructionInfo | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | ✓ | ✓ | ✓ | string |
 | FindSendRequestNow | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
-| FindServerReplicateActors | · | · | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | · | - |
+| FindServerReplicateActors | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | vtable |
 | FindSetChannelActor | · | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | - |
 | FindSetChannelActorForDestroy | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟳ | string |
 | FindSetGamePhase | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | string |
@@ -85,11 +85,11 @@ string-anchor (نص→مرجع→de-outline→بداية الدالة) أو nati
 | FindTickFlush | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string,vtable |
 | FindUnEquipVehicleWeapon | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | string |
 | FindUpdateSafeZonesPhase | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ⟳ | ⟳ | ⟳ | string |
-| Inline_AttemptDeriveFromURL | · | · | · | · | · | · | · | ✓ | · | · | · | - |
+| Inline_AttemptDeriveFromURL | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ⟳ | ⟳ | ⟳ | vtable |
 | Inline_ClientOnPawnDiedCaller | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 | Inline_CollectGarbagePatch | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | · | - |
 | Inline_EquipVehicleWeaponFunc | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
-| Inline_GetSparseClassData | · | · | · | · | ✓ | · | · | · | · | · | · | - |
+| Inline_GetSparseClassData | ⟳ | ⟳ | ⟳ | ⟳ | ✓ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | ⟳ | vtable |
 | Inline_K2_OnUnEquipCaller | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 | Inline_OnAuthorityRandomUpgradeAppliedCaller | ⟳ | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 | Inline_OnDamageServerCaller | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
@@ -98,24 +98,18 @@ string-anchor (نص→مرجع→de-outline→بداية الدالة) أو nati
 | Inline_ToDeathCauseNative | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 | Inline_UnequipVehicleWeaponFunc | ⟳ | ⟳ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | native |
 
-**التغطية الفعلية عند التشغيل: 913/979 (93%)** — كل خلية إما نمط فريد مُتحقق أو سلسلة إيجاد غاشمة وقت-التشغيل.
+**التغطية الفعلية عند التشغيل: 954/979 (97%)** — كل خلية إما نمط فريد مُتحقق أو سلسلة إيجاد غاشمة وقت-التشغيل.
 
 ## الدوال بلا أي سلسلة (تعتمد على الأنماط فقط):
-- `FindCallPreReplication` (أنماط: 4/11)
 - `FindClientHasInitializedLevelFor` (أنماط: 1/11)
-- `FindConstructAbilitySpec` (أنماط: 9/11)
 - `FindCreateNetDriverWorldContext` (أنماط: 5/11)
 - `FindGetNamePool` (أنماط: 8/11)
-- `FindGetWorldContext` (أنماط: 3/11)
 - `FindInitializeBuildingActor_next` (أنماط: 8/11)
 - `FindLoadPlayset` (أنماط: 11/11)
 - `FindPostInitializeSpawnedBuildingActor` (أنماط: 11/11)
 - `FindRemoveInventoryItem` (أنماط: 11/11)
 - `FindRemoveInventoryStateValue` (أنماط: 11/11)
-- `FindServerReplicateActors` (أنماط: 7/11)
 - `FindSetChannelActor` (أنماط: 10/11)
 - `FindSetInventoryStateValue` (أنماط: 11/11)
 - `FindSetPickupItems` (أنماط: 10/11)
-- `Inline_AttemptDeriveFromURL` (أنماط: 1/11)
 - `Inline_CollectGarbagePatch` (أنماط: 10/11)
-- `Inline_GetSparseClassData` (أنماط: 1/11)

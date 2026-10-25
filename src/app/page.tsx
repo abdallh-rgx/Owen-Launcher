@@ -675,7 +675,7 @@ function ErbiumTab() {
               (حتى الوسيطة غير المرئية مثل 21.40/22.00/27.11): نصوص UTF-16 → مراجع ADRP/ADR/GOT → de-outline →
               بداية الدالة · جداول vtable بعد الـ relocation مع deltas مُثبتة عبر ABIs
               (IsNetReady=FlushDormancy−17) · أزواج natives · GIs بنفس منطق Erbium الأصلي (نقل ARM64).
-              <b>مُختبَر وظيفياً 19/19</b> على وحدة ARM64 اصطناعية — التغطية الفعلية <b>913/979 (93%)</b>.
+              <b>مُختبَر وظيفياً 19/19</b> على وحدة ARM64 اصطناعية — التغطية الفعلية <b>954/979 (97%)</b>.
             </span>
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
@@ -697,7 +697,7 @@ function ErbiumTab() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Card className="border-emerald-500/40 bg-emerald-500/5">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-emerald-600">913/979</div>
+              <div className="text-2xl font-bold text-emerald-600">954/979</div>
               <div className="text-xs text-muted-foreground">تغطية v5 الفعلية (نمط + RT:: وقت-التشغيل)</div>
             </CardContent>
           </Card>

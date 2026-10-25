@@ -117,3 +117,18 @@ Stage Summary:
 - دعم الإيجاد المطلوب أُضيف: محرك RT:: غاشم يعمل على أي ثنائي أندرويد 5.x→30.00 وقت التشغيل (حتى الإصدارات غير المرئية) — مُختبَر 19/19
 - exe 27.11 استُخدم كـground truth: حل النصوص عبر LogV2 descriptors + إثبات deltas الجديدة عبر ABIs
 - GIsClient/GIsServer: اكتشاف وقت-تشغيل بنفس منطق Erbium يحل التعارضات نهائياً
+
+---
+Task ID: 12-b
+Agent: main (Z.ai Code)
+Task: الموجة الثانية — مطابقة الأشكال (shape-matching) للفجوات المتبقية
+
+Work Log:
+- إضافة 8 بدائل وقت-تشغيل جديدة: BLCallees (زحف المستدعَين) + BLCallersTo (زحف المستدعِين على كل .text) + PrologueSaveCount (مقياس الضخامة) + BigCalleeFrom/BigCallerOf + TinySparseAccessorFrom + WorldContextCalleeFrom + VirtCallCalleeFrom
+- سلاسل شكلية حلت 5 دوال كبيرة: AttemptDeriveFromURL (أضخم callee لـ GetNetMode 11/11 — منطق PatchAllNetModes نفسه) + ServerReplicateActors (أضخم مستدعٍ لـ ReplicateActor) + CallPreReplication (النداء الافتراضي الصغير من ReplicateActor) + GetSparseClassData (لاحق LDRB/LDR/RET) + GetWorldContext (حلقة LDRSW+ADD LSL#3) + ConstructAbilitySpec (callees GiveAbility)
+- التحقق من ClientHasInitializedLevelFor على 27.11: المطابقة كانت موجبة كاذبة (ليست في vtable PlayerController الحقيقي 0xc65fa78) — موثقة كأصعب دالة متبقية (1/11)
+- إعادة التوليد + 19/19 اختبار ناجح + lint نظيف + تحقق متصفح (لافتة v5 + بطاقة 954/979 + المصفوفة)
+
+Stage Summary:
+- التغطية النهائية: 954/979 (97.4%) — 759 نمط ثابت + 195 خلية عبر 76 سلسلة وقت-تشغيل
+- المتبقي 25 خلية/12 دالة موثقة (8 منها 10-11/11 أنماطاً أصلاً؛ الحقيقية: ClientHasInitializedLevelFor 1/11, CreateNetDriverWorldContext 5/11, GetNamePool 8/11 + 3 خلايا مفردة)

@@ -25,6 +25,13 @@
 | `FindNativeThunk(name)` | مسح .data عن أزواج `{char* Name, uintptr Thunk}` — جدول FNativeFunctionRegistrar بعد الربط |
 | `NativeOrig(name)` | orig-climb: الـ thunk → مسح 0x140 بايت عن BL → التنفيذ الأصلي |
 | `GIsFromAnchor(skip)` | نقل حرفي لمنطق Erbium الأصلي (Finders.cpp) إلى ARM64: مسح رجعي 0x100 بايت من مرجع `AllowCommandletRendering` عن LDRB/STRB عالمية (مباشرة أو عبر GOT) — skip=1 → GIsServer, skip=2 → GIsClient |
+| `BLCallees(from)` | كل من يستدعيه عبر BL داخل نافذة |
+| `BLCallersTo(target)` | مسح .text كاملاً عن مستدعي الدالة (caller-walk) |
+| `PrologueSaveCount(fn)` | عدد أزواج STP للمقدمة — مقياس ضخامة الدالة |
+| `BigCalleeFrom / BigCallerOf` | أضخم callee/caller (مثل AttemptDeriveFromURL من GetNetMode و ServerReplicateActors فوق ReplicateActor) |
+| `TinySparseAccessorFrom(caller)` | الشكل: LDRB Wt,[X0]; LDR X0,[X0]; RET — GetSparseClassData |
+| `WorldContextCalleeFrom(caller)` | الشكل: LDRSW + ADD LSL#3 (حلقة WorldContexts) — GetWorldContext |
+| `VirtCallCalleeFrom(caller)` | نداء افتراضي واحد صغير — CallPreReplication من ReplicateActor |
 
 ## التحقق (على هذا الجهاز)
 - **بناء ناجح**: الملف كاملاً (250KB) يُترجم بـ g++ -std=c++17 بلا أي خطأ
@@ -49,6 +56,14 @@
 (مثال مُقاس: OnItemInstanceAdded ظهر 183 بالمسح مقابل 143 الحقيقي على 21.30).
 الـ deltas داخل نفس الجدول محصَّنة ضد الدمج — وهي متطابقة عبر ABIs (مُثبت).
 
+## مطابقة الأشكال (shape-matching) — الموجة الثانية
+- `AttemptDeriveFromURL` = أضخم callee لـ GetNetMode (11/11 static) — نفس منطق PatchAllNetModes في Erbium
+- `ServerReplicateActors` = أضخم مستدعٍ لـ ReplicateActor (8/11)
+- `CallPreReplication` = النداء الافتراضي الصغير الوحيد من ReplicateActor
+- `GetSparseClassData` = اللاحق الصغير LDRB/LDR/RET من CantBuild/CanAfford
+- `GetWorldContext` = الحلقة LDRSW+ADD LSL#3 من CreateNetDriverWorldContext
+- `ConstructAbilitySpec` = من ضمن callees الـ GiveAbility (11/11)
+
 ## سلاسل الإيجاد لكل دالة (ترتيب المحاولة)
 1. الأنماط الثابتة v4 (717 نمط فريد مُتحقق — تعمل أولاً وأسرع)
 2. native-pair: `FindNativeThunk`/`NativeOrig` (كل الإصدارات لها جدول natives)
@@ -56,15 +71,17 @@
 4. vtable-delta: العلاقات أعلاه مع anchors تعمل 11/11 (GetPlayerViewPoint, TickFlush, ...)
 5. GIs/Globals: `GIsFromAnchor` (يحل أيضاً تعارضات النسخ القديمة 5.41-18.40/23.50)
 
-## ما زال نمطاً فقط (66 خلية / 18 دالة)
+## ما زال نمطاً فقط (25 خلية / 12 دالة)
 معظمها دوال بلا نصوص ولا natives ولا علاقات vtable معروفة:
-`CallPreReplication` (4/11), `ClientHasInitializedLevelFor` (1/11), `GetWorldContext` (3/11),
-`CreateNetDriverWorldContext` (5/11), `AttemptDeriveFromURL` (1/11), `GetSparseClassData` (1/11),
-`ServerReplicateActors` (7/11), `GetNamePool` (8/11), `ConstructAbilitySpec` (9/11), وغيرها
-(معظم القائمة لديها تغطية ثابتة 8-11/11 أصلاً).
+معظم القائمة لديها تغطية ثابتة 10-11/11 أصلاً (LoadPlayset, PostInitializeSpawnedBuildingActor,
+RemoveInventoryItem/StateValue, SetInventoryStateValue — كلها 11/11).
+الحقيقية المتبقية: `ClientHasInitializedLevelFor` (1/11 — أصعب دالة: بلا نصوص/natives/
+vtable قابل للإثبات؛ مطابقة النمط على ويندوز 27.11 كانت موجبة كاذبة)، `CreateNetDriverWorldContext` (5/11)،
+`GetNamePool` (8/11 — قبل UE4.23 تخطيط مختلف)، `InitializeBuildingActor_next` (8/11)،
++ 3 خلايا مفردة (SetChannelActor 5.41, SetPickupItems 13.40, CollectGarbagePatch 30.00).
 لهذه: أنماط v4 + مسار SDK الانعكاسي في Erbium (DefaultObjImpl → Vft scan) وقت التشغيل.
 
 ## النتيجة النهائية
-- **913/979 خلية (93.3%)** مع تغطية فعلية عند التشغيل (نمط فريد أو سلسلة RT::)
+- **954/979 خلية (97.4%)** مع تغطية فعلية عند التشغيل (نمط فريد أو سلسلة RT::)
   مقارنة بـ 759/979 (78%) أنماطاً فقط في v4
 - **GIs**: اكتشاف وقت-تشغيل يحل الـ 37 خلية المتعارضة نهائياً (المنطق الأصلي نفسه)

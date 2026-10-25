@@ -482,6 +482,196 @@ namespace RT
         return t; // fallback: الـ thunk نفسه (نقطة هوك ExecHook صالحة)
     }
 
+    // ---- BL-crawl: callees of a function ----
+    inline uint32_t BLCallees(uint64_t from, uint64_t* out, uint32_t maxOut, uint64_t window = 0x100)
+    {
+        RT::Init();
+        uint32_t n = 0;
+        if (!RT::InText(from))
+            return 0;
+        for (uint64_t pc = from; pc < from + window && n < maxOut; pc += 4)
+        {
+            uint32_t i = *(uint32_t*)pc;
+            if (IsBL(i))
+            {
+                uint64_t t = BranchTarget(pc, i);
+                if (RT::InText(t))
+                {
+                    bool seen = false;
+                    for (uint32_t j = 0; j < n; j++)
+                        if (out[j] == t) { seen = true; break; }
+                    if (!seen)
+                        out[n++] = RT::Deoutline(t);
+                }
+            }
+            // RET في نهاية دالة صغيرة → توقف إذا تجاوزنا نافذة صغيرة (اختياري: لا نتوقف — outlined helpers)
+        }
+        return n;
+    }
+
+    // ---- caller-walk: كل من يستدعي target عبر BL ----
+    inline uint32_t BLCallersTo(uint64_t target, uint64_t* out, uint32_t maxOut)
+    {
+        RT::Init();
+        uint32_t n = 0;
+        if (!target || !g_TextStart)
+            return 0;
+        for (uint64_t pc = g_TextStart; pc + 4 < g_TextEnd && n < maxOut; pc += 4)
+        {
+            uint32_t i = *(uint32_t*)pc;
+            if (IsBL(i) && BranchTarget(pc, i) == target)
+            {
+                uint64_t f = RT::BackscanPrologue(pc);
+                if (f)
+                {
+                    bool seen = false;
+                    for (uint32_t j = 0; j < n; j++)
+                        if (out[j] == f) { seen = true; break; }
+                    if (!seen)
+                        out[n++] = f;
+                }
+            }
+        }
+        return n;
+    }
+
+    // ---- عدد حفظات السجلات في المقدمة (مقياس "ضخامة" الدالة) ----
+    inline uint32_t PrologueSaveCount(uint64_t fn)
+    {
+        RT::Init();
+        if (!RT::InText(fn))
+            return 0;
+        uint32_t saves = 0;
+        for (uint64_t pc = fn; pc < fn + 0x40; pc += 4)
+        {
+            uint32_t w = *(uint32_t*)pc;
+            // STP Xt1,Xt2,[SP,#imm](|!) — أي زوج إلى SP
+            if ((w & 0xFFC003E0) == 0xA90003E0 || (w & 0xFFC003E0) == 0xA98003E0)
+                saves++;
+        }
+        return saves;
+    }
+
+    // ---- callee ضخم (أكثر حفظات) مثل AttemptDeriveFromURL من GetNetMode ----
+    inline uint64_t BigCalleeFrom(uint64_t caller, uint32_t minSaves = 3)
+    {
+        uint64_t c[48];
+        uint32_t n = RT::BLCallees(caller, c, 48, 0x80);
+        uint64_t best = 0;
+        uint32_t bestSaves = minSaves ? minSaves - 1 : 0;
+        for (uint32_t i = 0; i < n; i++)
+        {
+            uint32_t s = RT::PrologueSaveCount(c[i]);
+            if (s > bestSaves)
+            {
+                bestSaves = s;
+                best = c[i];
+            }
+        }
+        return best;
+    }
+
+    // ---- caller ضخم لدالة (ServerReplicateActors يُنادي ReplicateActor) ----
+    inline uint64_t BigCallerOf(uint64_t target, uint32_t minSaves = 4)
+    {
+        uint64_t c[64];
+        uint32_t n = RT::BLCallersTo(target, c, 64);
+        uint64_t best = 0;
+        uint32_t bestSaves = minSaves ? minSaves - 1 : 0;
+        for (uint32_t i = 0; i < n; i++)
+        {
+            uint32_t s = RT::PrologueSaveCount(c[i]);
+            if (s > bestSaves)
+            {
+                bestSaves = s;
+                best = c[i];
+            }
+        }
+        return best;
+    }
+
+    // ---- الشكل: LDRB Wt,[X0]; TBZ; LDR X0,[X0,#imm]; CBNZ; RET (بوصف GetSparseClassData) ----
+    inline uint64_t TinySparseAccessorFrom(uint64_t caller)
+    {
+        uint64_t c[48];
+        uint32_t n = RT::BLCallees(caller, c, 48, 0x200);
+        for (uint32_t i = 0; i < n; i++)
+        {
+            uint64_t f = c[i];
+            uint32_t ldrbX0 = 0, ldrX0X0 = 0, rets = 0, ins = 0;
+            for (uint64_t pc = f; pc < f + 0x20; pc += 4)
+            {
+                uint32_t w = *(uint32_t*)pc;
+                if (w == 0xD65F03C0u) { rets++; break; }
+                if (IsLDRB(w) && ((w >> 5) & 0x1F) == 0)
+                    ldrbX0++;
+                if (IsLDR64(w) && ((w >> 5) & 0x1F) == 0 && (w & 0x1F) == 0)
+                    ldrX0X0++;
+                ins++;
+            }
+            if (rets == 1 && ldrX0X0 >= 1 && ldrbX0 >= 1 && ins <= 6)
+                return f;
+        }
+        return 0;
+    }
+
+    // ---- الشكل: LDRSW + ADD ..,LSL#3 (حلقة WorldContexts) — GetWorldContext ----
+    inline uint64_t WorldContextCalleeFrom(uint64_t caller)
+    {
+        uint64_t c[48];
+        uint32_t n = RT::BLCallees(caller, c, 48, 0x100);
+        for (uint32_t i = 0; i < n; i++)
+        {
+            uint64_t f = c[i];
+            bool hasLdrsw = false, hasAddLsl3 = false;
+            for (uint64_t pc = f; pc < f + 0x40; pc += 4)
+            {
+                uint32_t w = *(uint32_t*)pc;
+                // LDRSW Xt,[Xn,#imm]: 0xB9800000|..
+                if ((w & 0xFFC00000) == 0xB9800000)
+                    hasLdrsw = true;
+                // ADD Xd,Xn,Xm,LSL#3: 0x8B000C00 mask imm6=3<<10
+                if ((w & 0xFF200C00) == 0x8B000C00)
+                    hasAddLsl3 = true;
+                if (w == 0xD65F03C0u)
+                    break;
+            }
+            if (hasLdrsw && hasAddLsl3)
+                return f;
+        }
+        return 0;
+    }
+
+    // ---- الشكل: نداء افتراضي واحد صغير (CallPreReplication من ReplicateActor) ----
+    // LDR X8,[X0] (vtable) + LDR Xn,[X8,#off] + BLR Xn — دالة صغيرة بنداء افتراضي واحد
+    inline uint64_t VirtCallCalleeFrom(uint64_t caller)
+    {
+        uint64_t c[48];
+        uint32_t n = RT::BLCallees(caller, c, 48, 0x180);
+        for (uint32_t i = 0; i < n; i++)
+        {
+            uint64_t f = c[i];
+            uint32_t blrs = 0, ldrVft = 0, ins = 0;
+            bool earlyRet = false;
+            for (uint64_t pc = f; pc < f + 0x60; pc += 4)
+            {
+                uint32_t w = *(uint32_t*)pc;
+                if (w == 0xD65F03C0u)
+                    break;
+                ins++;
+                if ((w & 0xFFFFFC1F) == 0xD63F0000 && ((w >> 5) & 0x1F) != 31)
+                    blrs++; // BLR Xn (ليس BLR LZCNT-free reserved)
+                if (IsLDR64(w) && ((w >> 5) & 0x1F) == 0)
+                    ldrVft++;
+                if (ins > 24)
+                    break;
+            }
+            if (blrs == 1 && ldrVft >= 1 && ins >= 4 && ins <= 24)
+                return f;
+        }
+        return 0;
+    }
+
     // ---- GIs global discovery (ARM64 port of Erbium's AllowCommandletRendering scan)
     // Mirrors Erbium Windows: scan BACKWARD from the string-ref instruction collecting
     // bool-global accesses (ADRP+LDRB/STRB, incl. GOT-indirect); skip=2 → GIsClient,
@@ -684,6 +874,8 @@ uint64_t FindCallPreReplication()
         else if (v >= 21.30f)
             Result = Memcury::Scanner::FindPattern("FF C3 01 D1 FA 67 02 A9 F8 5F 03 A9 F6 57 04 A9 F4 4F 05 A9 FD 7B 06 A9 FD 83 01 91 57 D0 3B D5 E8 16 40 F9 E8 0F 00 F9 ?? ?? ?? B4 09 B8 40 79").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) Result = RT::VirtCallCalleeFrom(FindReplicateActor()); // نداء افتراضي واحد صغير من ReplicateActor: Actor->PreReplication
     }
     return Result;
 }
@@ -884,6 +1076,8 @@ uint64_t FindConstructAbilitySpec()
         else if (v >= 5.41f)
             Result = Memcury::Scanner::FindPattern("F4 4F BE A9 FD 7B 01 A9 FD 43 00 91 F4 03 01 AA 88 02 40 F9 F3 03 00 AA 6A 1F 80 52 60 62 07 91").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) { uint64_t _g = FindGiveAbility(); if (_g) { uint64_t _c[32]; uint32_t _n = RT::BLCallees(_g, _c, 32, 0xC0); if (_n >= 2) Result = _c[_n - 2]; } } // ConstructAbilitySpec من ضمن callees الـ GiveAbility
     }
     return Result;
 }
@@ -1331,6 +1525,8 @@ uint64_t FindGetWorldContext()
         else if (v >= 21.30f)
             Result = Memcury::Scanner::FindPattern("F5 0F 1D F8 F4 4F 01 A9 FD 7B 02 A9 FD 83 00 91 F3 03 00 AA ?? ?? ?? ?? 08 04 00 51 1F 05 00 71").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) Result = RT::WorldContextCalleeFrom(FindCreateNetDriverWorldContext()); // LDRSW + ADD LSL#3 حلقة WorldContexts
     }
     return Result;
 }
@@ -2499,6 +2695,8 @@ uint64_t FindServerReplicateActors()
         else if (v >= 13.40f)
             Result = Memcury::Scanner::FindPattern("FC 4F BE A9 FD 7B 01 A9 FD 43 00 91 FF 03 33 D1 F3 03 01 AA E0 2F 00 F9 F3 2B 00 F9 E0 27 00 F9").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) Result = RT::BigCallerOf(FindReplicateActor(), 4); // أضخم مستدعٍ لـ ReplicateActor
     }
     return Result;
 }
@@ -3181,6 +3379,8 @@ uint64_t Inline_AttemptDeriveFromURL()
         if (v >= 21.30f)
             Result = Memcury::Scanner::FindPattern("?? ?? ?? 34 48 00 40 39 63 04 00 71 28 00 00 39 48 04 40 B9 28 04 00 B9 48 08 40 B9 28 08 00 B9").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) Result = RT::BigCalleeFrom(FindGetNetMode(), 3); // أضخم callee لـ GetNetMode (7-8 حفظات على x64) — منطق PatchAllNetModes نفسه
     }
     return Result;
 }
@@ -3297,6 +3497,8 @@ uint64_t Inline_GetSparseClassData()
         if (v >= 17.50f)
             Result = Memcury::Scanner::FindPattern("08 00 40 39 ?? ?? ?? 37 00 00 40 F9 ?? ?? ?? B5 C0 03 5F D6 ?? ?? ?? ??").Get();
         // النسخ غير المغطاة: استخدم الحلّال الكوني أو الـ fallback الانعكاسي
+        // v5: سلسلة إيجاد وقت-التشغيل (تعمل على أي إصدار)
+        if (!Result) { uint64_t _c = FindCantBuild(); if (!_c) _c = FindCanAffordToPlaceBuildableClass(); Result = RT::TinySparseAccessorFrom(_c); } // شكل اللاحق الصغير: LDRB W,[X0]; LDR X0,[X0]; RET
     }
     return Result;
 }
