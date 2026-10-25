@@ -669,12 +669,13 @@ function ErbiumTab() {
       <Card className="border-emerald-500/30 bg-emerald-500/5">
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <Badge variant="default" className="bg-emerald-600">v4 كوني</Badge>
+            <Badge variant="default" className="bg-emerald-600">v5 وقت-التشغيل</Badge>
             <span className="text-muted-foreground">
-              حلّال كوني يعمل على <b>أي إصدار بين 5.x و 30.00</b> — شلال استراتيجيات:
-              natives (أزواج relocation) → سلاسل (de-outline + GOT) → vtable deltas →
-              <b> بحث Z3 أعمى غاشمي في كل .text</b> (بصمات دلالية مُثبتة بـ SMT) → globals (GIs/FNamePool).
-              وضع <code className="text-xs">--no-patterns</code> استعاد 728/1034 خلية بلا أي نمط مُخزّن.
+              محرك <b>RT::</b> للإيجاد الغاشم على الجهاز بعد تحميل الوحدة — يعمل على <b>أي إصدار 5.x→30.00</b>
+              (حتى الوسيطة غير المرئية مثل 21.40/22.00/27.11): نصوص UTF-16 → مراجع ADRP/ADR/GOT → de-outline →
+              بداية الدالة · جداول vtable بعد الـ relocation مع deltas مُثبتة عبر ABIs
+              (IsNetReady=FlushDormancy−17) · أزواج natives · GIs بنفس منطق Erbium الأصلي (نقل ARM64).
+              <b>مُختبَر وظيفياً 19/19</b> على وحدة ARM64 اصطناعية — التغطية الفعلية <b>913/979 (93%)</b>.
             </span>
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
@@ -693,7 +694,13 @@ function ErbiumTab() {
         </CardContent>
       </Card>
       {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <Card className="border-emerald-500/40 bg-emerald-500/5">
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold text-emerald-600">913/979</div>
+              <div className="text-xs text-muted-foreground">تغطية v5 الفعلية (نمط + RT:: وقت-التشغيل)</div>
+            </CardContent>
+          </Card>
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-primary">{summary.patterns}</div>
@@ -703,7 +710,7 @@ function ErbiumTab() {
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold text-primary">{summary.cells}/979</div>
-              <div className="text-xs text-muted-foreground">خلية محلولة من {summary.total} دالة × 11 نسخة</div>
+              <div className="text-xs text-muted-foreground">حل ثابت (أنماط/globals/vtable) — قبل RT::</div>
             </CardContent>
           </Card>
           <Card>
@@ -869,10 +876,15 @@ function DownloadTab() {
       })),
       { group: "db", name: "version-diffs.json", desc: "الفروق بين النسخ (مضاف/محذوف)" },
       { group: "db", name: "erbium-native-map.json", desc: "ربط دوال Erbium بالـ natives" },
-      { group: "erbium", name: "Finders-Android-FULL-v3.cpp", desc: "منفذ Erbium الكامل v3 — 100 دالة (83+17 خارج Finders.cpp) × 11 نسخة" },
+      { group: "erbium", name: "Finders-Android-FULL-v5.cpp", desc: "⭐ v5: كل الدوال 89 + محرك RT:: للإيجاد الغاشم وقت-التشغيل (مُختبَر 19/19)" },
+      { group: "erbium", name: "RUNTIME-SUPPORT-v5.md", desc: "⭐ توثيق محرك RT:: + الأدلة + نتائج الاختبار الوظيفي" },
+      { group: "erbium", name: "COVERAGE-MATRIX-v5.md", desc: "مصفوفة v5: ✓ نمط ثابت / ⟳ إيجاد وقت-تشغيل — 93.3%" },
+      { group: "erbium", name: "Finders-Android-FULL-v4.cpp", desc: "v4: 717 نمط فريدة مُتحققة (بدون سلاسل وقت-التشغيل)" },
+      { group: "erbium", name: "UNIVERSALITY-REPORT.md", desc: "تقرير الكونية — وضع no-patterns استعاد 728/1034" },
+      { group: "erbium", name: "Finders-Android-FULL-v3.cpp", desc: "v3 — 100 دالة (83+17 خارج Finders.cpp) × 11 نسخة" },
       { group: "erbium", name: "VERIFICATION-REPORT-v3.md", desc: "تقرير التحقق v3 — المقارنة مع FortniteClient-Win64-Shipping.exe" },
       { group: "erbium", name: "COVERAGE-MATRIX-v3.md", desc: "مصفوفة تغطية v3 (94 دالة × 11 نسخة)" },
-      { group: "erbium", name: "final_resolved_v3.json", desc: "كل الحلول النهائية (عناوين/أنماط/فهارس) — JSON" },
+      { group: "erbium", name: "final_resolved_v4.json", desc: "كل الحلول النهائية v4 (عناوين/أنماط/فهارس) — JSON" },
       { group: "erbium", name: "verify_p1_v3.json", desc: "نتائج التحقق cross-arch ضد exe ويندوز" },
       { group: "erbium", name: "COVERAGE-MATRIX.md", desc: "مصفوفة التغطية (النسخة القديمة)" },
       { group: "erbium", name: "FINAL-REPORT.md", desc: "التقرير النهائي والمنهجية" },
