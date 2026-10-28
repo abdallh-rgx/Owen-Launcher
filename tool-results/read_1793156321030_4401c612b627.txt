@@ -1,0 +1,1454 @@
+     1→#define _GNU_SOURCE
+     2→#include <stdio.h>
+     3→#include <stdlib.h>
+     4→#include <string.h>
+     5→#include <stdint.h>
+     6→#include <pthread.h>
+     7→#include <dlfcn.h>
+     8→#include <sys/mman.h>
+     9→#include <unistd.h>
+    10→#include <fcntl.h>
+    11→#include <errno.h>
+    12→#include <sys/socket.h>
+    13→#include <netinet/in.h>
+    14→#include <arpa/inet.h>
+    15→#include <netdb.h>
+    16→
+    17→static char g_backend_url[4096] = "http://127.0.0.1:3551";
+    18→
+    19→typedef uint16_t TCHAR;
+    20→
+    21→struct FString {
+    22→    TCHAR*  data;
+    23→    int32_t length;
+    24→    int32_t capacity;
+    25→};
+    26→
+    27→static char* FString_ToCStr(const struct FString* str) {
+    28→    if (!str || !str->data || str->length <= 0) return NULL;
+    29→    int maxBytes = (str->length * 3) + 1;
+    30→    char* out = (char*)malloc(maxBytes);
+    31→    if (!out) return NULL;
+    32→    int o = 0;
+    33→    int i;
+    34→    for (i = 0; i < str->length - 1; i++) {
+    35→        uint16_t c = str->data[i];
+    36→        if (c <= 0x7F) { out[o++] = (char)c; }
+    37→        else if (c <= 0x7FF) { out[o++] = (char)(0xC0 | (c >> 6)); out[o++] = (char)(0x80 | (c & 0x3F)); }
+    38→        else { out[o++] = (char)(0xE0 | (c >> 12)); out[o++] = (char)(0x80 | ((c >> 6) & 0x3F)); out[o++] = (char)(0x80 | (c & 0x3F)); }
+    39→    }
+    40→    out[o] = 0;
+    41→    return out;
+    42→}
+    43→
+    44→static struct FString FString_FromCStr(const char* str) {
+    45→    struct FString fs;
+    46→    memset(&fs, 0, sizeof(fs));
+    47→    if (!str) return fs;
+    48→    int utf16len = 0;
+    49→    const unsigned char* s = (const unsigned char*)str;
+    50→    while (*s) {
+    51→        if ((*s & 0x80) == 0) { s += 1; utf16len += 1; }
+    52→        else if ((*s & 0xE0) == 0xC0) { s += 2; utf16len += 1; }
+    53→        else if ((*s & 0xF0) == 0xE0) { s += 3; utf16len += 1; }
+    54→        else { s += 4; utf16len += 1; }
+    55→    }
+    56→    fs.length = fs.capacity = utf16len + 1;
+    57→    fs.data = (TCHAR*)malloc(fs.capacity * sizeof(TCHAR));
+    58→    if (!fs.data) { fs.length = fs.capacity = 0; return fs; }
+    59→    int i = 0;
+    60→    s = (const unsigned char*)str;
+    61→    while (*s) {
+    62→        if ((*s & 0x80) == 0) { fs.data[i++] = *s++; }
+    63→        else if ((*s & 0xE0) == 0xC0) { fs.data[i++] = (uint16_t)(((s[0] & 0x1F) << 6) | (s[1] & 0x3F)); s += 2; }
+    64→        else if ((*s & 0xF0) == 0xE0) { fs.data[i++] = (uint16_t)(((s[0] & 0x0F) << 12) | ((s[1] & 0x3F) << 6) | (s[2] & 0x3F)); s += 3; }
+    65→        else { fs.data[i++] = '?'; s += 4; }
+    66→    }
+    67→    fs.data[i] = 0;
+    68→    return fs;
+    69→}
+    70→
+    71→static void FString_Free(struct FString* str) {
+    72→    if (!str) return;
+    73→    if (str->data) free(str->data);
+    74→    str->data = NULL;
+    75→    str->length = 0;
+    76→    str->capacity = 0;
+    77→}
+    78→
+    79→#define URL_HOST_MAX 1024
+    80→#define URL_PATH_MAX 4096
+    81→#define URL_TOTAL_MAX (URL_HOST_MAX + URL_PATH_MAX)
+    82→
+    83→struct Url {
+    84→    char host[URL_HOST_MAX];
+    85→    char pathAndQuery[URL_PATH_MAX];
+    86→};
+    87→
+    88→static void Url_ParseUrl(const char* url, struct Url* out) {
+    89→    if (!url || !out) return;
+    90→    out->host[0] = '\0';
+    91→    out->pathAndQuery[0] = '\0';
+    92→    if (url[0] == '\0') return;
+    93→    const char* proto_sep = "://";
+    94→    const char* remainder = NULL;
+    95→    const char* path_start = NULL;
+    96→    const char* proto_end = strstr(url, proto_sep);
+    97→    if (proto_end) {
+    98→        size_t host_len = proto_end - url + 3;
+    99→        if (host_len >= URL_HOST_MAX) host_len = URL_HOST_MAX - 1;
+   100→        strncpy(out->host, url, host_len);
+   101→        out->host[host_len] = '\0';
+   102→        remainder = proto_end + 3;
+   103→        path_start = strchr(remainder, '/');
+   104→        if (path_start) {
+   105→            size_t domain_len = path_start - remainder;
+   106→            if (strlen(out->host) + domain_len < URL_HOST_MAX) strncat(out->host, remainder, domain_len);
+   107→            size_t path_len = strlen(path_start);
+   108→            if (path_len >= URL_PATH_MAX) path_len = URL_PATH_MAX - 1;
+   109→            strncpy(out->pathAndQuery, path_start, path_len);
+   110→            out->pathAndQuery[path_len] = '\0';
+   111→        } else {
+   112→            if (strlen(out->host) + strlen(remainder) < URL_HOST_MAX) strcat(out->host, remainder);
+   113→        }
+   114→    } else {
+   115→        path_start = strchr(url, '/');
+   116→        if (path_start) {
+   117→            size_t domain_len = path_start - url;
+   118→            if (domain_len >= URL_HOST_MAX) domain_len = URL_HOST_MAX - 1;
+   119→            strncpy(out->host, url, domain_len);
+   120→            out->host[domain_len] = '\0';
+   121→            size_t path_len = strlen(path_start);
+   122→            if (path_len >= URL_PATH_MAX) path_len = URL_PATH_MAX - 1;
+   123→            strncpy(out->pathAndQuery, path_start, path_len);
+   124→            out->pathAndQuery[path_len] = '\0';
+   125→        } else {
+   126→            strncpy(out->host, url, URL_HOST_MAX - 1);
+   127→            out->host[URL_HOST_MAX - 1] = '\0';
+   128→        }
+   129→    }
+   130→}
+   131→
+   132→static int ShouldRedirect(const char* host) {
+   133→    char stripped[URL_HOST_MAX];
+   134→    strncpy(stripped, host, sizeof(stripped) - 1);
+   135→    stripped[sizeof(stripped) - 1] = '\0';
+   136→    if (strncmp(stripped, "http://", 7) == 0) memmove(stripped, stripped + 7, strlen(stripped + 7) + 1);
+   137→    else if (strncmp(stripped, "https://", 8) == 0) memmove(stripped, stripped + 8, strlen(stripped + 8) + 1);
+   138→    char* colon = strchr(stripped, ':');
+   139→    if (colon) *colon = '\0';
+   140→    const char* domains[] = {
+   141→        "game-social.epicgames.com",
+   142→        "ol.epicgames.com",
+   143→        "ol.epicgames.net",
+   144→        "on.epicgames.com",
+   145→        "ak.epicgames.com",
+   146→        "epicgames.dev"
+   147→    };
+   148→    int num_domains = sizeof(domains) / sizeof(domains[0]);
+   149→    int i;
+   150→    for (i = 0; i < num_domains; i++) {
+   151→        size_t dlen = strlen(domains[i]);
+   152→        size_t slen = strlen(stripped);
+   153→        if (slen >= dlen && strcmp(stripped + slen - dlen, domains[i]) == 0) return 1;
+   154→    }
+   155→    return 0;
+   156→}
+   157→
+   158→static void CreateUrl(const char* host, const char* pathAndQuery, char* out, size_t out_size) {
+   159→    if (!out || out_size == 0) return;
+   160→    size_t host_len = host ? strlen(host) : 0;
+   161→    size_t path_len = pathAndQuery ? strlen(pathAndQuery) : 0;
+   162→    size_t total = host_len + path_len;
+   163→    if (total >= out_size) total = out_size - 1;
+   164→    if (host_len > 0) memcpy(out, host, host_len > total ? total : host_len);
+   165→    if (path_len > 0 && total > host_len) memcpy(out + host_len, pathAndQuery, total - host_len);
+   166→    out[total] = '\0';
+   167→}
+   168→
+   169→static void url_encode(const char* src, char* dst, size_t dst_size) {
+   170→    if (!dst || dst_size == 0) return;
+   171→    const char* hex = "0123456789ABCDEF";
+   172→    size_t i = 0, j = 0;
+   173→    while (src[i] && j + 3 < dst_size) {
+   174→        unsigned char c = src[i];
+   175→        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') ||
+   176→            c == '-' || c == '_' || c == '.' || c == '~') {
+   177→            dst[j++] = c;
+   178→        } else {
+   179→            dst[j++] = '%';
+   180→            dst[j++] = hex[c >> 4];
+   181→            dst[j++] = hex[c & 15];
+   182→        }
+   183→        i++;
+   184→    }
+   185→    dst[j] = '\0';
+   186→}
+   187→
+   188→static void send_version_report(const char* version) {
+   189→    struct Url url;
+   190→    Url_ParseUrl(g_backend_url, &url);
+   191→    char host[256];
+   192→    strncpy(host, url.host, sizeof(host)-1);
+   193→    if (strncmp(host, "http://", 7) == 0) memmove(host, host+7, strlen(host+7)+1);
+   194→    else if (strncmp(host, "https://", 8) == 0) memmove(host, host+8, strlen(host+8)+1);
+   195→    char* port_str = "80";
+   196→    char* colon = strchr(host, ':');
+   197→    if (colon) {
+   198→        *colon = '\0';
+   199→        port_str = colon+1;
+   200→    }
+   201→    struct addrinfo hints, *res;
+   202→    memset(&hints, 0, sizeof(hints));
+   203→    hints.ai_family = AF_UNSPEC;
+   204→    hints.ai_socktype = SOCK_STREAM;
+   205→    int err = getaddrinfo(host, port_str, &hints, &res);
+   206→    if (err) return;
+   207→    int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+   208→    if (sock < 0) { freeaddrinfo(res); return; }
+   209→    if (connect(sock, res->ai_addr, res->ai_addrlen) < 0) { close(sock); freeaddrinfo(res); return; }
+   210→    char body[512];
+   211→    snprintf(body, sizeof(body), "GameVersion = \"%s\"", version);
+   212→    char request[1024];
+   213→    snprintf(request, sizeof(request),
+   214→        "POST / HTTP/1.1\r\n"
+   215→        "Host: %s\r\n"
+   216→        "Content-Type: text/plain\r\n"
+   217→        "Content-Length: %zu\r\n"
+   218→        "Connection: close\r\n"
+   219→        "\r\n"
+   220→        "%s", host, strlen(body), body);
+   221→    send(sock, request, strlen(request), 0);
+   222→    close(sock);
+   223→    freeaddrinfo(res);
+   224→}
+   225→
+   226→static struct {
+   227→    const char* version;
+   228→    uint32_t pr_offset;
+   229→    uint16_t geturl_off;
+   230→    uint32_t seturl_off;
+   231→} ue_offsets[] = {
+   232→    {"++Fortnite+Release-18.40-CL-18167774", 0x95FB1C4, 0x70, 0x95F8108},
+   233→    {"++Fortnite+Release-19.00-CL-18335626", 0x09FC7F18, 0x70, 0x09FC5A20},
+   234→    {"++Fortnite+Release-19.00-CL-18380290", 0x09FC8064, 0x70, 0x09FC5B6C},
+   235→    {"++Fortnite+Release-19.01-CL-18441387", 0x0A04AEF4, 0x70, 0x0A0489FC},
+   236→    {"++Fortnite+Release-19.01-CL-18467134", 0x0A04B09C, 0x70, 0x0A048BA4},
+   237→    {"++Fortnite+Release-19.10-CL-18593273", 0x0B98A7C8, 0x70, 0x0B988370},
+   238→    {"++Fortnite+Release-19.10-CL-18642366", 0x0B98B468, 0x70, 0x0B989010},
+   239→    {"++Fortnite+Release-19.10-CL-18675304", 0x0B98B690, 0x70, 0x0B989238},
+   240→    {"++Fortnite+Release-19.20-CL-18778007", 0x0B972F00, 0x70, 0x0B970A90},
+   241→    {"++Fortnite+Release-19.30-CL-18931164", 0x0818DAA8, 0x70, 0x0818B650},
+   242→    {"++Fortnite+Release-19.30-CL-19036451", 0x0818E1C0, 0x70, 0x0818BD68},
+   243→    {"++Fortnite+Release-19.40-CL-19121574", 0x0BD05208, 0x70, 0x0BD02BC4},
+   244→    {"++Fortnite+Release-20.00-CL-19411831", 0x0C927874, 0x70, 0x0C925220},
+   245→    {"++Fortnite+Release-20.10-CL-19582505", 0x086D6468, 0x70, 0x086D400C},
+   246→    {"++Fortnite+Release-20.20-CL-19751212", 0x087ADAD8, 0x70, 0x087AB660},
+   247→    {"++Fortnite+Release-20.20-CL-19864603", 0x087ADFE4, 0x70, 0x087ABB6C},
+   248→    {"++Fortnite+Release-20.30-CL-20005561", 0x087A901C, 0x70, 0x087A6BA8},
+   249→    {"++Fortnite+Release-20.30-CL-20037261", 0x087A9204, 0x70, 0x087A6D90},
+   250→    {"++Fortnite+Release-20.40-CL-20175294", 0x088C1340, 0x70, 0x088BEEC8},
+   251→    {"++Fortnite+Release-20.40-CL-20244966", 0x088C178C, 0x70, 0x088BF314},
+   252→    {"++Fortnite+Release-21.00-CL-20389800", 0x08A6A088, 0x70, 0x08A67C10},
+   253→    {"++Fortnite+Release-21.00-CL-20580074", 0x08A6AE30, 0x70, 0x08A689B8},
+   254→    {"++Fortnite+Release-21.10-CL-20696680", 0x08BDE4C4, 0x70, 0x08BDC0BC},
+   255→    {"++Fortnite+Release-21.10-CL-20805132", 0x08BDEAB4, 0x70, 0x08BDC6AC},
+   256→    {"++Fortnite+Release-21.20-CL-20938145", 0x08C12EF8, 0x70, 0x08C10AF0},
+   257→    {"++Fortnite+Release-21.20-CL-20978394", 0x08C12B3C, 0x70, 0x08C10734},
+   258→    {"++Fortnite+Release-21.20-CL-21014428", 0x08C13048, 0x70, 0x08C10C40},
+   259→    {"++Fortnite+Release-21.30-CL-21088273", 0x089F02F0, 0x70, 0x089EDCF8},
+   260→    {"++Fortnite+Release-21.40-CL-21347928", 0x08761B30, 0x70, 0x0875F794},
+   261→    {"++Fortnite+Release-21.40-CL-21431554", 0x08763A6C, 0x70, 0x087616D0},
+   262→    {"++Fortnite+Release-21.50-CL-21557619", 0x0878EEE4, 0x70, 0x0878CEAC},
+   263→    {"++Fortnite+Release-21.51-CL-21785624", 0x087DA864, 0x70, 0x087D882C},
+   264→    {"++Fortnite+Release-22.00-CL-22031344", 0x8CD9F20, 0x70, 0x8CD83CC},
+   265→    {"++Fortnite+Release-22.00-CL-22107157", 0x8CE1170, 0x70, 0x8CDF61C},
+   266→    {"++Fortnite+Release-22.10-CL-22240570", 0x932D314, 0x70, 0x932B7C0},
+   267→    {"++Fortnite+Release-22.20-CL-22545427", 0x932DE98, 0x70, 0x932C150},
+   268→    {"++Fortnite+Release-22.30-CL-22854046", 0x8F2F4C4, 0x70, 0x8F2D77C},
+   269→    {"++Fortnite+Release-22.30-CL-22886174", 0x8F2F740, 0x70, 0x8F2D9F8},
+   270→    {"++Fortnite+Release-22.40-CL-23070899", 0x8FE0F9C, 0x70, 0x8FDF254},
+   271→    {"++Fortnite+Release-23.00-CL-23281232", 0x6AA9BD8, 0x70, 0x8FFF24C},
+   272→    {"++Fortnite+Release-23.00-CL-23385779", 0x6AAF768, 0x70, 0x8FFD0B8},
+   273→    {"++Fortnite+Release-23.10-CL-23443094", 0x69AB370, 0x70, 0x915CF10},
+   274→    {"++Fortnite+Release-23.10-CL-23572221", 0x69ACD44, 0x70, 0x915F73C},
+   275→    {"++Fortnite+Release-23.20-CL-23659353", 0x6F2B3FC, 0x70, 0x94EDFD8},
+   276→    {"++Fortnite+Release-23.20-CL-23783097", 0x6FE5E88, 0x70, 0x95413E0},
+   277→    {"++Fortnite+Release-23.30-CL-23901854", 0x702FBE4, 0x70, 0x95B15F8},
+   278→    {"++Fortnite+Release-23.30-CL-23937783", 0x70303DC, 0x70, 0x95B24D8},
+   279→    {"++Fortnite+Release-23.30-CL-23986860", 0x7030908, 0x70, 0x95B472C},
+   280→    {"++Fortnite+Release-23.40-CL-24087481", 0x6E135A8, 0x70, 0x9701750},
+   281→    {"++Fortnite+Release-23.40-CL-24230880", 0x6E133D4, 0x70, 0x9701A98},
+   282→    {"++Fortnite+Release-23.50-CL-24376996", 0x6EFF15C, 0x70, 0x97220D8},
+   283→    {"++Fortnite+Release-24.00-CL-24518431", 0x7108914, 0x70, 0x7109570},
+   284→    {"++Fortnite+Release-24.01-CL-24665656", 0x71799D8, 0x70, 0x717A634},
+   285→    {"++Fortnite+Release-24.10-CL-24770548", 0x71C8AB4, 0x70, 0x71C9710},
+   286→    {"++Fortnite+Release-24.20-CL-24939793", 0x72DA320, 0x70, 0x72DAFC0},
+   287→    {"++Fortnite+Release-24.30-CL-25280217", 0x712C410, 0x70, 0x712D0B0},
+   288→    {"++Fortnite+Release-24.30-CL-25330280", 0x712CA1C, 0x70, 0x712D6BC},
+   289→    {"++Fortnite+Release-24.40-CL-25469380", 0x700D6FC, 0x70, 0x700E39C},
+   290→    {"++Fortnite+Release-24.40-CL-25595478", 0x700E1FC, 0x70, 0x700EE9C},
+   291→    {"++Fortnite+Release-25.00-CL-25695576", 0x739A09C, 0x70, 0x739AD44},
+   292→    {"++Fortnite+Release-25.00-CL-25913641", 0x739C67C, 0x70, 0x739D324},
+   293→    {"++Fortnite+Release-25.10-CL-26000958", 0x73B68A4, 0x70, 0x73B754C},
+   294→    {"++Fortnite+Release-25.11-CL-26227037", 0x73B85F8, 0x70, 0x73B92A0},
+   295→    {"++Fortnite+Release-25.20-CL-26474516", 0x76D98A8, 0x70, 0x76DA550},
+   296→    {"++Fortnite+Release-25.20-CL-26643816", 0x76D6A70, 0x70, 0x76D7718},
+   297→    {"++Fortnite+Release-25.30-CL-26867995", 0x77103EC, 0x70, 0x7711094},
+   298→    {"++Fortnite+Release-26.00-CL-27233190", 0x80A49C4, 0x78, 0x7D7EE28},
+   299→    {"++Fortnite+Release-26.00-CL-27405594", 0x80A54A0, 0x78, 0x7D7F480},
+   300→    {"++Fortnite+Release-26.10-CL-27665530", 0x81CA8C0, 0x78, 0x7EA9220},
+   301→    {"++Fortnite+Release-26.20-CL-28096793", 0x7ABD100, 0x78, 0x7ABE024},
+   302→    {"++Fortnite+Release-26.20-CL-28333111", 0x7ABD108, 0x78, 0x7ABE02C},
+   303→    {"++Fortnite+Release-26.30-CL-28520140", 0x7B31F28, 0x78, 0x80F59A0},
+   304→    {"++Fortnite+Release-26.30-CL-28620401", 0x7B31950, 0x78, 0x80F53D4},
+   305→    {"++Fortnite+Release-26.30-CL-28688692", 0x7B34CB0, 0x78, 0x80F885C},
+   306→    {"++Fortnite+Release-26.30-CL-28849396", 0x7B35108, 0x78, 0x80F8CB4},
+   307→    {"++Fortnite+Release-26.30-CL-28938851", 0x7B346F0, 0x78, 0x80F82A8},
+   308→    {"++Fortnite+Release-27.00-CL-29072303", 0x840093C, 0x88, 0x8850D48},
+   309→    {"++Fortnite+Release-27.10-CL-29703186", 0x8517AA4, 0x88, 0x893A5F4},
+   310→    {"++Fortnite+Release-27.11-CL-29739262", 0x8F3F580, 0x88, 0x93527E4},
+   311→    {"++Fortnite+Release-28.00-CL-29915848", 0x967E7FC, 0x150, 0x9A96B4C},
+   312→    {"++Fortnite+Release-28.01-CL-30342671", 0x968484C, 0x150, 0x9AADE34},
+   313→    {"++Fortnite+Release-28.10-CL-30676362", 0x969A70C, 0x160, 0x9A8E0FC},
+   314→    {"++Fortnite+Release-28.10-CL-30835064", 0x969B098, 0x160, 0x9A8EA84},
+   315→    {"++Fortnite+Release-28.20-CL-31165234", 0x98E27AC, 0x160, 0x9CBE7D4},
+   316→    {"++Fortnite+Release-28.20-CL-31286935", 0x98E239C, 0x160, 0x9CBE3C8},
+   317→    {"++Fortnite+Release-28.30-CL-31511038", 0x9914B88, 0x160, 0x9D11EF8},
+   318→    {"++Fortnite+Release-29.00-CL-31978752", 0x50B8CC0, 0x208, 0x99FA714},
+   319→    {"++Fortnite+Release-29.00-CL-32116959", 0x50B8C80, 0x208, 0x99F9D18},
+   320→    {"++Fortnite+Release-29.00-CL-32148000", 0x50B8C74, 0x208, 0x99FA754},
+   321→    {"++Fortnite+Release-29.01-CL-32236377", 0x50DAF3C, 0x208, 0x9A31F88},
+   322→    {"++Fortnite+Release-29.10-CL-32391220", 0x512A56C, 0x218, 0x9B2326C},
+   323→    {"++Fortnite+Release-29.10-CL-32567225", 0x512B56C, 0x218, 0x9B2557C},
+   324→    {"++Fortnite+Release-29.20-CL-32716692", 0x518A638, 0x268, 0x9C7EDD4},
+   325→    {"++Fortnite+Release-29.30-CL-32982357", 0x51D399C, 0x268, 0x9D246C0},
+   326→    {"++Fortnite+Release-29.40-CL-33291686", 0x51CB330, 0x268, 0x9C72D10},
+   327→    {"++Fortnite+Release-29.40-CL-33502036", 0x51CA330, 0x268, 0x9C6C3C4},
+   328→    {"++Fortnite+Release-30.00-CL-33760522", 0x52C3300, 0x270, 0x9E875A0},
+   329→    {"++Fortnite+Release-30.00-CL-33962396", 0x52C7E74, 0x270, 0x9E8D490},
+   330→    {"++Fortnite+Release-30.10-CL-34184790", 0x535DD9C, 0x270, 0xA00AE98},
+   331→    {"++Fortnite+Release-30.10-CL-34261954", 0x535DD9C, 0x270, 0xA00B1CC},
+   332→    {"++Fortnite+Release-30.20-CL-34488544", 0x53C1278, 0x270, 0xA0E7270},
+   333→    {"++Fortnite+Release-30.20-CL-34597766", 0x53C2278, 0x270, 0xA0E83CC},
+   334→    {"++Fortnite+Release-30.30-CL-34891016", 0x5417020, 0x270, 0xA1ABA5C},
+   335→    {"++Fortnite+Release-30.40-CL-35235494", 0x54827DC, 0x270, 0xA2A3DCC},
+   336→    {"++Fortnite+Release-31.00-CL-35447195", 0x55B55C4, 0x270, 0xA5D7D44},
+   337→    {"++Fortnite+Release-31.00-CL-35820075", 0x604A584, 0x270, 0xB37B56C},
+   338→    {"++Fortnite+Release-31.10-CL-35815136", 0x55DAA28, 0x270, 0xA62C754},
+   339→    {"++Fortnite+Release-31.20-CL-36217724", 0x5631354, 0x270, 0xA6EBED8},
+   340→    {"++Fortnite+Release-31.20-CL-36348035", 0x5631354, 0x270, 0xA6EBE18},
+   341→    {"++Fortnite+Release-31.30-CL-36600465", 0x56A8774, 0x270, 0xA7FA914},
+   342→    {"++Fortnite+Release-31.40-CL-36874825", 0x56C9590, 0x270, 0xA83D510},
+   343→    {"++Fortnite+Release-31.40-CL-37076506", 0x56C9590, 0x270, 0xA83E7A8},
+   344→    {"++Fortnite+Release-31.41-CL-37324991", 0x56D05B8, 0x270, 0xA84D3CC},
+   345→    {"++Fortnite+Release-32.00-CL-37505882", 0x59A6670, 0x288, 0xAB85574},
+   346→    {"++Fortnite+Release-32.00-CL-37747778", 0x5963A70, 0x288, 0xAB357F8},
+   347→    {"++Fortnite+Release-32.10-CL-37958378", 0x5974D60, 0x288, 0xAB5C23C},
+   348→    {"++Fortnite+Release-32.11-CL-38202817", 0x59A4E40, 0x288, 0xABBF324},
+   349→    {"++Fortnite+Release-32.11-CL-38371047", 0x59AFD74, 0x288, 0xABBFC48},
+   350→    {"++Fortnite+Release-33.00-CL-38416954", 0x5A42DF0, 0x288, 0xAE0E770},
+   351→    {"++Fortnite+Release-33.00-CL-38504598", 0x5A36F70, 0x288, 0xAD9CE6C}
+   352→};
+   353→
+   354→static struct {
+   355→    const char* version;
+   356→    uint32_t pr_offset;
+   357→    uint16_t geturl_off;
+   358→    uint32_t seturl_off;
+   359→} eos_offsets[] = {
+   360→    {"++Fortnite+Release-22.00-CL-22031344", 0xDEC088, 0x178, 0xDE8A3C},
+   361→    {"++Fortnite+Release-22.00-CL-22107157", 0xDEC088, 0x178, 0xDE8A3C},
+   362→    {"++Fortnite+Release-22.10-CL-22240570", 0xF20DC4, 0x178, 0xF1D778},
+   363→    {"++Fortnite+Release-22.20-CL-22545427", 0xF28A34, 0x178, 0xF253E8},
+   364→    {"++Fortnite+Release-22.30-CL-22854046", 0xF2D508, 0x178, 0xF29EBC},
+   365→    {"++Fortnite+Release-22.30-CL-22886174", 0xF2D508, 0x178, 0xF29EBC},
+   366→    {"++Fortnite+Release-22.40-CL-23070899", 0xFA881C, 0x178, 0xFA51D0},
+   367→    {"++Fortnite+Release-23.00-CL-23281232", 0xFA885C, 0x178, 0xFA5210},
+   368→    {"++Fortnite+Release-23.00-CL-23385779", 0xFA885C, 0x178, 0xFA5210},
+   369→    {"++Fortnite+Release-23.10-CL-23443094", 0xFA885C, 0x178, 0xFA5210},
+   370→    {"++Fortnite+Release-23.10-CL-23572221", 0xFA885C, 0x178, 0xFA5210},
+   371→    {"++Fortnite+Release-23.20-CL-23659353", 0xFAC0F0, 0x178, 0xFA8AA4},
+   372→    {"++Fortnite+Release-23.20-CL-23783097", 0xFAC0F0, 0x178, 0xFA8AA4},
+   373→    {"++Fortnite+Release-23.30-CL-23901854", 0xF70A5C, 0x178, 0xF6D410},
+   374→    {"++Fortnite+Release-23.30-CL-23937783", 0xF70A5C, 0x178, 0xF6D410},
+   375→    {"++Fortnite+Release-23.30-CL-23986860", 0xF70A5C, 0x178, 0xF6D410},
+   376→    {"++Fortnite+Release-23.40-CL-24087481", 0xF70A5C, 0x178, 0xF6D410},
+   377→    {"++Fortnite+Release-23.40-CL-24230880", 0xF70A5C, 0x178, 0xF6D410},
+   378→    {"++Fortnite+Release-23.50-CL-24376996", 0xF880E4, 0x178, 0xF84A98},
+   379→    {"++Fortnite+Release-24.00-CL-24518431", 0xF8A590, 0x178, 0xF86F44},
+   380→    {"++Fortnite+Release-24.01-CL-24665656", 0xF8A590, 0x178, 0xF86F44},
+   381→    {"++Fortnite+Release-24.10-CL-24770548", 0xF8A590, 0x178, 0xF86F44},
+   382→    {"++Fortnite+Release-24.20-CL-24939793", 0xFB2DFC, 0x178, 0xFAF7B0},
+   383→    {"++Fortnite+Release-24.30-CL-25280217", 0xFB2DFC, 0x178, 0xFAF7B0},
+   384→    {"++Fortnite+Release-24.30-CL-25330280", 0xFB2DFC, 0x178, 0xFAF7B0},
+   385→    {"++Fortnite+Release-24.40-CL-25469380", 0xFB2DFC, 0x178, 0xFAF7B0},
+   386→    {"++Fortnite+Release-24.40-CL-25595478", 0xFB2DFC, 0x178, 0xFAF7B0},
+   387→    {"++Fortnite+Release-25.00-CL-25695576", 0xFB2DFC, 0x178, 0xFAF7B0},
+   388→    {"++Fortnite+Release-25.00-CL-25913641", 0xFB2DFC, 0x178, 0xFAF7B0},
+   389→    {"++Fortnite+Release-25.10-CL-26000958", 0xFD14D8, 0x178, 0xFCDE8C},
+   390→    {"++Fortnite+Release-25.11-CL-26227037", 0xFD14D8, 0x178, 0xFCDE8C},
+   391→    {"++Fortnite+Release-25.20-CL-26474516", 0xFD31D4, 0x178, 0xFCFB88},
+   392→    {"++Fortnite+Release-25.20-CL-26643816", 0xFD31D4, 0x178, 0xFCFB88},
+   393→    {"++Fortnite+Release-25.30-CL-26867995", 0xFF5118, 0x178, 0xFF1ACC},
+   394→    {"++Fortnite+Release-26.00-CL-27233190", 0x1030348, 0x178, 0x102CCFC},
+   395→    {"++Fortnite+Release-26.00-CL-27405594", 0x1030348, 0x178, 0x102CCFC},
+   396→    {"++Fortnite+Release-26.10-CL-27665530", 0x1031F34, 0x178, 0x102E8E8},
+   397→    {"++Fortnite+Release-26.20-CL-28096793", 0xFDCB40, 0x178, 0xFD94F4},
+   398→    {"++Fortnite+Release-26.20-CL-28333111", 0xFDCB40, 0x178, 0xFD94F4},
+   399→    {"++Fortnite+Release-26.30-CL-28520140", 0x104EC18, 0x178, 0x104B5CC},
+   400→    {"++Fortnite+Release-26.30-CL-28620401", 0x104EC18, 0x178, 0x104B5CC},
+   401→    {"++Fortnite+Release-26.30-CL-28688692", 0x104F0B4, 0x178, 0x104BA68},
+   402→    {"++Fortnite+Release-26.30-CL-28849396", 0x104F0B4, 0x178, 0x104BA68},
+   403→    {"++Fortnite+Release-26.30-CL-28938851", 0x104F0B4, 0x178, 0x104BA68},
+   404→    {"++Fortnite+Release-27.00-CL-29072303", 0x104F0B4, 0x178, 0x104BA68},
+   405→    {"++Fortnite+Release-27.10-CL-29703186", 0x1052524, 0x178, 0x104EED8},
+   406→    {"++Fortnite+Release-27.11-CL-29739262", 0x1052524, 0x178, 0x104EED8},
+   407→    {"++Fortnite+Release-28.00-CL-29915848", 0x10D7BDC, 0x178, 0x10D4590},
+   408→    {"++Fortnite+Release-28.01-CL-30342671", 0x10D6C0C, 0x178, 0x10D35C0},
+   409→    {"++Fortnite+Release-28.10-CL-30676362", 0x10EF380, 0x178, 0x10EBD34},
+   410→    {"++Fortnite+Release-28.10-CL-30835064", 0x10EF380, 0x178, 0x10EBD34},
+   411→    {"++Fortnite+Release-28.20-CL-31165234", 0x110335C, 0x178, 0x10FFD10},
+   412→    {"++Fortnite+Release-28.20-CL-31286935", 0x110335C, 0x178, 0x10FFD10},
+   413→    {"++Fortnite+Release-28.30-CL-31511038", 0x1105254, 0x178, 0x1101C08},
+   414→    {"++Fortnite+Release-29.00-CL-31978752", 0x1104044, 0x178, 0x11009F8},
+   415→    {"++Fortnite+Release-29.00-CL-32116959", 0x1104044, 0x178, 0x11009F8},
+   416→    {"++Fortnite+Release-29.00-CL-32148000", 0x1104044, 0x178, 0x11009F8},
+   417→    {"++Fortnite+Release-29.01-CL-32236377", 0x1104044, 0x178, 0x11009F8},
+   418→    {"++Fortnite+Release-29.10-CL-32391220", 0x103C6A8, 0x178, 0x103905C},
+   419→    {"++Fortnite+Release-29.10-CL-32567225", 0x103C6A8, 0x178, 0x103905C},
+   420→    {"++Fortnite+Release-29.20-CL-32716692", 0x10422CC, 0x178, 0x103EC80},
+   421→    {"++Fortnite+Release-29.30-CL-32982357", 0x105B2C8, 0x178, 0x1057C7C},
+   422→    {"++Fortnite+Release-29.40-CL-33291686", 0x10A8028, 0x178, 0x10A49DC},
+   423→    {"++Fortnite+Release-29.40-CL-33502036", 0x10A8028, 0x178, 0x10A49DC},
+   424→    {"++Fortnite+Release-30.00-CL-33760522", 0x10A8148, 0x178, 0x10A4AFC},
+   425→    {"++Fortnite+Release-30.00-CL-33962396", 0x10A8148, 0x178, 0x10A4AFC},
+   426→    {"++Fortnite+Release-30.10-CL-34184790", 0x10ADA38, 0x178, 0x10AA3EC},
+   427→    {"++Fortnite+Release-30.10-CL-34261954", 0x10ADA38, 0x178, 0x10AA3EC},
+   428→    {"++Fortnite+Release-30.20-CL-34488544", 0x10BA2DC, 0x178, 0x10B6C90},
+   429→    {"++Fortnite+Release-30.20-CL-34597766", 0x10BA2DC, 0x178, 0x10B6C90},
+   430→    {"++Fortnite+Release-30.30-CL-34891016", 0x10BA2E0, 0x178, 0x10B6C94},
+   431→    {"++Fortnite+Release-30.40-CL-35235494", 0x10BA2DC, 0x178, 0x10B6C90},
+   432→    {"++Fortnite+Release-31.00-CL-35447195", 0x10BA2DC, 0x178, 0x10B6C90},
+   433→    {"++Fortnite+Release-31.00-CL-35820075", 0x10BA2DC, 0x178, 0x10B6C90},
+   434→    {"++Fortnite+Release-31.10-CL-35815136", 0x10BA2DC, 0x178, 0x10B6C90},
+   435→    {"++Fortnite+Release-31.20-CL-36217724", 0x10DAC84, 0x178, 0x10D7638},
+   436→    {"++Fortnite+Release-31.20-CL-36348035", 0x10DAC84, 0x178, 0x10D7638},
+   437→    {"++Fortnite+Release-31.30-CL-36600465", 0x1141D90, 0x178, 0x113E744},
+   438→    {"++Fortnite+Release-31.40-CL-36874825", 0x11FBB34, 0x178, 0x11F84E8},
+   439→    {"++Fortnite+Release-31.40-CL-37076506", 0x11FBB34, 0x178, 0x11F84E8},
+   440→    {"++Fortnite+Release-31.41-CL-37324991", 0x11FBB34, 0x178, 0x11F84E8},
+   441→    {"++Fortnite+Release-32.00-CL-37505882", 0x11FBB34, 0x178, 0x11F84E8},
+   442→    {"++Fortnite+Release-32.00-CL-37747778", 0x11FBB34, 0x178, 0x11F84E8},
+   443→    {"++Fortnite+Release-32.10-CL-37958378", 0x125F9A4, 0x178, 0x125C358},
+   444→    {"++Fortnite+Release-32.11-CL-38202817", 0x125F9A4, 0x178, 0x125C358},
+   445→    {"++Fortnite+Release-32.11-CL-38371047", 0x125F9A4, 0x178, 0x125C358},
+   446→    {"++Fortnite+Release-33.00-CL-38416954", 0x125F9A4, 0x178, 0x125C358},
+   447→    {"++Fortnite+Release-33.00-CL-38504598", 0x125F9A4, 0x178, 0x125C358}
+   448→};
+   449→
+   450→static const char* detected_version = NULL;
+   451→static uint32_t ue_pr_offset = 0;
+   452→static uint16_t ue_geturl_off = 0;
+   453→static uint32_t ue_seturl_off = 0;
+   454→static uint32_t eos_pr_offset = 0;
+   455→static uint16_t eos_geturl_off = 0;
+   456→static uint32_t eos_seturl_off = 0;
+   457→
+   458→static uintptr_t FindStringInMemory(uintptr_t start, uintptr_t size, const char* target, int wide);
+   459→
+   460→static int detect_version_by_string(const uint8_t* mem, size_t size, int try_wide) {
+   461→    size_t n = sizeof(ue_offsets) / sizeof(ue_offsets[0]);
+   462→    for (size_t i = 0; i < n; i++) {
+   463→        const char* ver_str = ue_offsets[i].version;
+   464→        if (strlen(ver_str) < 10) continue;
+   465→        uintptr_t addr = 0;
+   466→        if (!try_wide) {
+   467→            addr = FindStringInMemory((uintptr_t)mem, size, ver_str, 0);
+   468→        } else {
+   469→            addr = FindStringInMemory((uintptr_t)mem, size, ver_str, 1);
+   470→        }
+   471→        if (addr) {
+   472→            detected_version = ver_str;
+   473→            ue_pr_offset   = ue_offsets[i].pr_offset;
+   474→            ue_geturl_off  = ue_offsets[i].geturl_off;
+   475→            ue_seturl_off  = ue_offsets[i].seturl_off;
+   476→            return 1;
+   477→        }
+   478→    }
+   479→    return 0;
+   480→}
+   481→
+   482→static void load_eos_offsets_for_version(void) {
+   483→    if (!detected_version) {
+   484→        eos_pr_offset = 0;
+   485→        eos_geturl_off = 0;
+   486→        eos_seturl_off = 0;
+   487→        return;
+   488→    }
+   489→    size_t n = sizeof(eos_offsets) / sizeof(eos_offsets[0]);
+   490→    for (size_t i = 0; i < n; i++) {
+   491→        if (strcmp(eos_offsets[i].version, detected_version) == 0) {
+   492→            eos_pr_offset = eos_offsets[i].pr_offset;
+   493→            eos_geturl_off = eos_offsets[i].geturl_off;
+   494→            eos_seturl_off = eos_offsets[i].seturl_off;
+   495→            return;
+   496→        }
+   497→    }
+   498→    eos_pr_offset = 0;
+   499→    eos_geturl_off = 0;
+   500→    eos_seturl_off = 0;
+   501→}
+   502→
+   503→struct ModuleInfo {
+   504→    uintptr_t baseAddress;
+   505→    uintptr_t size;
+   506→    uintptr_t textSectionStart;
+   507→    uintptr_t textSectionSize;
+   508→};
+   509→
+   510→static int GetModuleInfo(const char* moduleName, struct ModuleInfo* outInfo) {
+   511→    FILE* fp = fopen("/proc/self/maps", "rt");
+   512→    if (!fp) return 0;
+   513→    char line[512];
+   514→    uintptr_t minStart = ~(uintptr_t)0;
+   515→    uintptr_t maxEnd = 0;
+   516→    outInfo->textSectionStart = 0;
+   517→    outInfo->textSectionSize = 0;
+   518→    int found = 0;
+   519→    while (fgets(line, sizeof(line), fp)) {
+   520→        if (strstr(line, moduleName)) {
+   521→            uintptr_t start, end;
+   522→            char perms[5];
+   523→            if (sscanf(line, "%lx-%lx %4s", &start, &end, perms) == 3) {
+   524→                found = 1;
+   525→                if (start < minStart) minStart = start;
+   526→                if (end > maxEnd) maxEnd = end;
+   527→                if (perms[0] == 'r' && perms[2] == 'x') {
+   528→                    if (outInfo->textSectionStart == 0) outInfo->textSectionStart = start;
+   529→                    outInfo->textSectionSize += (end - start);
+   530→                }
+   531→            }
+   532→        }
+   533→    }
+   534→    fclose(fp);
+   535→    if (found) {
+   536→        outInfo->baseAddress = minStart;
+   537→        outInfo->size = maxEnd - minStart;
+   538→    }
+   539→    return found;
+   540→}
+   541→
+   542→static uintptr_t FindStringInMemory(uintptr_t start, uintptr_t size, const char* target, int wide) {
+   543→    if (!wide) {
+   544→        size_t targetLen = strlen(target);
+   545→        uintptr_t maxAddr = start + size - targetLen;
+   546→        uintptr_t addr;
+   547→        for (addr = start; addr < maxAddr; addr++) {
+   548→            if (memcmp((void*)addr, target, targetLen) == 0) return addr;
+   549→        }
+   550→    } else {
+   551→        size_t targetLen = strlen(target);
+   552→        size_t wideLen = targetLen * 2;
+   553→        uintptr_t maxAddr = start + size - wideLen;
+   554→        uintptr_t addr;
+   555→        for (addr = start; addr < maxAddr; addr++) {
+   556→            int match = 1;
+   557→            size_t i;
+   558→            for (i = 0; i < targetLen; i++) {
+   559→                if (((uint8_t*)addr)[i * 2] != target[i] || ((uint8_t*)addr)[i * 2 + 1] != 0) {
+   560→                    match = 0;
+   561→                    break;
+   562→                }
+   563→            }
+   564→            if (match) return addr;
+   565→        }
+   566→    }
+   567→    return 0;
+   568→}
+   569→
+   570→typedef uintptr_t addr_t;
+   571→typedef uint32_t addr32_t;
+   572→typedef uint64_t addr64_t;
+   573→typedef void *asm_func_t;
+   574→
+   575→#define ARM64_TMP_REG_NDX_0 17
+   576→
+   577→typedef union _FPReg {
+   578→  __int128_t q;
+   579→  struct { double d1; double d2; } d;
+   580→  struct { float f1; float f2; float f3; float f4; } f;
+   581→} FPReg;
+   582→
+   583→typedef struct {
+   584→  uint64_t dmmpy_0;
+   585→  uint64_t sp;
+   586→  uint64_t dmmpy_1;
+   587→  union {
+   588→    uint64_t x[29];
+   589→    struct { uint64_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28; } regs;
+   590→  } general;
+   591→  uint64_t fp;
+   592→  uint64_t lr;
+   593→  union {
+   594→    FPReg q[32];
+   595→    struct { FPReg q0, q1, q2, q3, q4, q5, q6, q7; FPReg q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29, q30, q31; } regs;
+   596→  } floating;
+   597→} DobbyRegisterContext;
+   598→
+   599→typedef void (*dobby_instrument_callback_t)(void *address, DobbyRegisterContext *ctx);
+   600→typedef addr_t (*dobby_alloc_near_code_callback_t)(uint32_t size, addr_t pos, size_t range);
+   601→
+   602→#define ALIGN_FLOOR(address, range) ((uintptr_t)(address) & ~((uintptr_t)(range) - 1))
+   603→#define ALIGN_CEIL(address, range) (((uintptr_t)(address) + (uintptr_t)(range) - 1) & ~((uintptr_t)(range) - 1))
+   604→#define ALIGN(address, range) ALIGN_FLOOR(address, range)
+   605→
+   606→#define LeftShift(a, b, c) (((a) & ((1 << (b)) - 1)) << (c))
+   607→#define RightShift(a, b, c) (((a) >> (c)) & ((1 << (b)) - 1))
+   608→
+   609→#define submask(x) ((1L << ((x) + 1)) - 1)
+   610→#define bits_(obj, st, fn) (((obj) >> (st)) & submask((fn) - (st)))
+   611→#define bit_(obj, st) (((obj) >> (st)) & 1)
+   612→
+   613→#define set_bit_(obj, st, b) (obj) = ((~(1 << (st))) & (obj)) | ((b) << (st))
+   614→#define set_bits_(obj, st, fn, b) (obj) = ((~(submask((fn) - (st)) << (st))) & (obj)) | ((b) << (st))
+   615→
+   616→#define TMP_REG_0_CODE 17
+   617→#define TMP_REG_0 17
+   618→
+   619→#define kRdShift 0
+   620→#define kRnShift 5
+   621→#define kRtShift 0
+   622→#define kRt2Shift 10
+   623→#define kRmShift 16
+   624→
+   625→#define Rd_(rd) ((rd) << kRdShift)
+   626→#define Rt_(rt) ((rt) << kRtShift)
+   627→#define Rn_(rn) ((rn) << kRnShift)
+   628→#define Rm_(rm) ((rm) << kRmShift)
+   629→
+   630→#define UnconditionalBranchFixed 0x14000000
+   631→#define UnconditionalBranchFixedMask 0x7C000000
+   632→#define UnconditionalBranchMask 0xFC000000
+   633→#define B_ 0x14000000
+   634→#define BL 0x94000000
+   635→
+   636→#define UnconditionalBranchToRegisterFixed 0xD6000000
+   637→#define BR 0xD61F0000
+   638→#define BLR 0xD63F0000
+   639→#define RET 0xD65F0000
+   640→
+   641→#define LoadRegLiteralFixed 0x18000000
+   642→#define LoadRegLiteralFixedMask 0x3B000000
+   643→#define LoadRegLiteralMask 0xFF000000
+   644→
+   645→#define PCRelAddressingFixed 0x10000000
+   646→#define PCRelAddressingFixedMask 0x1F000000
+   647→#define PCRelAddressingMask 0x9F000000
+   648→#define ADR 0x10000000
+   649→#define ADRP 0x90000000
+   650→
+   651→#define CompareBranchFixed 0x34000000
+   652→#define CompareBranchFixedMask 0x7E000000
+   653→#define CompareBranchMask 0xFF000000
+   654→
+   655→#define ConditionalBranchFixed 0x54000000
+   656→#define ConditionalBranchFixedMask 0xFE000000
+   657→#define ConditionalBranchMask 0xFF000010
+   658→
+   659→#define TestBranchFixed 0x36000000
+   660→#define TestBranchFixedMask 0x7E000000
+   661→#define TestBranchMask 0x7F000000
+   662→
+   663→#define MoveWideImmediateFixed 0x12800000
+   664→#define MOVZ 0x40000000
+   665→#define MOVK 0x60000000
+   666→#define MOVN 0x00000000
+   667→#define SixtyFourBits 0x80000000
+   668→
+   669→#define AddSubImmediateFixed 0x11000000
+   670→#define ADD_X_IMM 0x91000000
+   671→#define ADD_W_IMM 0x11000000
+   672→#define SUB_X_IMM 0xD1000000
+   673→#define SUB_W_IMM 0x51000000
+   674→
+   675→#define LoadStoreUnsignedOffsetFixed 0x39000000
+   676→#define LDR_X 0xF9400000
+   677→#define LDR_W 0xB9400000
+   678→#define STR_X 0xF9000000
+   679→#define STR_W 0xB9000000
+   680→
+   681→#define LogicalShiftedFixed 0x0A000000
+   682→#define ORR 0x20000000
+   683→#define ORR_X_SHIFT 0xAA000000
+   684→#define ORR_W_SHIFT 0x2A000000
+   685→
+   686→#define NOP 0xD503201F
+   687→#define BRK 0xD4200000
+   688→
+   689→#define kNoAccess 0
+   690→#define kRead 1
+   691→#define kWrite 2
+   692→#define kExecute 4
+   693→#define kReadWrite (kRead | kWrite)
+   694→#define kReadExecute (kRead | kExecute)
+   695→#define kReadWriteExecute (kRead | kWrite | kExecute)
+   696→
+   697→#define MEM_PERM_R 0x1
+   698→#define MEM_PERM_W 0x2
+   699→#define MEM_PERM_X 0x4
+   700→
+   701→#define TRAMPOLINE_UNKNOWN 0
+   702→#define TRAMPOLINE_ARM64_B_XXX 1
+   703→#define TRAMPOLINE_ARM64_B_XXX_AND_FORWARD_TRAMP 2
+   704→#define TRAMPOLINE_ARM64_ADRP_ADD_BR 3
+   705→#define TRAMPOLINE_ARM64_LDR_BR 4
+   706→#define FORWARD_TRAMPOLINE_ARM64 5
+   707→
+   708→#define ARM64_B_XXX_RANGE ((1ULL << 25) << 2)
+   709→
+   710→static inline int64_t SignExtend(unsigned long x, int M, int N) {
+   711→  char sign_bit = bit_(x, M - 1);
+   712→  unsigned long sign_mask = 0 - sign_bit;
+   713→  x |= ((sign_mask >> M) << M);
+   714→  return (int64_t)x;
+   715→}
+   716→
+   717→static inline int64_t decode_imm14_offset(uint32_t instr) {
+   718→  int64_t imm14 = bits_(instr, 5, 18);
+   719→  int64_t offset = (imm14 << 2);
+   720→  offset = SignExtend(offset, 2 + 14, 64);
+   721→  return offset;
+   722→}
+   723→
+   724→static inline uint32_t encode_imm14_offset(uint32_t instr, int64_t offset) {
+   725→  uint32_t imm14 = bits_((offset >> 2), 0, 13);
+   726→  set_bits_(instr, 5, 18, imm14);
+   727→  return instr;
+   728→}
+   729→
+   730→static inline int64_t decode_imm19_offset(uint32_t instr) {
+   731→  int64_t imm19 = bits_(instr, 5, 23);
+   732→  int64_t offset = (imm19 << 2);
+   733→  offset = SignExtend(offset, 2 + 19, 64);
+   734→  return offset;
+   735→}
+   736→
+   737→static inline uint32_t encode_imm19_offset(uint32_t instr, int64_t offset) {
+   738→  uint32_t imm19 = bits_((offset >> 2), 0, 18);
+   739→  set_bits_(instr, 5, 23, imm19);
+   740→  return instr;
+   741→}
+   742→
+   743→static inline int64_t decode_imm26_offset(uint32_t instr) {
+   744→  int64_t imm26 = bits_(instr, 0, 25);
+   745→  int64_t offset = (imm26 << 2);
+   746→  offset = SignExtend(offset, 2 + 26, 64);
+   747→  return offset;
+   748→}
+   749→
+   750→static inline uint32_t encode_imm26_offset(uint32_t instr, int64_t offset) {
+   751→  uint32_t imm26 = bits_((offset >> 2), 0, 25);
+   752→  set_bits_(instr, 0, 25, imm26);
+   753→  return instr;
+   754→}
+   755→
+   756→static inline int64_t decode_immhi_immlo_offset(uint32_t instr) {
+   757→  uint32_t immlo = bits_(instr, 29, 30);
+   758→  uint32_t immhi = bits_(instr, 5, 23);
+   759→  int64_t imm = (int64_t)immlo | ((int64_t)immhi << 2);
+   760→  imm = SignExtend(imm, 2 + 19, 64);
+   761→  return imm;
+   762→}
+   763→
+   764→static inline int64_t decode_immhi_immlo_zero12_offset(uint32_t instr) {
+   765→  int64_t imm = decode_immhi_immlo_offset(instr);
+   766→  imm = imm << 12;
+   767→  return imm;
+   768→}
+   769→
+   770→static inline int decode_rt(uint32_t instr) { return bits_(instr, 0, 4); }
+   771→static inline int decode_rd(uint32_t instr) { return bits_(instr, 0, 4); }
+   772→
+   773→static inline int inst_is_b_bl(uint32_t instr) { return (instr & UnconditionalBranchFixedMask) == UnconditionalBranchFixed; }
+   774→static inline int inst_is_ldr_literal(uint32_t instr) { return ((instr & LoadRegLiteralFixedMask) == LoadRegLiteralFixed); }
+   775→static inline int inst_is_adr(uint32_t instr) { return (instr & PCRelAddressingFixedMask) == PCRelAddressingFixed && (instr & PCRelAddressingMask) == ADR; }
+   776→static inline int inst_is_adrp(uint32_t instr) { return (instr & PCRelAddressingFixedMask) == PCRelAddressingFixed && (instr & PCRelAddressingMask) == ADRP; }
+   777→static inline int inst_is_b_cond(uint32_t instr) { return (instr & ConditionalBranchFixedMask) == ConditionalBranchFixed; }
+   778→static inline int inst_is_compare_b(uint32_t instr) { return (instr & CompareBranchFixedMask) == CompareBranchFixed; }
+   779→static inline int inst_is_test_b(uint32_t instr) { return (instr & TestBranchFixedMask) == TestBranchFixed; }
+   780→
+   781→static int os_page_size(void) { return (int)sysconf(_SC_PAGESIZE); }
+   782→
+   783→static void clear_cache_arm64(void *start, void *end) {
+   784→  uint64_t xstart = (uint64_t)(uintptr_t)start;
+   785→  uint64_t xend = (uint64_t)(uintptr_t)end;
+   786→  static uint64_t ctr_el0 = 0;
+   787→  if (ctr_el0 == 0) {
+   788→    __asm__ __volatile__("mrs %0, ctr_el0" : "=r"(ctr_el0));
+   789→  }
+   790→  uint64_t addr;
+   791→  if (((ctr_el0 >> 28) & 0x1) == 0x0) {
+   792→    const size_t dcache_line_size = 4 << ((ctr_el0 >> 16) & 15);
+   793→    for (addr = xstart & ~(dcache_line_size - 1); addr < xend; addr += dcache_line_size)
+   794→      __asm__ __volatile__("dc cvau, %0" ::"r"(addr));
+   795→  }
+   796→  __asm__ __volatile__("dsb ish");
+   797→  if (((ctr_el0 >> 29) & 0x1) == 0x0) {
+   798→    const size_t icache_line_size = 4 << ((ctr_el0 >> 0) & 15);
+   799→    for (addr = xstart & ~(icache_line_size - 1); addr < xend; addr += icache_line_size)
+   800→      __asm__ __volatile__("ic ivau, %0" ::"r"(addr));
+   801→    __asm__ __volatile__("dsb ish");
+   802→  }
+   803→  __asm__ __volatile__("isb sy");
+   804→}
+   805→
+   806→typedef struct { addr_t start_; size_t size; } MemRange;
+   807→static inline void MemRange_init(MemRange *r, addr_t start, size_t size) { r->start_ = start; r->size = size; }
+   808→static inline addr_t MemRange_addr(const MemRange *r) { return r->start_; }
+   809→static inline addr_t MemRange_start(const MemRange *r) { return r->start_; }
+   810→static inline addr_t MemRange_end(const MemRange *r) { return r->start_ + r->size; }
+   811→static inline void MemRange_resize(MemRange *r, size_t s) { r->size = s; }
+   812→typedef MemRange MemBlock;
+   813→static inline void MemBlock_init(MemBlock *b, addr_t start, size_t size) { b->start_ = start; b->size = size; }
+   814→
+   815→static MemRange MemRange_intersect(const MemRange *a, const MemRange *b) {
+   816→  MemRange r;
+   817→  addr_t s = a->start_ > b->start_ ? a->start_ : b->start_;
+   818→  addr_t e = (a->start_ + a->size) < (b->start_ + b->size) ? (a->start_ + a->size) : (b->start_ + b->size);
+   819→  if (s < e) MemRange_init(&r, s, e - s);
+   820→  else MemRange_init(&r, 0, 0);
+   821→  return r;
+   822→}
+   823→
+   824→typedef struct { uint8_t *buffer; uint32_t buffer_size; uint32_t buffer_capacity; } MemBuffer;
+   825→static void MemBuffer_init(MemBuffer *b) { b->buffer_capacity = 64; b->buffer = (uint8_t *)malloc(b->buffer_capacity); b->buffer_size = 0; }
+   826→static void MemBuffer_destroy(MemBuffer *b) { if (b->buffer) { free(b->buffer); b->buffer = NULL; } b->buffer_size = 0; b->buffer_capacity = 0; }
+   827→static inline uint8_t *MemBuffer_data(MemBuffer *b) { return b->buffer; }
+   828→static inline uint32_t MemBuffer_size(MemBuffer *b) { return b->buffer_size; }
+   829→static void MemBuffer_ensure_capacity(MemBuffer *b, uint32_t in_size) {
+   830→  if (b->buffer_size + in_size > b->buffer_capacity) {
+   831→    uint32_t new_capacity = b->buffer_capacity * 2;
+   832→    while (new_capacity < b->buffer_size + in_size) new_capacity *= 2;
+   833→    uint8_t *new_buffer = (uint8_t *)malloc(new_capacity);
+   834→    memcpy(new_buffer, b->buffer, b->buffer_size);
+   835→    free(b->buffer);
+   836→    b->buffer = new_buffer;
+   837→    b->buffer_capacity = new_capacity;
+   838→  }
+   839→}
+   840→static void MemBuffer_emit(MemBuffer *b, const void *in_buffer, uint32_t size) { MemBuffer_ensure_capacity(b, size); memcpy(b->buffer + b->buffer_size, in_buffer, size); b->buffer_size += size; }
+   841→static void MemBuffer_emit_u32(MemBuffer *b, uint32_t value) { MemBuffer_emit(b, &value, sizeof(value)); }
+   842→static void MemBuffer_emit_u64(MemBuffer *b, uint64_t value) { MemBuffer_emit(b, &value, sizeof(value)); }
+   843→static void MemBuffer_rewrite_inst(MemBuffer *b, uint32_t offset, uint32_t inst) { *(uint32_t *)(b->buffer + offset) = inst; }
+   844→static uint32_t MemBuffer_load_inst(MemBuffer *b, uint32_t offset) { return *(uint32_t *)(b->buffer + offset); }
+   845→static MemBlock MemBuffer_dup(MemBuffer *b) { uint8_t *copy = (uint8_t *)malloc(b->buffer_size); memcpy(copy, b->buffer, b->buffer_size); MemBlock m; MemBlock_init(&m, (addr_t)copy, b->buffer_size); return m; }
+   846→
+   847→typedef struct simple_linear_allocator_t { uint8_t *buffer; uint32_t size; uint32_t capacity; uint32_t builtin_alignment; } simple_linear_allocator_t;
+   848→static void simple_linear_allocator_init(simple_linear_allocator_t *a, uint8_t *buffer, uint32_t capacity, uint32_t alignment) { a->buffer = buffer; a->capacity = capacity; a->builtin_alignment = alignment ? alignment : 1; a->size = 0; }
+   849→static uint8_t *simple_linear_allocator_cursor(simple_linear_allocator_t *a) { return a->buffer + a->size; }
+   850→static uint8_t *simple_linear_allocator_alloc(simple_linear_allocator_t *a, uint32_t in_size, uint32_t in_alignment) {
+   851→  uint32_t alignment = in_alignment ? in_alignment : a->builtin_alignment;
+   852→  uint32_t gap_size = ALIGN_CEIL((uintptr_t)simple_linear_allocator_cursor(a), alignment) - (uintptr_t)simple_linear_allocator_cursor(a);
+   853→  a->size += gap_size;
+   854→  if (a->size + in_size > a->capacity) return NULL;
+   855→  uint8_t *data = simple_linear_allocator_cursor(a);
+   856→  a->size += in_size;
+   857→  return data;
+   858→}
+   859→
+   860→#define MAX_PAGE_ALLOCATORS 64
+   861→typedef struct { simple_linear_allocator_t *code_page_allocators[MAX_PAGE_ALLOCATORS]; int code_page_count; simple_linear_allocator_t *data_page_allocators[MAX_PAGE_ALLOCATORS]; int data_page_count; } MemoryAllocator;
+   862→static MemoryAllocator gMemoryAllocator;
+   863→
+   864→static void *os_memory_allocate(size_t size, int access) {
+   865→  int prot = 0;
+   866→  if (access & kRead) prot |= PROT_READ;
+   867→  if (access & kWrite) prot |= PROT_WRITE;
+   868→  if (access & kExecute) prot |= PROT_EXEC;
+   869→  int flags = MAP_PRIVATE | MAP_ANONYMOUS;
+   870→  void *result = mmap(NULL, size, prot, flags, -1, 0);
+   871→  if (result == MAP_FAILED) return NULL;
+   872→  return result;
+   873→}
+   874→
+   875→static int os_memory_set_permission(void *address, size_t size, int access) {
+   876→  int prot = 0;
+   877→  if (access & kRead) prot |= PROT_READ;
+   878→  if (access & kWrite) prot |= PROT_WRITE;
+   879→  if (access & kExecute) prot |= PROT_EXEC;
+   880→  return mprotect(address, size, prot) == 0;
+   881→}
+   882→
+   883→static MemBlock alloc_mem_block(size_t in_size, int is_exec) {
+   884→  if (in_size > (size_t)os_page_size()) { MemBlock b; MemBlock_init(&b, 0, 0); return b; }
+   885→  uint8_t *result = NULL;
+   886→  int count;
+   887→  simple_linear_allocator_t **allocators;
+   888→  int *count_ptr;
+   889→  if (is_exec) { count = gMemoryAllocator.code_page_count; allocators = gMemoryAllocator.code_page_allocators; count_ptr = &gMemoryAllocator.code_page_count; }
+   890→  else { count = gMemoryAllocator.data_page_count; allocators = gMemoryAllocator.data_page_allocators; count_ptr = &gMemoryAllocator.data_page_count; }
+   891→  for (int i = 0; i < count; i++) { result = (uint8_t *)simple_linear_allocator_alloc(allocators[i], (uint32_t)in_size, 0); if (result) break; }
+   892→  if (!result) {
+   893→    if (*count_ptr >= MAX_PAGE_ALLOCATORS) { MemBlock b; MemBlock_init(&b, 0, 0); return b; }
+   894→    void *page = os_memory_allocate(os_page_size(), kNoAccess);
+   895→    if (!page) { MemBlock b; MemBlock_init(&b, 0, 0); return b; }
+   896→    os_memory_set_permission(page, os_page_size(), is_exec ? kReadExecute : kReadWrite);
+   897→    simple_linear_allocator_t *pa = (simple_linear_allocator_t *)malloc(sizeof(simple_linear_allocator_t));
+   898→    simple_linear_allocator_init(pa, (uint8_t *)page, os_page_size(), 8);
+   899→    allocators[*count_ptr] = pa; (*count_ptr)++;
+   900→    result = (uint8_t *)simple_linear_allocator_alloc(pa, (uint32_t)in_size, 0);
+   901→  }
+   902→  MemBlock b; MemBlock_init(&b, (addr_t)result, in_size); return b;
+   903→}
+   904→
+   905→static MemBlock alloc_exec_block(size_t size) { return alloc_mem_block(size, 1); }
+   906→static MemBlock alloc_data_block(size_t size) { return alloc_mem_block(size, 0); }
+   907→
+   908→static int DobbyCodePatch(void *address, uint8_t *buffer, uint32_t buffer_size) {
+   909→  int page_size = os_page_size();
+   910→  uintptr_t patch_page = ALIGN_FLOOR(address, page_size);
+   911→  uintptr_t patch_end_page = ALIGN_FLOOR((uintptr_t)address + buffer_size, page_size);
+   912→  mprotect((void *)patch_page, page_size, PROT_READ | PROT_WRITE | PROT_EXEC);
+   913→  if (patch_page != patch_end_page) mprotect((void *)patch_end_page, page_size, PROT_READ | PROT_WRITE | PROT_EXEC);
+   914→  memcpy(address, buffer, buffer_size);
+   915→  mprotect((void *)patch_page, page_size, PROT_READ | PROT_EXEC);
+   916→  if (patch_page != patch_end_page) mprotect((void *)patch_end_page, page_size, PROT_READ | PROT_EXEC);
+   917→  addr_t clear_start = (addr_t)address;
+   918→  clear_cache_arm64((void *)clear_start, (void *)(clear_start + buffer_size));
+   919→  return 0;
+   920→}
+   921→
+   922→static void make_memory_readable(void *address, size_t size) {
+   923→  void *page = (void *)ALIGN_FLOOR(address, os_page_size());
+   924→  os_memory_set_permission(page, os_page_size(), kReadExecute);
+   925→}
+   926→
+   927→typedef struct RelocDataLabel {
+   928→  addr_t pos; uint8_t data[8]; uint8_t data_size;
+   929→  struct { int link_type; uintptr_t inst_offset; } ref_insts[32]; int ref_insts_count;
+   930→} RelocDataLabel;
+   931→
+   932→static void RelocDataLabel_init(RelocDataLabel *l, uint64_t data, uint8_t data_size) {
+   933→  l->pos = 0; memcpy(l->data, &data, data_size); l->data_size = data_size; l->ref_insts_count = 0;
+   934→}
+   935→
+   936→static void RelocDataLabel_link_to(RelocDataLabel *l, int link_type, uint32_t pc_off) {
+   937→  if (l->ref_insts_count < 32) { l->ref_insts[l->ref_insts_count].link_type = link_type; l->ref_insts[l->ref_insts_count].inst_offset = pc_off; l->ref_insts_count++; }
+   938→}
+   939→
+   940→static void RelocDataLabel_link_confused_instructions(RelocDataLabel *l, MemBuffer *buffer) {
+   941→  int i;
+   942→  for (i = 0; i < l->ref_insts_count; i++) {
+   943→    int64_t fixup_offset = (int64_t)l->pos - (int64_t)l->ref_insts[i].inst_offset;
+   944→    uint32_t inst = MemBuffer_load_inst(buffer, (uint32_t)l->ref_insts[i].inst_offset);
+   945→    uint32_t new_inst = encode_imm19_offset(inst, fixup_offset);
+   946→    MemBuffer_rewrite_inst(buffer, (uint32_t)l->ref_insts[i].inst_offset, new_inst);
+   947→  }
+   948→}
+   949→
+   950→typedef struct {
+   951→  addr_t fixed_addr; MemBuffer code_buffer; RelocDataLabel *data_labels[64]; int data_labels_count;
+   952→} Assembler;
+   953→
+   954→static void Assembler_init(Assembler *a, addr_t fixed_addr) { a->fixed_addr = fixed_addr; MemBuffer_init(&a->code_buffer); a->data_labels_count = 0; }
+   955→static void Assembler_destroy(Assembler *a) { int i; for (i = 0; i < a->data_labels_count; i++) free(a->data_labels[i]); MemBuffer_destroy(&a->code_buffer); }
+   956→static inline size_t Assembler_pc_offset(Assembler *a) { return MemBuffer_size(&a->code_buffer); }
+   957→static void Assembler_emit_u32(Assembler *a, uint32_t value) { MemBuffer_emit_u32(&a->code_buffer, value); }
+   958→static void Assembler_emit_u64(Assembler *a, uint64_t value) { MemBuffer_emit_u64(&a->code_buffer, value); }
+   959→static void Assembler_nop(Assembler *a) { Assembler_emit_u32(a, NOP); }
+   960→static void Assembler_ret(Assembler *a) { Assembler_emit_u32(a, RET); }
+   961→static void Assembler_br(Assembler *a, int rn) { Assembler_emit_u32(a, BR | Rn_(rn)); }
+   962→static void Assembler_blr(Assembler *a, int rn) { Assembler_emit_u32(a, BLR | Rn_(rn)); }
+   963→static void Assembler_b_imm(Assembler *a, int64_t imm) { int32_t imm26 = bits_((imm >> 2), 0, 25); Assembler_emit_u32(a, B_ | imm26); }
+   964→static void Assembler_adrp(Assembler *a, int rd, int64_t imm) { uint32_t immlo = LeftShift(bits_((imm >> 12), 0, 1), 2, 29); uint32_t immhi = LeftShift(bits_((imm >> 12), 2, 20), 19, 5); Assembler_emit_u32(a, ADRP | Rd_(rd) | immlo | immhi); }
+   965→static void Assembler_add_imm_x(Assembler *a, int rd, int rn, int64_t imm) { uint32_t imm12 = LeftShift(imm, 12, 10); Assembler_emit_u32(a, ADD_X_IMM | Rd_(rd) | Rn_(rn) | imm12); }
+   966→static void Assembler_ldr_literal_x(Assembler *a, int rt, int64_t imm) { uint32_t encoding = 0x58000000 | LeftShift((imm >> 2), 26, 5) | Rt_(rt); Assembler_emit_u32(a, encoding); }
+   967→static void Assembler_ldr_unsigned_x(Assembler *a, int rt, int rn, int64_t offset) { uint32_t imm12 = (uint32_t)(offset >> 3); Assembler_emit_u32(a, LoadStoreUnsignedOffsetFixed | LDR_X | LeftShift(imm12, 12, 10) | Rn_(rn) | Rt_(rt)); }
+   968→static void Assembler_ldr_unsigned_w(Assembler *a, int rt, int rn, int64_t offset) { uint32_t imm12 = (uint32_t)(offset >> 2); Assembler_emit_u32(a, LoadStoreUnsignedOffsetFixed | LDR_W | LeftShift(imm12, 12, 10) | Rn_(rn) | Rt_(rt)); }
+   969→static void Assembler_str_unsigned_x(Assembler *a, int rt, int rn, int64_t offset) { uint32_t imm12 = (uint32_t)(offset >> 3); Assembler_emit_u32(a, LoadStoreUnsignedOffsetFixed | STR_X | LeftShift(imm12, 12, 10) | Rn_(rn) | Rt_(rt)); }
+   970→static void Assembler_movz(Assembler *a, int rd, uint64_t imm, int shift) { if (shift > 0) shift /= 16; else shift = 0; uint32_t imm16 = LeftShift(imm, 16, 5); Assembler_emit_u32(a, MoveWideImmediateFixed | MOVZ | SixtyFourBits | LeftShift(shift, 2, 21) | imm16 | Rd_(rd)); }
+   971→static void Assembler_movk(Assembler *a, int rd, uint64_t imm, int shift) { if (shift > 0) shift /= 16; else shift = 0; uint32_t imm16 = LeftShift(imm, 16, 5); Assembler_emit_u32(a, MoveWideImmediateFixed | MOVK | SixtyFourBits | LeftShift(shift, 2, 21) | imm16 | Rd_(rd)); }
+   972→static void Assembler_orr_shift_x(Assembler *a, int rd, int rn, int rm) { Assembler_emit_u32(a, LogicalShiftedFixed | ORR | SixtyFourBits | Rm_(rm) | Rn_(rn) | Rd_(rd)); }
+   973→static void Assembler_mov_reg(Assembler *a, int rd, int rn) { Assembler_orr_shift_x(a, rd, rn, 31); }
+   974→static void Assembler_mov_imm64(Assembler *a, int rd, uint64_t imm) {
+   975→  const uint32_t w0 = (uint32_t)(imm & 0xFFFFFFFF);
+   976→  const uint32_t w1 = (uint32_t)(imm >> 32);
+   977→  const uint16_t h0 = (uint16_t)(w0 & 0xFFFF);
+   978→  const uint16_t h1 = (uint16_t)(w0 >> 16);
+   979→  const uint16_t h2 = (uint16_t)(w1 & 0xFFFF);
+   980→  const uint16_t h3 = (uint16_t)(w1 >> 16);
+   981→  Assembler_movz(a, rd, h0, 0);
+   982→  Assembler_movk(a, rd, h1, 16);
+   983→  Assembler_movk(a, rd, h2, 32);
+   984→  Assembler_movk(a, rd, h3, 48);
+   985→}
+   986→
+   987→static void Assembler_adrp_add(Assembler *a, int rd, uint64_t from, uint64_t to) {
+   988→  uint64_t from_PAGE = ALIGN(from, 0x1000);
+   989→  uint64_t to_PAGE = ALIGN(to, 0x1000);
+   990→  uint64_t to_PAGEOFF = (uint64_t)to % 0x1000;
+   991→  Assembler_adrp(a, rd, (int64_t)(to_PAGE - from_PAGE));
+   992→  Assembler_add_imm_x(a, rd, rd, (int64_t)to_PAGEOFF);
+   993→}
+   994→
+   995→static RelocDataLabel *Assembler_create_data_label(Assembler *a, uint64_t data, uint8_t data_size) {
+   996→  RelocDataLabel *l = (RelocDataLabel *)malloc(sizeof(RelocDataLabel));
+   997→  RelocDataLabel_init(l, data, data_size);
+   998→  if (a->data_labels_count < 64) a->data_labels[a->data_labels_count++] = l;
+   999→  return l;
+  1000→}
+  1001→
+  1002→static void Assembler_ldr_label(Assembler *a, int rt, RelocDataLabel *label) { RelocDataLabel_link_to(label, 0, (uint32_t)Assembler_pc_offset(a)); Assembler_ldr_literal_x(a, rt, 0); }
+  1003→static void Assembler_literal_ldr_branch(Assembler *a, uint64_t address) { RelocDataLabel *label = Assembler_create_data_label(a, address, 8); Assembler_ldr_label(a, TMP_REG_0, label); Assembler_br(a, TMP_REG_0); }
+  1004→
+  1005→static void Assembler_reloc_data_labels(Assembler *a) {
+  1006→  int i;
+  1007→  for (i = 0; i < a->data_labels_count; i++) {
+  1008→    RelocDataLabel *l = a->data_labels[i];
+  1009→    l->pos = Assembler_pc_offset(a);
+  1010→    if (l->ref_insts_count > 0) RelocDataLabel_link_confused_instructions(l, &a->code_buffer);
+  1011→    MemBuffer_emit(&a->code_buffer, l->data, l->data_size);
+  1012→  }
+  1013→}
+  1014→
+  1015→static MemBlock Assembler_finalize(Assembler *a) {
+  1016→  size_t buffer_size = MemBuffer_size(&a->code_buffer);
+  1017→  MemBlock block = alloc_exec_block(buffer_size);
+  1018→  if (MemRange_addr(&block) == 0) { MemBlock b; MemBlock_init(&b, 0, 0); return b; }
+  1019→  addr_t fixed = MemRange_addr(&block);
+  1020→  a->fixed_addr = fixed;
+  1021→  DobbyCodePatch((void *)fixed, MemBuffer_data(&a->code_buffer), (uint32_t)MemBuffer_size(&a->code_buffer));
+  1022→  MemBlock b; MemBlock_init(&b, fixed, MemBuffer_size(&a->code_buffer)); return b;
+  1023→}
+  1024→
+  1025→typedef struct { int type; MemBlock buffer; addr_t forward_addr; size_t forward_size; int has_forward; } Trampoline;
+  1026→
+  1027→static void Trampoline_init(Trampoline *t, int type, MemBlock buffer) { t->type = type; t->buffer = buffer; t->forward_addr = 0; t->forward_size = 0; t->has_forward = 0; }
+  1028→static inline addr_t Trampoline_addr(Trampoline *t) { return t->buffer.start_; }
+  1029→static inline addr_t Trampoline_size(Trampoline *t) { return t->buffer.size; }
+  1030→
+  1031→static Trampoline *generate_normal_trampoline(addr_t from, addr_t to) {
+  1032→  Assembler as;
+  1033→  Assembler_init(&as, from);
+  1034→  int tramp_type = 0;
+  1035→  uint64_t distance = (uint64_t)llabs((long long)(from - to));
+  1036→  uint64_t adrp_range = ((uint64_t)1 << (2 + 19 + 12 - 1));
+  1037→  if (distance < adrp_range) { tramp_type = TRAMPOLINE_ARM64_ADRP_ADD_BR; Assembler_adrp_add(&as, TMP_REG_0, from, to); Assembler_br(&as, TMP_REG_0); }
+  1038→  else { tramp_type = TRAMPOLINE_ARM64_LDR_BR; Assembler_literal_ldr_branch(&as, (uint64_t)to); }
+  1039→  Assembler_reloc_data_labels(&as);
+  1040→  MemBlock blk = MemBuffer_dup(&as.code_buffer);
+  1041→  Trampoline *t = (Trampoline *)malloc(sizeof(Trampoline));
+  1042→  Trampoline_init(t, tramp_type, blk);
+  1043→  Assembler_destroy(&as);
+  1044→  return t;
+  1045→}
+  1046→
+  1047→static int g_enable_near_trampoline = 0;
+  1048→static dobby_alloc_near_code_callback_t custom_alloc_near_code_handler = NULL;
+  1049→
+  1050→#define MAX_REGIONS 1024
+  1051→typedef struct { addr_t addr; size_t size; int perm; } MemRegionInfo;
+  1052→
+  1053→static int get_memory_layout(MemRegionInfo *out_regions, int max_regions) {
+  1054→  FILE *fp = fopen("/proc/self/maps", "r");
+  1055→  if (!fp) return 0;
+  1056→  int count = 0;
+  1057→  char line[2048];
+  1058→  while (fgets(line, sizeof(line), fp) && count < max_regions) {
+  1059→    addr_t region_start, region_end, region_offset;
+  1060→    char permissions[5] = {0};
+  1061→    uint8_t dev_major, dev_minor;
+  1062→    long inode;
+  1063→    int path_index = 0;
+  1064→    if (sscanf(line, "%lx-%lx %4c %lx %hhx:%hhx %ld %n", (unsigned long *)&region_start, (unsigned long *)&region_end, permissions, (unsigned long *)&region_offset, &dev_major, &dev_minor, &inode, &path_index) < 7) continue;
+  1065→    int perm = 0;
+  1066→    if (permissions[0] == 'r') perm |= MEM_PERM_R;
+  1067→    if (permissions[1] == 'w') perm |= MEM_PERM_W;
+  1068→    if (permissions[2] == 'x') perm |= MEM_PERM_X;
+  1069→    out_regions[count].addr = region_start;
+  1070→    out_regions[count].size = region_end - region_start;
+  1071→    out_regions[count].perm = perm;
+  1072→    count++;
+  1073→  }
+  1074→  fclose(fp);
+  1075→  return count;
+  1076→}
+  1077→
+  1078→static MemBlock alloc_near_block_in_page(addr_t pos, size_t range, uint32_t in_size) {
+  1079→  if (custom_alloc_near_code_handler) { addr_t a = custom_alloc_near_code_handler(in_size, pos, range); if (a) { MemBlock b; MemBlock_init(&b, a, in_size); return b; } }
+  1080→  MemRange search_range;
+  1081→  MemRange_init(&search_range, pos > range ? pos - range : 0, range * 2);
+  1082→  for (int i = 0; i < gMemoryAllocator.code_page_count; i++) {
+  1083→    simple_linear_allocator_t *al = gMemoryAllocator.code_page_allocators[i];
+  1084→    addr_t cursor = (addr_t)al->buffer + al->size;
+  1085→    uint32_t unused_size = al->capacity - al->size;
+  1086→    MemRange unused_range; MemRange_init(&unused_range, cursor, unused_size);
+  1087→    MemRange intersect = MemRange_intersect(&search_range, &unused_range);
+  1088→    if (intersect.size < in_size) continue;
+  1089→    addr_t gap_size = intersect.start_ - cursor;
+  1090→    if (gap_size) simple_linear_allocator_alloc(al, (uint32_t)gap_size, 0);
+  1091→    uint8_t *result = simple_linear_allocator_alloc(al, in_size, 0);
+  1092→    MemBlock b; MemBlock_init(&b, (addr_t)result, in_size); return b;
+  1093→  }
+  1094→  MemRegionInfo regions[MAX_REGIONS];
+  1095→  int region_count = get_memory_layout(regions, MAX_REGIONS);
+  1096→  for (int i = 0; i < region_count; i++) {
+  1097→    if (i >= region_count - 1) break;
+  1098→    addr_t unused_start = regions[i].addr + regions[i].size;
+  1099→    size_t unused_size = regions[i + 1].addr - unused_start;
+  1100→    MemRange unused_range; MemRange_init(&unused_range, unused_start, unused_size);
+  1101→    MemRange intersect = MemRange_intersect(&search_range, &unused_range);
+  1102→    if (intersect.size < in_size) continue;
+  1103→    void *unused_page = (void *)ALIGN_FLOOR(intersect.start_, os_page_size());
+  1104→    void *page = mmap(unused_page, os_page_size(), PROT_READ | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
+  1105→    if (page == MAP_FAILED) continue;
+  1106→    if (page != unused_page) continue;
+  1107→    if (gMemoryAllocator.code_page_count >= MAX_PAGE_ALLOCATORS) break;
+  1108→    simple_linear_allocator_t *pa = (simple_linear_allocator_t *)malloc(sizeof(simple_linear_allocator_t));
+  1109→    simple_linear_allocator_init(pa, (uint8_t *)page, os_page_size(), 8);
+  1110→    gMemoryAllocator.code_page_allocators[gMemoryAllocator.code_page_count++] = pa;
+  1111→    return alloc_near_block_in_page(pos, range, in_size);
+  1112→  }
+  1113→  const uint8_t zero_seq[0x1000] = {0};
+  1114→  for (int i = 0; i < region_count; i++) {
+  1115→    if (!(regions[i].perm & MEM_PERM_X)) continue;
+  1116→    MemRange r; MemRange_init(&r, regions[i].addr, regions[i].size);
+  1117→    MemRange intersect = MemRange_intersect(&search_range, &r);
+  1118→    if (intersect.size < in_size) continue;
+  1119→    const uint8_t *p = (const uint8_t *)intersect.start_;
+  1120→    size_t search_size = intersect.size;
+  1121→    size_t needle = in_size + 3;
+  1122→    void *found = NULL;
+  1123→    for (size_t j = 0; j + needle <= search_size; j++) { if (memcmp(p + j, zero_seq, needle) == 0) { found = (void *)(p + j); break; } }
+  1124→    if (!found) continue;
+  1125→    found = (void *)ALIGN_CEIL(found, 4);
+  1126→    MemBlock b; MemBlock_init(&b, (addr_t)found, in_size); return b;
+  1127→  }
+  1128→  MemBlock b; MemBlock_init(&b, 0, 0); return b;
+  1129→}
+  1130→
+  1131→static Trampoline *generate_fast_forward_trampoline(addr_t src, addr_t dst) {
+  1132→  Assembler as; Assembler_init(&as, 0);
+  1133→  uint32_t need = 4 * 4;
+  1134→  MemBlock blk = alloc_near_block_in_page(src, ARM64_B_XXX_RANGE, need);
+  1135→  if (MemRange_addr(&blk) == 0) { Assembler_destroy(&as); return NULL; }
+  1136→  Assembler_ldr_unsigned_x(&as, TMP_REG_0, TMP_REG_0, 8);
+  1137→  Assembler_br(&as, TMP_REG_0);
+  1138→  Assembler_emit_u64(&as, (uint64_t)dst);
+  1139→  as.fixed_addr = MemRange_addr(&blk);
+  1140→  MemBlock finalized = Assembler_finalize(&as);
+  1141→  Trampoline *t = (Trampoline *)malloc(sizeof(Trampoline));
+  1142→  Trampoline_init(t, FORWARD_TRAMPOLINE_ARM64, finalized);
+  1143→  Assembler_destroy(&as);
+  1144→  return t;
+  1145→}
+  1146→
+  1147→static Trampoline *generate_near_trampoline(addr_t src, addr_t dst) {
+  1148→  Assembler as; Assembler_init(&as, src);
+  1149→  int tramp_type = 0;
+  1150→  Trampoline *forward_tramp = NULL;
+  1151→  if (llabs((long long)dst - (long long)src) < (long long)ARM64_B_XXX_RANGE) {
+  1152→    tramp_type = TRAMPOLINE_ARM64_B_XXX; Assembler_b_imm(&as, (int64_t)dst - (int64_t)src);
+  1153→  } else {
+  1154→    tramp_type = TRAMPOLINE_ARM64_B_XXX_AND_FORWARD_TRAMP;
+  1155→    forward_tramp = generate_fast_forward_trampoline(src, dst);
+  1156→    if (!forward_tramp) { Assembler_destroy(&as); return NULL; }
+  1157→    Assembler_b_imm(&as, (int64_t)Trampoline_addr(forward_tramp) - (int64_t)src);
+  1158→  }
+  1159→  MemBlock blk = MemBuffer_dup(&as.code_buffer);
+  1160→  Trampoline *t = (Trampoline *)malloc(sizeof(Trampoline));
+  1161→  Trampoline_init(t, tramp_type, blk);
+  1162→  if (forward_tramp) { t->forward_addr = Trampoline_addr(forward_tramp); t->forward_size = Trampoline_size(forward_tramp); t->has_forward = 1; free(forward_tramp); }
+  1163→  Assembler_destroy(&as);
+  1164→  return t;
+  1165→}
+  1166→
+  1167→typedef struct { uint32_t id; addr_t fake_func_addr; addr_t addr; MemBlock patched; MemBlock relocated; uint8_t *origin_code; size_t origin_code_size; } InterceptEntry;
+  1168→
+  1169→#define MAX_INTERCEPT_ENTRIES 256
+  1170→static InterceptEntry g_entries[MAX_INTERCEPT_ENTRIES];
+  1171→static int g_entries_count = 0;
+  1172→
+  1173→static InterceptEntry *find_entry(addr_t addr) { int i; for (i = 0; i < g_entries_count; i++) { if (g_entries[i].patched.start_ == addr) return &g_entries[i]; } return NULL; }
+  1174→
+  1175→static void remove_entry(addr_t addr) {
+  1176→  int i;
+  1177→  for (i = 0; i < g_entries_count; i++) {
+  1178→    if (g_entries[i].patched.start_ == addr) {
+  1179→      int j;
+  1180→      for (j = i; j < g_entries_count - 1; j++) g_entries[j] = g_entries[j + 1];
+  1181→      g_entries_count--; return;
+  1182→    }
+  1183→  }
+  1184→}
+  1185→
+  1186→static void backup_orig_code(InterceptEntry *e) { uint32_t tramp_size = (uint32_t)e->patched.size; e->origin_code = (uint8_t *)malloc(tramp_size); memcpy(e->origin_code, (void *)e->addr, tramp_size); e->origin_code_size = tramp_size; }
+  1187→
+  1188→static void restore_orig_code(InterceptEntry *e) { if (!e->origin_code) return; DobbyCodePatch((void *)e->patched.start_, e->origin_code, (uint32_t)e->patched.size); free(e->origin_code); e->origin_code = NULL; }
+  1189→
+  1190→typedef struct { addr_t origin_start; uint32_t origin_size; Assembler as; MemBlock relocated; int relocated_built; } ReloCtx;
+  1191→
+  1192→static void ReloCtx_init(ReloCtx *ctx, addr_t origin, uint32_t size) { ctx->origin_start = origin; ctx->origin_size = size; Assembler_init(&ctx->as, 0); ctx->relocated_built = 0; MemBlock_init(&ctx->relocated, 0, 0); }
+  1193→static void ReloCtx_destroy(ReloCtx *ctx) { Assembler_destroy(&ctx->as); }
+  1194→static addr_t origin_cursor(ReloCtx *ctx, uint32_t offset) { return ctx->origin_start + offset; }
+  1195→
+  1196→static int relocate(ReloCtx *ctx, int branch) {
+  1197→  Assembler *as = &ctx->as;
+  1198→  uint32_t offset = 0;
+  1199→  while (offset < ctx->origin_size) {
+  1200→    uint32_t inst = *(uint32_t *)(origin_cursor(ctx, offset));
+  1201→    if (inst_is_b_bl(inst)) {
+  1202→      int64_t off = decode_imm26_offset(inst);
+  1203→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1204→      RelocDataLabel *label = Assembler_create_data_label(as, (uint64_t)dst, 8);
+  1205→      Assembler_ldr_label(as, TMP_REG_0, label);
+  1206→      if ((inst & UnconditionalBranchMask) == BL) Assembler_blr(as, TMP_REG_0);
+  1207→      else Assembler_br(as, TMP_REG_0);
+  1208→    } else if (inst_is_ldr_literal(inst)) {
+  1209→      int64_t off = decode_imm19_offset(inst);
+  1210→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1211→      int rt = decode_rt(inst);
+  1212→      char opc = bits_(inst, 30, 31);
+  1213→      Assembler_mov_imm64(as, TMP_REG_0, (uint64_t)dst);
+  1214→      if (opc == 0b00) Assembler_ldr_unsigned_w(as, rt, TMP_REG_0, 0);
+  1215→      else if (opc == 0b01) Assembler_ldr_unsigned_x(as, rt, TMP_REG_0, 0);
+  1216→    } else if (inst_is_adr(inst)) {
+  1217→      int64_t off = decode_immhi_immlo_offset(inst);
+  1218→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1219→      int rd = decode_rd(inst);
+  1220→      Assembler_mov_imm64(as, rd, (uint64_t)dst);
+  1221→    } else if (inst_is_adrp(inst)) {
+  1222→      int64_t off = decode_immhi_immlo_zero12_offset(inst);
+  1223→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1224→      dst = ALIGN(dst, 0x1000);
+  1225→      int rd = decode_rd(inst);
+  1226→      Assembler_mov_imm64(as, rd, (uint64_t)dst);
+  1227→    } else if (inst_is_b_cond(inst)) {
+  1228→      int64_t off = decode_imm19_offset(inst);
+  1229→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1230→      uint32_t branch_inst = inst;
+  1231→      char cond = bits_(inst, 0, 3);
+  1232→      cond = cond ^ 1;
+  1233→      set_bits_(branch_inst, 0, 3, cond);
+  1234→      int64_t new_off = 4 * 3;
+  1235→      uint32_t imm19 = (uint32_t)(new_off >> 2);
+  1236→      set_bits_(branch_inst, 5, 23, imm19);
+  1237→      RelocDataLabel *label = Assembler_create_data_label(as, (uint64_t)dst, 8);
+  1238→      Assembler_emit_u32(as, branch_inst);
+  1239→      Assembler_ldr_label(as, TMP_REG_0, label);
+  1240→      Assembler_br(as, TMP_REG_0);
+  1241→    } else if (inst_is_compare_b(inst)) {
+  1242→      int64_t off = decode_imm19_offset(inst);
+  1243→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1244→      uint32_t branch_inst = inst;
+  1245→      char op = bit_(inst, 24);
+  1246→      op = op ^ 1;
+  1247→      set_bit_(branch_inst, 24, op);
+  1248→      int64_t new_off = 4 * 3;
+  1249→      uint32_t imm19 = (uint32_t)(new_off >> 2);
+  1250→      set_bits_(branch_inst, 5, 23, imm19);
+  1251→      RelocDataLabel *label = Assembler_create_data_label(as, (uint64_t)dst, 8);
+  1252→      Assembler_emit_u32(as, branch_inst);
+  1253→      Assembler_ldr_label(as, TMP_REG_0, label);
+  1254→      Assembler_br(as, TMP_REG_0);
+  1255→    } else if (inst_is_test_b(inst)) {
+  1256→      int64_t off = decode_imm14_offset(inst);
+  1257→      addr_t dst = origin_cursor(ctx, offset) + off;
+  1258→      uint32_t branch_inst = inst;
+  1259→      char op = bit_(inst, 24);
+  1260→      op = op ^ 1;
+  1261→      set_bit_(branch_inst, 24, op);
+  1262→      int64_t new_off = 4 * 3;
+  1263→      uint32_t imm14 = (uint32_t)(new_off >> 2);
+  1264→      set_bits_(branch_inst, 5, 18, imm14);
+  1265→      RelocDataLabel *label = Assembler_create_data_label(as, (uint64_t)dst, 8);
+  1266→      Assembler_emit_u32(as, branch_inst);
+  1267→      Assembler_ldr_label(as, TMP_REG_0, label);
+  1268→      Assembler_br(as, TMP_REG_0);
+  1269→    } else {
+  1270→      Assembler_emit_u32(as, inst);
+  1271→    }
+  1272→    offset += sizeof(uint32_t);
+  1273→  }
+  1274→  ctx->origin_size = offset;
+  1275→  if (branch) Assembler_literal_ldr_branch(as, origin_cursor(ctx, offset));
+  1276→  Assembler_reloc_data_labels(as);
+  1277→  ctx->relocated = Assembler_finalize(as);
+  1278→  ctx->relocated_built = 1;
+  1279→  return 0;
+  1280→}
+  1281→
+  1282→int DobbyHook(void *address, void *fake_func, void **out_origin_func) {
+  1283→  if (!address) return -1;
+  1284→  make_memory_readable(address, 4);
+  1285→  if (find_entry((addr_t)address)) return -1;
+  1286→  if (g_entries_count >= MAX_INTERCEPT_ENTRIES) return -1;
+  1287→  InterceptEntry *entry = &g_entries[g_entries_count];
+  1288→  memset(entry, 0, sizeof(*entry));
+  1289→  entry->addr = (addr_t)address;
+  1290→  entry->fake_func_addr = (addr_t)fake_func;
+  1291→  addr_t from = (addr_t)address;
+  1292→  addr_t to = (addr_t)fake_func;
+  1293→  Trampoline *trampoline = NULL;
+  1294→  Trampoline *near_trampoline = NULL;
+  1295→  if (g_enable_near_trampoline) near_trampoline = generate_near_trampoline(from, to);
+  1296→  if (!near_trampoline) trampoline = generate_normal_trampoline(from, to);
+  1297→  addr_t tramp_addr; size_t tramp_size;
+  1298→  if (near_trampoline) { tramp_addr = Trampoline_addr(near_trampoline); tramp_size = Trampoline_size(near_trampoline); }
+  1299→  else if (trampoline) { tramp_addr = Trampoline_addr(trampoline); tramp_size = Trampoline_size(trampoline); }
+  1300→  else return -1;
+  1301→  ReloCtx ctx; ReloCtx_init(&ctx, from, (uint32_t)tramp_size);
+  1302→  relocate(&ctx, 1);
+  1303→  if (ctx.relocated.size == 0) { ReloCtx_destroy(&ctx); if (trampoline) free(trampoline); if (near_trampoline) free(near_trampoline); return -1; }
+  1304→  entry->patched.start_ = from;
+  1305→  entry->patched.size = (size_t)ctx.origin_size;
+  1306→  entry->relocated = ctx.relocated;
+  1307→  backup_orig_code(entry);
+  1308→  DobbyCodePatch((void *)from, (uint8_t *)tramp_addr, (uint32_t)tramp_size);
+  1309→  if (out_origin_func) *out_origin_func = (void *)entry->relocated.start_;
+  1310→  g_entries_count++;
+  1311→  ReloCtx_destroy(&ctx);
+  1312→  if (trampoline) { free(trampoline); }
+  1313→  if (near_trampoline) { free(near_trampoline); }
+  1314→  return 0;
+  1315→}
+  1316→
+  1317→static void* GetLibBase(const char* libName) {
+  1318→    FILE* fp = fopen("/proc/self/maps", "r");
+  1319→    if (!fp) return NULL;
+  1320→    char line[512];
+  1321→    while (fgets(line, sizeof(line), fp)) {
+  1322→        if (strstr(line, libName)) {
+  1323→            uintptr_t base = strtoull(line, NULL, 16);
+  1324→            fclose(fp);
+  1325→            return (void*)base;
+  1326→        }
+  1327→    }
+  1328→    fclose(fp);
+  1329→    return NULL;
+  1330→}
+  1331→
+  1332→static int (*CurlHook_OG_SETOPT)(void*, int, void*) = NULL;
+  1333→static int (*FCurlHook_OGProcessRequest)(void*) = NULL;
+  1334→static void (*FCurlHook_SetUrl)(void*, const void*) = NULL;
+  1335→static int (*EOSFCurlHook_OGProcessRequest)(void*) = NULL;
+  1336→static void (*EOSFCurlHook_SetUrl)(void*, const void*) = NULL;
+  1337→
+  1338→static struct FString* FCurlHook_GetUrl(void* req) {
+  1339→    return (struct FString*)((uintptr_t)req + (uintptr_t)ue_geturl_off);
+  1340→}
+  1341→
+  1342→static struct FString* EOSFCurlHook_GetUrl(void* req) {
+  1343→    return (struct FString*)((uintptr_t)req + (uintptr_t)eos_geturl_off);
+  1344→}
+  1345→
+  1346→static int InternalProcessRequest(void* Req, int isEOS) {
+  1347→    if (!Req) return 0;
+  1348→    int (*OGProcessRequest)(void*) = isEOS ? EOSFCurlHook_OGProcessRequest : FCurlHook_OGProcessRequest;
+  1349→    void (*SetUrl)(void*, const void*) = isEOS ? EOSFCurlHook_SetUrl : FCurlHook_SetUrl;
+  1350→    struct FString* OGUrl = isEOS ? EOSFCurlHook_GetUrl(Req) : FCurlHook_GetUrl(Req);
+  1351→    if (OGUrl->length == 0 || !OGUrl->data) return OGProcessRequest(Req);
+  1352→    char* OGUrlCStr = FString_ToCStr(OGUrl);
+  1353→    if (!OGUrlCStr) return OGProcessRequest(Req);
+  1354→    struct Url url;
+  1355→    Url_ParseUrl(OGUrlCStr, &url);
+  1356→    if (ShouldRedirect(url.host)) {
+  1357→        char newUrlCStr[URL_TOTAL_MAX];
+  1358→        CreateUrl(g_backend_url, url.pathAndQuery, newUrlCStr, sizeof(newUrlCStr));
+  1359→        struct FString* newUrl = (struct FString*)malloc(sizeof(struct FString));
+  1360→        *newUrl = FString_FromCStr(newUrlCStr);
+  1361→        SetUrl(Req, newUrl);
+  1362→    }
+  1363→    free(OGUrlCStr);
+  1364→    return OGProcessRequest(Req);
+  1365→}
+  1366→
+  1367→static int FCurlHook_ProcessRequest(void* Req) { return InternalProcessRequest(Req, 0); }
+  1368→static int EOSFCurlHook_ProcessRequest(void* Req) { return InternalProcessRequest(Req, 1); }
+  1369→
+  1370→static int CurlHook_SetOptHook(void* handle, int option, void* args) {
+  1371→    if (!CurlHook_OG_SETOPT) return -1;
+  1372→    if (option == 10002 && args != NULL) {
+  1373→        const char* url = (const char*)args;
+  1374→        if (url) {
+  1375→            struct Url parsed;
+  1376→            Url_ParseUrl(url, &parsed);
+  1377→            if (ShouldRedirect(parsed.host)) {
+  1378→                static __thread char newUrl[URL_TOTAL_MAX];
+  1379→                CreateUrl(g_backend_url, parsed.pathAndQuery, newUrl, sizeof(newUrl));
+  1380→                return CurlHook_OG_SETOPT(handle, option, (void*)newUrl);
+  1381→            }
+  1382→        }
+  1383→    }
+  1384→    return CurlHook_OG_SETOPT(handle, option, args);
+  1385→}
+  1386→
+  1387→static void setup_ue_hooks(void* base) {
+  1388→    if (!ue_pr_offset) return;
+  1389→    void* pr_addr = (void*)((uintptr_t)base + (uintptr_t)ue_pr_offset);
+  1390→    FCurlHook_SetUrl = (void (*)(void*, const void*))((uintptr_t)base + (uintptr_t)ue_seturl_off);
+  1391→    DobbyHook(pr_addr, (void*)FCurlHook_ProcessRequest, (void**)&FCurlHook_OGProcessRequest);
+  1392→}
+  1393→
+  1394→static void setup_eos_hooks(void* base) {
+  1395→    if (!eos_pr_offset) return;
+  1396→    void* pr_addr = (void*)((uintptr_t)base + (uintptr_t)eos_pr_offset);
+  1397→    EOSFCurlHook_SetUrl = (void (*)(void*, const void*))((uintptr_t)base + (uintptr_t)eos_seturl_off);
+  1398→    DobbyHook(pr_addr, (void*)EOSFCurlHook_ProcessRequest, (void**)&EOSFCurlHook_OGProcessRequest);
+  1399→}
+  1400→
+  1401→__attribute__((constructor))
+  1402→void Main() {
+  1403→    time_t start = time(NULL);
+  1404→    const char* lib_name = NULL;
+  1405→    while (1) {
+  1406→        if (GetLibBase("libUE4.so")) {
+  1407→            lib_name = "libUE4.so";
+  1408→            break;
+  1409→        }
+  1410→        if (GetLibBase("libUnreal.so")) {
+  1411→            lib_name = "libUnreal.so";
+  1412→            break;
+  1413→        }
+  1414→        if (time(NULL) - start > 15) {
+  1415→            return;
+  1416→        }
+  1417→        usleep(200000);
+  1418→    }
+  1419→    if (strcmp(lib_name, "libUE4.so") == 0) {
+  1420→        void* handle = dlopen("libUE4.so", RTLD_NOW | RTLD_NOLOAD);
+  1421→        if (handle) {
+  1422→            void* curl_setopt = dlsym(handle, "curl_easy_setopt");
+  1423→            if (curl_setopt) {
+  1424→                DobbyHook(curl_setopt, (void*)CurlHook_SetOptHook, (void**)&CurlHook_OG_SETOPT);
+  1425→                dlclose(handle);
+  1426→                return;
+  1427→            }
+  1428→            dlclose(handle);
+  1429→        }
+  1430→    }
+  1431→    struct ModuleInfo mod;
+  1432→    if (!GetModuleInfo(lib_name, &mod)) {
+  1433→        return;
+  1434→    }
+  1435→    int found = 0;
+  1436→    if (strcmp(lib_name, "libUnreal.so") == 0) {
+  1437→        found = detect_version_by_string((const uint8_t*)mod.baseAddress, mod.size, 1);
+  1438→        if (!found) found = detect_version_by_string((const uint8_t*)mod.baseAddress, mod.size, 0);
+  1439→    } else {
+  1440→        found = detect_version_by_string((const uint8_t*)mod.baseAddress, mod.size, 0);
+  1441→    }
+  1442→    if (!found || !detected_version || strlen(detected_version) < 10) {
+  1443→        return;
+  1444→    }
+  1445→    send_version_report(detected_version);
+  1446→    load_eos_offsets_for_version();
+  1447→    setup_ue_hooks((void*)mod.baseAddress);
+  1448→    if (strcmp(lib_name, "libUnreal.so") == 0 && eos_pr_offset) {
+  1449→        while (!GetLibBase("libEOSSDK.so")) usleep(200000);
+  1450→        void* eosBase = GetLibBase("libEOSSDK.so");
+  1451→        if (eosBase) setup_eos_hooks(eosBase);
+  1452→    }
+  1453→}
+  1454→

@@ -1,0 +1,303 @@
+{
+  "battleBundleOfferId": "77CD9F9033AC0B5E5DB854D037DF8B51",
+  "battlePassOfferId": "34C144E9B26A206151387D9196C18751",
+  "tierOfferId": "6DDC1A92132F299BBDEA7145EDE20475",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_ChemPencil": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_ChemPencil": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ChemPencil": 1
+    },
+    {
+      "AthenaCharacter:Character_TechTomato": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ToyMonkeyOrca": 1
+    },
+    {
+      "AthenaDance:EID_LuckyCase": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_FigmentS3_3Up": 1
+    },
+    {
+      "CosmeticShoes:Shoes_AloofAtomPond": 1
+    },
+    {
+      "CosmeticShoes:Shoes_AloofAtomPuddle": 1
+    },
+    {
+      "CosmeticShoes:Shoes_FuzzyTracks": 1
+    },
+    {
+      "AthenaCharacter:Character_CoreStreet": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_CoreStreet": 1
+    },
+    {
+      "AthenaGlider:Glider_CoreStreet": 1
+    },
+    {
+      "AthenaDance:EID_CoreStreet": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_CoreStreet": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CoreStreet": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S34_CoreStreet": 1
+    },
+    {
+      "AthenaSpray:Spray_CoreStreet": 1
+    },
+    {
+      "AthenaSpray:Spray_CoreStreet2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_CoreStreet": 1
+    },
+    {
+      "AthenaCharacter:Character_CyberDelivery": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_CyberDelivery": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CyberDelivery": 1
+    },
+    {
+      "AthenaCharacter:Character_TeriyakiTech": 1
+    },
+    {
+      "AthenaCharacter:Character_ToxicStorm": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ToxicStorm": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ToxicStorm": 1
+    },
+    {
+      "CosmeticShoes:Shoes_StigmaStickerFreckle": 1
+    },
+    {
+      "CosmeticShoes:Shoes_WaggishRuse": 1
+    },
+    {},
+    {
+      "AthenaCharacter:Character_ElegantHeist": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_ElegantHeist": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ElegantHeist": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_InflatoDodo": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_InflatoDodo": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_InflatoDodo": 1
+    },
+    {
+      "AthenaGlider:Glider_InflatoDodo": 1
+    },
+    {
+      "AthenaDance:EID_Inflatododo": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_InflatoDodo": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_InflatoDodo": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S34_InflatoDodo": 1
+    },
+    {
+      "AthenaSpray:Spray_InflatoDodo": 1
+    },
+    {
+      "AthenaSpray:Spray_InflatoDodo2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_InflatoDodo": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_LacedCrimp": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LacedCrimp": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LacedCrimp": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_MagneticPlotter": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_MagneticPlotter": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MagneticPlotter": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_MediCrow": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_MediCrow": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MediCrow": 1
+    },
+    {
+      "AthenaGlider:Glider_MediCrow": 1
+    },
+    {
+      "AthenaDance:EID_MediCrow": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MediCrow": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MediCrow": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S34_MediCrow": 1
+    },
+    {
+      "AthenaSpray:Spray_MediCrow": 1
+    },
+    {
+      "AthenaSpray:Spray_MediCrow2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_MediCrow": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_MezzoAce": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_PearlTote": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PearlTote": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PearlTote": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PearlTote": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_FigmentS3KeyArt": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S34_LanternFest2": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

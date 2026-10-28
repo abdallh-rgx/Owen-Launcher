@@ -1,0 +1,62 @@
+name: Build libowen.so
+
+on:
+  push:
+    branches: [main, master]
+    paths: ["owen-launcher-rs/**", ".github/workflows/build-owen.yml"]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: libowen (aarch64-linux-android)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: owen-launcher-rs
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r27c
+
+      - name: Build libowen.so
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: |
+          TOOLCHAIN="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64"
+          export CC_aarch64_linux_android="$TOOLCHAIN/bin/aarch64-linux-android24-clang"
+          export AR_aarch64_linux_android="$TOOLCHAIN/bin/llvm-ar"
+          mkdir -p .cargo
+          cat > .cargo/config.toml <<'EOF'
+          [target.aarch64-linux-android]
+          linker = "aarch64-linux-android24-clang"
+          EOF
+          cargo build --release -p owen-redirecter --target aarch64-linux-android
+
+      - name: Build host tools
+        run: |
+          cargo build --release -p owen-detect -p owen-server -p owen-pak -p owen-apk
+
+      - name: Sanity checks
+        run: |
+          file target/aarch64-linux-android/release/libowen.so
+          test -f target/aarch64-linux-android/release/libowen.so
+          # The exported entry points the loader looks for.
+          nm -D target/aarch64-linux-android/release/libowen.so | grep -E "JNI_OnLoad|curl_easy_setopt_hook" || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: owen-android
+          path: |
+            owen-launcher-rs/target/aarch64-linux-android/release/libowen.so
+            owen-launcher-rs/target/release/owen-detect
+            owen-launcher-rs/target/release/owen-server
+            owen-launcher-rs/target/release/owen-pak

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "قاعدة دوال فورتنايت أندرويد — Fortnite Android Functions DB",
+  title: "Owen Launcher Web Console",
   description:
-    "كل دوال فورتنايت أندرويد ARM64 (49,859 دالة native) عبر 11 نسخة من 5.41 إلى 30.00 + منفذ Erbium بأنماط ARM64 مُتحققة",
-  keywords: ["Fortnite", "Android", "ARM64", "Erbium", "Reverse Engineering", "UFunction", "Offsets"],
+    "Professional console for the Owen Launcher Fortnite private-server toolchain: Redirecter configuration, curl_easy_setopt Symbol Finder, Battle Pass seasons, servers and access keys.",
+  keywords: [
+    "Owen Launcher",
+    "Fortnite",
+    "private server",
+    "curl_easy_setopt",
+    "ARM64",
+    "no-smali",
+  ],
 };
 
 export default function RootLayout({
@@ -26,12 +33,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-zinc-950 font-sans antialiased text-foreground`}
       >
         {children}
-        <Toaster />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

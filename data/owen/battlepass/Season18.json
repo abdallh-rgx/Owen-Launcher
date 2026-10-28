@@ -1,0 +1,330 @@
+{
+  "battleBundleOfferId": "90F07BF9DB29472CE31B39E7FB413EBB",
+  "battlePassOfferId": "56F376F1829E3003C989A6AD73488785",
+  "tierOfferId": "59DF7ABC7FE519927E42BDB0962C408C",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:CID_A_197_Athena_Commando_M_Clash": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_841_Clash": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_667_ClashMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_312_ClashMale": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_342_Clash": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_Clash": 1
+    },
+    {
+      "AthenaSpray:SPID_306_Clash": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_126_Clash": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_18": 1
+    },
+    {
+      "AthenaDance:EID_Applause": 1
+    },
+    {
+      "AthenaDance:EID_LaughTrack": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaDance:EID_Roving": 1
+    },
+    {
+      "AthenaDance:EID_WatchThis": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_402_Sideways": 1
+    },
+    {
+      "AthenaCharacter:CID_A_198_Athena_Commando_M_CerealBox": 1
+    },
+    {
+      "AthenaBackpack:BID_842_CerealBox": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_666_CerealBoxMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_311_CerealBoxMale": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_399_CerealBox": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_337_CerealBox": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_350_CerealBoxParade": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaMusicPack:MusicPack_100_CerealBox": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_101_CerealBox_Instrumental": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_CerealBox": 1
+    },
+    {
+      "AthenaSpray:SPID_301_CerealBox": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_124_CerealBox": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_347_Corrupt": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_348_DarkTrioIntro": 1
+    },
+    {
+      "AthenaCharacter:CID_A_199_Athena_Commando_M_SpaceChimp": 1
+    },
+    {
+      "AthenaBackpack:BID_843_SpaceChimp": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_673_SpaceChimpMale": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaGlider:Glider_ID_314_SpaceChimpMale": 1
+    },
+    {
+      "AthenaDance:EID_SpaceChimp": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_400_SpaceChimp": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_340_SpaceChimp": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_344_SpaceChimp2": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_102_SpaceChimp": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_103_SpaceChimpInstrumental": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_SpaceChimp": 1
+    },
+    {
+      "AthenaSpray:SPID_304_SpaceChimp": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_104_Kiwi": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaEmoji:Emoji_S18_SadToonFishstick": 1
+    },
+    {
+      "AthenaCharacter:CID_A_200_Athena_Commando_F_GhostHunter": 1
+    },
+    {
+      "AthenaBackpack:BID_844_GhostHunter": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_671_GhostHunterFemale1H": 1
+    },
+    {
+      "AthenaDance:EID_GhostHunter": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_403_GhostHunter": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_339_GhostHunter": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_343_GhostHunterSideWas": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_GhostHunter": 1
+    },
+    {
+      "AthenaSpray:SPID_303_GhostHunter": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_125_GhostHunter": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_127_TeriyakiToon": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:CID_A_201_Athena_Commando_M_TeriyakiFishToon": 1
+    },
+    {
+      "AthenaBackpack:BID_845_TeriyakiFishToon": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_674_TeriyakiFishToonMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_315_TeriyakiFishToon": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_TeriyakiFishToon": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:SPID_305_TeriyakiFishToon": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:CID_A_202_Athena_Commando_F_Division": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_846_Division": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_669_DivisionFemale1H": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_313_DivisionFemale": 1
+    },
+    {
+      "AthenaDance:EID_Division": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_398_Division": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_338_Division": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_Division": 1
+    },
+    {
+      "AthenaSpray:SPID_302_Division": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_128_Division": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:CID_A_203_Athena_Commando_F_PunkKoi": 1
+    },
+    {
+      "AthenaBackpack:BID_847_PunkKoi": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_672_PunkKoiFemale1H": 1
+    },
+    {
+      "AthenaDance:EID_PunkKoi": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_397_PunkKoi": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_336_PunkKoi": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S18_PunkKoi": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:SPID_300_PunkKoi": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LSID_345_S18KeyArt": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:SPID_315_4thBirthday": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S18_AnimToonFishstick": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_401_Cubes": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

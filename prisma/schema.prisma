@@ -30,3 +30,66 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+// ---------------------------------------------------------------------------
+// Owen Launcher Web Console (Task 24)
+// ---------------------------------------------------------------------------
+
+/// Singleton owen.json configuration (row id = 1).
+model RedirecterConfig {
+  id         Int      @id @default(1)
+  configJson String
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+}
+
+/// Derived extra_rules rows from the owen.json redirect section.
+model RedirectRule {
+  id          String   @id @default(cuid())
+  match       String
+  replacePath String
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Backend server profiles.
+model ServerProfile {
+  id        String   @id @default(cuid())
+  name      String
+  baseUrl   String
+  backend   String   @default("lawin-v2")
+  features  String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Access keys (replaces the classic Discord bot admin panel).
+model KeyEntry {
+  id        String    @id @default(cuid())
+  key       String    @unique
+  role      String    @default("player")
+  note      String    @default("")
+  revoked   Boolean   @default(false)
+  lastUsedAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+/// Imported battle pass season reward data.
+model SeasonRecord {
+  id           String   @id @default(cuid())
+  seasonNumber Int      @unique
+  displayName  String
+  dataJson     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Symbol Finder scan history.
+model ScanRecord {
+  id        String   @id @default(cuid())
+  fileName  String
+  bestVa    String?
+  score     Int      @default(0)
+  variadic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,1 @@
+/home/z/my-project/owen-launcher-rs/target/debug/libowen_detect.rlib: /home/z/my-project/owen-launcher-rs/crates/owen-detect/src/arm64.rs /home/z/my-project/owen-launcher-rs/crates/owen-detect/src/elf.rs /home/z/my-project/owen-launcher-rs/crates/owen-detect/src/lib.rs /home/z/my-project/owen-launcher-rs/crates/owen-detect/src/scan.rs

@@ -1,0 +1,13 @@
+[package]
+name = "owen-pak"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Owen Launcher Rust workspace crate (owen-pak)"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "owen-pak"
+path = "src/main.rs"

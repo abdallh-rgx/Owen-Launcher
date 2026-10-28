@@ -1,0 +1,383 @@
+{
+  "battleBundleOfferId": "43029F863FBD73CBAA37E34A159B89DE",
+  "battlePassOfferId": "7B45D55F1CCB45FE9EEC35D763CF2E48",
+  "tierOfferId": "2BC7D5452AF58C886A740AB5E7DB2078",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_BudBlossom": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BudBlossom": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BudBlossom": 1
+    },
+    {
+      "AthenaDance:EID_BudBlossom": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BudBlossom": 1
+    },
+    {
+      "AthenaCharacter:Character_SolveSolid": 1
+    },
+    {
+      "AthenaBackpack:Backpack_BriskReign": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CozyMechanic": 1
+    },
+    {
+      "AthenaBackpack:Backpack_FoundKelp": 1
+    },
+    {
+      "AthenaBackpack:Backpack_OpsHopper": 1
+    },
+    {
+      "AthenaCharacter:Character_CozyMechanic_Hen": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_SquibblySquid": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SquibblySquid": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SquibblySquid": 1
+    },
+    {
+      "AthenaGlider:Glider_SquibblySquid": 1
+    },
+    {
+      "AthenaDance:EID_SquibblySquid": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SquibblySquid": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SquibblySquid": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SquibblySquid2": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_SquibblySquid": 1
+    },
+    {
+      "AthenaCharacter:Character_CurbRestore": 1,
+      "AthenaSpray:Spray_SquibblySquid": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_CurbRestore": 1,
+      "AthenaSpray:Spray_SquibblySquid2": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CurbRestore": 1,
+      "AthenaSkyDiveContrail:Contrail_SquibblySquid": 1
+    },
+    {
+      "AthenaDance:EID_CurbRestore": 1
+    },
+    {
+      "AthenaCharacter:Character_SteedShimmer_Shire": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SteedShimmer": 1
+    },
+    {
+      "AthenaBackpack:Backpack_VileSting": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BriskReign": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CozyMechanic": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FlakeyStick": 1
+    },
+    {
+      "AthenaCharacter:Character_FamilyPoll": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_FamilyPoll": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FamilyPoll": 1
+    },
+    {
+      "AthenaCharacter:Character_ThornyPoint": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ThornyPoint": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ThornyPoint": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FoundKelp": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Season_40": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SteedShimmer": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VileSting": 1
+    },
+    {
+      "AthenaCharacter:Character_FoundKelp_Bolt": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_VileSting_Crude": 1
+    },
+    {
+      "AthenaGlider:Glider_BriskReign_Glacier": 1
+    },
+    {
+      "AthenaGlider:Glider_CozyMechanic": 1
+    },
+    {
+      "AthenaGlider:Glider_FoundKelp": 1
+    },
+    {
+      "AthenaGlider:Glider_VileSting": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_40": 1
+    },
+    {
+      "AthenaDance:EID_BriskReign": 1
+    },
+    {
+      "AthenaDance:EID_CozyMechanic": 1
+    },
+    {
+      "AthenaDance:EID_FoundKelp": 1
+    },
+    {
+      "AthenaCharacter:Character_IcicleCane_Bright": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_IcicleCane_Bright": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_IcicleCane_Bright": 1
+    },
+    {
+      "AthenaGlider:Glider_IcicleCane_Bright": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_IcicleCane_Bright": 1
+    },
+    {
+      "AthenaCharacter:Character_VoidSpray": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VoidSpray": 1
+    },
+    {
+      "AthenaDance:EID_FoundKelpHelm": 1
+    },
+    {
+      "AthenaDance:EID_IcicleCane": 1
+    },
+    {
+      "AthenaDance:EID_JoyGrid": 1
+    },
+    {
+      "AthenaCharacter:Character_PrawnTwine": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PrawnTwine": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PrawnTwine": 1
+    },
+    {
+      "AthenaDance:EID_PrawnTwine": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PrawnTwine": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_PrawnTwine": 1
+    },
+    {
+      "AthenaSpray:Spray_PrawnTwine": 1
+    },
+    {
+      "AthenaSpray:Spray_PrawnTwine2": 1
+    },
+    {
+      "AthenaSpray:Spray_PrawnTwine3": 1
+    },
+    {
+      "AthenaDance:EID_VileSting": 1
+    },
+    {
+      "AthenaCharacter:Character_RankedPhantom": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_RankedPhantom": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedPhantom": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_CozyMechanic": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_DeerChair_Ballistic": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_FoundKelp": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_FuseBrookRune": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_VileSting": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BriskReign": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BriskReign2": 1
+    },
+    {
+      "AthenaCharacter:Character_RoseJewel": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_RoseJewel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RoseJewel": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CozyMechanic": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CozyMechanic2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_FoundKelp": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_FoundKelp2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_IcicleCane": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_IcicleCane2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_RoseAssassin": 1
+    },
+    {
+      "AthenaCharacter:Character_SaltLattice": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_SaltLattice": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SaltLattice": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S40KeyArt": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S40LineUp": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SteedShimmer": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SteedShimmer2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_VileSting": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_VileSting2": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_BriskImp": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_BallerLeague": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoticon_BriskImp": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_BriskReign": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

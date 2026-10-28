@@ -1,0 +1,384 @@
+{
+  "battleBundleOfferId": "E7F0C5B23EF45DB7E65890F2BE75ED85",
+  "battlePassOfferId": "A65A7059409C4388AD98737F62E1E3D5",
+  "tierOfferId": "9CE846B6AF5AB795017840D64F09CE7E",
+  "paidRewards": [
+    {
+      "AthenaSkyDiveContrail:Contrail_PinkSpike": 1,
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:CID_A_390_Athena_Commando_M_Blackbird": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_992_BlackbirdMale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_781_BlackbirdMale": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_467_BlackBird": 1
+    },
+    {
+      "AthenaCharacter:Character_RoseDust": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RoseDust": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RoseDust": 1
+    },
+    {
+      "AthenaGlider:Glider_RoseDust": 1
+    },
+    {
+      "AthenaDance:EID_RoseDust": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_RoseDust": 1
+    },
+    {
+      "AthenaCharacter:CID_A_391_Athena_Commando_F_Nightingale": 1,
+      "AthenaLoadingScreen:LoadingScreen_RoseDust_Alt": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_993_NightingaleFemale": 1,
+      "AthenaEmoji:Emoji_S22_RoseDust": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_790_NightingaleFemale": 1,
+      "AthenaSpray:Spray_RoseDust": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_RoseDust": 1
+    },
+    {
+      "AthenaCharacter:Character_TheHerald": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TheHerald": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TheHerald": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_147_TheHerald": 1
+    },
+    {
+      "AthenaSpray:Spray_TheHerald": 1
+    },
+    {
+      "AthenaBackpack:Backpack_FNBirthday5": 1
+    },
+    {
+      "AthenaCharacter:CID_A_392_Athena_Commando_F_Mockingbird": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_994_MockingbirdFemale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_789_MockingbirdFemale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FNBirthday5": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RenegadeRaider_Spark": 1
+    },
+    {
+      "AthenaGlider:Glider_RustyRaider_Spark": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_22": 1
+    },
+    {
+      "AthenaDance:EID_Cruising": 1
+    },
+    {
+      "AthenaDance:EID_TwoHype": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_HexagonColors": 1
+    },
+    {
+      "AthenaCharacter:Character_BadBear": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BadBear": 1
+    },
+    {
+      "AthenaGlider:Glider_BadBear": 1
+    },
+    {
+      "AthenaDance:EID_BadBear": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BadBear": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BadBear": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_146_BadBear": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_BadBear": 1
+    },
+    {
+      "AthenaSpray:Spray_BadBear_Hand": 1
+    },
+    {
+      "AthenaSpray:Spray_BadBear_Muscle": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_BadBear": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_Bites": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Bites": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Bites": 1
+    },
+    {
+      "AthenaGlider:Glider_Bites": 1
+    },
+    {
+      "AthenaDance:EID_Bites": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Bites": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Bites": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_Bites": 1
+    },
+    {
+      "AthenaSpray:Spray_Bites_Blade": 1
+    },
+    {
+      "AthenaSpray:Spray_Bites_Skull": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_Candor": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Candor": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Candor": 1
+    },
+    {
+      "AthenaGlider:Glider_Candor": 1
+    },
+    {
+      "AthenaDance:EID_Candor": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Candor": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Candor": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_Candor": 1
+    },
+    {
+      "AthenaSpray:Spray_Candor": 1
+    },
+    {
+      "AthenaSpray:Spray_Candor_Guns": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_ChillCat": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ChillCat": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ChillCat": 1
+    },
+    {
+      "AthenaGlider:Glider_ChillCat": 1
+    },
+    {
+      "AthenaDance:EID_ChillCat": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_ChillCat": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_ChillCat": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_148_ChillCat": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_ChillCat_Claw": 1
+    },
+    {
+      "AthenaSpray:Spray_ChillCat": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_Headset": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Headset": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Headset": 1
+    },
+    {
+      "AthenaDance:EID_Headset": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_HeadSet": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Headset": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_Headset": 1
+    },
+    {
+      "AthenaSpray:Spray_Headset": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MeteorWoman": 1
+    },
+    {
+      "AthenaCharacter:Character_Meteorwomen_Alt": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_Meteorwomen_Alt": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Meteorwomen_Alt": 1
+    },
+    {
+      "AthenaGlider:Glider_Meteorwomen_Alt": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RenegadeRaiderSpark": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_TieDyeSummer": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MeteorWomen": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S4CH3KeyArt": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_RebootRally_RenegadeRaider": 1
+    },
+    {
+      "AthenaSpray:Spray_MeteorWomen": 1
+    },
+    {
+      "AthenaCharacter:Character_PinkSpike": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PinkSpike": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PinkSpike": 1
+    },
+    {
+      "AthenaGlider:Glider_PinkSpike": 1
+    },
+    {
+      "AthenaDance:EID_PinkSpike": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PinkSpike": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PinkSpike": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S22_PinkSpike": 1
+    },
+    {
+      "AthenaSpray:Spray_PinkSpike": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_IslandChrome": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_5thBirthday": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S22_Meteorwomen": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_DiscordQuest": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

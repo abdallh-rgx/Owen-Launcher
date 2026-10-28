@@ -1,0 +1,20 @@
+[package]
+name = "owen-redirecter"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "libowen.so — the universal, version-independent Owen Redirecter (curl_easy_setopt auto-detect, PartyHub WebView hooks, cleartext unlock, auto manifest redirect, HTTP and HTTPS verbatim)."
+
+[lib]
+name = "owen"
+crate-type = ["cdylib", "staticlib"]
+path = "src/lib.rs"
+
+[dependencies]
+owen-detect = { path = "../owen-detect" }
+owen-hook = { path = "../owen-hook" }
+serde = { version = "1", default-features = false, features = ["derive", "std"] }
+serde_json = { version = "1", default-features = false, features = ["std"] }
+
+[target.'cfg(target_os = "android")'.dependencies]
+owen-art = { path = "../owen-art" }

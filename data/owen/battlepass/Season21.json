@@ -1,0 +1,343 @@
+{
+  "battleBundleOfferId": "95EEAB6F22C7BCAE63F7EA554684E098",
+  "battlePassOfferId": "B58E744806ACFEAAC48F4A4E52802F8B",
+  "tierOfferId": "A5B7D38BFFBC1AB57892499E2366C9EF",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:CID_A_422_Athena_Commando_M_Realm": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_A_029_RealmMale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_819_RealmMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_374_RealmMale": 1
+    },
+    {
+      "AthenaDance:EID_Realm": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_481_Realm": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_450_Realm": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_Realm": 1
+    },
+    {
+      "AthenaSpray:SPID_413_Realm": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_146_Realm": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_811_ArmadilloMale": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaGlider:Glider_ID_375_DarkStormYellow": 1
+    },
+    {
+      "AthenaCharacter:CID_A_423_Athena_Commando_M_Canary": 1
+    },
+    {
+      "AthenaBackpack:BID_A_020_CanaryMale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_813_CanaryMale": 1
+    },
+    {
+      "AthenaDance:EID_Canary": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_482_Canary": 1
+    },
+    {
+      "AthenaSpray:SPID_414_Canary": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_21": 1
+    },
+    {
+      "AthenaDance:EID_ArmadilloRobot": 1
+    },
+    {
+      "AthenaDance:EID_GroovingSparkle": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaDance:EID_Reverence": 1
+    },
+    {
+      "AthenaDance:EID_Tally": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_494_RockVein": 1
+    },
+    {
+      "AthenaCharacter:CID_A_424_Athena_Commando_M_Lancelot": 1
+    },
+    {
+      "AthenaBackpack:BID_A_021_LancelotMale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_816_LancelotMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_371_LancelotMale": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_483_Lancelot": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_447_Lancelot": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_Lancelot": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:SPID_410_Lancelot": 1
+    },
+    {
+      "AthenaSpray:SPID_423_Lancelot_NeonSword": 1
+    },
+    {
+      "AthenaSpray:SPID_424_Lancelot_Profile": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_147_Lancelot": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_443_C3S3_KeyArt": 1
+    },
+    {
+      "AthenaCharacter:CID_A_425_Athena_Commando_F_BlueJay": 1
+    },
+    {
+      "AthenaBackpack:BID_A_022_BlueJayFemale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_812_BlueJayFemale": 1
+    },
+    {
+      "AthenaDance:EID_BlueJay": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_484_BlueJay": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LSID_444_BlueJay": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_136_BlueJay": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_BlueJay": 1
+    },
+    {
+      "AthenaSpray:SPID_407_BlueJay": 1
+    },
+    {
+      "AthenaSpray:SPID_416_BlueJayX": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_452_RealityTree": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_455_Lofi": 1
+    },
+    {
+      "AthenaCharacter:CID_A_427_Athena_Commando_F_Fuchsia": 1
+    },
+    {
+      "AthenaBackpack:BID_A_024_FuchsiaFemale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_815_FuchsiaFemale": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaGlider:Glider_ID_370_FuchsiaFemale": 1
+    },
+    {
+      "AthenaDance:EID_Fuchsia": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_486_Fuchsia": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_446_Fuchsia": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_Fuchsia": 1
+    },
+    {
+      "AthenaSpray:SPID_409_Fuchsia": 1
+    },
+    {
+      "AthenaSpray:SPID_425_Fuchsia_Duotone": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_137_NightNight": 1
+    },
+    {
+      "AthenaSpray:SPID_419_PeaceSignQuest": 1
+    },
+    {
+      "AthenaCharacter:CID_A_428_Athena_Commando_F_PinkWidow": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:BID_A_025_PinkWidowFemale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_818_PinkWidowFemale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_373_PinkWidowFemale": 1
+    },
+    {
+      "AthenaDance:EID_PinkWidow": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_487_PinkWidow": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_449_PinkWidow": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_PinkWidow": 1
+    },
+    {
+      "AthenaSpray:SPID_412_PinkWidow": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_144_PinkWidow": 1
+    },
+    {
+      "AthenaSpray:SPID_420_ALT_Chaos": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_145_Fuchisa": 1
+    },
+    {
+      "AthenaCharacter:CID_A_429_Athena_Commando_M_Collectable": 1
+    },
+    {
+      "AthenaBackpack:BID_A_026_CollectableMale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ID_814_CollectableMale": 1
+    },
+    {
+      "AthenaGlider:Glider_ID_369_CollectableMale": 1
+    },
+    {
+      "AthenaDance:EID_Collectable": 1
+    },
+    {
+      "AthenaLoadingScreen:LSID_445_Collectable": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_138_Collectable": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S21_Collectable": 1
+    },
+    {
+      "AthenaSpray:SPID_408_Collectable": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:SPID_415_CollectableSmall": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Trails_ID_148_80sRibbon": 1
+    },
+    {},
+    {
+      "AthenaCharacter:CID_A_431_Athena_Commando_M_JonesyOrange": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LSID_442_Armadillo_Heartache": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:SPID_411_DarkStorm": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S21_DarkStorm": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_493_PinkDaisies": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

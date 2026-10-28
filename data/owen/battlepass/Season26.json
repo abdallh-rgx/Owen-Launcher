@@ -1,0 +1,383 @@
+{
+  "battleBundleOfferId": "40534F2BF9DCBB41B062816FF66D2189",
+  "battlePassOfferId": "2DD92202CD1EE987BEAA991304FBA90A",
+  "tierOfferId": "C1D853AC8BC3E3D5903F55CAEF0F2FD2",
+  "paidRewards": [
+    {
+      "AthenaLoadingScreen:LoadingScreen_ScorpionZero": 1,
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_BlazerVeil": 1,
+      "AthenaLoadingScreen:LoadingScreen_ScorpionZero2": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BlazerVeil": 1,
+      "AthenaEmoji:Emoji_S26_ScorpionZero": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BlazerVeil": 1,
+      "AthenaSpray:Spray_ScorpionZero": 1
+    },
+    {
+      "AthenaDance:EID_BlazerVeil": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BlazerVeil": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BlazerVeil": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BlazerVeil2": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_185_BlazerVeil": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S26_BlazerVeil": 1
+    },
+    {
+      "AthenaSpray:Spray_BlazerVeil": 1
+    },
+    {
+      "AthenaSpray:Spray_BlazerVeil2": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_BlazerVeil": 1
+    },
+    {
+      "AthenaCharacter:Character_BrawnyBass": 1
+    },
+    {
+      "AthenaBackpack:Backpack_BrawnyBass": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BrawnyBass": 1
+    },
+    {
+      "AthenaGlider:Glider_BrawnyBass": 1
+    },
+    {
+      "AthenaDance:EID_BrawnyBass": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BrawnyBass": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BrawnyBass": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BrawnyBass2": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S26_BrawnyBass": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_BrawnyBass": 1
+    },
+    {
+      "AthenaSpray:Spray_BrawnyBass2": 1
+    },
+    {
+      "AthenaCharacter:Character_DapperPunch": 1
+    },
+    {
+      "AthenaBackpack:Backpack_DapperPunch": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DapperPunch": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_DapperPunch": 1
+    },
+    {
+      "AthenaCharacter:Character_SmartHyena": 1
+    },
+    {
+      "AthenaCharacter:Character_TalonHime": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TalonHime": 1
+    },
+    {
+      "AthenaCharacter:Character_IchorIncisor": 1,
+      "AthenaPickaxe:Pickaxe_TalonHime": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_IchorIncisor": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_IchorIncisor": 1
+    },
+    {
+      "AthenaCharacter:Character_TungStan": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TungStan": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TungStan": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LlamaNuggets": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedHeist": 1
+    },
+    {
+      "AthenaGlider:Glider_Scribble": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_26": 1
+    },
+    {
+      "AthenaCharacter:Character_IndieBucket": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_IndieBucket": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_IndieBucket": 1
+    },
+    {
+      "AthenaGlider:Glider_IndieBucket": 1
+    },
+    {
+      "AthenaDance:EID_IndieBucket": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_IndieBucket": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_IndieBucket": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_IndieBucket2": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_186_IndieBucket": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S26_IndieBucket": 1
+    },
+    {
+      "AthenaSpray:Spray_IndieBucket": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_IndieBucket2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_IndieBucket": 1
+    },
+    {
+      "AthenaCharacter:Character_LazarusLens": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LazarusLens": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LazarusLens": 1
+    },
+    {
+      "AthenaGlider:Glider_LazarusLens": 1
+    },
+    {
+      "AthenaDance:EID_LazarusLens": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_LazarusLens": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LazarusLens": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LazarusLens2": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaEmoji:Emoji_S26_LazarusLens": 1
+    },
+    {
+      "AthenaSpray:Spray_LazarusLens": 1
+    },
+    {
+      "AthenaSpray:Spray_LazarusLens2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_LazarusLens": 1
+    },
+    {
+      "AthenaCharacter:Character_MusketSlinger": 1
+    },
+    {
+      "AthenaBackpack:Backpack_MusketSlinger": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MusketSlinger": 1
+    },
+    {
+      "AthenaGlider:Glider_MusketSlinger": 1
+    },
+    {
+      "AthenaDance:EID_MusketSlinger": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MusketSlinger": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MusketSlinger": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MusketSlinger2": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S26_MusketSlinger": 1
+    },
+    {
+      "AthenaSpray:Spray_MusketSlinger": 1
+    },
+    {
+      "AthenaSpray:Spray_MusketSlinger2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_MusketSlinger": 1
+    },
+    {
+      "AthenaCharacter:Character_PirouetteWeld": 1
+    },
+    {
+      "AthenaBackpack:Backpack_PirouetteWeld": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PirouetteWeld": 1
+    },
+    {
+      "AthenaCharacter:Character_PizzaParty": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PizzaParty": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PizzaParty": 1
+    },
+    {
+      "AthenaGlider:Glider_PizzaParty": 1
+    },
+    {
+      "AthenaDance:EID_PizzaParty": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PizzaParty": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PizzaParty": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PizzaParty2": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_187_PizzaParty": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S26_PizzaParty": 1
+    },
+    {
+      "AthenaSpray:Spray_PizzaParty": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_PizzaParty2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_PizzaParty": 1
+    },
+    {
+      "AthenaCharacter:Character_ScorpionZero": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ScorpionZero": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ScorpionZero": 1
+    },
+    {
+      "AthenaGlider:Glider_ScorpionZero": 1
+    },
+    {
+      "AthenaDance:EID_ScorpionZero": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_ScorpionZero": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_HeadHunterStar_Remake": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_S26_Ranked": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S26_Ranked": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}
