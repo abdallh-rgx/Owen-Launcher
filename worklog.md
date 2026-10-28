@@ -445,3 +445,27 @@ Work Log:
 Stage Summary:
 - CI يعمل: Build libowen.so نجح (ARM aarch64, NDK r27c) — E2E الجاري يختبر المسار الكامل من بناء الـ Launcher حتى تحميل اللعبة مع libOwen.so الجديد
 - بانتظار نتيجة E2E (سيُرفع logcat + لقطات كأدلة artifacts)
+
+---
+Task ID: 27
+Agent: main (Z.ai Code)
+Task: shippedweb.7z — تحليل أرشيف المستخدم، إصلاح التعلق على واجهة Epic، توثيق طريقة تغيير graphql، وإثبات استقبال الـ Backend للطلبات
+
+Work Log:
+- تنزيل shippedweb.7z من mediafire (3.5MB) واستخراجه بـ 7zz الرسمي (py7zr فشل CRC bug)
+- المحتوى: shippedweb/offline/entry/ — صفحة دخول Kairos (index.html 975KB + main.kairos.*.js 3.2MB بيلد 8af1b828dc6188736f50) + server.py موك جرافيكويل من المستخدم + سكربتات debug عربية محقونة سابقاً في index.html
+- إعادة إنتاج الخلل حرفياً بالمتصفح: صفحة تُعلّق على شعار Epic للأبد — لا يوجد أي طلب graphql
+- السبب الجذري (مثبت بفك الباندل): الـ mock bridge المدمج يجيب getstartupstatus بـ "authenticated" — وهذه ليست case في switch الـ LoginContainer (المعالجة: init/authenticating/prelogin/postlogin/autherror/error/networkoffline) → default → LoadingContainer للأبد
+- اكتشاف بروتوكول الجسر كاملاً: استدعاءات postMessage mockRequest/asyncResponse (single-shot: أول رد يفوز، والـ mock المدمج يتأخر 100ms) + إشعارات notification (startupstatuschanged, oss.identity.loginchanged, ...) + الجسر الأصلي JSBridge.postMessage(id,subsystem,command,args)
+- مصدر graphql مؤكد: window.clientEnvConfig.EPIC_SERVICE_GRAPHQL_URL يُحقن قبل main.js (checkConfig يرمي بدونه) — http/https حرفياً بلا إعادة كتابة — والاستعلام الفعلي: POST {"query":"query {Account { myAccount {id}}}"} ويقرأ data.data.Account.myAccount.id
+- بناء owen-bridge.js: يسابق الـ mock المدمج (يسجل listener قبله ويجيب فوراً): getstartupstatus→prelogin (يفتح شاشة الدخول فوراً)، login/register/RetryLogin/logout تقود آلة الحالة كاملة (loginchanged→authenticated→postlogin)، getloggedinuserid→{UserId}، وتغليف postMessage لنزع فتة DataCloneError (الـ mock المدمج يرسل Promise payload)
+- بناء patch_entry.py: يرقّع أي نسخة shippedweb إلى مجلد جديد (يحذف حقن clientEnvConfig القديم ويحقن owen-bridge.js قبل الباندل) مع --graphql/--friends/--presence/--party
+- خادم مرجعي mini-services/kairos-mock (Bun): ملفات ثابتة + /graphql نفس الأصل + SPA fallback لمسارات offline/:locale/... + حل الأصول النسبية من المسارات المتداخلة
+- التحقق النهائي E2E (متصفح جديد بالكامل): فتح /offline/en-US/ → شاشة "Played Fortnite before?" فوراً (لا شعار معلق) → POST /graphql {"query":"query {Account { myAccount {id}}}"} وصل للخادم → نقرة "YES, FIND MY ACCOUNT" → "LOGGING YOU IN" (الحالة النهائية) → صندوق debug الخاص بالمستخدم: "لا توجد أخطاء جافاسكريبت" — بلا DataCloneError
+- اختبار ناجح أيضاً بالتقديم من الجذر (سيناريو server.py الخاص بالمستخدم): نفس النتيجة
+- توثيق كامل PATCH-GUIDE.md: كيفية تغيير graphql (المفاتيح + التوقيت + الاستعلام المتوقع)، بروتوكول الجسر، آلة حالة الدخول، قواعد التقديم الثلاث، ملاحظة الإصدارات (10.31-12.60 لا تحوي المجلد أصلاً — هذا بيلد أحدث)
+- تحديث Web Console (تبويب PartyHub): بطاقة "CONFIRMED and fixed" بالتفاصيل والأدوات + الإبقاء على بطاقة تحقيق الإصدارات القديمة
+
+Stage Summary:
+- مهمة المستخدم مكتملة بمعايير نجاحه المعلنة: الصفحة لم تعد تتعلق، وُثّقت طريقة تغيير graphql بدقة (clientEnvConfig قبل الباندل)، والـ Backend استقبل طلب graphql فعلياً (مثبت بالسجل)
+- الأدوات: owen-launcher-rs/tools/shippedweb/{owen-bridge.js, patch_entry.py, PATCH-GUIDE.md} + shippedweb_owen المرقعة + kairos-mock المرجعي

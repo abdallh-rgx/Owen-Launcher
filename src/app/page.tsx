@@ -1490,21 +1490,78 @@ function PartyHubSection() {
         </CardContent>
       </Card>
 
+      <Card className="mt-4 border-emerald-400/30 bg-emerald-400/5">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base text-emerald-300">
+            shippedweb offline entry — claim CONFIRMED and fixed
+          </CardTitle>
+          <CardDescription className="text-zinc-500">
+            Verified end to end against the real archive (Kairos build 8af1b828dc6188736f50).
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm leading-relaxed text-zinc-300">
+            <span className="font-medium text-zinc-100">GraphQL location found.</span> The entry
+            page (assets/shippedweb/offline/entry/) reads every endpoint from{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              window.clientEnvConfig
+            </code>{" "}
+            — injected in index.html <em>before</em> main.kairos.*.js loads. The one required key is{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              EPIC_SERVICE_GRAPHQL_URL
+            </code>{" "}
+            (GraphQlService.configure throws without it). http:// and https:// are both accepted
+            verbatim — the scheme is never rewritten.
+          </p>
+          <p className="text-sm leading-relaxed text-zinc-300">
+            <span className="font-medium text-zinc-100">Frozen Epic logo — root cause.</span> The
+            built-in mock bridge answers getstartupstatus with{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-amber-300">
+              authenticated
+            </code>
+            , which is not a case in the LoginContainer switch (handled: init, authenticating,
+            prelogin, postlogin, autherror, error, networkoffline) — so the UI falls through to the
+            static LoadingContainer forever. The fix is a listener registered before the bundle
+            that answers <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">prelogin</code> first
+            (responses are single-shot; the built-in mock answers 100 ms late and is ignored).
+          </p>
+          <p className="text-sm leading-relaxed text-zinc-300">
+            <span className="font-medium text-zinc-100">Shipped fix.</span>{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              tools/shippedweb/owen-bridge.js
+            </code>{" "}
+            injects the config, drives the full login state machine (login → loginchanged →
+            authenticated → postlogin) and fires the bundle&apos;s own identity check, which POSTs{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              query {"{Account { myAccount {id}}}"}
+            </code>{" "}
+            to your GraphQL URL. Patch any copy with{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              patch_entry.py &lt;shippedweb&gt; --graphql http://host:port/graphql
+            </code>
+            . Verified in a real browser: login screen renders, the flow completes, and the backend
+            receives the GraphQL request. Full protocol and serving rules:{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              tools/shippedweb/PATCH-GUIDE.md
+            </code>
+            .
+          </p>
+        </CardContent>
+      </Card>
+
       <Card className="mt-4 border-amber-400/30 bg-amber-400/5">
         <CardContent className="p-4">
           <p className="text-sm leading-relaxed text-amber-200/90">
             <span className="font-medium">
-              Community claim investigated — assets/shippedweb/offline/entry/index.html:
+              Older APKs investigated (10.10, 12.50, 13.00) — no offline entry:
             </span>{" "}
-            inspected real APKs end to end (assets + hidden main.obb.png payload) on 10.10,
-            12.50 (inside the claimed 10.31-12.60 range) and 13.00, plus the Epic Games App.
-            No offline entry page exists in any of them: 12.50 and 13.00 ship only 7-8 asset
-            files (Login-Seasonal.jpg is the sole shippedweb item) and their OBB contains a
-            single pakchunk. Uptodown no longer hosts anything older than 23.30, so 10.31-12.40
-            cannot be sourced publicly — but the in-range 12.50 result plus a GitHub-wide code
-            search (zero hits) refutes the claim for every obtainable build. The Kairos UI is
-            compiled Kotlin, so the ART runtime hooks (DebouncedLimiter + WebView.loadUrl)
-            remain the correct smali-free path.
+            inspected real APKs end to end (assets + hidden main.obb.png payload). 12.50 (inside
+            the claimed 10.31-12.60 range) and 13.00 ship only 7-8 asset files and their OBB
+            contains a single pakchunk — the shippedweb/offline entry does not exist in those
+            builds. The Kairos offline entry belongs to the newer login flow; if your APK contains
+            assets/shippedweb/, the fix above applies to it directly. The ART runtime hooks
+            (DebouncedLimiter + WebView.loadUrl) remain the correct smali-free path for the
+            in-game login on every version.
           </p>
         </CardContent>
       </Card>
