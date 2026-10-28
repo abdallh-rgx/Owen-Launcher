@@ -580,3 +580,20 @@ Work Log:
 
 Stage Summary:
 - سلسلة الترقيع أصبحت Rust بالكامل تقريباً (smali يبقى fallback اختيارياً): DT_NEEDED بدل تعديل dex + توقيع v2 تشفيري موثّق + اختبارات تكامل — والمحاكي على GitHub Actions سيحسم E2E
+
+---
+Task ID: 31 (خاتمة الجلسة)
+Agent: main (Z.ai Code)
+Task: توثيق الجولات + حالة CI النهائية
+
+Work Log:
+- Owen-RS backend CI على GitHub Actions: نجاح كامل ✓ (اختبارات الوورك سبيس الآمنة + مصفوفة المواسم S1-S42 على سيرفر حي + بناء libowenpatch.so لـ aarch64-android مع فحص تصدير JNI بـ nm)
+- E2E جولة 1: بناء libowenpatch.so للمحاكي نجح (ELF aarch64 NDK r27c) لكن compileReleaseKotlin فشل (DiagLog.w غير موجودة) — أُصلحت
+- E2E جولة 2: التطبيق بُني بنجاح مع المُرقّع — لكن M3 سقط مرة أخرى إلى مسار smali (دوامة GC نفسها): التشخيص كشف أن DiagLog لا يكتب في logcat إطلاقاً (ملف فقط) وأن الـ workflow يجمع owen_log.txt من المسار الداخلي بينما التطبيق يكتب في الخارجي — لذا غاب سجل المُرقّع
+- الإصلاحات: DiagLog يعكس كل مدخل إلى logcat (Owen/<tag>) + جمع السجل من المسار الصحيح — الجولة القادمة ستكشف بدقة سبب سقوط المسار الأصلي (فشل تحميل؟ فشل ترقيع؟ رفض توقيع؟)
+- الواجهة: إصلاح مفاتيح React المكررة (نسخ CP في manifests) + التذييل flex-push بدل sticky-overlay (قاعدة UI)
+- تقييم VLM النهائي للواجهة: 9.2/10 (زجاج 9.5 — "Exceptional execution of the iOS 26 Liquid Glass aesthetic")
+- الحالة المحلية النهائية: 46 اختبار Rust ناجحاً | eslint نظيف | السيرفر يعمل :3010 | المتصفح: تسجيل→دخول→كل الشاشات→PartyHub حي = كلها تعمل | دفع مزدوج Erbium-Android + Owen-Launcher(rust-rewrite)
+
+Stage Summary:
+- الجلسة أنجزت: توحيد المشروع بـ Rust آمن، حسابات كاملة، PartyHub أصلي مُشغّل بالكامل من السيرفر، واجهة Liquid Glass حية (9.2/10)، مصفوفة المواسم كلها تعمل (محلياً + CI)، مُرقّع Rust بتوقيع v2 تشفيري — وبقيت جولة E2E أخيرة قيد التشغيل على المحاكي بتشخيص كامل
