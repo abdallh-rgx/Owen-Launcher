@@ -59,8 +59,12 @@ data/owen/accounts.json
 data/owen/sessions.json
 data/owen/accounts.json.tmp
 data/owen/sessions.json.tmp
-owen-rs/data/owen/accounts.json
-owen-rs/data/owen/sessions.json
+owen-launcher-rs/data/owen/accounts.json
+owen-launcher-rs/data/owen/sessions.json
+owen-launcher-rs/data/owen/accounts.json.tmp
+owen-launcher-rs/data/owen/sessions.json.tmp
+# Rust build artifacts
+owen-launcher-rs/target/
 # third-party Kairos bundle — never redistribute
 data/owen/partyhub/
 download/

@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/owen-core",
     "crates/owen-detect",
     "crates/owen-hook",
     "crates/owen-art",
@@ -8,6 +9,11 @@ members = [
     "crates/owen-server",
     "crates/owen-pak",
     "crates/owen-apk",
+    "crates/owen-lawin",
+    "crates/owen-cli",
+    "crates/owen-patcher",
+    "crates/owen-patcher-jni",
+    "crates/owen-launcher",
 ]
 
 [workspace.package]
@@ -15,6 +21,20 @@ version = "2.0.0"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/abdallh-rgx/Owen-Launcher"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+memmap2 = "0.9"
+flate2 = "1"
+sha2 = "0.10"
+rsa = { version = "0.9", features = ["sha2"] }
+rand = "0.8"
+axum = { version = "0.7", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+ehttp = "0.5"
 
 [profile.release]
 opt-level = "z"

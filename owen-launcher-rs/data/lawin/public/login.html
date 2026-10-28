@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LawinServer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,800;1,900&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
+        overflow: hidden;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 30% 40%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 60%, rgba(0, 170, 255, 0.06) 0%, transparent 50%);
+        animation: ambientShift 15s ease-in-out infinite alternate;
+      }
+
+      @keyframes ambientShift {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(-30px, 20px) scale(1.05); }
+      }
+
+      .container {
+        position: relative;
+        background: rgba(20, 20, 35, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 50px 40px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+                    0 0 80px rgba(138, 43, 226, 0.08);
+        animation: fadeSlideIn 0.8s ease-out;
+        z-index: 1;
+      }
+
+      @keyframes fadeSlideIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .logo {
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 24px;
+        border-radius: 24px;
+        background: radial-gradient(circle at 50% 25%, #ffffff 0%, #ececec 55%, #d2d2d2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: logoPulse 3s ease-in-out infinite;
+      }
+
+      @keyframes logoPulse {
+        0%, 100% { box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 25px rgba(0, 170, 255, 0.15); }
+        50% { box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 45px rgba(0, 170, 255, 0.35); }
+      }
+
+      .logo span {
+        font-family: "Nunito", "Segoe UI", sans-serif;
+        font-style: italic;
+        font-weight: 900;
+        font-size: 21px;
+        letter-spacing: 0.5px;
+        color: #ffffff;
+        text-shadow:
+          2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000,
+          2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+          3px 0 0 #000, -3px 0 0 #000, 0 3px 0 #000, 0 -3px 0 #000;
+      }
+
+      h1 {
+        font-family: "Nunito", "Segoe UI", sans-serif;
+        font-style: italic;
+        font-weight: 900;
+        font-size: 28px;
+        letter-spacing: 1px;
+        color: #ffffff;
+        margin-bottom: 35px;
+        white-space: nowrap;
+        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
+        text-shadow:
+          2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000,
+          2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+          3px 0 0 #000, -3px 0 0 #000, 0 3px 0 #000, 0 -3px 0 #000;
+      }
+
+      .input-wrapper {
+        position: relative;
+        margin-bottom: 24px;
+      }
+
+      .input-wrapper svg {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        fill: rgba(255, 255, 255, 0.3);
+        transition: fill 0.3s ease;
+      }
+
+      input {
+        width: 100%;
+        padding: 15px 18px 15px 48px;
+        border-radius: 12px;
+        border: 1.5px solid rgba(255, 255, 255, 0.08);
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #ffffff;
+        outline: none;
+        transition: all 0.3s ease;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      input:focus {
+        border-color: rgba(0, 170, 255, 0.6);
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: 0 0 20px rgba(0, 170, 255, 0.1);
+      }
+
+      .input-wrapper:focus-within svg {
+        fill: #00aaff;
+      }
+
+      button {
+        width: 100%;
+        padding: 15px 0;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #8a2be2 0%, #00aaff 100%);
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.3px;
+      }
+
+      button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        transition: left 0.5s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 170, 255, 0.3);
+      }
+
+      button:hover::before {
+        left: 100%;
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(0, 170, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo"><span>LAWIN</span></div>
+
+      <h1>LAWINSERVER</h1>
+
+      <div class="input-wrapper">
+        <input type="text" id="username" placeholder="Enter your name" />
+        <svg viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+
+      <button onclick="redirect()">Launch Game</button>
+    </div>
+
+    <script>
+      function redirect() {
+        const username = document.getElementById("username").value.trim();
+        if (!username) {
+          alert("Please enter your name");
+          return;
+        }
+        window.location.href = `com.epicgames.fortnite://authorize/?code=${encodeURIComponent(username)}`;
+      }
+    </script>
+  </body>
+</html>

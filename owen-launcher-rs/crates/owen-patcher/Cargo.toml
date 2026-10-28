@@ -1,0 +1,16 @@
+[package]
+name = "owen-patcher"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Owen APK patcher: native-only injection (DT_NEEDED, zero smali edits), APK v2 signing"
+
+[dependencies]
+owen-core = { path = "../owen-core" }
+owen-apk = { path = "../owen-apk" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+flate2 = { workspace = true }
+sha2 = { workspace = true }
+rsa = { workspace = true }
+rand = { workspace = true }

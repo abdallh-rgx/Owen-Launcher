@@ -1,0 +1,14 @@
+[package]
+name = "owen-lawin"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "owen-lawin — the LawinServer v2-compatible embedded backend (port of the original C server from Owen-Launcher app/src/main/cpp), 100% safe Rust with zero dependencies. Hosted in-process by libowen.so when server.embedded = true, or run standalone."
+
+[lib]
+name = "owen_lawin"
+path = "src/lib.rs"
+
+[[bin]]
+name = "owen-lawin"
+path = "src/main.rs"

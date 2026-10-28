@@ -24,6 +24,13 @@ mod maps;
 mod report;
 mod rewrite;
 
+/// Redirect rules shared with the backend tooling — mirrors
+/// `owen_core::urlrule` but keeps a copy inside the library so hook
+/// callbacks (which must never block on locks) read plain statics.
+/// Preserved verbatim from the previous owen-rs redirecter so
+/// `owen_redirecter::rules` users keep the same paths.
+pub mod rules;
+
 use config::owen_log;
 use std::ffi::c_void;
 use std::sync::atomic::{AtomicBool, Ordering};

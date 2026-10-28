@@ -5,11 +5,11 @@ on:
   push:
     branches: [rust-rewrite, main]
     paths:
-      - "owen-rs/**"
+      - "owen-launcher-rs/**"
       - ".github/workflows/owen-rs-ci.yml"
   pull_request:
     paths:
-      - "owen-rs/**"
+      - "owen-launcher-rs/**"
 
 env:
   CARGO_TERM_COLOR: always
@@ -30,19 +30,19 @@ jobs:
         run: cargo install cargo-nextest --locked || true
 
       - name: Workspace check (host)
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         env:
           CARGO_TARGET_DIR: ${{ github.workspace }}/target
         run: cargo check --workspace
 
       - name: Verify the safe-Rust policy (no unsafe outside the audited hook cores)
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         run: |
           # owen-hook and owen-art are the two documented, audited unsafe
           # cores (inline trampolines + JNI) — every other crate must be
           # 100% safe. owen-redirecter embeds them behind cfg(android).
           bad=0
-          for crate in owen-core owen-server owen-cli owen-patcher; do
+          for crate in owen-core owen-server owen-cli owen-patcher owen-lawin owen-apk owen-pak owen-detect owen-patcher-jni; do
             if rg -n "unsafe \{|unsafe fn|unsafe impl" "crates/$crate/src"; then
               echo "::error::$crate contains unsafe code"
               bad=1
@@ -51,7 +51,7 @@ jobs:
           exit $bad
 
       - name: Run all tests
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         env:
           CARGO_TARGET_DIR: ${{ github.workspace }}/target
         run: cargo nextest run --workspace || cargo test --workspace
@@ -66,22 +66,22 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Build the backend
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         env:
           CARGO_TARGET_DIR: ${{ github.workspace }}/target
         run: cargo build --release -p owen-server
 
       - name: Prepare the data directory
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         run: |
-          # owen-rs/data/owen ships with the repo (battlepass, profiles,
+          # owen-launcher-rs/data/owen ships with the repo (battlepass, profiles,
           # responses, manifests). The PartyHub web (third-party Kairos
           # bundle) is intentionally NOT redistributed — the partyhub CI
           # checks only exercise the native graphql + bridge + login page.
           ls data/owen
 
       - name: Boot the server
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         run: |
           ${{ github.workspace }}/target/release/owen-server \
             --port 3010 --data-dir data/owen \
@@ -181,7 +181,7 @@ jobs:
           ndk-version: r27c
 
       - name: Build the Rust APK patcher (JNI)
-        working-directory: owen-rs
+        working-directory: owen-launcher-rs
         env:
           ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
           CARGO_TARGET_DIR: ${{ github.workspace }}/target

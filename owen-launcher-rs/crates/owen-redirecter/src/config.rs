@@ -134,11 +134,30 @@ impl Default for WebviewConfig {
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
-#[serde(rename_all = "lowercase")]
 pub enum PartyHubMode {
     #[default]
     Auto,
     Off,
+}
+
+/// Console-window toggles — the runtime (ART-hook) replacement for the legacy
+/// smali `GameActivity.dispatchTouchEvent` + `forceShowConsoleWindow_test`
+/// patch that `SmaliPatcher.patchGameActivityConsole` used to bake into
+/// `classes.dex` at patch time (season-aware four-finger-touch console).
+///
+/// The patcher no longer edits dex: it writes `console.enabled` into the
+/// `owen.json` next to the patched APK (see `owen_patcher::patch_plan`),
+/// and libowen.so applies the touch hook at runtime.
+///
+/// Kotlin source map: `SmaliPatcher.appendConsolePatch` → `ConsoleConfig`.
+/// Source: Owen-Launcher app/src/main/kotlin/com/abdallhrgx/owenlauncher/core/apk/SmaliPatcher.kt
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
+pub struct ConsoleConfig {
+    /// `true` = enable the four-finger-touch console hook at runtime
+    /// (`false` keeps the game's default behaviour — matches a dev build
+    /// that already ships a console, i.e. `isDev == true`).
+    #[serde(default)]
+    pub enabled: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -193,6 +212,10 @@ pub struct OwenConfig {
     pub manifest: ManifestConfig,
     #[serde(default)]
     pub webview: WebviewConfig,
+    /// Console-window hook switch (the zero-smali replacement for the legacy
+    /// GameActivity console patch) — see [`ConsoleConfig`].
+    #[serde(default)]
+    pub console: ConsoleConfig,
     #[serde(default)]
     pub detect: DetectConfig,
     #[serde(default)]
@@ -207,6 +230,7 @@ impl Default for OwenConfig {
             redirect: RedirectConfig::default(),
             manifest: ManifestConfig::default(),
             webview: WebviewConfig::default(),
+            console: ConsoleConfig::default(),
             detect: DetectConfig::default(),
             hooks: HookToggles::default(),
         }

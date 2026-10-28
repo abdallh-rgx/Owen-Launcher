@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
-      /* the Owen Rust backend (owen-rs/crates/owen-server) — same-origin
+      /* the Owen Rust backend (owen-launcher-rs/crates/owen-server) — same-origin
        * proxying keeps the Epic-compatible absolute paths intact */
       { source: "/partyhub/:path*", destination: `${OWEN_BACKEND}/partyhub/:path*` },
       { source: "/owen-api/:path*", destination: `${OWEN_BACKEND}/:path*` },
