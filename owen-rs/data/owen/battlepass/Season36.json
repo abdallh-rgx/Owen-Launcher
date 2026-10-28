@@ -1,0 +1,381 @@
+{
+  "battleBundleOfferId": "AEA82E73D5DF94BB83C4F0EAEEDF6345",
+  "battlePassOfferId": "ADE16017BA758B8EBC0695FE3AA691D8",
+  "tierOfferId": "E5A22DF9EE032F7B5C68B5F15A9842AD",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_AshenMagnusSlant": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_AshenMagnusSlant": 1
+    },
+    {
+      "AthenaCharacter:Character_SolidMist": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SolidMist": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SolidMist": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SolidMist": 1
+    },
+    {
+      "AthenaBackpack:Backpack_AshenMagnus": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LazyLizz": 1
+    },
+    {
+      "AthenaBackpack:Backpack_MistRaven": 1
+    },
+    {
+      "AthenaBackpack:Backpack_PolarityWinn": 1
+    },
+    {
+      "AthenaCharacter:Character_BentBaton": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BentBaton": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BentBaton": 1
+    },
+    {
+      "AthenaGlider:Glider_BentBaton": 1
+    },
+    {
+      "AthenaDance:EID_BentBaton": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BentBaton": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BentBaton": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BentBaton2": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_BentBaton": 1
+    },
+    {
+      "AthenaSpray:Spray_BentBaton": 1
+    },
+    {
+      "AthenaSpray:Spray_BentBaton2": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_CarbideWeld": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CarbideWeld": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CarbideWeld": 1
+    },
+    {
+      "AthenaGlider:Glider_CarbideWeld": 1
+    },
+    {
+      "AthenaDance:EID_CarbideWeld": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_CarbideWeld": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CarbideWeld": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_CarbideWeld": 1
+    },
+    {
+      "AthenaSpray:Spray_CarbideWeld": 1
+    },
+    {
+      "AthenaSpray:Spray_CarbideWeld2": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_CarbideWeld": 1
+    },
+    {
+      "AthenaCharacter:Character_DameRegent": 1
+    },
+    {
+      "AthenaBackpack:Backpack_DameRegent": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DameRegent": 1
+    },
+    {
+      "AthenaCharacter:Character_SpatialTravelWatt": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_SpatialTravelWatt": 1
+    },
+    {
+      "AthenaCharacter:Character_SquidGlistenLift": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SquidGlistenLift": 1
+    },
+    {
+      "AthenaGlider:Glider_SquidGlistenLiftDairy": 1
+    },
+    {
+      "AthenaCharacter:Character_GraffitiTon": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_GraffitiTon": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_GraffitiTon": 1
+    },
+    {
+      "AthenaGlider:Glider_GraffitiTon": 1
+    },
+    {
+      "AthenaDance:EID_GraffitiTon": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_GraffitiTon": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_GraffitiTon": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_GraffitiTon": 1
+    },
+    {
+      "AthenaSpray:Spray_GraffitiTon": 1
+    },
+    {
+      "AthenaSpray:Spray_GraffitiTon2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_GraffitiTon": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_LazyLizzChip": 1
+    },
+    {
+      "AthenaCharacter:Character_SynthContact": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SynthContact": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SynthContact": 1
+    },
+    {
+      "AthenaGlider:Glider_SynthContact": 1
+    },
+    {
+      "AthenaDance:EID_SynthContact": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SynthContact": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SynthContact": 1
+    },
+    {
+      "AthenaEmoji:Emoticon_SynthContact": 1
+    },
+    {
+      "AthenaCharacter:Character_MistRavenPeck": 1,
+      "AthenaSpray:Spray_SynthContact": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_SynthContact2": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_SynthContact": 1
+    },
+    {
+      "AthenaCharacter:Character_TacticalPrince": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TacticalPrince": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TacticalPrince": 1
+    },
+    {
+      "AthenaCharacter:Character_ToughPack": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ToughPack": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ToughPack": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_ToughPack": 1
+    },
+    {
+      "AthenaCharacter:Character_MoralKoreLine": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_TrendyPunk": 1
+    },
+    {
+      "AthenaCharacter:Character_UnbrokenTrash": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedHero": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SpatialTravel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AshenMagnus": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LazyLizz": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MistRaven": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MoralKore": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PolarityWinn": 1
+    },
+    {
+      "AthenaCharacter:Character_PolarityWinnField": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_PolarityWinnField": 1
+    },
+    {
+      "AthenaCharacter:Character_WealthLambFate": 1
+    },
+    {
+      "AthenaBackpack:Backpack_WealthLambFate": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedHero": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SpatialTravel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SquidGlisten_Lift": 1
+    },
+    {
+      "AthenaGlider:Glider_LazyLizz": 1
+    },
+    {
+      "AthenaGlider:Glider_MistRaven": 1
+    },
+    {
+      "AthenaGlider:Glider_PolarityWinn": 1
+    },
+    {
+      "AthenaCharacter:Character_PreppyBeret": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PreppyBeret": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PreppyBeret": 1
+    },
+    {
+      "AthenaGlider:Glider_SpatialTravel": 1
+    },
+    {
+      "AthenaGlider:Umbrella_FoggyDive": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season36": 1
+    },
+    {
+      "AthenaDance:EID_AnnoyingPen": 1
+    },
+    {
+      "AthenaDance:EID_AshenMagnus": 1
+    },
+    {
+      "AthenaDance:EID_LazyLizz": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_AshenMagnus": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_AshenMagnus": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoticon_AshenMagus": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_AshenMagnus": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

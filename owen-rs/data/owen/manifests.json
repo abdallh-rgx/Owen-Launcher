@@ -1,0 +1,344 @@
+[
+  {
+    "version": "11.31",
+    "cl": "10853343",
+    "releaseString": "++Fortnite+Release-11.31-CL-10853343-Android",
+    "manifestHash": "q25EmP_XlhCdbRc1Kka6ZLaUwzSDuw",
+    "label": "11.31-CL-10853343",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/q25EmP_XlhCdbRc1Kka6ZLaUwzSDuw.manifest"
+  },
+  {
+    "version": "11.40",
+    "cl": "10948180",
+    "releaseString": "++Fortnite+Release-11.40-CL-10948180-Android",
+    "manifestHash": "eMHfwvzx6ilSW-S32UGQ_UiuvG3Vtg",
+    "label": "11.40-CL-10948180",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/eMHfwvzx6ilSW-S32UGQ_UiuvG3Vtg.manifest"
+  },
+  {
+    "version": "11.40",
+    "cl": "10993225",
+    "releaseString": "++Fortnite+Release-11.40-CL-10993225-Android",
+    "manifestHash": "oQ2iSEtsGXzpgpzQu0efGmRygMHvEQ",
+    "label": "11.40-CL-10993225",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/oQ2iSEtsGXzpgpzQu0efGmRygMHvEQ.manifest"
+  },
+  {
+    "version": "11.40",
+    "cl": "11112758",
+    "releaseString": "++Fortnite+Release-11.40-CL-11112758-Android",
+    "manifestHash": "fRx6cCBiOjGfNVpCO0S3mdKdkCt9RA",
+    "label": "11.40-CL-11112758",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/fRx6cCBiOjGfNVpCO0S3mdKdkCt9RA.manifest"
+  },
+  {
+    "version": "11.50",
+    "cl": "11204868",
+    "releaseString": "++Fortnite+Release-11.50-CL-11204868-Android",
+    "manifestHash": "dBLCJG_9Fga8dhu5XUSTajhn4el_hQ",
+    "label": "11.50-CL-11204868",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/dBLCJG_9Fga8dhu5XUSTajhn4el_hQ.manifest"
+  },
+  {
+    "version": "11.50",
+    "cl": "11265652",
+    "releaseString": "++Fortnite+Release-11.50-CL-11265652-Android",
+    "manifestHash": "h4jFrR-41gvk3BXN80y5BPquJa1A0A",
+    "label": "11.50-CL-11265652",
+    "date": "2019-12-10",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/h4jFrR-41gvk3BXN80y5BPquJa1A0A.manifest"
+  },
+  {
+    "version": "12.00",
+    "cl": "11529743",
+    "releaseString": "++Fortnite+Release-12.00-CL-11529743-Android",
+    "manifestHash": "_91WxyXFMQZAeQ93lESx44GYhhAaUQ",
+    "label": "12.00-CL-11529743",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/_91WxyXFMQZAeQ93lESx44GYhhAaUQ.manifest"
+  },
+  {
+    "version": "12.00",
+    "cl": "11573981",
+    "releaseString": "++Fortnite+Release-12.00-CL-11573981-Android",
+    "manifestHash": "ZDpFkNbWz_7dWPZqYU2ERg0pivspww",
+    "label": "12.00-CL-11573981",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/ZDpFkNbWz_7dWPZqYU2ERg0pivspww.manifest"
+  },
+  {
+    "version": "12.00",
+    "cl": "11573981",
+    "releaseString": "++Fortnite+Release-12.00-CL-11573981-Android",
+    "manifestHash": "D_hcnoUhpY45CHcNNE6sKd6iBtIWww",
+    "label": "12.00-CL-11573981",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/D_hcnoUhpY45CHcNNE6sKd6iBtIWww.manifest"
+  },
+  {
+    "version": "12.10",
+    "cl": "11794982",
+    "releaseString": "++Fortnite+Release-12.10-CL-11794982-Android",
+    "manifestHash": "8wUBatavCLAjSi3arkGbL5_prhLd0g",
+    "label": "12.10-CL-11794982",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/8wUBatavCLAjSi3arkGbL5_prhLd0g.manifest"
+  },
+  {
+    "version": "12.21",
+    "cl": "12395074",
+    "releaseString": "++Fortnite+Release-12.21-CL-12395074-Android",
+    "manifestHash": "qLsdJyXRD_zotj3DX0KNuMGRWS7etw",
+    "label": "12.21-CL-12395074",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/qLsdJyXRD_zotj3DX0KNuMGRWS7etw.manifest"
+  },
+  {
+    "version": "12.30",
+    "cl": "12486755",
+    "releaseString": "++Fortnite+Release-12.30-CL-12486755-Android",
+    "manifestHash": "ggWwml6bEICZBlrGPUuHsfs1J3zplg",
+    "label": "12.30-CL-12486755",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/ggWwml6bEICZBlrGPUuHsfs1J3zplg.manifest"
+  },
+  {
+    "version": "12.30",
+    "cl": "12502623",
+    "releaseString": "++Fortnite+Release-12.30-CL-12502623-Android",
+    "manifestHash": "pQg1ACifcbd-yGe5zkWSZYKJUVzBLA",
+    "label": "12.30-CL-12502623",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/pQg1ACifcbd-yGe5zkWSZYKJUVzBLA.manifest"
+  },
+  {
+    "version": "12.30",
+    "cl": "12624643",
+    "releaseString": "++Fortnite+Release-12.30-CL-12624643-Android",
+    "manifestHash": "rPPWEHcWA8eYpC3XxEybSa7tyJ9y6A",
+    "label": "12.30-CL-12624643",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/rPPWEHcWA8eYpC3XxEybSa7tyJ9y6A.manifest"
+  },
+  {
+    "version": "12.40",
+    "cl": "12743641",
+    "releaseString": "++Fortnite+Release-12.40-CL-12743641-Android",
+    "manifestHash": "OCs49CEcVD2Dm5lXhUSzwlF5kPl2hA",
+    "label": "12.40-CL-12743641",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/OCs49CEcVD2Dm5lXhUSzwlF5kPl2hA.manifest"
+  },
+  {
+    "version": "12.40",
+    "cl": "12837456",
+    "releaseString": "++Fortnite+Release-12.40-CL-12837456-Android",
+    "manifestHash": "9Zd_VZAmfDyKWe2qwEWZL7O8wcK0Qg",
+    "label": "12.40-CL-12837456",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/9Zd_VZAmfDyKWe2qwEWZL7O8wcK0Qg.manifest"
+  },
+  {
+    "version": "12.41",
+    "cl": "12910313",
+    "releaseString": "++Fortnite+Release-12.41-CL-12910313-Android",
+    "manifestHash": "aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg",
+    "label": "12.41-CL-12910313",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest"
+  },
+  {
+    "version": "12.41",
+    "cl": "12948829",
+    "releaseString": "++Fortnite+Release-12.41-CL-12948829-Android",
+    "manifestHash": "qEuvqZqHRP9IipPXDUK-c7g2-oa6Zg",
+    "label": "12.41-CL-12948829",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/qEuvqZqHRP9IipPXDUK-c7g2-oa6Zg.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13044369",
+    "releaseString": "++Fortnite+Release-12.50-CL-13044369-Android",
+    "manifestHash": "vIgppZezObOg6d1GwUu5ryTXkkdEJA",
+    "label": "12.50-CL-13044369",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/vIgppZezObOg6d1GwUu5ryTXkkdEJA.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13044691",
+    "releaseString": "++Fortnite+Release-12.50-CL-13044691-Android",
+    "manifestHash": "e_ZEF-BdEBHy-2pub0aC_NKUfYs2-A",
+    "label": "12.50-CL-13044691",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/e_ZEF-BdEBHy-2pub0aC_NKUfYs2-A.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13070868",
+    "releaseString": "++Fortnite+Release-12.50-CL-13070868-Android",
+    "manifestHash": "8iHlkg8Bd7cAGiv8hUSHyiTamMLtQQ",
+    "label": "12.50-CL-13070868",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/8iHlkg8Bd7cAGiv8hUSHyiTamMLtQQ.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13070927",
+    "releaseString": "++Fortnite+Release-12.50-CL-13070927-Android",
+    "manifestHash": "87Pe9zdOHDli9ZqYC06U-P24DurVeA",
+    "label": "12.50-CL-13070927",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/87Pe9zdOHDli9ZqYC06U-P24DurVeA.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13145792",
+    "releaseString": "++Fortnite+Release-12.50-CL-13145792-Android",
+    "manifestHash": "j5mFM96__zfBiAX23E2vS7zDPkonoQ",
+    "label": "12.50-CL-13145792",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/j5mFM96__zfBiAX23E2vS7zDPkonoQ.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13145792",
+    "releaseString": "++Fortnite+Release-12.50-CL-13145792-Android",
+    "manifestHash": "8sn__wuGlK6j0zeWNUyMQ-svf5TvXQ",
+    "label": "12.50-CL-13145792",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/8sn__wuGlK6j0zeWNUyMQ-svf5TvXQ.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13179981",
+    "releaseString": "++Fortnite+Release-12.50-CL-13179981-Android",
+    "manifestHash": "-04l9M68rnQuyTXf6Uud9qEls6DrZQ",
+    "label": "12.50-CL-13179981",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/-04l9M68rnQuyTXf6Uud9qEls6DrZQ.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13179981",
+    "releaseString": "++Fortnite+Release-12.50-CL-13179981-Android",
+    "manifestHash": "ThY3xhZ8cBjovxgDDk6lDmlrnn5T0w",
+    "label": "12.50-CL-13179981",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/ThY3xhZ8cBjovxgDDk6lDmlrnn5T0w.manifest"
+  },
+  {
+    "version": "12.50",
+    "cl": "13294732",
+    "releaseString": "++Fortnite+Release-12.50-CL-13294732-Android",
+    "manifestHash": "NK5d3mcay7e_fqcyQ06rmEjFVHX1gQ",
+    "label": "12.50-CL-13294732",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/NK5d3mcay7e_fqcyQ06rmEjFVHX1gQ.manifest"
+  },
+  {
+    "version": "12.60",
+    "cl": "13315662",
+    "releaseString": "++Fortnite+Release-12.60-CL-13315662-Android",
+    "manifestHash": "7loAvkN0gInoJ3BmIUqKkS-sJ4jQCA",
+    "label": "12.60-CL-13315662",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/7loAvkN0gInoJ3BmIUqKkS-sJ4jQCA.manifest"
+  },
+  {
+    "version": "12.60",
+    "cl": "13333624",
+    "releaseString": "++Fortnite+Release-12.60-CL-13333624-Android",
+    "manifestHash": "CW6o5EyZwctpgqz35UC-qEybjwqaAw",
+    "label": "12.60-CL-13333624",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/CW6o5EyZwctpgqz35UC-qEybjwqaAw.manifest"
+  },
+  {
+    "version": "12.61",
+    "cl": "13498347",
+    "releaseString": "++Fortnite+Release-12.61-CL-13498347-Android",
+    "manifestHash": "mSs7lzt6QOVv6SKlOE21TcBvJU4lnw",
+    "label": "12.61-CL-13498347",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/mSs7lzt6QOVv6SKlOE21TcBvJU4lnw.manifest"
+  },
+  {
+    "version": "12.61",
+    "cl": "13498980",
+    "releaseString": "++Fortnite+Release-12.61-CL-13498980-Android",
+    "manifestHash": "5UR0XFTlmPSJlqpGpE60LF1pmp5OjQ",
+    "label": "12.61-CL-13498980",
+    "date": "2020-02-20",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/5UR0XFTlmPSJlqpGpE60LF1pmp5OjQ.manifest"
+  },
+  {
+    "version": "13.00",
+    "cl": "13649278",
+    "releaseString": "++Fortnite+Release-13.00-CL-13649278-Android",
+    "manifestHash": "u-oTvtm5PVAMd8kwGkqjQTEDjk4gEw",
+    "label": "13.00-CL-13649278",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/u-oTvtm5PVAMd8kwGkqjQTEDjk4gEw.manifest"
+  },
+  {
+    "version": "13.00",
+    "cl": "13649811",
+    "releaseString": "++Fortnite+Release-13.00-CL-13649811-Android",
+    "manifestHash": "fbL9Hp5RcLbfBSuFXU6d0t0HtCDNlg",
+    "label": "13.00-CL-13649811",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/fbL9Hp5RcLbfBSuFXU6d0t0HtCDNlg.manifest"
+  },
+  {
+    "version": "13.00",
+    "cl": "13715544",
+    "releaseString": "++Fortnite+Release-13.00-CL-13715544-Android",
+    "manifestHash": "DOKYY-S3KyDzjJyLOUqv2TuCUbQTYw",
+    "label": "13.00-CL-13715544",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/DOKYY-S3KyDzjJyLOUqv2TuCUbQTYw.manifest"
+  },
+  {
+    "version": "13.00",
+    "cl": "13715664",
+    "releaseString": "++Fortnite+Release-13.00-CL-13715664-Android",
+    "manifestHash": "w80l2cYc6XImANM1iE6y1pcmrj71jA",
+    "label": "13.00-CL-13715664",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/w80l2cYc6XImANM1iE6y1pcmrj71jA.manifest"
+  },
+  {
+    "version": "13.20",
+    "cl": "13777676",
+    "releaseString": "++Fortnite+Release-13.20-CL-13777676-Android",
+    "manifestHash": "LbsMhzBedtbqm1XN1UKUkaJNIrP6LA",
+    "label": "13.20-CL-13777676",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/LbsMhzBedtbqm1XN1UKUkaJNIrP6LA.manifest"
+  },
+  {
+    "version": "13.20",
+    "cl": "13778048",
+    "releaseString": "++Fortnite+Release-13.20-CL-13778048-Android",
+    "manifestHash": "Te2GcsNotd6-wgYkm0-_d9SkX6vRqA",
+    "label": "13.20-CL-13778048",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/Te2GcsNotd6-wgYkm0-_d9SkX6vRqA.manifest"
+  },
+  {
+    "version": "13.30",
+    "cl": "13880136",
+    "releaseString": "++Fortnite+Release-13.30-CL-13880136-Android",
+    "manifestHash": "llSjZLhgxom9EL6_sEis-Q9f35bLSQ",
+    "label": "13.30-CL-13880136",
+    "date": "2020-06-17",
+    "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/llSjZLhgxom9EL6_sEis-Q9f35bLSQ.manifest"
+  }
+]

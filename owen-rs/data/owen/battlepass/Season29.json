@@ -1,0 +1,380 @@
+{
+  "battleBundleOfferId": "65831D41F34C2B1D5CCE70671CCBED85",
+  "battlePassOfferId": "6683B11134702B674E3ECC4ED6CA5BBE",
+  "tierOfferId": "30EBE9AF30664C19CBAE38390D39DF17",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_DarkStance_Inferno": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_SeleneCobra_Stride": 1
+    },
+    {
+      "AthenaBackpack:Backpack_DarkStance": 1
+    },
+    {
+      "AthenaBackpack:Backpack_DiscoBall": 1
+    },
+    {
+      "AthenaBackpack:Backpack_GateHound": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LiftingAura": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RaiderIceMelt": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RainbowHatPink": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedPantheon": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ReptilianOcean": 1
+    },
+    {
+      "AthenaCharacter:Character_GateHound_Spectral": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_StunningMountain_Armor": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SeleneCobra": 1
+    },
+    {
+      "AthenaBackpack:Backpack_StunningMountain": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TideKing": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AgentRoguePoison": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DarkStance": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_GateHound": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LiftingAura": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Paper": 1
+    },
+    {
+      "AthenaCharacter:Character_GoldAccomplishment": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_GoldAccomplishmentCape": 1
+    },
+    {
+      "AthenaCharacter:Character_TacticalRed_Disco": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedPantheon": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ReptilianOcean": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SeleneCobra": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SharkFinSwing": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_StunningMountain": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TideKing": 1
+    },
+    {
+      "AthenaGlider:Glider_DarkStance": 1
+    },
+    {
+      "AthenaCharacter:Character_LiftingAura_Wave": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_TideKing_Regal": 1
+    },
+    {
+      "AthenaGlider:Glider_GateHound": 1
+    },
+    {
+      "AthenaGlider:Glider_JailbirdSoar": 1
+    },
+    {
+      "AthenaGlider:Glider_LiftingAura": 1
+    },
+    {
+      "AthenaGlider:Glider_SeleneCobra": 1
+    },
+    {
+      "AthenaGlider:Glider_StunningMountain": 1
+    },
+    {
+      "AthenaGlider:Glider_TideKing": 1
+    },
+    {
+      "AthenaGlider:Umbrella_RankedPantheon": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_29": 1
+    },
+    {
+      "AthenaCharacter:Character_PaperBlaze": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PaperBlaze": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PaperBlaze": 1
+    },
+    {
+      "AthenaDance:EID_DarkStance": 1
+    },
+    {
+      "AthenaDance:EID_GateHound": 1
+    },
+    {
+      "AthenaDance:EID_Intermission": 1
+    },
+    {
+      "AthenaDance:EID_LiftingAura": 1
+    },
+    {
+      "AthenaDance:EID_ReptilianOcean": 1
+    },
+    {
+      "AthenaDance:EID_SeleneCobra": 1
+    },
+    {
+      "AthenaDance:EID_StunningMountain": 1
+    },
+    {
+      "AthenaCharacter:Character_PaperGlow": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PaperGlow": 1
+    },
+    {
+      "AthenaDance:EID_TideKing": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_DarkStanceA": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_DarkStanceB": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_GateHound": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_LiftingAura": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_ReptilianOcean": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SeleneCobra": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_StunningMountainA": 1
+    },
+    {
+      "AthenaCharacter:Character_PiteousKicks": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PiteousKicksCape": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_StunningMountainB": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_TideKingA": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_TideKingB": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_TideKingC": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_TriangleDance": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_8Up_29": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_DarkStance_Chariot": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_DarkStance_River": 1
+    },
+    {
+      "AthenaCharacter:Character_PlantStand": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_GateHound": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LiftingAura_Gliding": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LiftingAura_Selfie": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_ReptilianOcean_Already": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_ReptilianOcean_River": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S29Ranked": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SelenaCobra_Gliding": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SelenaCobra_Scope": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_StunningMountain_2": 1
+    },
+    {
+      "AthenaCharacter:Character_RankedOlympus": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedOlympus": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_StunningMountain_Lightening": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_TideKing_CoralBuddies": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_TideKing_Muscles": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_202_SelenaCobra": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_203_TideKing": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_204_DarkStance": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_GateHound": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_LiftingAura": 1
+    },
+    {
+      "AthenaCharacter:Character_ReptilianOcean_Sleek": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaEmoji:Emoji_S29_Ranked1": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_Ranked2": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_Ranked3": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_ReptilianOcean": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_SelenaCobra": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_StunningMountatin": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S29_TideKing": 1
+    },
+    {
+      "AthenaSpray:Spray_DarkStance_Medallion": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_29KeyArt": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_DarkStance_Mask": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S29_DarkStanceHorns": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_AgentRogueGreen": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

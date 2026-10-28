@@ -540,3 +540,23 @@ Work Log:
 
 Stage Summary:
 - المهمة الكونية مكتملة: manifest hash لـ 12.41 موجود ومُتحقق منه ومُطبَّق في Voltronite — aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg — والطريقة (سلسلة الدلتا على CDN) موثقة وقابلة للتكرار لكل الإصدارات 10.31-15.50
+
+---
+Task ID: 31
+Agent: main (Z.ai Code)
+Task: Owen Launcher → Rust آمن موحّد + سيرفر رسمي (حسابات كاملة + PartyHub أصلي) + واجهة Liquid Glass بتصميم iOS 26 + اختبار كل المواسم + CI
+
+Work Log:
+- إصلاح مساحة العمل owen-rs (تلف needed.rs من جلسة مقطوعة: كود يتيم بعد _unused_marker — أُعيد دمج اكتشاف PT_DYNAMIC) — cargo check يمر
+- [Subagent A] ترقية owen-server v3 كاملة: PBKDF2-SHA256 يدوي (RFC 2104/8018 بلا اعتماديات، مقارنة زمنية ثابتة، متجهات RFC رسمية) + Account بإيميل/اسم مستخدم/كلمة مرور + تسجيل كامل بالتحقق (6 رموز أخطاء Epic-style) + OAuth حقيقي (password/device_auth/refresh/exchange + invalid_grant) + استمرارية accounts.json وsessions.json (الجلسات تنجو من إعادة التشغيل) + سجل مواسم ثابت S1-S42 بتواريخ تاريخية حقيقية + API المواسم + timeline واعٍ بالموسم (X-Season/?season/المختار) + MCP QueryProfile يعيد fullProfileUpdate دائماً (سلوك LawinServer) مع إثراء athena ببطاقات المعركة (تقطيع Reload حسب المستوى) + PartyHub أصلي كامل — 44 اختباراً ناجحاً
+- [أنا] نظام تصميم Owen Liquid Glass موحّد (tokens مشتركة): صفحة /login الزجاجية (أوين/تسجيل بتبويبات متحولة + RTL/LTR + دخول سريع + exchange code → deep link) + جسر PartyHub v4 (دخول زجاجي كامل + استرجاع جلسة يشارك توكن الواجهة + كشف وضع البروكسي OWEN_API_BASE + XHR→graphql أصلي بـ Bearer + fallbacks محلية)
+- تفكيك بروتوكول PartyHub من الباندل: getpresence (مصفوفة {UserId,State,Status,Properties}) + createparty {PartyId,LeaderId,PresencePermissions,State,Members[{Id,DisplayName,Platform,bConnected,Type,Properties}]} + الأنواع (embedded/game, Active, VoiceChatStatus) + join مشترك بين الحفلة والصوت (args.channelId → {ChannelName,ChannelType} ليصبح الصوت Connected) + الاكتشاف الحاسم: نوع الإشعار يجب أن يكون native_notification حرفياً (وليس notification) وإلا تجاهله processBridgeResponse — والتطبيق لا يستقصي getparty أبداً بل يعتمد إشعارات oss.party.partyjoined + joininfodata في خصائص الحضور
+- [أنا] واجهة Next.js Liquid Glass كاملة (تصميم iOS 26): Aurora خلفية متحركة + بطاقات زجاجية مصقولة (backdrop-blur 26px saturate 1.75) + عربي RTL افتراضياً/إنجليزي + وضع فاتح/داكن + Splash → مصادقة → 6 شاشات (الرئيسية ببطاقة الموسم البطل + المواسم carousel مع التفاصيل وبطاقات المعركة + التنزيلات بمانيفستات حقيقية 38 نسخة + PartyHub بإطار هاتف حي + الملف الشخصي بملف MCP حقيقي + الإعدادات) + شريط حالة زجاجي مثبت أسفل + Framer Motion springs في كل مكان
+- إصلاحان حاسمان كشفتههما المتصفح: (1) Next.js proxy يحوّل /account/* إلى 404 داخل إطار PartyHub → الجسر يكتشف appContext ويستخدم /owen-api (2) Lightning CSS حوّل backdrop-filter إلى -webkit- فقط وHeadlessChrome 156 أسقطها → أدوات Tailwind الأصلية (backdrop-blur-[26px]) تحل المشكلة + (3) جلسات السيرفر كانت بالذاكرة → استمرارية sessions.json
+- البيانات: manifests.json (38 نسخة بما فيها 12.41 aEzFZyiS_7jkqD6K8KN4zQEg + هوتفيكس) من MANIFEST-HASHES + profiles/responses من Voltronite + مجلد partyhub من shippedweb_party (بمسار جسر مطلق) + rewrites نحو :3010 (owen-api + partyhub)
+- الاختبارات الحية: مصفوفة المواسم S1-S42 كاملة (timeline + تفاصيل + MCP fullProfileUpdate لكل موسم) — نجاح كامل ✓ | تسجيل→دخول→ملف عبر المتصفح فعلياً ✓ | PartyHub داخل iframe: التطبيق الكامل يقلع بحساب حقيقي (بطاقات الميكروفون/الإشعارات/Llama Bell/شارة NEW FRIEND REQUEST — نفس الحالة المرجعية للجلسة 28) والحفلة تُدفع بإشعار native_notification ✓ | تقييم VLM للواجهة: 8/10 (زجاج مصقول حقيقي بعد الإصلاح)
+- CI: owen-rs-ci.yml (اختبارات الوورك سبيس + فحص سياسة Rust الآمن (صفر unsafe في core/server/cli/patcher) + مصفوفة المواسم الحية على سيرفر فعلي + فحوص PartyHub + بناء libowen.so للـ aarch64-android) — بيانات CI ذاتية الاحتواء في owen-rs/data (بدون حزمة Kairos المحمية) + README كامل
+- lint نظيف (eslint src: صفر أخطاء) + كل أوامر الجسر غير المعالجة سُجّلت وفُكّت ومعالجة
+
+Stage Summary:
+- المشروع الموحد جاهز: owen-rs (9 كريتات، Rust آمن) + سيرفر بحسابات حقيقية + PartyHub أصلي 100% من Rust + واجهة Liquid Glass حية متصلة بالسيرفر + كل المواسم تعمل + CI على GitHub Actions

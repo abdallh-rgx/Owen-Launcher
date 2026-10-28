@@ -1,0 +1,382 @@
+{
+  "battleBundleOfferId": "1A6D55EB3E7A9E2C111510D73406A60E",
+  "battlePassOfferId": "1B339E3EEC9D3A2AF2D1FF5EEB527020",
+  "tierOfferId": "0C49D00DE618F4BE46E4B950DD85E2FA",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_AlpacaLean_Gel": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_AlpacaLean_Gel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AlpacaLean_Gel": 1
+    },
+    {
+      "AthenaGlider:Glider_AlpacaLean_Gel": 1
+    },
+    {
+      "AthenaCharacter:Character_RankedShade": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedShade": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedShade": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RankedShade": 1
+    },
+    {
+      "AthenaBackpack:Backpack_AlpacaLean_Bass": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CellSeed": 1
+    },
+    {
+      "AthenaCharacter:Character_CopperMoggy_Swan": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CopperMoggy_Swan": 1
+    },
+    {
+      "AthenaCharacter:Character_RebelTempo": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RebelTempo": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RebelTempo_DrumStick": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RebelTempo": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RebelTempo_DrumStick": 1
+    },
+    {
+      "AthenaDance:EID_RebelTempo": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ColdTrophy": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CopperMoggy_Prime": 1
+    },
+    {
+      "AthenaCharacter:Character_FunkyFeather_Cap": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_FunkyFeather_Cap": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FunkyFeather_Cap": 1
+    },
+    {
+      "AthenaGlider:Glider_FunkyFeather_Cap": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_FunkyFeather_Cap": 1
+    },
+    {
+      "AthenaCharacter:Character_RoseScour": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RoseScour": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RoseScour": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RoseScourA": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RoseScourB": 1
+    },
+    {
+      "AthenaCharacter:Character_HydroDrift_Metal": 1,
+      "AthenaItemWrap:Wrap_RoseScourC": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_HydroDrift_Metal": 1,
+      "AthenaSkyDiveContrail:Contrail_RoseScour": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_HydroDrift_Metal": 1
+    },
+    {
+      "AthenaCharacter:Character_TrickCrate": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TrickCrateCape": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TrickCrate": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ExtractionFrame": 1
+    },
+    {
+      "AthenaBackpack:Backpack_FunkyFeather_Keytar": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LocalTalent_Flare": 1
+    },
+    {
+      "AthenaBackpack:Backpack_OrbTwirl": 1
+    },
+    {
+      "AthenaCharacter:Character_LemonWrath_Ochre": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_LemonWrath_Ochre": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LemonWrath_Ochre": 1
+    },
+    {
+      "AthenaGlider:Glider_LemonWrath_Ochre": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_LemonWrath_Ochre": 1
+    },
+    {
+      "AthenaCharacter:Character_WoodsPrice": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Season_41": 1
+    },
+    {
+      "AthenaBackpack:Backpack_VoyagerCuboid": 1
+    },
+    {
+      "AthenaBackpack:Backpack_VoyagerCuboid_Guitar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AlpacaLean_Bass": 1
+    },
+    {
+      "AthenaCharacter:Character_LentilAnise": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_LentilAnise": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LentilAnise": 1
+    },
+    {
+      "AthenaDance:EID_LentilAnise": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AxeOfUnreal_41": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CellSeed": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_FunkyFeather_Keytar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LocalTalent_Flare": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Season_41": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VoyagerCuboid": 1
+    },
+    {
+      "AthenaCharacter:Character_LivelySugar_Syrup": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_LivelySugar_Syrup": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LivelySugar_Syrup": 1
+    },
+    {
+      "AthenaGlider:Glider_LivelySugar_Syrup": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_LivelySugar_Syrup": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VoyagerCuboid_Guitar": 1
+    },
+    {
+      "AthenaGlider:Glider_CopperMoggy_Prime": 1
+    },
+    {
+      "AthenaGlider:Glider_LocalTalent": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_41": 1
+    },
+    {
+      "AthenaDance:EID_AlpacaLean": 1
+    },
+    {
+      "AthenaCharacter:Character_LocalTalent_Daisy": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaDance:EID_ChewyStave": 1
+    },
+    {
+      "AthenaDance:EID_CopperMoggy": 1
+    },
+    {
+      "AthenaDance:EID_FunkyFeather": 1
+    },
+    {
+      "AthenaDance:EID_HydroDrift": 1
+    },
+    {
+      "AthenaDance:EID_LemonWrath": 1
+    },
+    {
+      "AthenaDance:EID_LivelySugar": 1
+    },
+    {
+      "AthenaDance:EID_LocalTalent": 1
+    },
+    {
+      "AthenaDance:EID_PixieParts": 1
+    },
+    {
+      "AthenaDance:EID_VoyagerCuboid": 1
+    },
+    {
+      "AthenaCharacter:Character_PixieParts_Lava": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PixieParts_Lava": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PixieParts_Lava": 1
+    },
+    {
+      "AthenaGlider:Glider_PixieParts_Lava": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_CopperMoggy": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_HydroDrift": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_LivelySugar": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_LocalTalentFlare": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PixiePartsLava": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Season_41": 1
+    },
+    {
+      "AthenaCharacter:Character_PrismGlee": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PrismGlee": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PrismGlee": 1
+    },
+    {
+      "AthenaDance:EID_PrismGlee": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_VoyagerCuboid": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CopperMoggy": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CopperMoggy2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CosmoHound": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_DustyWing": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_AlpacaLean": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_AlpacaLean": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoticon_AlpacaLean": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_AlpacaLean": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

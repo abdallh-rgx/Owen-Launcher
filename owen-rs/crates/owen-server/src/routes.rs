@@ -2,7 +2,8 @@
 //! plus Reload-Backend features) and the Owen-specific endpoints.
 
 use crate::login_page::LOGIN_PAGE;
-use crate::state::{iso_now, AppState, Session};
+use crate::seasons::{self, MAX_SEASON, SeasonMeta};
+use crate::state::{iso_now, today, Account, AppState, Session};
 use axum::body::Bytes;
 use axum::extract::{Multipart, Path, Query, State};
 use axum::http::{HeaderMap, StatusCode};
@@ -18,7 +19,14 @@ pub fn root_router(state: Arc<AppState>) -> Router {
         // ---- Owen-specific ----
         .route("/", get(index))
         .route("/login", get(login_page))
-        .route("/partyhub/graphql", post(partyhub_graphql))
+        .merge(crate::partyhub::partyhub_router())
+        .route("/api/launcher/register", post(launcher_register))
+        .route("/api/launcher/me", get(launcher_me))
+        .route("/api/launcher/me/season", post(launcher_me_season))
+        .route("/api/launcher/logout", post(launcher_logout))
+        .route("/api/launcher/seasons", get(launcher_seasons))
+        .route("/api/launcher/seasons/:n", get(launcher_season))
+        .route("/api/launcher/manifests", get(launcher_manifests))
         .route("/launcher/api/public/assets/:platform/:label/:app/:build", get(launcher_assets))
         .route("/manifest/:rest", get(manifest_file))
         // ---- admin (web panel) ----
@@ -127,6 +135,13 @@ fn ok_json(v: Value) -> Response {
 async fn index(State(state): State<Arc<AppState>>) -> Response {
     let cfg = state.config.read().unwrap().clone();
     let uptime = state.started.elapsed().as_secs();
+    let (accounts, registered) = {
+        let accounts = state.accounts.read().unwrap();
+        (
+            accounts.len(),
+            accounts.values().filter(|a| !a.email.is_empty()).count(),
+        )
+    };
     ok_json(json!({
         "server": "owen-server",
         "version": env!("CARGO_PKG_VERSION"),
@@ -134,7 +149,12 @@ async fn index(State(state): State<Arc<AppState>>) -> Response {
         "uptime_seconds": uptime,
         "login_url": cfg.login_url(),
         "partyhub_graphql": cfg.partyhub_graphql_url(),
-        "accounts": state.accounts.read().unwrap().len(),
+        "accounts": accounts,
+        "registered": registered,
+        "seasons": state.battlepass_seasons.read().unwrap().len(),
+        "partyhub": state.partyhub_dir.is_some(),
+        "manifests": state.manifests_count(),
+        "xmpp_port": cfg.xmpp_port,
     }))
 }
 
@@ -143,54 +163,190 @@ async fn login_page(Query(q): Query<HashMap<String, String>>) -> Html<&'static s
     Html(LOGIN_PAGE)
 }
 
-/// PartyHub graphql (Kairos era, 12.61-15.50). The redirecter rewrites
-/// `DebouncedLimiter.getGraphqlUrl()` to this endpoint; respond with an
-/// Apollo-compatible body for the queries the companion app sends.
-async fn partyhub_graphql(
+// ---------------------------------------------------------------------------
+// launcher auth API
+// ---------------------------------------------------------------------------
+
+/// Register a launcher account (email + username + password) and return an
+/// auto-login session.
+async fn launcher_register(State(state): State<Arc<AppState>>, body: Bytes) -> Response {
+    state.log_request("POST /api/launcher/register".into());
+    let payload: Value = match serde_json::from_slice(&body) {
+        Ok(v) => v,
+        Err(_) => {
+            return jresp(
+                StatusCode::BAD_REQUEST,
+                json!({"errorCode": "errors.com.owen.account.invalid_payload",
+                       "message": "Expected a JSON body {email, username, displayName?, password}"}),
+            )
+        }
+    };
+    let email = payload.get("email").and_then(|v| v.as_str()).unwrap_or("");
+    let username = payload.get("username").and_then(|v| v.as_str()).unwrap_or("");
+    let display_name = payload
+        .get("displayName")
+        .or_else(|| payload.get("display_name"))
+        .and_then(|v| v.as_str())
+        .unwrap_or(username);
+    let password = payload.get("password").and_then(|v| v.as_str()).unwrap_or("");
+
+    match state.register(email, username, display_name, password) {
+        Ok(acc) => {
+            let session = state.create_session(&acc.account_id);
+            ok_json(json!({
+                "accountId": acc.account_id,
+                "username": acc.username,
+                "displayName": acc.display_name,
+                "email": acc.email,
+                "created": acc.created,
+                "access_token": session.access_token,
+                "refresh_token": session.refresh_token,
+                "expires_in": session.expires_in,
+            }))
+        }
+        Err(e) => jresp(
+            StatusCode::BAD_REQUEST,
+            json!({"errorCode": e.error_code(), "message": e.message()}),
+        ),
+    }
+}
+
+/// Launcher account summary (Bearer).
+async fn launcher_me(State(state): State<Arc<AppState>>, headers: HeaderMap) -> Response {
+    match state.auth_account(&headers) {
+        Some(acc) => ok_json(account_summary(&state, &acc)),
+        None => jresp(StatusCode::UNAUTHORIZED, json!({"error": "invalid_token"})),
+    }
+}
+
+fn account_summary(state: &AppState, acc: &Account) -> Value {
+    json!({
+        "accountId": acc.account_id,
+        "username": acc.username,
+        "displayName": acc.display_name,
+        "email": acc.email,
+        "created": acc.created,
+        "level": acc.level,
+        "vbucks": acc.vbucks,
+        "battlePassPurchased": acc.battle_pass_purchased,
+        "banned": acc.banned,
+        "itemsOwned": acc.items.len(),
+        "selectedSeason": acc.selected_season.unwrap_or(state.current_season()),
+    })
+}
+
+/// Select the active battle pass season for the bearer account.
+async fn launcher_me_season(
     State(state): State<Arc<AppState>>,
     headers: HeaderMap,
     body: Bytes,
 ) -> Response {
-    state.log_request("POST /partyhub/graphql".into());
-    let query = String::from_utf8_lossy(&body).to_string();
-    let operation = extract_operation(&query);
-    let account = state.auth_account(&headers);
-    let member = account.map(|a| json!({"accountId": a.account_id, "displayName": a.display_name, "role": "CAPTAIN", "joinedAt": iso_now()}));
-    match operation.as_deref() {
-        Some("GetPartyHubStatus") => ok_json(json!({
-            "data": {"partyHubStatus": {"status": "READY"}}
-        })),
-        Some(op) if op.contains("Party") || op.contains("party") => ok_json(json!({
-            "data": {"party": {"id": "owen-party", "config": {"invitePermissions": "Anyone"},
-                    "members": [member.unwrap_or_else(|| json!({"accountId": "owen", "displayName": "OwenPlayer", "role": "CAPTAIN", "joinedAt": iso_now()}))],
-                    "applicants": [], "invites": [], "intention": []}}
-        })),
-        _ => ok_json(json!({"data": {}})),
+    let Some(account_id) = state.auth_account(&headers).map(|a| a.account_id) else {
+        return jresp(StatusCode::UNAUTHORIZED, json!({"error": "invalid_token"}));
+    };
+    let payload: Value = match serde_json::from_slice(&body) {
+        Ok(v) => v,
+        Err(_) => {
+            return jresp(
+                StatusCode::BAD_REQUEST,
+                json!({"errorCode": "errors.com.owen.season.invalid",
+                       "message": "Expected a JSON body {season: N}"}),
+            )
+        }
+    };
+    let season = payload
+        .get("season")
+        .and_then(|v| v.as_u64())
+        .filter(|n| (1..=MAX_SEASON as u64).contains(n));
+    let Some(season) = season else {
+        return jresp(
+            StatusCode::BAD_REQUEST,
+            json!({"errorCode": "errors.com.owen.season.invalid",
+                   "message": format!("Season must be a number between 1 and {MAX_SEASON}")}),
+        );
+    };
+    match state.set_selected_season(&account_id, season as u32) {
+        Some(acc) => ok_json(account_summary(&state, &acc)),
+        None => jresp(StatusCode::UNAUTHORIZED, json!({"error": "invalid_token"})),
     }
 }
 
-fn extract_operation(query: &str) -> Option<String> {
-    // Apollo posts JSON {"query": "...", "operationName": "..."} — or raw
-    // graphql. Find "query <Name>" or the operationName field.
-    if let Ok(v) = serde_json::from_str::<Value>(query) {
-        if let Some(name) = v.get("operationName").and_then(|n| n.as_str()) {
-            return Some(name.to_string());
-        }
-        if let Some(q) = v.get("query").and_then(|n| n.as_str()) {
-            return graphql_name(q);
-        }
+/// Kill the bearer session.
+async fn launcher_logout(State(state): State<Arc<AppState>>, headers: HeaderMap) -> Response {
+    if let Some(auth) = headers.get("authorization").and_then(|v| v.to_str().ok()) {
+        let token = auth
+            .strip_prefix("Bearer ")
+            .or(auth.strip_prefix("bearer "))
+            .unwrap_or(auth);
+        state.end_session(token);
     }
-    graphql_name(query)
+    ok_json(json!({}))
 }
 
-fn graphql_name(q: &str) -> Option<String> {
-    let mut it = q.split_whitespace();
-    while let Some(tok) = it.next() {
-        if tok.eq_ignore_ascii_case("query") || tok.eq_ignore_ascii_case("mutation") {
-            return it.next().map(|s| s.trim_matches(|c: char| c == '(' || c == '{').to_string());
-        }
+// ---------------------------------------------------------------------------
+// launcher seasons / manifests
+// ---------------------------------------------------------------------------
+
+fn season_item(meta: SeasonMeta, bp: Option<&Value>, current: u32) -> Value {
+    let (paid, free) = bp.map(seasons::battlepass_tiers).unwrap_or((0, 0));
+    let now = today();
+    let active = (meta.start <= now.as_str() && now.as_str() <= meta.end) || meta.season == current;
+    json!({
+        "season": meta.season,
+        "chapter": meta.chapter,
+        "chapterSeason": meta.chapter_season,
+        "name": meta.name,
+        "version": format!("v{}.0", meta.season),
+        "startDate": meta.start,
+        "endDate": meta.end,
+        "image": seasons::season_image(meta.season),
+        "paidTiers": paid,
+        "freeTiers": free,
+        "active": active,
+    })
+}
+
+/// The season catalog for the launcher: every known season with battle
+/// pass tier counts, plus the current default season.
+async fn launcher_seasons(State(state): State<Arc<AppState>>) -> Response {
+    let current = state.current_season();
+    let battlepasses = state.battlepass_seasons.read().unwrap();
+    let items: Vec<Value> = seasons::all_seasons()
+        .into_iter()
+        .map(|meta| {
+            let bp = battlepasses.get(&format!("Season{}", meta.season));
+            season_item(meta, bp, current)
+        })
+        .collect();
+    ok_json(json!({"current": current, "seasons": items}))
+}
+
+/// One season with its full battle pass JSON.
+async fn launcher_season(State(state): State<Arc<AppState>>, Path(n): Path<String>) -> Response {
+    let Ok(n) = n.trim().parse::<u32>() else {
+        return jresp(StatusCode::NOT_FOUND, json!({"errorCode": "errors.com.owen.season.not_found"}));
+    };
+    let Some(meta) = seasons::season_info(n) else {
+        return jresp(StatusCode::NOT_FOUND, json!({"errorCode": "errors.com.owen.season.not_found"}));
+    };
+    let current = state.current_season();
+    let battlepass = state.battlepass_for(n);
+    let meta_json = season_item(meta, battlepass.as_ref(), current);
+    ok_json(json!({
+        "meta": meta_json,
+        "battlepass": battlepass.unwrap_or(Value::Null),
+    }))
+}
+
+/// Serve the launcher manifests catalog (data_dir/manifests.json).
+async fn launcher_manifests(State(state): State<Arc<AppState>>) -> Response {
+    match state
+        .data_file("manifests.json")
+        .and_then(|d| serde_json::from_slice::<Value>(&d).ok())
+    {
+        Some(v) => ok_json(v),
+        None => ok_json(json!([])),
     }
-    None
 }
 
 /// Auto manifest redirecter: the launcher asset API the game asks after
@@ -260,12 +416,39 @@ async fn oauth_token(
     let grant = form.get("grant_type").cloned().unwrap_or_default();
     let account = match grant.as_str() {
         "password" => {
-            let name = form
+            let login = form
                 .get("username")
                 .cloned()
                 .or_else(|| form.get("email").cloned())
                 .unwrap_or_else(|| "OwenPlayer".into());
-            state.account_by_name(&name)
+            let password = form.get("password").cloned().unwrap_or_default();
+            match state.verify_login(&login, &password) {
+                Some(acc) => acc,
+                // No account matches the login at all → legacy quick-account
+                // creation so the in-game flow keeps working.
+                None if !state.login_exists(&login) => state.account_by_name(&login),
+                // An account exists (registered, password-protected) but the
+                // password is wrong.
+                None => {
+                    return jresp(
+                        StatusCode::BAD_REQUEST,
+                        json!({"error": "invalid_grant", "error_description": "Invalid username or password"}),
+                    )
+                }
+            }
+        }
+        "device_auth" => {
+            // form fields: device_id / account_id / secret
+            let account_id = form.get("account_id").cloned().unwrap_or_default();
+            match state.account_by_id(&account_id) {
+                Some(acc) => acc,
+                None => {
+                    return jresp(
+                        StatusCode::BAD_REQUEST,
+                        json!({"error": "invalid_grant", "error_description": "Unknown device credentials"}),
+                    )
+                }
+            }
         }
         "authorization_code" => {
             let code = form.get("code").cloned().unwrap_or_default();
@@ -421,7 +604,7 @@ async fn grant_access(State(state): State<Arc<AppState>>, Path(id): Path<String>
     ok_json(json!({}))
 }
 
-async fn try_play(State(state): State<Arc<AppState>>, Path(id): Path<String>) -> Response {
+async fn try_play(State(_state): State<Arc<AppState>>, Path(id): Path<String>) -> Response {
     let _ = id;
     ok_json(json!({}))
 }
@@ -432,6 +615,7 @@ async fn mcp(
     State(state): State<Arc<AppState>>,
     Path((account_id, operation)): Path<(String, String)>,
     headers: HeaderMap,
+    Query(query): Query<HashMap<String, String>>,
     body: Bytes,
 ) -> Response {
     let account = state
@@ -451,9 +635,15 @@ async fn mcp(
         .unwrap_or("common_core")
         .to_string();
 
-    let mut profile = state.profile_for(&account, &profile_id);
     let mut notifications: Vec<Value> = Vec::new();
     let mut changed = false;
+    // Read commands always answer with the full profile (LawinServer v2
+    // behavior) — the game expects its locker/level/battle-pass data in
+    // `profileChanges` on every QueryProfile / ClientQuestLogin.
+    let full_update = matches!(
+        operation.as_str(),
+        "QueryProfile" | "ClientQuestLogin" | "RefreshExpeditions" | "GetMcpTimeForLogin"
+    );
 
     match operation.as_str() {
         "QueryProfile" | "ClientQuestLogin" | "RefreshExpeditions" | "GetMcpTimeForLogin" => {}
@@ -496,28 +686,38 @@ async fn mcp(
             let rvn = map.rvn.entry(profile_id.clone()).or_insert(1);
             *rvn += 1;
         }
-        if let Value::Object(m) = &mut profile {
-            m.insert(
-                "rvn".into(),
-                Value::Number((state
-                    .account_by_id(&account.account_id)
-                    .and_then(|a| a.rvn.get(&profile_id).copied())
-                    .unwrap_or(1))
-                .into()),
-            );
+        state.persist_accounts();
+    }
+
+    // Fresh snapshot so mutations (level, purchase...) are reflected.
+    let account = state
+        .account_by_id(&account.account_id)
+        .unwrap_or(account);
+
+    let mut profile = state.profile_for(&account, &profile_id);
+
+    // Athena enrichment: when the resolved season has a battle pass file,
+    // overlay book level and the flattened battle pass items.
+    if profile_id == "athena" {
+        let current = state.current_season();
+        let season = seasons::resolve_season(
+            headers.get("x-season").and_then(|v| v.to_str().ok()),
+            query.get("season").map(|s| s.as_str()),
+            account.selected_season,
+            current,
+        );
+        if let Some(battlepass) = state.battlepass_for(season) {
+            seasons::enrich_athena(&mut profile, &account, &battlepass);
         }
     }
 
-    let rvn = state
-        .account_by_id(&account.account_id)
-        .and_then(|a| a.rvn.get(&profile_id).copied())
-        .unwrap_or(1);
+    let rvn = account.rvn.get(&profile_id).copied().unwrap_or(1);
 
     ok_json(json!({
         "profileRevision": rvn,
         "profileId": profile_id,
         "profileChangesBaseRevision": rvn.saturating_sub(1),
-        "profileChanges": if changed {
+        "profileChanges": if changed || full_update {
             serde_json::Value::Array(vec![json!({
                 "changeType": "fullProfileUpdate",
                 "profile": profile,
@@ -552,27 +752,35 @@ async fn keychain(State(state): State<Arc<AppState>>) -> Response {
     }
 }
 
-async fn timeline(State(state): State<Arc<AppState>>) -> Response {
-    let seasons = state.battlepass_seasons.read().unwrap();
-    let mut timelines = vec![];
-    let mut idx = 0i64;
-    for (name, _data) in seasons.iter() {
-        let num: i64 = name.trim_start_matches("Season").parse().unwrap_or(1);
-        idx = idx.max(num);
-    }
-    // current season = highest loaded
-    for s in 1..=idx.max(1) {
-        timelines.push(json!({
-            "season": s, "chapter": if s > 10 {2} else {1},
-            "startTime": iso_now(), "endTime": iso_now(),
-        }));
-    }
+/// Fortnite calendar/timeline. The season is resolved from the `X-Season`
+/// header, the `?season=` query or the bearer account's selection,
+/// defaulting to the highest season with a battle pass file.
+async fn timeline(
+    State(state): State<Arc<AppState>>,
+    headers: HeaderMap,
+    Query(query): Query<HashMap<String, String>>,
+) -> Response {
+    let current = state.current_season();
+    let selected = state.auth_account(&headers).and_then(|a| a.selected_season);
+    let season = seasons::resolve_season(
+        headers.get("x-season").and_then(|v| v.to_str().ok()),
+        query.get("season").map(|s| s.as_str()),
+        selected,
+        current,
+    );
+    let meta = seasons::season_info_or_default(season);
     ok_json(json!({
         "channels": {},
-        "currentTime": iso_now(),
         "clientParameters": {"canvas": "en"},
-        "seasons": timelines,
-        "seasonStamp": format!("{}_{}", 1, idx.max(1)),
+        "currentTime": iso_now(),
+        "events": [],
+        "seasons": [{
+            "seasonNumber": meta.season,
+            "beginTime": format!("{}T00:00:00.000Z", meta.start),
+            "endTime": format!("{}T00:00:00.000Z", meta.end),
+            "profileChanges": [],
+        }],
+        "seasonStamp": meta.season.to_string(),
         "stories": {},
         "synergy": {},
         "activeEvents": [],
@@ -634,7 +842,7 @@ async fn cloudstorage_user(State(state): State<Arc<AppState>>, Path(account): Pa
 }
 
 async fn cloudstorage_user_file(
-    State(state): State<Arc<AppState>>,
+    State(_state): State<Arc<AppState>>,
     Path((account, file)): Path<(String, String)>,
 ) -> Response {
     let _ = (account, file);
@@ -902,32 +1110,43 @@ async fn admin_update_player(
     Path(id): Path<String>,
     Json(body): Json<Value>,
 ) -> Response {
-    let mut accounts = state.accounts.write().unwrap();
-    let Some(acc) = accounts.get_mut(&id) else {
-        return jresp(StatusCode::NOT_FOUND, json!({"error": "not found"}));
+    let (snapshot, old_name) = {
+        let mut accounts = state.accounts.write().unwrap();
+        let Some(acc) = accounts.get_mut(&id) else {
+            return jresp(StatusCode::NOT_FOUND, json!({"error": "not found"}));
+        };
+        let old_name = acc.display_name.clone();
+        if let Some(v) = body.get("banned").and_then(|v| v.as_bool()) {
+            acc.banned = v;
+        }
+        if let Some(v) = body.get("whitelisted").and_then(|v| v.as_bool()) {
+            acc.whitelisted = v;
+        }
+        if let Some(v) = body.get("vbucks").and_then(|v| v.as_i64()) {
+            acc.vbucks = v;
+        }
+        if let Some(v) = body.get("level").and_then(|v| v.as_u64()) {
+            acc.level = v as u32;
+        }
+        if let Some(v) = body.get("battle_pass_purchased").and_then(|v| v.as_bool()) {
+            acc.battle_pass_purchased = v;
+        }
+        if let Some(v) = body.get("sac_code").and_then(|v| v.as_str()) {
+            acc.sac_code = v.to_string();
+        }
+        if let Some(v) = body.get("display_name").and_then(|v| v.as_str()) {
+            acc.display_name = v.to_string();
+        }
+        (acc.clone(), old_name)
     };
-    if let Some(v) = body.get("banned").and_then(|v| v.as_bool()) {
-        acc.banned = v;
+    // keep the display-name index in sync on rename
+    if snapshot.display_name != old_name {
+        let mut by_name = state.by_name.write().unwrap();
+        by_name.remove(&old_name);
+        by_name.insert(snapshot.display_name.clone(), snapshot.account_id.clone());
     }
-    if let Some(v) = body.get("whitelisted").and_then(|v| v.as_bool()) {
-        acc.whitelisted = v;
-    }
-    if let Some(v) = body.get("vbucks").and_then(|v| v.as_i64()) {
-        acc.vbucks = v;
-    }
-    if let Some(v) = body.get("level").and_then(|v| v.as_u64()) {
-        acc.level = v as u32;
-    }
-    if let Some(v) = body.get("battle_pass_purchased").and_then(|v| v.as_bool()) {
-        acc.battle_pass_purchased = v;
-    }
-    if let Some(v) = body.get("sac_code").and_then(|v| v.as_str()) {
-        acc.sac_code = v.to_string();
-    }
-    if let Some(v) = body.get("display_name").and_then(|v| v.as_str()) {
-        acc.display_name = v.to_string();
-    }
-    ok_json(serde_json::to_value(&*acc).unwrap_or_default())
+    state.persist_accounts();
+    ok_json(serde_json::to_value(&snapshot).unwrap_or_default())
 }
 
 async fn admin_delete_player(
@@ -937,6 +1156,17 @@ async fn admin_delete_player(
     let removed = state.accounts.write().unwrap().remove(&id);
     if let Some(acc) = removed {
         state.by_name.write().unwrap().remove(&acc.display_name);
+        if !acc.username.is_empty() {
+            state
+                .by_username
+                .write()
+                .unwrap()
+                .remove(&acc.username.to_lowercase());
+        }
+        if !acc.email.is_empty() {
+            state.by_email.write().unwrap().remove(&acc.email);
+        }
+        state.persist_accounts();
         ok_json(json!({"deleted": acc.account_id}))
     } else {
         jresp(StatusCode::NOT_FOUND, json!({"error": "not found"}))
@@ -1113,4 +1343,121 @@ async fn admin_log(State(state): State<Arc<AppState>>) -> Response {
 
 async fn admin_versions() -> Response {
     ok_json(owen_core::profiles::version_catalog())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn router_builds_without_pattern_conflicts() {
+        // Fails (panics) if any route pattern is invalid — e.g. a
+        // catch-all in the middle of a path, which axum 0.7 rejects.
+        let state = Arc::new(crate::state::AppState::load(
+            std::env::temp_dir().join("owen-router-smoke"),
+            owen_core::config::OwenConfig::default(),
+        ));
+        let _router = root_router(state);
+    }
+
+    #[test]
+    fn season_item_shape_and_counts() {
+        let meta = seasons::season_info(12).expect("season 12");
+        let bp = json!({
+            "paidRewards": Value::Array(vec![json!({}); 100]),
+            "freeRewards": Value::Array(vec![json!({}); 90])
+        });
+        let item = season_item(meta, Some(&bp), 12);
+        assert_eq!(item["season"], 12);
+        assert_eq!(item["chapter"], 2);
+        assert_eq!(item["chapterSeason"], 2);
+        assert_eq!(item["name"], "Top Secret");
+        assert_eq!(item["version"], "v12.0");
+        assert_eq!(item["startDate"], "2020-02-20");
+        assert_eq!(item["endDate"], "2020-06-16");
+        assert_eq!(item["image"], "/owen/seasons/season_12_folder.png");
+        assert_eq!(item["paidTiers"], 100);
+        assert_eq!(item["freeTiers"], 90);
+        assert_eq!(item["active"], true, "season == current is active");
+
+        // no battle pass file → zero counts, image rules still apply
+        let item = season_item(meta, None, 42);
+        assert_eq!(item["paidTiers"], 0);
+        assert_eq!(item["freeTiers"], 0);
+        assert_eq!(item["active"], false, "past window and not current");
+
+        // seasons outside 5..=33 have no image
+        let meta = seasons::season_info(2).expect("season 2");
+        let item = season_item(meta, None, 42);
+        assert!(item["image"].is_null());
+        let meta = seasons::season_info(34).expect("season 34");
+        let item = season_item(meta, None, 42);
+        assert!(item["image"].is_null());
+    }
+
+    #[test]
+    fn account_summary_shape() {
+        let (state, _dir) = crate::state::testing::test_state();
+        let mut acc = state.account_by_name("SummaryUser");
+        state
+            .update_account(&acc.account_id, |a| {
+                a.level = 33;
+                a.vbucks = 1234;
+                a.items.push("AthenaCharacter:cid_test".into());
+            })
+            .expect("update");
+        acc = state.account_by_id(&acc.account_id).expect("fresh");
+        let summary = account_summary(&state, &acc);
+        assert_eq!(summary["accountId"], acc.account_id.as_str());
+        assert_eq!(summary["displayName"], "SummaryUser");
+        assert_eq!(summary["level"], 33);
+        assert_eq!(summary["vbucks"], 1234);
+        assert_eq!(summary["battlePassPurchased"], false);
+        assert_eq!(summary["banned"], false);
+        assert_eq!(summary["itemsOwned"], 1);
+        assert_eq!(summary["selectedSeason"], 1, "defaults to current season");
+    }
+
+    #[test]
+    fn mcp_athena_enrichment_via_state() {
+        // End-to-end shape of the MCP athena path: profile_for +
+        // enrich_athena with a small inline battle pass.
+        let (state, _dir) = crate::state::testing::test_state();
+        let mut acc = state.account_by_name("McpUser");
+        state
+            .update_account(&acc.account_id, |a| {
+                a.level = 3;
+                a.battle_pass_purchased = true;
+            })
+            .expect("update");
+        acc = state.account_by_id(&acc.account_id).expect("fresh");
+
+        state.battlepass_seasons.write().unwrap().insert(
+            "Season12".into(),
+            json!({
+                "paidRewards": [
+                    { "AthenaCharacter:cid_1": 1 },
+                    {},
+                    { "AthenaBackpack:bid_1": 1 }
+                ],
+                "freeRewards": [{ "AthenaDance:spid_1": 1 }]
+            }),
+        );
+
+        let mut profile = state.profile_for(&acc, "athena");
+        let bp = state.battlepass_for(12).expect("battle pass");
+        seasons::enrich_athena(&mut profile, &acc, &bp);
+
+        // level 3 → all paid tiers (tier 1 empty) + free tier 0
+        let items = profile["items"].as_array().expect("items");
+        assert_eq!(items.len(), 3);
+        assert_eq!(items[0]["templateId"], "AthenaCharacter:cid_1");
+        assert_eq!(items[1]["templateId"], "AthenaBackpack:bid_1");
+        assert_eq!(items[2]["templateId"], "AthenaDance:spid_1");
+        assert_eq!(profile["stats"]["attributes"]["book_level"], 3);
+        assert_eq!(profile["stats"]["attributes"]["battlepass_purchased"], true);
+        // synthesized athena template defaults
+        assert_eq!(profile["wipeNumber"], 7);
+        assert_eq!(profile["version"], 1);
+    }
 }

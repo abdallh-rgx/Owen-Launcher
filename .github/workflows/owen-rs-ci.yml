@@ -1,0 +1,199 @@
+name: Owen-RS backend CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rust-rewrite, main]
+    paths:
+      - "owen-rs/**"
+      - ".github/workflows/owen-rs-ci.yml"
+  pull_request:
+    paths:
+      - "owen-rs/**"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  tests:
+    name: Workspace tests (safe Rust)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Install cargo-nextest (fast test runner)
+        run: cargo install cargo-nextest --locked || true
+
+      - name: Workspace check (host)
+        working-directory: owen-rs
+        env:
+          CARGO_TARGET_DIR: ${{ github.workspace }}/target
+        run: cargo check --workspace
+
+      - name: Verify the safe-Rust policy (no unsafe outside the audited hook cores)
+        working-directory: owen-rs
+        run: |
+          # owen-hook and owen-art are the two documented, audited unsafe
+          # cores (inline trampolines + JNI) — every other crate must be
+          # 100% safe. owen-redirecter embeds them behind cfg(android).
+          bad=0
+          for crate in owen-core owen-server owen-cli owen-patcher; do
+            if rg -n "unsafe \{|unsafe fn|unsafe impl" "crates/$crate/src"; then
+              echo "::error::$crate contains unsafe code"
+              bad=1
+            fi
+          done
+          exit $bad
+
+      - name: Run all tests
+        working-directory: owen-rs
+        env:
+          CARGO_TARGET_DIR: ${{ github.workspace }}/target
+        run: cargo nextest run --workspace || cargo test --workspace
+
+  seasons:
+    name: Every season S1-S42 (live server matrix)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Build the backend
+        working-directory: owen-rs
+        env:
+          CARGO_TARGET_DIR: ${{ github.workspace }}/target
+        run: cargo build --release -p owen-server
+
+      - name: Prepare the data directory
+        working-directory: owen-rs
+        run: |
+          # owen-rs/data/owen ships with the repo (battlepass, profiles,
+          # responses, manifests). The PartyHub web (third-party Kairos
+          # bundle) is intentionally NOT redistributed — the partyhub CI
+          # checks only exercise the native graphql + bridge + login page.
+          ls data/owen
+
+      - name: Boot the server
+        working-directory: owen-rs
+        run: |
+          ${{ github.workspace }}/target/release/owen-server \
+            --port 3010 --data-dir data/owen \
+            --partyhub-dir data/owen/partyhub --xmpp-port 5222 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:3010/ >/dev/null && break || sleep 1
+          done
+          curl -sf http://127.0.0.1:3010/ | head -c 400
+
+      - name: Register + login (PBKDF2 accounts)
+        run: |
+          curl -sf -X POST http://127.0.0.1:3010/api/launcher/register \
+            -H 'Content-Type: application/json' \
+            -d '{"email":"ci@owen.gg","username":"CiRunner","displayName":"CiWizard","password":"password123"}' \
+            | python3 -c "import json,sys; j=json.load(sys.stdin); assert j.get('access_token'); print('register OK:', j['accountId'])"
+          TOKEN=$(curl -sf -X POST http://127.0.0.1:3010/account/api/oauth/token \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            -d 'grant_type=password&username=CiRunner&password=password123' \
+            | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])")
+          echo "TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          # wrong password must fail
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3010/account/api/oauth/token \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            -d 'grant_type=password&username=CiRunner&password=WRONG')
+          [ "$code" = "400" ] || { echo "wrong password returned $code"; exit 1; }
+
+      - name: The full season matrix (timeline + detail + MCP profile)
+        run: |
+          python3 - <<'EOF'
+          import json, os, urllib.request, urllib.error
+
+          BASE = "http://127.0.0.1:3010"
+          TOKEN = os.environ["TOKEN"]
+          def req(method, path, data=None, headers=None):
+              h = {"Content-Type": "application/json"}
+              if headers: h.update(headers)
+              body = json.dumps(data).encode() if data is not None else None
+              r = urllib.request.Request(BASE + path, data=body, headers=h, method=method)
+              with urllib.request.urlopen(r, timeout=10) as resp:
+                  return resp.status, json.loads(resp.read() or b"{}")
+
+          st, me = req("GET", "/api/launcher/me", headers={"Authorization": "Bearer " + TOKEN})
+          assert st == 200, "me failed"
+          aid = me["accountId"]
+          req("POST", f"/fortnite/api/game/v2/profile/{aid}/client/PurchaseBattlePassLevels?profileId=athena",
+              {"profileId": "athena", "purchaseCount": 41},
+              {"Authorization": "Bearer " + TOKEN})
+
+          fails = []
+          for s in range(1, 43):
+              st1, tl = req("GET", f"/fortnite/api/calendar/v1/timeline?season={s}")
+              ok1 = st1 == 200 and tl.get("seasonStamp") == str(s)
+              st2, det = req("GET", f"/api/launcher/seasons/{s}")
+              ok2 = st2 == 200 and det.get("meta", {}).get("season") == s
+              st3, mcp = req("POST", f"/fortnite/api/game/v2/profile/{aid}/client/QueryProfile?profileId=athena",
+                             {"profileId": "athena"}, {"Authorization": "Bearer " + TOKEN, "X-Season": str(s)})
+              ch = mcp.get("profileChanges", [])
+              ok3 = st3 == 200 and len(ch) == 1 and ch[0].get("changeType") == "fullProfileUpdate"
+              if not (ok1 and ok2 and ok3):
+                  fails.append((s, ok1, ok2, ok3))
+          if fails:
+              print("SEASON FAILS:", fails); raise SystemExit(1)
+          print("all 42 seasons pass ✓ (timeline + detail + MCP fullProfileUpdate)")
+          EOF
+
+      - name: PartyHub (native graphql + bridge + login page)
+        run: |
+          # bridge served with the v4 banner
+          curl -sf http://127.0.0.1:3010/partyhub/owen-bridge.js | head -c 40 | grep -q "Owen Bridge v4"
+          # glass login page
+          curl -sf http://127.0.0.1:3010/login | grep -q "LIQUID GLASS"
+          # native graphql (status)
+          curl -sf -X POST http://127.0.0.1:3010/partyhub/graphql \
+            -H 'Content-Type: application/json' \
+            -d '{"query":"query { LightSwitch { fortniteStatus { status } kairosStatus { status } } SocialBan { socialBan } }"}' \
+            | python3 -c "import json,sys; d=json.load(sys.stdin)['data']['LightSwitch']; assert d['fortniteStatus']['status']=='UP' and d['kairosStatus']['status']=='UP'; print('partyhub graphql OK')"
+          # native graphql (account) with the CI bearer
+          curl -sf -X POST http://127.0.0.1:3010/partyhub/graphql \
+            -H 'Content-Type: application/json' -H "Authorization: Bearer $TOKEN" \
+            -d '{"query":"query { Account { myAccount { id displayName externalAuths } } }"}' \
+            | python3 -c "import json,sys; a=json.load(sys.stdin)['data']['Account']['myAccount']; assert a['displayName']=='CiWizard'; print('partyhub account OK:', a['id'])"
+
+  android-build:
+    name: libowen.so (aarch64-android, the redirecter)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: nttld/setup-ndk@v1
+        id: ndk
+        with:
+          ndk-version: r27c
+
+      - name: Build the unified redirecter crate
+        working-directory: owen-rs
+        env:
+          ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
+          CARGO_TARGET_DIR: ${{ github.workspace }}/target
+        run: |
+          mkdir -p .cargo
+          printf '[target.aarch64-linux-android]\nlinker = "aarch64-linux-android24-clang"\n' > .cargo/config.toml
+          export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
+          cargo build --release -p owen-redirecter --target aarch64-linux-android
+          file target/aarch64-linux-android/release/libowen.so
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: libowen-so-aarch64
+          path: ${{ github.workspace }}/target/aarch64-linux-android/release/libowen.so
+          if-no-files-found: error

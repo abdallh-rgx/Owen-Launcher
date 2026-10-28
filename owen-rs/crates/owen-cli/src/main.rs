@@ -7,6 +7,8 @@
 //! owen-cli pak   <file.pak> --cosmetics [--version 12.50]
 //! owen-cli manifest <cloudcontent.json | apk-dir>  build manifest entries
 //! ```
+#![forbid(unsafe_code)]
+
 
 use owen_core::battlepass;
 use owen_core::manifest::{CloudContent, ManifestCatalog};

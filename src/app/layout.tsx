@@ -1,30 +1,34 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Rubik } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const rubik = Rubik({
+  variable: "--font-rubik",
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "Owen Launcher Web Console",
+  title: "Owen Launcher — Liquid Glass",
   description:
-    "Professional console for the Owen Launcher Fortnite private-server toolchain: Redirecter configuration, curl_easy_setopt Symbol Finder, Battle Pass seasons, servers and access keys.",
+    "Owen Launcher: the complete safe-Rust Fortnite mobile private-server stack — launcher, redirecter, LawinServer v2-compatible backend and the native PartyHub, behind a liquid-glass interface.",
   keywords: [
     "Owen Launcher",
     "Fortnite",
     "private server",
-    "curl_easy_setopt",
-    "ARM64",
-    "no-smali",
+    "PartyHub",
+    "LawinServer",
+    "Reload Backend",
+    "Rust",
   ],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#05060b",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -33,12 +37,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-zinc-950 font-sans antialiased text-foreground`}
+        className={`${rubik.variable} bg-[#05060b] font-sans antialiased text-[#f4f6fb]`}
       >
         {children}
-        <Toaster position="bottom-right" />
+        <Toaster position="bottom-center" richColors />
       </body>
     </html>
   );

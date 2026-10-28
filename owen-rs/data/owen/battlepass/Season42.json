@@ -1,0 +1,380 @@
+{
+  "battleBundleOfferId": "0E80B8E4339C1AFE795978D8F125396B",
+  "battlePassOfferId": "6C5663C22CAF7F50FBCA694442978774",
+  "tierOfferId": "F0BF57134A4B9D85774FB4392B6D0D3F",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_BlockStack": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BlockStack": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BlockStack": 1
+    },
+    {
+      "AthenaGlider:Glider_BlockStack": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_BlockStack": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BlockStack2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Blockstack": 1
+    },
+    {
+      "AthenaSpray:Spray_BlockStack": 1
+    },
+    {
+      "AthenaSpray:Spray_BlockStack2": 1
+    },
+    {
+      "AthenaCharacter:Character_SlickIntel_Swipe": 1
+    },
+    {
+      "AthenaCharacter:Character_BrokenGravel_Brunt": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_SouthBalk": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SouthBalk": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SouthBalk_Keytar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SouthBalk": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SouthBalk_Keytar": 1
+    },
+    {
+      "AthenaDance:EID_SouthBalk": 1
+    },
+    {
+      "AthenaBackpack:Backpack_BrokenGravel": 1
+    },
+    {
+      "AthenaBackpack:Backpack_HeroicTale": 1
+    },
+    {
+      "AthenaBackpack:Backpack_PebbleScout": 1
+    },
+    {
+      "AthenaCharacter:Character_HeroicTale_Fair": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_SpecterDunk": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SpecterDunk": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SpecterDunk": 1
+    },
+    {
+      "AthenaBackpack:Backpack_PhoenixKick": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SaltyBrim_Guitar": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Season_42": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SheerWill": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SizeTribe": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SlickIntel": 1
+    },
+    {
+      "AthenaCharacter:Character_InterOrbit_Shock": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_InterOrbit_Shock": 1
+    },
+    {
+      "AthenaCharacter:Character_TimeTrotter": 1
+    },
+    {
+      "AthenaBackpack:Backpack_TimeTrotter": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_TimeTrotter": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_AxeOfUnreal_42": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BrokenGravel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_HeroicTale": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PebbleScout": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_PhoenixKick": 1
+    },
+    {
+      "AthenaCharacter:Character_MixedAlley": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_MixedAlley": 1
+    },
+    {
+      "AthenaBackpack:Backpack_MixedAlley_DrumStick": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MixedAlley": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MixedAlley_DrumStick": 1
+    },
+    {
+      "AthenaCharacter:Character_UniqueBeetle": 1
+    },
+    {
+      "AthenaBackpack:Backpack_UniqueBeetle_Bass": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_UniqueBeetle": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_UniqueBeetle_Bass": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_UniqueBeetle": 1
+    },
+    {
+      "AthenaCharacter:Character_PebbleScout_Lean": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SaltyBrim_Guitar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Season_42": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SheerWill": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SizeTribe": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SlickIntel": 1
+    },
+    {
+      "AthenaGlider:Glider_HeroicTale": 1
+    },
+    {
+      "AthenaGlider:Glider_PebbleScout": 1
+    },
+    {
+      "AthenaGlider:Glider_PhoenixKick": 1
+    },
+    {
+      "AthenaGlider:Glider_SheerWill": 1
+    },
+    {
+      "AthenaCharacter:Character_PhoenixKick_Gain": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaGlider:Glider_SizeTribe": 1
+    },
+    {
+      "AthenaGlider:Glider_SlickIntel": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_42": 1
+    },
+    {
+      "AthenaDance:EID_BrokenGravel": 1
+    },
+    {
+      "AthenaDance:EID_HeroicTale": 1
+    },
+    {
+      "AthenaDance:EID_HighFashion": 1
+    },
+    {
+      "AthenaDance:EID_PebbleScout": 1
+    },
+    {
+      "AthenaDance:EID_PhoenixKick": 1
+    },
+    {
+      "AthenaDance:EID_SaltyBrim": 1
+    },
+    {
+      "AthenaCharacter:Character_SaltyBrim_Pin": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_SaltyBrim_Pin": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SaltyBrim_Pin": 1
+    },
+    {
+      "AthenaDance:EID_SheerWill": 1
+    },
+    {
+      "AthenaDance:EID_SlickIntel": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_HeroicTale": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_InterOrbit": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PebbleScout": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_PhoenixKick": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SaltyBrimPin": 1
+    },
+    {
+      "AthenaCharacter:Character_ScribeSpider": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_ScribeSpider": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ScribeSpider_Guitar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ScribeSpider": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ScribeSpider_Guitar": 1
+    },
+    {
+      "CosmeticShoes:Shoes_ScribeSpiderOar": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Season42": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SheerWill": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SlickIntel": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_VintageTrigger": 1
+    },
+    {
+      "AthenaCharacter:Character_SheerWill_Blot": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BrokenGravel2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_HeroicTale": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_HeroicTale2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Override": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PebbleScout": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PebbleScout2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PhoenixKick": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_PhoenixKick2": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_BrokenGravel": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_BrokenGravel": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoticon_BrokenGravel": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_BrokenGravel": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

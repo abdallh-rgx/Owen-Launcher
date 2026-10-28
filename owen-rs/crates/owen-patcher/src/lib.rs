@@ -20,6 +20,8 @@
 //! The optional legacy smali path (four-finger console) is intentionally
 //! NOT implemented here — console opening stays a native concern of the
 //! redirecter library itself.
+#![forbid(unsafe_code)]
+
 
 pub mod needed;
 pub mod sign;

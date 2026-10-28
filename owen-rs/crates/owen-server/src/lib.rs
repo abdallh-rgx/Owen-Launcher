@@ -1,11 +1,17 @@
 //! Owen backend server — a safe-Rust, LawinServer v2-compatible HTTP
 //! backend with Reload-Backend feature parity where it matters (Battle
 //! Pass, MCP profiles, item shop, friends) plus the Owen-specific
-//! endpoints: `/login`, `/partyhub/graphql`, the auto manifest redirecter
-//! and the admin API that powers the web control panel.
+//! endpoints: `/login`, the native `/partyhub` host (static app + graphql),
+//! the auto manifest redirecter and the admin API that powers the web
+//! control panel.
+
+#![forbid(unsafe_code)]
 
 pub mod login_page;
+pub mod partyhub;
+pub mod pbkdf2;
 pub mod routes;
+pub mod seasons;
 pub mod state;
 pub mod xmpp;
 
@@ -19,6 +25,12 @@ pub struct ServerOptions {
     pub port: u16,
     pub data_dir: PathBuf,
     pub bind: String,
+    /// PartyHub static root (`--partyhub-dir`).
+    pub partyhub_dir: Option<PathBuf>,
+    /// XMPP port override (`--xmpp-port`).
+    pub xmpp_port: Option<u16>,
+    /// Extra battle pass search dir (`--battlepass-dir`).
+    pub battlepass_dir: Option<PathBuf>,
 }
 
 impl Default for ServerOptions {
@@ -27,6 +39,9 @@ impl Default for ServerOptions {
             port: 3551,
             data_dir: PathBuf::from("owen-data"),
             bind: "0.0.0.0".into(),
+            partyhub_dir: None,
+            xmpp_port: None,
+            battlepass_dir: None,
         }
     }
 }
@@ -52,6 +67,23 @@ pub fn run_server_from_args(args: &[String]) {
                     opts.data_dir = PathBuf::from(d);
                 }
             }
+            "--partyhub-dir" => {
+                if let Some(d) = iter.next() {
+                    opts.partyhub_dir = Some(PathBuf::from(d));
+                }
+            }
+            "--xmpp-port" => {
+                if let Some(p) = iter.next() {
+                    if let Ok(port) = p.parse::<u16>() {
+                        opts.xmpp_port = Some(port);
+                    }
+                }
+            }
+            "--battlepass-dir" => {
+                if let Some(d) = iter.next() {
+                    opts.battlepass_dir = Some(PathBuf::from(d));
+                }
+            }
             "--backend-url" => {
                 if let Some(u) = iter.next() {
                     backend_url = Some(u.clone());
@@ -69,6 +101,9 @@ pub fn run_server_from_args(args: &[String]) {
         let mut config = owen_core::config::OwenConfig::default();
         config.http_port = opts.port;
         config.login_port = opts.port;
+        if let Some(port) = opts.xmpp_port {
+            config.xmpp_port = port;
+        }
         if let Some(u) = backend_url {
             let _ = config.set_backend_url(&u);
         } else {
@@ -88,9 +123,21 @@ pub fn build_router(state: Arc<state::AppState>) -> axum::Router {
 /// Run the HTTP server (and the minimal XMPP listener when enabled).
 pub async fn run_server(
     opts: ServerOptions,
-    config: owen_core::config::OwenConfig,
+    mut config: owen_core::config::OwenConfig,
 ) -> Result<(), String> {
-    let state = Arc::new(state::AppState::load(opts.data_dir.clone(), config));
+    if let Some(port) = opts.xmpp_port {
+        config.xmpp_port = port;
+    }
+    let battlepass_dirs = match &opts.battlepass_dir {
+        Some(dir) => vec![dir.clone()],
+        None => Vec::new(),
+    };
+    let state = Arc::new(state::AppState::load_with(
+        opts.data_dir.clone(),
+        config,
+        opts.partyhub_dir.clone(),
+        battlepass_dirs,
+    ));
 
     let app = build_router(state.clone());
 
@@ -99,6 +146,9 @@ pub async fn run_server(
         .map_err(|e| format!("bad bind address: {e}"))?;
     println!("owen-server listening on http://{addr}");
     println!("data dir: {}", opts.data_dir.display());
+    if let Some(dir) = &opts.partyhub_dir {
+        println!("partyhub dir: {}", dir.display());
+    }
 
     // Minimal XMPP service (friends/party presence) on its own port.
     let xmpp_port = state.config.read().unwrap().xmpp_port;

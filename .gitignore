@@ -53,3 +53,16 @@ server.log
 # Skills directory
 /skills/win-funcs-27.11.json
 win-natives-27.11.json
+
+# Owen runtime state
+data/owen/accounts.json
+data/owen/sessions.json
+data/owen/accounts.json.tmp
+data/owen/sessions.json.tmp
+owen-rs/data/owen/accounts.json
+owen-rs/data/owen/sessions.json
+# third-party Kairos bundle — never redistribute
+data/owen/partyhub/
+download/
+tool-results/
+run1-logs.zip

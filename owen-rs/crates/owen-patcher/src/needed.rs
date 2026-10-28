@@ -42,6 +42,27 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
 
     let mut data = lib.to_vec();
 
+    // ---- locate PT_DYNAMIC through the program headers ----
+    let phoff = rd_u64(&data, 0x20).ok_or("bad phoff".to_string())? as usize;
+    let phentsize = rd_u16(&data, 0x36).ok_or("bad phentsize".to_string())? as usize;
+    let phnum = rd_u16(&data, 0x38).ok_or("bad phnum".to_string())? as usize;
+    let mut dyn_off = None;
+    let mut dyn_size = 0usize;
+    for i in 0..phnum {
+        let ph = phoff + i * phentsize;
+        if ph + 56 > data.len() {
+            break;
+        }
+        let p_type = rd_u32(&data, ph).ok_or("bad ph".to_string())?;
+        if p_type == 2 {
+            // PT_DYNAMIC: p_offset at +8, p_filesz at +32.
+            dyn_off = Some(rd_u64(&data, ph + 8).ok_or("bad dyn off".to_string())? as usize);
+            dyn_size = rd_u64(&data, ph + 32).unwrap_or(0) as usize;
+            break;
+        }
+    }
+    let dyn_off = dyn_off.ok_or("no PT_DYNAMIC")?;
+
     // ---- DT_STRTAB / DT_STRSZ / spare DT_NULL ----
     // (collected first so the strsz slot can be updated when the string
     // lands in a section gap past the original strtab end)
@@ -120,103 +141,6 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
             write_u64(&mut data, slot, new_strsz);
         }
     }
-
-    // ---- rewrite the first DT_NULL as DT_NEEDED ----
-    let null_off = null_slot.ok_or("no spare DT_NULL slot in PT_DYNAMIC")?;
-    write_u64(&mut data, null_off, DT_NEEDED as u64);
-    write_u64(&mut data, null_off + 8, strtab_delta);
-
-    // ---- verification ----
-    let check = ElfImage::parse(&data).map_err(|e| format!("patched image broken: {e}"))?;
-    if !check.needed_libraries_from(&data).iter().any(|n| n == lib_name) {
-        return Err("verification failed: name not visible after patch".into());
-    }
-
-    Ok((data, true))
-}
-
-fn _unused_marker() {}
-    let phoff = rd_u64(&data, 0x20).ok_or("bad phoff".to_string())? as usize;
-    let phentsize = rd_u16(&data, 0x36).ok_or("bad phentsize".to_string())? as usize;
-    let phnum = rd_u16(&data, 0x38).ok_or("bad phnum".to_string())? as usize;
-    let mut dyn_off = None;
-    let mut dyn_size = 0usize;
-    for i in 0..phnum {
-        let ph = phoff + i * phentsize;
-        if ph + 56 > data.len() {
-            break;
-        }
-        let p_type = rd_u32(&data, ph).ok_or("bad ph".to_string())?;
-        if p_type == 2 {
-            dyn_off = Some(rd_u64(&data, ph + 8).ok_or("bad dyn off".to_string())? as usize);
-            dyn_size = rd_u64(&data, ph + 32).unwrap_or(0) as usize;
-            break;
-        }
-    }
-    let dyn_off = dyn_off.ok_or("no PT_DYNAMIC")?;
-
-    // ---- DT_STRTAB / DT_STRSZ / spare DT_NULL ----
-    let mut strtab_va = None;
-    let mut strsz = 0u64;
-    let mut null_slot = None;
-    let entries = dyn_size / 16;
-    for i in 0..entries {
-        let off = dyn_off + i * 16;
-        if off + 16 > data.len() {
-            break;
-        }
-        let tag = rd_u64(&data, off).ok_or("bad dyn tag".to_string())? as i64;
-        let val = rd_u64(&data, off + 8).ok_or("bad dyn val".to_string())?;
-        match tag {
-            DT_STRTAB => strtab_va = Some(val),
-            DT_STRSZ => strsz = val,
-            DT_NULL => {
-                null_slot = Some(off);
-                break;
-            }
-            _ => {}
-        }
-    }
-    let strtab_va = strtab_va.ok_or("no DT_STRTAB")?;
-    let strtab_off = elf
-        .va_to_off(strtab_va)
-        .ok_or("DT_STRTAB outside PT_LOAD".to_string())? as usize;
-    let strtab_end = strtab_off + strsz as usize;
-
-    let name_bytes = lib_name.as_bytes();
-    let need = name_bytes.len() + 1;
-
-    // ---- placement: 1) padding inside the strtab range ----
-    let placement = find_nul_run(&data[strtab_off..strtab_end], need).map(|rel| {
-        let at = strtab_off + rel;
-        (at, at as u64 - strtab_off as u64)
-    });
-
-    // ---- 2) inter-section alignment gaps after the strtab ----
-    let placement = placement.or_else(|| {
-        let gaps = section_gaps_after(&data, strtab_end);
-        for (start, end) in gaps {
-            if end > start && end - start >= need {
-                let at = start;
-                // The gap must be inside a PT_LOAD (so it is mapped) and
-                // its VA must be resolvable.
-                if let Some(va) = elf.off_to_va(at as u64) {
-                    if va >= strtab_va + strsz {
-                        return Some((at, va - strtab_va));
-                    }
-                }
-            }
-        }
-        None
-    });
-
-    let Some((at, strtab_delta)) = placement else {
-        return Err("no safe padding found for the dependency name (strtab and section gaps are full)".into());
-    };
-
-    // ---- write the string ----
-    data[at..at + name_bytes.len()].copy_from_slice(name_bytes);
-    data[at + name_bytes.len()] = 0;
 
     // ---- rewrite the first DT_NULL as DT_NEEDED ----
     let null_off = null_slot.ok_or("no spare DT_NULL slot in PT_DYNAMIC")?;

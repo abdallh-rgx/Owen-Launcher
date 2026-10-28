@@ -1,0 +1,380 @@
+{
+  "battleBundleOfferId": "35DB510247A8DCD8C768D650752DE7FB",
+  "battlePassOfferId": "BEA747E771FCAABB37548F61B7D679C3",
+  "tierOfferId": "50EB33D1F3A18487495299D3722F1119",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_AbstractMirror_Rogue": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BengalBasher": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CeremonialGuard": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CyberRunnerGolden": 1
+    },
+    {
+      "AthenaBackpack:Backpack_DiamondHeart": 1
+    },
+    {
+      "AthenaBackpack:Backpack_MadameMoth": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedFaction": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Speed": 1
+    },
+    {
+      "AthenaBackpack:Backpack_UndergroundRebel": 1
+    },
+    {
+      "AthenaBackpack:Backpack_VoidRedemption": 1
+    },
+    {
+      "AthenaCharacter:Character_BananaAdventure": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_BananaAdventure": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BananaAdventure": 1
+    },
+    {
+      "AthenaBackpack:Backpack_ZebraScramble_Bone": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_BengalBasher": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_CeremonialGuard": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DiamondHeart": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MadameMoth": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RankedFaction": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SkullPunkBlade": 1
+    },
+    {
+      "AthenaCharacter:Character_BengalBasher_Suit": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaPickaxe:Pickaxe_UndergroundRebel": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VoidRedemption": 1
+    },
+    {
+      "AthenaGlider:Glider_BengalBasher": 1
+    },
+    {
+      "AthenaGlider:Glider_CeremonialGuard": 1
+    },
+    {
+      "AthenaGlider:Glider_DiamondHeart": 1
+    },
+    {
+      "AthenaGlider:Glider_VoidRedemption": 1
+    },
+    {
+      "AthenaGlider:Umbrella_RankedFaction": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_28": 1
+    },
+    {
+      "AthenaDance:EID_BengalBasher": 1
+    },
+    {
+      "AthenaCharacter:Character_CeremonialGuard_Fencer": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaDance:EID_CeremonialGuard": 1
+    },
+    {
+      "AthenaDance:EID_DiamondHeart": 1
+    },
+    {
+      "AthenaDance:EID_MadameMoth": 1
+    },
+    {
+      "AthenaDance:EID_Potassium": 1
+    },
+    {
+      "AthenaDance:EID_UndergroundRebel": 1
+    },
+    {
+      "AthenaDance:EID_VoidRedemption": 1
+    },
+    {
+      "AthenaDance:EID_ZebraScramble": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_CeremonialGuard": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_DiamondHeart": 1
+    },
+    {
+      "AthenaCharacter:Character_DiamondHeart_Chic": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaItemWrap:Wrap_MadameMothA": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MadameMothB": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MadameMothC": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_MadameMothD": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SkullPunkBlade": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_UndergroundRebel": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_VoidRedemption": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_ZebraScramble": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BangalBasher_Phone": 1
+    },
+    {
+      "AthenaCharacter:Character_MadameMoth_Posh": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_BangalBasher_Train": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CeremonialGuard_Orchard": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_CeremonialGuard_Prisoner": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_DiamondHeart_Car": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_DiamondHeart_SeeingEye": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Evergreen_BigChuggus": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MadameMoth_FireStorm": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MadameMoth_Searching": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S28_CharacterLineUp": 1
+    },
+    {
+      "AthenaCharacter:Character_UndergroundRebel_Fashion": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SparksKeyArt": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_UndergroundRebel_Estate": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_UndergroundRebel_HQ": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_VoidRedemption_Mural": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_VoidRedemption_Rooftop": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_193_VoidRedemption": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_194_BangalBasher": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_195_MadameMoth": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_196_S28DefaultTrack": 1
+    },
+    {
+      "AthenaCharacter:Character_VitalInventor": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_VitalInventor": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_VitalInventor": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_198_JunoDefault": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_199_DelMarDefault": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_CeremonialGuard": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_DiamondHeart": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_MadameMoth": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_Ranked_Biohazard": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_Ranked_Target": 1
+    },
+    {
+      "AthenaCharacter:Character_VoidRedemption_Rebel": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaEmoji:Emoji_S28_Ranked_Trophy": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_Sparks_Equalizer": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_Sparks_Llama": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_UndergroundRebel": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_VoidRedemption": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S28_ZebraScramble": 1
+    },
+    {
+      "AthenaSpray:Spray_BangalBasher_Royale": 1
+    },
+    {
+      "AthenaSpray:Spray_CeremonialGuard_Portrait": 1
+    },
+    {
+      "AthenaSpray:Spray_DiamondHeart_Portrait": 1
+    },
+    {
+      "AthenaCharacter:Character_ZebraScramble_Bacon": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_ZebraScramble_Bacon": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ZebraScramble_Bacon": 1
+    },
+    {
+      "AthenaGlider:Glider_ZebraScramble_Bacon": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_ZebraScramble_Bacon": 1
+    },
+    {
+      "AthenaSpray:Spray_MadameMoth_Portrait": 1
+    },
+    {
+      "AthenaSpray:Spray_MadameMoth_Symbol": 1
+    },
+    {
+      "AthenaSpray:Spray_Ranked": 1
+    },
+    {
+      "AthenaSpray:Spray_Ranked2": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_28KeyArt": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_BangalBasher_Face": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S28_BengalBasher": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_BengalBasher": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

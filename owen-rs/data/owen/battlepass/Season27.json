@@ -1,0 +1,346 @@
+{
+  "battleBundleOfferId": "928D31012C10488FEF88FB4B3E95AB95",
+  "battlePassOfferId": "3D3A412B71A85F77D32E5F99C4F38FE5",
+  "tierOfferId": "BDDE12B3E49862C0B0BF436C7483B210",
+  "paidRewards": [
+    {
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_BriteDino": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_SnowKnight_Helm": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SnowKnight_Helm": 1
+    },
+    {
+      "AthenaSpray:Spray_SnowKnight_Helm": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CraneGame": 1
+    },
+    {
+      "AthenaBackpack:Backpack_HornedJudgmentCape": 1
+    },
+    {
+      "AthenaBackpack:Backpack_LilSplit": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RankedRemix": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RebelClaw": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SnowKnight": 1
+    },
+    {
+      "AthenaCharacter:Character_DriftAvatar": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_DriftAvatar": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DriftAvatar": 1
+    },
+    {
+      "AthenaCharacter:Character_VelociTeeth": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_HornedJudgment": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_LilSplit": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RebelClaw": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SnowKnight": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_WingedMedieval": 1
+    },
+    {
+      "AthenaGlider:Glider_HornedJudgment": 1
+    },
+    {
+      "AthenaCharacter:Character_DriftSwat": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_DriftSwat": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DriftSwat": 1
+    },
+    {
+      "AthenaGlider:Glider_LilSplit": 1
+    },
+    {
+      "AthenaGlider:Glider_RankedRemixAsparagus": 1
+    },
+    {
+      "AthenaGlider:Glider_RebelClaw": 1
+    },
+    {
+      "AthenaGlider:Glider_WingedMedieval": 1
+    },
+    {
+      "AthenaGlider:Umbrella_RankedRemixCarrot": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_27": 1
+    },
+    {
+      "AthenaDance:EID_Calico": 1
+    },
+    {
+      "AthenaCharacter:Character_DriftTrooper": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_DriftTrooper": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_DriftTrooper": 1
+    },
+    {
+      "AthenaDance:EID_HornedJudgment": 1
+    },
+    {
+      "AthenaDance:EID_LilSplit": 1
+    },
+    {
+      "AthenaDance:EID_RebelClaw": 1
+    },
+    {
+      "AthenaDance:EID_SnowKnight": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RebelClaw": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SnowKnight": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_WingedMedieval": 1
+    },
+    {
+      "AthenaCharacter:Character_GroovyReader": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_GroovyReader": 1
+    },
+    {
+      "AthenaBackpack:Backpack_GroovyReaderGrid": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_GroovyReaderPierce": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_GroovyReaderPoke": 1
+    },
+    {
+      "AthenaDance:EID_GroovyReader": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_HornedJudgment": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_HornedJudgment2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LilSplit": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_LilSplit2": 1
+    },
+    {
+      "AthenaCharacter:Character_HornedJudgment_Midgard": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_RebelClaw": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_RebelClaw2": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Rufus_KeyArt": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_191_LilSplit": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_192_Rufus": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_LilSplit": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_Ranked1": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_Ranked2": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_Ranked3": 1
+    },
+    {
+      "AthenaCharacter:Character_LilSplit_Sprinkles": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaItemWrap:Wrap_LilSplit_SprinklesFudge": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_RebelClaw": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S27_RebootRally": 1
+    },
+    {
+      "AthenaSpray:Spray_LilSplit2": 1
+    },
+    {
+      "AthenaSpray:Spray_LilSplit_Extra": 1
+    },
+    {
+      "AthenaSpray:Spray_RebelClaw": 1
+    },
+    {
+      "AthenaSpray:Spray_RebelClaw2": 1
+    },
+    {
+      "AthenaSpray:Spray_S27_Ranked_HornedJudgment": 1
+    },
+    {
+      "AthenaSpray:Spray_S27_Ranked_RebelClaw": 1
+    },
+    {
+      "AthenaCharacter:Character_RebelClaw_Aviator": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_S27_Ranked_ScaryBeary": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_HornedJudgment": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_LilSplit": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_SnowKnight": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_RhombCamo": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_RhombCamo": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RhombCamo": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RhombCamoA": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RhombCamoB": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RhombCamoC": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RhombCamoD": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaCharacter:Character_ScareyBeary": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_ScareyBeary": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_ScareyBeary": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_EvergreenBattleBus": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_HornedJudgement2": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S27_HornedJudgement": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_HornedJudgment": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}

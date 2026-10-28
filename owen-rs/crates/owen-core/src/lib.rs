@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 //! # owen-core
 //!
 //! Safe-Rust core of the Owen stack. Everything in this crate is written with

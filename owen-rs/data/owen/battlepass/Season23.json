@@ -1,0 +1,381 @@
+{
+  "battleBundleOfferId": "DF22DACC29B13112D481F064C9A70F10",
+  "battlePassOfferId": "311EC81200D234F1B562C72E6E9F5112",
+  "tierOfferId": "55B3276FB32728E777BCAF6DD19E8B9D",
+  "paidRewards": [
+    {
+      "AthenaSpray:Spray_Venice_Skateboard": 1,
+      "Token:athenaseasonxpboost": 50,
+      "Token:athenaseasonfriendxpboost": 60
+    },
+    {
+      "AthenaCharacter:Character_Apprentice": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_Apprentice": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Apprentice": 1
+    },
+    {
+      "AthenaGlider:Glider_Apprentice": 1
+    },
+    {
+      "AthenaDance:EID_Apprentice": 1
+    },
+    {
+      "AthenaDance:EID_ApprenticeSwirl": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Apprentice": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Apprentice_Blue": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Apprentice_Forcefield": 1
+    },
+    {
+      "AthenaSpray:Spray_Apprentice": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_Apprentice": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaCharacter:Character_Chainmail": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Chainmail": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Chainmail": 1
+    },
+    {
+      "AthenaGlider:Glider_Chainmail": 1
+    },
+    {
+      "AthenaDance:EID_Chainmail": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Chainmail": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Chainmail": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Chainmail_Bat": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_159_Chainmail": 1
+    },
+    {
+      "AthenaSpray:Spray_Chainmail_Bat": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaSpray:Spray_Chainmail_Mask": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_Chainmail": 1
+    },
+    {
+      "AthenaCharacter:Character_Citadel": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Citadel": 1
+    },
+    {
+      "AthenaBackpack:Backpack_CitadelCape": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Citadel": 1
+    },
+    {
+      "AthenaGlider:Glider_Citadel": 1
+    },
+    {
+      "AthenaDance:EID_Citadel": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Citadel": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Citadel": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Citadel_SwordRaise": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_161_Citadel": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_Citadel": 1
+    },
+    {
+      "AthenaSpray:Spray_Citadel": 1
+    },
+    {
+      "AthenaCharacter:Character_MagicMeadow": 1
+    },
+    {
+      "AthenaBackpack:Backpack_MagicMeadow": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_MagicMeadow": 1
+    },
+    {
+      "AthenaDance:EID_MagicMeadow": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_MagicMeadow": 1
+    },
+    {
+      "AthenaSpray:Spray_MagicMeadow": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaBackpack:Backpack_PhotographerHoliday": 1
+    },
+    {
+      "AthenaGlider:Glider_CyberFuGlitch": 1
+    },
+    {
+      "AthenaGlider:Umbrella_Season_23": 1
+    },
+    {
+      "AthenaCharacter:Character_Photographer_Holiday": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Photographer_Holiday_Female": 1
+    },
+    {
+      "AthenaDance:EID_FlagPlant": 1
+    },
+    {
+      "AthenaDance:EID_Lonely": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_GreenGlass": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SquareCells": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Radish_ConceptArt": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Radish_KeyArt": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S23BP_Lineup": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_S23KeyArt": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_156_Radish_Event": 1
+    },
+    {
+      "AthenaCharacter:Character_RedPepper": 1
+    },
+    {
+      "AthenaBackpack:Backpack_RedPepper": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_RedPepper": 1
+    },
+    {
+      "AthenaGlider:Glider_RedPepper": 1
+    },
+    {
+      "AthenaDance:EID_RedPepper": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_RedPepper": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_RedPepper": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_RedPepper": 1
+    },
+    {
+      "AthenaSpray:Spray_RedPepper": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_RedPepper": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_158_VampireHunters": 1
+    },
+    {
+      "AthenaCharacter:Character_SharpFang": 1
+    },
+    {
+      "AthenaBackpack:Backpack_SharpFang": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_SharpFang": 1
+    },
+    {
+      "AthenaDance:EID_Sharpfang": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_SharpFang": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SharpFang_Extra": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_SharpFang_Slash": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_SharpFang": 1
+    },
+    {
+      "AthenaSpray:Spray_SharpFang_Sipping": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_SharpFang": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_162_S23Default": 1
+    },
+    {
+      "AthenaCharacter:Character_Sunlit": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Sunlit": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Sunlit": 1
+    },
+    {
+      "AthenaGlider:Glider_Sunlit": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaDance:EID_Sunlit": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Sunlit": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Sunlit": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_Sunlit": 1
+    },
+    {
+      "AthenaSpray:Spray_Sunlit": 1
+    },
+    {
+      "AthenaSkyDiveContrail:Contrail_Sunlit": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_ZeroWeekEvent": 1
+    },
+    {
+      "AthenaCharacter:Character_Venice": 1
+    },
+    {
+      "AthenaBackpack:Backpack_Venice": 1
+    },
+    {
+      "AthenaPickaxe:Pickaxe_Venice": 1,
+      "MtxGiveaway": 100
+    },
+    {
+      "AthenaGlider:Glider_Venice": 1
+    },
+    {
+      "AthenaDance:EID_Venice": 1
+    },
+    {
+      "AthenaItemWrap:Wrap_Venice": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Venice": 1
+    },
+    {
+      "AthenaLoadingScreen:LoadingScreen_Venice_Skateboard": 1
+    },
+    {
+      "AthenaMusicPack:MusicPack_160_Venice": 1
+    },
+    {
+      "AthenaEmoji:Emoji_S23_Venice": 1
+    },
+    {
+      "AthenaSpray:Spray_Venice_Bird": 1
+    }
+  ],
+  "freeRewards": [
+    {},
+    {},
+    {},
+    {},
+    {
+      "AthenaLoadingScreen:LoadingScreen_DowntimeMicrosite_Reward": 1
+    },
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {
+      "AthenaSpray:Spray_GlitchPunk": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaEmoji:Emoji_S23_RebootRally": 1
+    },
+    {},
+    {},
+    {},
+    {
+      "AthenaItemWrap:Wrap_CyberFu_Glitch": 1
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "MtxGiveaway": 100
+    }
+  ]
+}
