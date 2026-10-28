@@ -136,8 +136,9 @@ export function MainShell({
         </div>
       </nav>
 
-      {/* sticky footer status bar */}
-      <footer className="sticky bottom-0 z-30 mt-auto px-4 pb-[max(env(safe-area-inset-bottom),10px)] pt-2 lg:pb-4">
+      {/* footer status bar — flex-pushed to the bottom (sticks on short
+       * pages, pushed down naturally on long ones; never overlays) */}
+      <footer className="z-30 mt-auto px-4 pb-[max(env(safe-area-inset-bottom),10px)] pt-2 lg:pb-4">
         <div className="owen-glass-soft backdrop-blur-[18px] backdrop-saturate-[1.6] mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-full px-5 py-2 text-[11.5px] font-semibold text-[var(--owen-muted)]">
           <span className="flex items-center gap-2">
             <StatusDot ok={online} />

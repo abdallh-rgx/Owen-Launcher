@@ -464,8 +464,8 @@ export function DownloadsView({ d, manifests }: { d: Dict; manifests: ManifestEn
       </div>
 
       <Stagger className="space-y-3" gap={0.05}>
-        {filtered.map((m) => {
-          const key = m.version + "-" + m.cl;
+        {filtered.map((m, i) => {
+          const key = m.releaseString + "@" + i;
           const progress = jobs[key];
           const done = progress != null && progress >= 100;
           return (
