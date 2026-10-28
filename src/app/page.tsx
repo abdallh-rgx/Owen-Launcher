@@ -1469,6 +1469,76 @@ interface PartyHubStatus {
 }
 
 /**
+ * The runnable phone package (v3): golden launcher login, no debug strip,
+ * Voltronite-compatible links in owen-bridge.js. Download + release notes.
+ */
+function PhonePackageCard() {
+  return (
+    <Card className="mt-4 border-amber-400/30 bg-gradient-to-b from-amber-400/10 to-zinc-900">
+      <CardHeader className="pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-base text-amber-300">
+            <span
+              className="rounded px-1.5 py-0.5 font-mono text-[10px] font-bold text-zinc-900"
+              style={{ background: "linear-gradient(90deg,#FFB300,#FF9F0A,#FF8A00)" }}
+            >
+              v3
+            </span>
+            Phone package — Owen PartyHub (Voltronite edition)
+          </CardTitle>
+          <a href="/owen/Owen-PartyHub-Voltronite.7z" download>
+            <Button
+              size="sm"
+              className="h-8 border-0 text-xs font-bold text-zinc-900"
+              style={{ background: "linear-gradient(90deg,#FFB300,#FF9F0A,#FF8A00)" }}
+            >
+              Download .7z (3.4 MB)
+            </Button>
+          </a>
+        </div>
+        <CardDescription className="text-zinc-500">
+          Run it directly on the phone: extract, <span className="font-mono text-zinc-400">python server.py</span>{" "}
+          (Termux), open http://127.0.0.1:8081. The Voltronite address is edited in one place —{" "}
+          <span className="font-mono text-zinc-400">owen-bridge.js</span> →{" "}
+          <span className="font-mono text-zinc-400">OWEN_CONFIG.VOLTRONITE_URL</span>.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[
+            {
+              title: "No top strip",
+              body: "The injected Arabic debug overlay (the red-on-black strip at the top of every screen) is stripped from index.html by the patcher — verified pixel-level: zero red pixels in the top rows.",
+            },
+            {
+              title: "Golden launcher login",
+              body: "The login page is the Owen Launcher Aurum design: charcoal background, OWEN / LAUNCHER gold-gradient wordmark, player-name card with the Required/OK pill and the gold LOGIN button. Logout returns to it.",
+            },
+            {
+              title: "Voltronite links",
+              body: "owen-bridge.js v3 maps every raw Kairos query to a Voltronite operation (GetMyAccount, GetStatusPerService, GetMySetting, …) and relays it with a real oauth token. Account ids are zero-padded to 32 chars so short names can't crash the home screen.",
+            },
+          ].map((f) => (
+            <div key={f.title} className="rounded-md border border-zinc-800 bg-zinc-950/60 p-3">
+              <p className="text-xs font-semibold text-amber-200">{f.title}</p>
+              <p className="mt-1 text-[11px] leading-relaxed text-zinc-500">{f.body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-[11px] leading-relaxed text-zinc-500">
+          Package contents: <span className="font-mono text-zinc-400">server.py</span> (zero-dependency
+          static + SPA + Voltronite relay), the patched{" "}
+          <span className="font-mono text-zinc-400">offline/entry</span> build, and an Arabic README with
+          Termux instructions. E2E-verified on this machine: golden login → LOGIN → PartyHub home
+          renders, and Voltronite answers GetMyAccount / GetMySetting / GetAccountSettings /
+          UpdateUserSetting for the typed account name.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
  * Live embed of the patched shippedweb Party Hub. The Kairos web itself runs in
  * mini-services/partyhub-web (:8091) behind the /partyhub rewrite; its raw
  * graphql dialect is adapted to the Voltronite backend (see the card below).
@@ -1562,8 +1632,9 @@ function LivePartyHubDemo() {
               />
             </div>
             <p className="mt-2 text-center text-xs text-zinc-500">
-              Tap <span className="text-zinc-300">YES, FIND MY ACCOUNT</span> — the app logs in
-              through the Owen bridge and lands on the Party Hub home screen.
+              The golden <span className="text-amber-300">OWEN LAUNCHER</span> login page — type a
+              name, press <span className="text-zinc-300">LOGIN</span>, and the hub mounts with that
+              Voltronite account (accountId = hex(name)).
             </p>
           </div>
 
@@ -1661,6 +1732,8 @@ function PartyHubSection() {
 
       <LivePartyHubDemo />
 
+      <PhonePackageCard />
+
       <Card className="border-zinc-800 bg-zinc-900">
         <CardHeader className="pb-3">
           <CardTitle className="text-base text-zinc-100">Version matrix</CardTitle>
@@ -1737,32 +1810,38 @@ function PartyHubSection() {
             stopImmediatePropagation so the built-in mock cannot navigate the page away.
           </p>
           <p className="text-sm leading-relaxed text-zinc-300">
-            <span className="font-medium text-zinc-100">Voltronite dialect adapter.</span> The
-            Kairos web POSTs raw graphql documents (no operationName, no Authorization header);
-            Voltronite switches on operationName and requires a Bearer token.{" "}
+            <span className="font-medium text-zinc-100">Voltronite dialect adapter (v3 — in owen-bridge.js).</span>{" "}
+            The Kairos web POSTs raw graphql documents over axios/XMLHttpRequest (no operationName,
+            no Authorization header); Voltronite switches on operationName and requires a Bearer
+            token. The bridge hooks XHR directly: it fingerprints each query client-side, maps it
+            to a Voltronite operation, and relays{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              mini-services/partyhub-web
+              /owen-graphql
             </code>{" "}
-            fingerprints each query, obtains a real token from
-            /account/api/oauth/token (password grant), and forwards to /partyhub/graphql — the
-            backend receives and answers GetMyAccount, GetStatusPerService, EulaAccepted,
-            GetMySetting, GetAccountSettings, UpdateUserSetting, GetNotificationSettings. Only the
-            kairos lightswitch status (Voltronite reports DOWN for Kairos; the old client requires
-            UP) and queries Voltronite does not implement (friends lists, eula body, character
-            profile) are answered locally with neutral defaults.
+            (same-origin — browsers cannot call Voltronite directly, it sends no CORS headers) with
+            the backend URL and account name in headers. The relay (server.py on the phone,
+            partyhub-web here) attaches a real token from /account/api/oauth/token (password grant,
+            cached per user, refreshed on 401) and forwards to /partyhub/graphql — the backend
+            receives and answers GetMyAccount, GetStatusPerService, EulaAccepted, GetMySetting,
+            GetAccountSettings, UpdateUserSetting, GetNotificationSettings. The bridge applies the
+            compatibility transforms (kairos lightswitch DOWN→UP, short account ids zero-padded to
+            32 chars so short names can't crash the home screen) and answers the queries Voltronite
+            does not implement (friends lists, eula body, character profile) locally — with a local
+            fallback also when the backend is unreachable, so the hub always renders.
           </p>
           <p className="text-sm leading-relaxed text-zinc-300">
-            <span className="font-medium text-zinc-100">Verified in a real browser.</span> Login
-            screen renders → “YES, FIND MY ACCOUNT” → the router lands on{" "}
+            <span className="font-medium text-zinc-100">Verified in a real browser.</span> The
+            golden launcher login renders → type a name → LOGIN → the router lands on{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
               /offline/en-US/home
-            </code>{" "}
+            </code>
             with the Party Hub home screen (onboarding cards, microphone and notification
             permissions, Llama Bell, friend-request badge, Add Friends and Share The App actions),
-            modal routes work (universal search), and the request log above shows every forwarded
-            operation. Patch any copy with{" "}
+            modal routes work (universal search), logout returns to the golden login, and the
+            request log above shows every forwarded operation for the typed account name. Patch any
+            copy with{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              patch_partyhub.py &lt;shippedweb&gt; --out &lt;copy&gt; --base &lt;route-base&gt;
+              patch_partyhub.py &lt;shippedweb&gt; --out &lt;copy&gt; --base &lt;route-base&gt; --server
             </code>
             . Full protocol and serving rules:{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">

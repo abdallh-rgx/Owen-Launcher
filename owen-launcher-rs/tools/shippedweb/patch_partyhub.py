@@ -103,17 +103,40 @@ OLD_ENV_BLOCK_RE = re.compile(
 OLD_BRIDGE_TAG_RE = re.compile(
     r'<script[^>]*src="(?:\./)?owen-bridge\.js"[^>]*>\s*</script>', re.I
 )
-OLD_ARABIC_DEBUG_RE = re.compile(
-    r"<script>\s*window\.addEventListener\('unhandledrejection'[\s\S]*?</script>", re.I
-)
+
+# THE TOP STRIP: the user's original shippedweb carried an injected Arabic
+# debug-overlay script (a position:fixed; top:0 red-on-black "__debugBox"
+# that covers the top of every screen). It MUST be removed — the strip the
+# user sees at the top of the app is exactly this box. Match any <script>
+# block whose BODY (inside the same script element) contains one of the
+# debug markers, using tempered patterns so the marker can never leak past
+# a closing </script>.
+def _strip_debug_scripts(html: str) -> str:
+    markers = [
+        "__debugBox",
+        "captureLog",
+        "window.__errors",
+        "unhandledrejection",  # older variant of the same debug block
+    ]
+    for marker in markers:
+        pat = re.compile(
+            r"<script[^>]*>(?:(?!</script>)[\s\S])*?"
+            + re.escape(marker)
+            + r"(?:(?!</script>)[\s\S])*?</script>\s*",
+            re.I,
+        )
+        html = pat.sub("", html)
+    return html
+
 APPCONTEXT_RE = re.compile(r"window\.appContext\s*=\s*'[^']*';")
 
 
 def patch_index_html(html: str, base: str, graphql: str) -> str:
-    # strip any previously injected blocks (idempotency)
+    # strip any previously injected blocks (idempotency) — including the
+    # Arabic debug-overlay script that renders the top strip
     html = OLD_BRIDGE_TAG_RE.sub("", html)
     html = OLD_ENV_BLOCK_RE.sub("", html)
-    html = OLD_ARABIC_DEBUG_RE.sub("", html)
+    html = _strip_debug_scripts(html)
 
     # route base
     if APPCONTEXT_RE.search(html):
@@ -144,6 +167,7 @@ def main() -> None:
     ap.add_argument("--src", required=True, help="pristine shippedweb folder (contains offline/entry)")
     ap.add_argument("--out", required=True, help="output folder (created/cleaned)")
     ap.add_argument("--base", default="/partyhub/offline", help="window.appContext value (route base)")
+    ap.add_argument("--server", action="store_true", help="also copy server.py (phone package relay) next to the build")
     ap.add_argument("--graphql", default="./graphql", help="EPIC_SERVICE_GRAPHQL_URL value")
     args = ap.parse_args()
 
@@ -197,6 +221,11 @@ def main() -> None:
     # 4. copy the bridge
     shutil.copy2(TOOLS / "owen-bridge.js", entry_out / "owen-bridge.js")
     print(f"copied owen-bridge.js -> {entry_out / 'owen-bridge.js'}")
+
+    # 5. optional: the phone-package relay server (zero-dependency Python)
+    if args.server:
+        shutil.copy2(TOOLS / "server.py", out / "server.py")
+        print(f"copied server.py -> {out / 'server.py'}")
 
     print("\nServe with: bun run mini-services/partyhub-web (or any static host)")
     print("that (a) falls back to index.html for SPA routes and (b) answers the")

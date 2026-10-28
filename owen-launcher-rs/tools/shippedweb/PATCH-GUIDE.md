@@ -287,3 +287,83 @@ that versions 10.31-12.60 contain an `offline/index.html` with a party GraphQL
 URL was re-checked during this work: those old APKs do not ship this folder at
 all. If you have an APK that contains `assets/shippedweb/`, the steps in this
 document apply to it directly - no smali edits, no manifest changes.
+
+---
+
+## 10. v3 - The phone package (golden login, no debug strip, Voltronite links)
+
+`patch_partyhub.py --src <pristine> --out <copy> --base /offline --server`
+produces the runnable phone package. What v3 adds on top of v2:
+
+### 10.1 The top strip is gone
+
+The original shippedweb.7z carried an injected Arabic debug-overlay script in
+`index.html` (a `position:fixed; top:0` red-on-black `__debugBox` that covers
+the top of every screen and prints JS errors). The patcher now strips ANY
+`<script>` block whose body contains `__debugBox`, `captureLog`,
+`window.__errors` or `unhandledrejection` (tempered regex - the marker can
+never leak past a closing `</script>`), so the strip never renders.
+
+### 10.2 The golden launcher login page
+
+`owen-bridge.js` renders the Owen Launcher "Aurum" login as a full-screen page
+instead of the Kairos "Played Fortnite before?" screen (which mounts underneath
+and stays hidden):
+
+- charcoal gradient background (`#1A140C -> #141009`), `OWEN` in white +
+  `LAUNCHER` in the gold gradient (`#FFE9B8 -> #FFC24B -> #FF9F0A`)
+- a player-name card (`#211A11`, gold border, 16px radius) with the
+  `Required`/`OK` pill, an outlined gold-focus input, and the gold gradient
+  LOGIN button (52px, `#FFB300 -> #FF9F0A -> #FF8A00`)
+- the typed name becomes the Voltronite account; it is persisted in
+  localStorage and prefilled on the next visit; logout re-shows the page
+
+### 10.3 Voltronite links (all in `owen-bridge.js`)
+
+```js
+window.OWEN_CONFIG = {
+  VOLTRONITE_URL: "http://127.0.0.1:3551",  // <- the ONE link to edit
+  USERNAME: "OwenTester",                    // default (login page wins)
+  RELAY_URL: "auto",                         // <appContext>/owen-graphql
+};
+```
+
+The bundle's HTTP stack is **axios over XMLHttpRequest** (NOT fetch), so the
+bridge hooks `XMLHttpRequest.prototype.open/send`: every POST whose URL
+matches graphql is consumed, its raw query fingerprinted and mapped to a
+Voltronite `operationName`, and forwarded (via the ORIGINAL window.fetch) to
+the same-origin relay `<appContext>/owen-graphql` with `X-Owen-Backend` /
+`X-Owen-User` headers. The relay (`server.py` on the phone, `partyhub-web`
+behind the web console) attaches the real Bearer token (password grant,
+cached per user, refreshed once on 401) and forwards to
+`<backend>/partyhub/graphql`. A same-origin relay is REQUIRED: Voltronite
+sends no CORS headers, so a browser page can never call it directly.
+
+### 10.4 The 32-char account id (short-name crash fix)
+
+Voltronite derives `accountId = hex(username)` - 6 hex chars for "Rex". The
+Kairos home screen hashes the id with `parseInt(id.slice(8, 9), 16)`: with a
+short id that slice is empty, the hash is `NaN`, and HomeContainer crashes on
+`backgroundColor: b[1]` (red error boundary, "An unknown error occurred").
+The bridge therefore uses a **client-side id = hex(name) zero-padded to 32
+chars** everywhere (login notifications, getloggedinuserid, settings keys)
+and rewrites the ids Voltronite returns (myAccount/myProfile) to the padded
+form in the GetMyAccount extract. Verified with 1-char ("K"), 3-char ("Rex")
+and 10-char ("WebTester") names.
+
+### 10.5 Running it
+
+```
+python server.py                    # http://127.0.0.1:8081 -> /offline/en-US/
+PORT=9000 python server.py          # custom port
+```
+
+`server.py` is pure Python 3 stdlib (ThreadingHTTPServer): static files from
+its own folder, SPA fallback (extension-less misses -> offline/entry/index.html),
+relative-asset resolution (`/offline/en-US/main.*.js` -> `offline/entry/`),
+`POST */owen-graphql` -> the Voltronite relay, per-request backend override
+from `X-Owen-Backend` (fallback: `OWEN_BACKEND` env or `http://127.0.0.1:3551`).
+
+If the backend is unreachable the relay answers 502 and the bridge falls back
+to local neutral answers, so the hub still renders (the relay log prints
+`[RELAY] <op> user=<name> -> FAILED`).

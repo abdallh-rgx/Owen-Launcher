@@ -54,23 +54,23 @@ const MIME: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ *
- * Voltronite access token (cached; password grant)                   *
+ * Voltronite access tokens (cached per user; password grant)          *
  * ------------------------------------------------------------------ */
-let accessToken: string | null = null;
-let tokenAt = 0;
+const tokenCache = new Map<string, { token: string; at: number }>();
 
-async function getToken(force = false): Promise<string> {
-  if (!force && accessToken && Date.now() - tokenAt < 24 * 3600_000) return accessToken;
+async function getToken(user: string, force = false): Promise<string> {
+  const key = user || OWEN_USER;
+  const hit = tokenCache.get(key);
+  if (!force && hit && Date.now() - hit.at < 24 * 3600_000) return hit.token;
   const res = await fetch(`${VOLTRONITE}/account/api/oauth/token`, {
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
-    body: `grant_type=password&username=${encodeURIComponent(OWEN_USER)}`,
+    body: `grant_type=password&username=${encodeURIComponent(key)}`,
   });
   if (!res.ok) throw new Error(`oauth token failed: HTTP ${res.status}`);
   const json: any = await res.json();
-  accessToken = json.access_token;
-  tokenAt = Date.now();
-  return accessToken!;
+  tokenCache.set(key, { token: json.access_token, at: Date.now() });
+  return json.access_token;
 }
 
 /* ------------------------------------------------------------------ *
@@ -225,7 +225,7 @@ function mapQuery(query: string): Mapping {
  * Forward to Voltronite                                              *
  * ------------------------------------------------------------------ */
 async function forward(op: string, body: any, depth = 0): Promise<any> {
-  const token = await getToken(depth > 0);
+  const token = await getToken(OWEN_USER, depth > 0);
   const res = await fetch(`${VOLTRONITE}/partyhub/graphql`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
@@ -292,7 +292,70 @@ const server = serve({
     const ts = new Date().toISOString().slice(11, 19);
 
     /* ---- graphql adapter (same-origin on every SPA route) ---- */
-    if (method === "POST" && (p.endsWith("/graphql") || p === "/graphql" || p.endsWith("/api/graphql"))) {
+    if (
+      method === "POST" &&
+      (p === "/owen-graphql" ||
+        p.endsWith("/owen-graphql") ||
+        p.endsWith("/graphql") ||
+        p === "/graphql" ||
+        p.endsWith("/api/graphql"))
+    ) {
+      /* /owen-graphql is the v3 bridge relay: owen-bridge.js already mapped
+       * the raw query to a Voltronite operation and tells us the backend +
+       * user via headers — forward verbatim with a real Bearer token. */
+      if (p === "/owen-graphql" || p.endsWith("/owen-graphql")) {
+        const bodyText = await req.text();
+        let bodyJson: any = null;
+        try { bodyJson = JSON.parse(bodyText); } catch {}
+        const backend = (req.headers.get("x-owen-backend") || VOLTRONITE).replace(/\/+$/, "");
+        const user = req.headers.get("x-owen-user") || OWEN_USER;
+        const op = String(bodyJson?.operationName ?? "?");
+        try {
+          let token = await getToken(user);
+          let voltronite: any = null;
+          for (let attempt = 0; attempt < 2; attempt++) {
+            const res = await fetch(`${backend}/partyhub/graphql`, {
+              method: "POST",
+              headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+              body: JSON.stringify(bodyJson ?? {}),
+            });
+            if (res.status === 401 && attempt === 0) {
+              token = await getToken(user, true);
+              continue;
+            }
+            voltronite = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(`voltronite HTTP ${res.status}`);
+            break;
+          }
+          console.log(`[${ts}] RELAY   ${op}  user=${user}  -> ${backend}/partyhub/graphql`);
+          pushHit({
+            time: ts,
+            method: "POST",
+            path: p,
+            op: `${op} (v3 relay)`,
+            via: "voltronite",
+            detail: `user=${user} -> ${backend}`,
+          });
+          return new Response(JSON.stringify(voltronite), {
+            headers: { "content-type": "application/json", "access-control-allow-origin": "*" },
+          });
+        } catch (err) {
+          console.log(`  !! relay failed (${op}): ${(err as Error).message}`);
+          pushHit({
+            time: ts,
+            method: "POST",
+            path: p,
+            op: `${op} (v3 relay FAILED)`,
+            via: "voltronite",
+            detail: `${err instanceof Error ? err.message : err} (bridge will fall back locally)`,
+          });
+          return new Response(JSON.stringify({ errors: [{ message: String(err) }] }), {
+            status: 502,
+            headers: { "content-type": "application/json", "access-control-allow-origin": "*" },
+          });
+        }
+      }
+
       const bodyText = await req.text();
       let bodyJson: any = null;
       try {
@@ -338,7 +401,7 @@ const server = serve({
             voltronite: VOLTRONITE,
             user: OWEN_USER,
             accountId: OWEN_ACCOUNT_ID,
-            backendReachable: accessToken !== null,
+            backendReachable: tokenCache.size > 0,
             hits: hits.slice(-60).reverse(),
           },
           null,

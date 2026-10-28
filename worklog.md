@@ -492,3 +492,31 @@ Work Log:
 
 Stage Summary:
 - المهمة مكتملة بمعايير المستخدم المعلنة والجديدة: لم يعد التعلق في "checking your login information" — الوصول الفعلي لواجهة PartyHub الكاملة، والـBackend (Voltronite) يستقبل الطلبات فعلياً (مثبت بالسجل الحي في الواجهة)
+
+---
+Task ID: 29
+Agent: main (Z.ai Code)
+Task: حزمة 7z تعمل مباشرة على الهاتف — حذف الشريط العلوي + روابط owen-bridge.js المتوافقة مع Voltronite + صفحة دخول الـ Launcher الذهبية مدمجة
+
+Work Log:
+- تحديد الشريط العلوي بدقة: سكربت debug عربي محقون في index.html الأصلي (صندوق __debugBox بـ position:fixed;top:0 بنص أحمر على أسود) — patch_partyhub.py لم يكن يحذفه لأن regex القديم لا يطابق بدايته (تعليق عربي ثم window.__errors)
+- إصلاح الحذف: أنماط tempered regex تفحص جسم كل <script> بحثاً عن __debugBox/captureLog/window.__errors/unhandledrejection — لا يمكن أن يتسرب المطابقة عبر </script> — تحقق بكسلي: صفر بكسلات حمراء في الصفوف العلوية
+- owen-bridge.js v3 (إعادة كتابة كبرى):
+  * OWEN_CONFIG في الأعلى: VOLTRONITE_URL (الرابط الوحيد الذي يُعدّل) + USERNAME + RELAY_URL=auto
+  * اكتشاف حاسم: مكدس HTTP للباندل هو axios عبر XMLHttpRequest وليس fetch — اعتراف XMLHttpRequest.prototype.open/send (وليس fetch): كل POST لـ graphql يُستهلك، يُبصم الاستعلام الخام ويُحوَّل إلى operationName في Voltronite، ويُرحَّل عبر window.fetch الأصلي إلى relay بنفس الأصل (<appContext>/owen-graphql محسوبة تلقائياً — تعمل من الجذر وخلف بادئة /partyhub)
+  * تمرير X-Owen-Backend/X-Owen-User في الترويسات — relay يضيف التوكن الحقيقي (لأن Voltronite بلا CORS لا يمكن استدعاؤه من المتصفح مباشرة)
+  * إصلاح انهيار الأسماء القصيرة: HomeContainer يحسب لون الخلفية بـ parseInt(id.slice(8,9),16) — معرف hex القصير (اسم ≤4 أحرف) = NaN = انهيار شاشة حمراء — الحل: معرف عميل = hex(الاسم) محشو أصفاراً إلى 32 خانة في كل مكان + إعادة كتابة معرفات Voltronite في GetMyAccount extract — مُتحقق بأسماء K وRex وWebTester وFreshTest
+  * صفحة الدخول الذهبية (تصميم Aurum من الـ Launcher): خلفية فحمية متدرجة + OWEN أبيض وLAUNCHER بتدرج ذهبي + بطاقة اسم اللاعب مع حبة Required/OK + زر LOGIN ذهبي متدرج 52px — الاسم يُحفظ ويُعبأ مسبقاً — الخروج يعيدها
+  * ردود محلية للعمليات غير المدعومة + fallback محلي عند سقوط الـ backend (الواجهة تعمل دائماً)
+- server.py v2 (الهاتف، صفر اعتماديات، stdlib فقط): ThreadingHTTPServer + خدمة من مجلد السكربت + SPA fallback + حل الأصول النسبية من مسارات متداخلة + relay إلى Voltronite (توكن لكل مستخدم مع تحديث عند 401) + إعادة توجيه / إلى /offline/en-US/ + راية تشغيل واضحة
+- partyhub-web: مسار /owen-graphql relay + توكن لكل مستخدم (خريطة) — المثال الحي في الكونسول يعرض الآن سلوك الهاتف نفسه
+- إصلاح انهيارات Next.js المتكررة: Turbopack ينكسر عند تجميع / بسبب نفاد inotify watches (الحد 8192) — نقل مخلفات بناء Rust (target/) إلى /tmp وإغلاق المتصفح أثناء التجميع الأول — الخادم مستقر الآن
+- الحزمة: Owen-PartyHub-Voltronite.7z (3.4MB، 22 مدخلاً) — shippedweb/{README.txt عربي+إنجليزي، server.py، offline/entry المرقّع} — في upload/ وpublic/owen/ (قابلة للتنزيل من الكونسول)
+- تحديث الكونسول: بطاقة تحميل v3 ذهبية (3 ميزات + زر تنزيل) + تحديث نصوص المثال الحي والشرح لبنية v3
+- PATCH-GUIDE.md: قسم 10 كامل (الشريط، الصفحة الذهبية، الروابط، معرف 32 خانة، التشغيل)
+
+التحقق النهائي E2E (استخراج الأرشيف الفعلي إلى مجلد نظيف وتشغيله على 8099):
+- صفحة الدخول الذهبية تظهر فوراً (VLM أكّد: خلفية فحمية، OWEN/LAUNCHER ذهبي، بطاقة اسم، زر LOGIN ذهبي، لا شريط أحمر)
+- دخول FreshTest → /offline/en-US/home بواجهة PartyHub كاملة (126 div، لا أخطاء كونسول)
+- Voltronite استقبل وأجاب: GetMyAccount/UpdateUserSetting/GetMySetting×2/GetAccountSettings×2 بحساب FreshTest (سجل الخادم)
+- الخروج يعيد الصفحة الذهبية بنفس الاسم المحفوظ — رابط التنزيل من الكونسول يقدم الأرشيف الصحيح (md5 مطابق)
