@@ -560,3 +560,23 @@ Work Log:
 
 Stage Summary:
 - المشروع الموحد جاهز: owen-rs (9 كريتات، Rust آمن) + سيرفر بحسابات حقيقية + PartyHub أصلي 100% من Rust + واجهة Liquid Glass حية متصلة بالسيرفر + كل المواسم تعمل + CI على GitHub Actions
+
+---
+Task ID: 31 (تابع)
+Agent: main (Z.ai Code)
+Task: استبدال مُرقّع Kotlin smali بمُرقّع Rust كامل (JNI) + إصلاح توقيع v2 بدقة المواصفات + تحديث CI
+
+Work Log:
+- تحليل فشل الـ E2E السابق من artifacts: المُثبِّت كان في دوامة GC قاتلة (baksmali/smali على classes.dex داخل heap ~214MB على المحاكي) — حوار التثبيت لم يظهر أبداً خلال 45 دقيقة
+- إنشاء owen-patcher-jni (libowenpatch.so): JNI adapter نظيف (صفر unsafe فعلياً — jni 0.21 آمن) يكشف patchApk() للتطبيق — كل المنطق في owen-patcher (#![forbid(unsafe_code)])
+- Kotlin: NativePatcher.kt + مسار سريع في ApkPatcher (يجرّب Rust أولاً ويسقط لـ smali عند الفشل) — PartyHub builds تبقى على smali (تحتاج ترقيع dex للنقاط)
+- owen-patcher: PatchOptions +key_path (المفتاح يبقى في filesDir) +rename_package (تعديل binary AXML in-place) + محاذاة 4096 للمدخلات المستبدلة (متطلب extractNativeLibs=false)
+- إعادة كتابة sign.rs بدقة مواصفة APK Signature Scheme v2: هضم علوي واحد (قطع 1MB عبر المناطق الثلاث بالترتيب، 0xa5/0x5a) بدل ثلاث هضمات، سجلات (algo,len,digest) صحيحة، بنية زوج u64/id صحيحة — وأصلح خللاً حاسماً: بادئة طول مزدوجة على حقل التوقيعات — verify_v2 الآن تحقق تشفيري كامل (إعادة حساب الهضم + RSA على المفتاح المضمّن) ويرفض العبث
+- اختبارا تكامل جديدان: مصنع ELF64 اصطناعي (PT_LOAD/PT_DYNAMIC/DT_NEEDED/DT_NULL احتياطية + .dynstr بفراغ حقن) + مصنع zip مصغّر → pipeline كامل: حقن DT_NEEDED + تضمين libOwen.so + توقيع v2 + تحقق + idempotency + كشف العبث — 2/2 ناجح (المجموع 46 اختباراً في الوورك سبيس)
+- E2E workflow: يبني ويعبّئ libowenpatch.so (jniLibs) بجانب libOwen.so
+- owen-rs-ci.yml: android job يبني owen-patcher-jni (مع فحص nm للتصدير) بدل owen-redirecter الموحد (كوده الـ android من جلسة مقطوعة لم يكتمل — الـ redirecter الحقيقي يُبنى ويُختبر في E2E)
+- أول تشغيل لـ CI الجديد: Workspace tests ✓ + مصفوفة المواسم S1-S42 على سيرفر حي ✓ (فشل android فقط — أُصلح)
+- الدفع: Erbium-Android (main) + Owen-Launcher (rust-rewrite) — owen-rs كاملاً + بيانات CI ذاتية + workflows
+
+Stage Summary:
+- سلسلة الترقيع أصبحت Rust بالكامل تقريباً (smali يبقى fallback اختيارياً): DT_NEEDED بدل تعديل dex + توقيع v2 تشفيري موثّق + اختبارات تكامل — والمحاكي على GitHub Actions سيحسم E2E

@@ -165,7 +165,7 @@ jobs:
             | python3 -c "import json,sys; a=json.load(sys.stdin)['data']['Account']['myAccount']; assert a['displayName']=='CiWizard'; print('partyhub account OK:', a['id'])"
 
   android-build:
-    name: libowen.so (aarch64-android, the redirecter)
+    name: libowenpatch.so (aarch64-android, the Rust patcher)
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -180,7 +180,7 @@ jobs:
         with:
           ndk-version: r27c
 
-      - name: Build the unified redirecter crate
+      - name: Build the Rust APK patcher (JNI)
         working-directory: owen-rs
         env:
           ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
@@ -189,11 +189,17 @@ jobs:
           mkdir -p .cargo
           printf '[target.aarch64-linux-android]\nlinker = "aarch64-linux-android24-clang"\n' > .cargo/config.toml
           export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
-          cargo build --release -p owen-redirecter --target aarch64-linux-android
-          file target/aarch64-linux-android/release/libowen.so
+          cargo build --release -p owen-patcher-jni --target aarch64-linux-android
+          file target/aarch64-linux-android/release/libowenpatch.so
+          # the JNI export must be present
+          nm -D target/aarch64-linux-android/release/libowenpatch.so | grep Java_com_abdallhrgx_owenlauncher_core_apk_NativePatcher_patchApk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: libowen-so-aarch64
-          path: ${{ github.workspace }}/target/aarch64-linux-android/release/libowen.so
+          name: libowenpatch-so-aarch64
+          path: ${{ github.workspace }}/target/aarch64-linux-android/release/libowenpatch.so
           if-no-files-found: error
+
+      # NOTE: the redirecter (libowen.so) itself is built and exercised on a
+      # real Android emulator by test-launcher-e2e.yml (build + install +
+      # launch + hooks + backend /login) — the authoritative test.

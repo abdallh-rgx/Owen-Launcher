@@ -192,15 +192,27 @@ impl ZipArchive {
                         Cow::Deflated(v, ulen) => (v.clone(), 8u16, crc32(v), *ulen),
                     };
                     let name = e.name.as_bytes();
-                    let lh = local_header(offset, method, crc, raw.len() as u32, usize_, name.len() as u16);
+                    // zipalign-style 4096 padding for stored entries (native
+                    // libs) so the APK installs with extractNativeLibs=false.
+                    let extra_pad = if method == 0 {
+                        let hdr = 30u64 + name.len() as u64;
+                        let rem = (offset + hdr) % 4096;
+                        if rem == 0 { 0 } else { (4096 - rem) as usize }
+                    } else {
+                        0
+                    };
+                    let mut lh = local_header(offset, method, crc, raw.len() as u32, usize_, name.len() as u16);
+                    lh[28..30].copy_from_slice(&(extra_pad as u16).to_le_bytes());
+                    let pad = vec![0u8; extra_pad];
                     write_all(&mut out, &lh)?;
                     write_all(&mut out, name)?;
+                    write_all(&mut out, &pad)?;
                     write_all(&mut out, &raw)?;
                     central.extend_from_slice(&central_header(
                         method, crc, raw.len() as u32, usize_, name.len() as u16, offset,
                     ));
                     central.extend_from_slice(name);
-                    offset += lh.len() as u64 + name.len() as u64 + raw.len() as u64;
+                    offset += lh.len() as u64 + name.len() as u64 + pad.len() as u64 + raw.len() as u64;
                 }
                 None => {
                     // Raw copy from source.

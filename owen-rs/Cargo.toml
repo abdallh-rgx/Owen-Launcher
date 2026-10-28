@@ -5,6 +5,7 @@ members = [
     "crates/owen-cli",
     "crates/owen-server",
     "crates/owen-patcher",
+    "crates/owen-patcher-jni",
     "crates/owen-redirecter",
 ]
 
