@@ -469,3 +469,26 @@ Work Log:
 Stage Summary:
 - مهمة المستخدم مكتملة بمعايير نجاحه المعلنة: الصفحة لم تعد تتعلق، وُثّقت طريقة تغيير graphql بدقة (clientEnvConfig قبل الباندل)، والـ Backend استقبل طلب graphql فعلياً (مثبت بالسجل)
 - الأدوات: owen-launcher-rs/tools/shippedweb/{owen-bridge.js, patch_entry.py, PATCH-GUIDE.md} + shippedweb_owen المرقعة + kairos-mock المرجعي
+
+---
+Task ID: 28
+Agent: main (Z.ai Code)
+Task: Voltronite كـ Backend — الوصول إلى واجهة PartyHub بدل التعلق في "checking your login information"
+
+Work Log:
+- تنزيل Voltronite (مستودع المستخدم) وتشغيله: :3551 + matchmaker :8080، oauth password grant يعمل (accountId=hex(username))
+- التحليل الحاسم للباندل: البناء offline/entry يركّب LoginContainer فقط كجذر (module 1041) — تطبيق PartyHub كامل (روابط home/party/friends/settings + modal routes في module 1291) موجود في نفس الباندل لكن لا يُركّب أبداً — شاشة "Checking your login info" (diesel.kairos.login.authenticating) هي حالة postlogin الميتة بالتصميم
+- اكتشاف السبب الثاني: window.__GraphQlService لا يُستدعى له configure أبداً في بناء offline (bootstrap الأونلاين هو من يفعلها) — endpoint يبقى "" فتذهب كل استعلامات graphql إلى URL فارغ (الصفحة نفسها) وتفشل بصمت
+- اكتشاف السبب الثالث: mock المدمج ينفّذ login حتى مع فوز ردّنا بالسباق — w("login") يغيّر location.href لأن appContext لم يعد "offline" حرفياً
+- البنية المكتملة:
+  * patch_partyhub.py: يستبدل module 1041 بجذر هجين (login حتى authenticated ثم التطبيق الكامل: useAppInitialization + AppEffects + AppStateInitializers + getRoutes مع دعم modal isModal) + يرقّع module 170 ليستدعي configure(clientEnvConfig) + يحقن owen-bridge v2 + appContext قابل للتخصيص (--base)
+  * owen-bridge v2: stateful (getstartupstatus تعيد الحالة الحالية — بدونها يُقلع FullApp للمستخدم بعد ثوانٍ)، login يدفع authenticated فقط (بدون postlogin كي يطلق once-on-authenticated)، stopImmediatePropagation للأوامر المُعالجة، getconfiguredbackend، getsetting يبذر onboardingComplete/introVideoWatched، حساب UserId=hex(OwenTester)
+  * mini-services/partyhub-web (:8091): خدمة الويب + محلّف graphql: يبصم كل استعلام خام ويحوّله إلى operationName في Voltronite (GetMyAccount/GetStatusPerService/EulaAccepted/GetMySetting/GetAccountSettings/UpdateUserSetting/GetNotificationSettings) مع توكن oauth حقيقي (cache + refresh عند 401)، وتحويلات توافق (kairosStatus→UP لأن Voltronite يرجع DOWN والعميل القديم يتطلب UP، SocialBan.socialBan=null)، والاستعلامات غير المدعومة في Voltronite (friends/eula body/character) تُجاب محلياً بمحايد
+  * next.config.ts: rewrite ‏/partyhub/:path* → :8091 + redirect /partyhub — البنية تعمل عبر منفذ 3000 الوحيد المكشوف، وappContext="/partyhub/offline" يجعل الرواتر يطابق المسار
+  * Web Console (تبويب PartyHub): بطاقة LIVE بهاتف مدمج (iframe) يعمل بالفعل + سجل طلبات GraphQL حي (GET /api/partyhub-status → :8091/__status) مع تمييز ما وصل Voltronite
+- التحقق النهائي E2E (متصفح جديد بالكامل): شاشة الدخول → "YES, FIND MY ACCOUNT" → authenticated → الرواتر يهبط في /partyhub/offline/en-US/home → واجهة PartyHub كاملة (بطاقات onboarding + ENABLE YOUR MICROPHONE/NOTIFICATIONS + قسم Llama Bell + شارة 1 NEW FRIEND REQUEST + ADD FRIENDS + SHARE THE APP) — modal routes تعمل (universal-search) — صندوق debug الخاص بالمستخدم: "لا توجد أخطاء جافاسكريبت" — وVoltronite استقبل وأجاب كل العمليات المُحوّلة (سجل الخدمة يثبت GetMyAccount/GetStatusPerService/GetMySetting/GetAccountSettings/UpdateUserSetting/GetNotificationSettings بحساب OwenTester الحقيقي)
+- PATCH-GUIDE.md أُعيدت كتابته كاملاً (v2): الأسباب الثلاثة، بروتوكول الجسر مع قواعد الحالة، جدول التحويل graphql، متطلبات التقديم، خطوات التحقق
+- الأدوات: owen-launcher-rs/tools/shippedweb/{patch_partyhub.py, partyhub-root.js, owen-bridge.js(v2), PATCH-GUIDE.md(v2)} + mini-services/partyhub-web + download/shippedweb_party
+
+Stage Summary:
+- المهمة مكتملة بمعايير المستخدم المعلنة والجديدة: لم يعد التعلق في "checking your login information" — الوصول الفعلي لواجهة PartyHub الكاملة، والـBackend (Voltronite) يستقبل الطلبات فعلياً (مثبت بالسجل الحي في الواجهة)

@@ -1,43 +1,51 @@
 /*
- * Owen Bridge - offline entry enabler for the Fortnite "shippedweb" Kairos login page.
+ * Owen Bridge v2 — offline entry enabler + PartyHub unlocker for the Fortnite
+ * "shippedweb" Kairos bundle.
  *
- * WHAT THIS FIXES
- * ---------------
- * The offline entry bundle (main.kairos.*.js) renders a full-screen Epic Games logo
- * forever when it is opened outside the real Fortnite app. The cause is not a missing
- * GraphQL URL: the built-in mock bridge answers the "native/getstartupstatus" call
- * with {status:"authenticated"}, and "authenticated" is intentionally NOT a case in
- * the LoginContainer switch (init/authenticating/prelogin/postlogin/autherror/
- * error/networkoffline are). It falls through to the default branch, which is the
- * static LoadingContainer - the Epic logo - with no further transitions.
+ * WHAT THIS FIXES (v1)
+ * ---------------------
+ * The offline entry bundle renders a full-screen Epic Games logo forever when
+ * opened outside the real Fortnite app: the built-in mock bridge answers the
+ * "native/getstartupstatus" call with {status:"authenticated"} and
+ * "authenticated" is intentionally NOT a case in the LoginContainer switch.
+ * Answering {status:"prelogin"} instead unlocks the real login UI.
  *
- * HOW IT WORKS
- * ------------
- * The bundle talks to its host through a bridge:
+ * WHAT THIS ADDS (v2)
+ * --------------------
+ * The stock entry ends on the "Checking your login info..." screen and waits
+ * for the native app to take over — the PartyHub UI is never mounted by this
+ * build (patching webpack module 1041 with tools/shippedweb/partyhub-root.js
+ * fixes that). This bridge drives the state machine exactly the way the
+ * patched root expects:
+ *
+ *   login  ->  oss.identity.loginchanged(LoggedIn, <id>)
+ *          ->  startupstatuschanged(authenticated)      [STOPS HERE — no
+ *              "postlogin", so the app mounts the full PartyHub router while
+ *              the status is still "authenticated" and the once-on-
+ *              authenticated initialization chain fires]
+ *
+ *   getconfiguredbackend -> {appName:"fortnite"}  (the LightSwitch service
+ *              queries this BEFORE its graphql call)
+ *   getloggedinuserid    -> {UserId:<hex(OwenTester)>} — MUST equal the
+ *              accountId the backend returns for the same username, so the
+ *              persisted-settings keys line up with the real account.
+ *   getsetting           -> seeded values for <accountId>:onboardingComplete
+ *              and <accountId>:introVideoWatched so the home screen skips the
+ *              first-run intro and renders the hub directly. Every other key
+ *              falls through to the bundle's own mock (localStorage-backed).
+ *
+ * BRIDGE PROTOCOL (identical in the real app)
  *   OUT (JS -> host): window.postMessage({id, type:"mockRequest", command, args}, "*")
- *                     when no window.JSBridge / window.ue / window.webkit exists,
- *   IN  (host -> JS): window.postMessage({id, type:"asyncResponse", payload, errors}, "*")
+ *   IN  (host -> JS): window.postMessage({id, type:"asyncResponse", payload}, "*")
  *                     window.postMessage({type:"notification", command, args:[...]}, "*")
- * The bundle ships its own mock responder (configureMockBridge) that answers every
- * mockRequest after a 100 ms delay. Responses are single-shot: the pending callback
- * is deleted on first answer, so the FIRST response wins.
- *
- * This script registers a listener BEFORE the bundle loads and answers the critical
- * calls immediately (0 ms), beating the built-in mock:
- *   - native/getstartupstatus -> {status:"prelogin"}  (unlocks the real login UI)
- *   - native/login|register   -> completes the login flow and pushes the
- *                                oss.identity.loginchanged + startupstatuschanged
- *                                notifications exactly like the native app does,
- *   - the identity check is performed through the bundle's own exposed bridge
- *     function, which makes the bundle POST
- *       {"query":"query {Account { myAccount {id}}}"}
- *     to window.clientEnvConfig.EPIC_SERVICE_GRAPHQL_URL - i.e. YOUR backend
- *     receives the request.
+ * Responses are single-shot (first answer wins); the built-in mock answers
+ * after 100 ms, this script answers immediately.
  *
  * CONFIGURATION
  * -------------
- * Edit the window.clientEnvConfig block below (kept verbatim: http:// and https://
- * are both supported and are NEVER rewritten). Set the URLs to your backend.
+ * window.clientEnvConfig.EPIC_SERVICE_GRAPHQL_URL must point at your backend
+ * (relative "./graphql" works when the serving host exposes the graphql
+ * endpoint on every SPA route — see mini-services/partyhub-web).
  */
 
 (function () {
@@ -45,21 +53,15 @@
 
   /* ------------------------------------------------------------------ *
    * 1. Client environment - MUST be set before main.kairos.*.js loads.  *
-   *    EPIC_SERVICE_GRAPHQL_URL is the single required key (the bundle  *
-   *    throws "Failed to configure GraphQlService" without it).         *
    * ------------------------------------------------------------------ */
   window.clientEnvConfig = Object.assign(
     {
-      /* Required - the identity/EULA GraphQL endpoint (Account.myAccount). */
-      EPIC_SERVICE_GRAPHQL_URL: "/graphql",
-      /* Optional service endpoints - same server in a Lawin-style setup. */
-      EPIC_SERVICE_FRIENDS_URL: "/graphql",
-      EPIC_SERVICE_PRESENCE_URL: "/graphql",
-      EPIC_SERVICE_PARTY_URL: "/graphql",
+      /* Identity / EULA / lightswitch / settings graphql endpoint.
+       * Relative: resolves against the current SPA route, so any path the
+       * router lands on keeps hitting the same adapter. */
+      EPIC_SERVICE_GRAPHQL_URL: "./graphql",
       /* Keep false for local http backends (avoids credential-cookies issues). */
       EPIC_SERVICE_GRAPHQL_WITHCREDENTIALS: false,
-      /* Environment flags. "local-gamedev" additionally enables the hidden
-       * debug menu (all screens reachable from the UI). */
       EPIC_ENV: "production",
       EPIC_ENABLE_DEBUG_MENU: false,
     },
@@ -68,9 +70,7 @@
 
   /* Startup statuses understood by the bundle:
    *   init | authenticating | authenticated | prelogin | postlogin |
-   *   autherror | error | networkoffline
-   * prelogin  -> shows the "Played Fortnite before?" login screen.
-   * postlogin -> shows the "Logging you in" screen (final entry state). */
+   *   autherror | error | networkoffline */
   var STARTUP_STATUS = {
     INIT: "init",
     AUTHENTICATING: "authenticating",
@@ -82,15 +82,22 @@
     NETWORK_OFFLINE: "networkoffline",
   };
 
-  /* Local account used to satisfy the identity flow. Replace with the
-   * account id of your backend user if you want deeper flows to match. */
+  /* Local account. UserId MUST match the account id the backend reports for
+   * the same username (Voltronite: accountId = hex(username)). */
   var OWEN_ACCOUNT = {
-    UserId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    UserId: "4f77656e546573746572", /* hex("OwenTester") */
     DisplayName: "OwenTester",
   };
 
+  /* Current startup status — the bridge is STATEFUL exactly like the native
+   * layer: re-queries of getstartupstatus (the FullApp re-registers the
+   * startup-state effect when it mounts) must return the CURRENT status,
+   * otherwise the app would fall back to the login screen right after
+   * logging in. */
+  var currentStatus = STARTUP_STATUS.PRELOGIN;
+
   /* ------------------------------------------------------------------ *
-   * 2. Bridge helper functions.                                        *
+   * 2. Bridge helpers.                                                  *
    * ------------------------------------------------------------------ */
   function respond(id, payload) {
     window.postMessage(
@@ -99,11 +106,9 @@
     );
   }
 
-  /* The bundle's built-in mock answers async commands (e.g. getloggedinuserid)
-   * with a Promise as the postMessage payload, which throws DataCloneError
-   * ("<Promise> could not be cloned"). Those late answers are ignored anyway
-   * (responses are single-shot and ours arrive first), so defuse the payload
-   * instead of letting the error surface. */
+  /* The bundle's built-in mock answers async commands with a Promise as the
+   * postMessage payload, which throws DataCloneError. Defuse those late
+   * answers (they are ignored anyway — responses are single-shot). */
   var nativePostMessage = window.postMessage.bind(window);
   window.postMessage = function (message, targetOrigin, transfer) {
     if (
@@ -123,6 +128,7 @@
   }
 
   function setStartupStatus(status) {
+    currentStatus = status;
     notify("startupstatuschanged", [{ status: status }]);
   }
 
@@ -131,24 +137,25 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 3. Command table. Answers returned here win the race against the   *
-   *    bundle's built-in mock (which answers after 100 ms).            *
+   * 3. Command table — answers win the race against the built-in mock.  *
    * ------------------------------------------------------------------ */
   var COMMANDS = {
-    /* THE FIX: the built-in mock answers "authenticated" which is a dead
-     * end for the UI. "prelogin" renders the actual login screen. */
+    /* THE v1 FIX: "prelogin" renders the real login screen instead of the
+     * dead-end "authenticated" case (the Epic logo). STATEFUL: returns the
+     * current status so re-queries after login keep the PartyHub mounted. */
     getstartupstatus: function () {
-      return { status: STARTUP_STATUS.PRELOGIN };
+      return { status: currentStatus };
     },
 
-    /* Login buttons on the entry screen. Emulate a successful native
-     * Epic login: resolve the call, then drive the state machine the way
-     * the Fortnite app does (loginchanged -> authenticated -> postlogin). */
+    /* Login buttons. v2: drive to "authenticated" and STOP — the patched
+     * root mounts the full PartyHub app at that point, and the
+     * once-on-authenticated initialization chain (friends + GetMyAccount +
+     * initializationComplete) fires while the status still reads
+     * "authenticated". Pushing "postlogin" too would race past that trigger. */
     login: function () {
       setTimeout(function () {
         loginChanged("LoggedIn", OWEN_ACCOUNT.UserId);
         setStartupStatus(STARTUP_STATUS.AUTHENTICATED);
-        setStartupStatus(STARTUP_STATUS.POSTLOGIN);
       }, 150);
       return {};
     },
@@ -172,10 +179,7 @@
       return {};
     },
 
-    /* Identity. Answering here gives the app a proper {UserId} instantly;
-     * the built-in mock still runs its own implementation for the same call,
-     * which performs the GraphQL POST against EPIC_SERVICE_GRAPHQL_URL -
-     * i.e. the backend receives the request either way. */
+    /* Identity: the id MUST match the backend account (see OWEN_ACCOUNT). */
     getloggedinuserid: function () {
       return { UserId: OWEN_ACCOUNT.UserId };
     },
@@ -184,6 +188,24 @@
     },
     refreshauth: function () {
       return { Token: "owen-offline-token" };
+    },
+
+    /* The LightSwitch service calls this BEFORE its graphql query. */
+    getconfiguredbackend: function () {
+      return { appName: "fortnite", environment: "production", gameBackend: "fortnite" };
+    },
+
+    /* Persisted settings: seed first-run values so the hub renders in its
+     * final state. Any other key falls through to the built-in mock. */
+    getsetting: function (args) {
+      try {
+        var key = typeof args === "string" ? (JSON.parse(args) || {}).key : args && args.key;
+        if (typeof key === "string") {
+          if (/(^|:)onboardingComplete$/.test(key)) return { key: key, value: "true" };
+          if (/(^|:)introVideoWatched$/.test(key)) return { key: key, value: "true" };
+        }
+      } catch (err) { /* fall through */ }
+      return undefined; /* not handled -> built-in mock (localStorage) */
     },
 
     /* Platform info (not present in the built-in mock table). */
@@ -202,65 +224,42 @@
   };
 
   /* ------------------------------------------------------------------ *
-   * 4. Listener registered before main.kairos.*.js - sees every        *
-   *    mockRequest first and answers instantly.                        *
+   * 4. Listener registered before main.kairos.*.js — sees every         *
+   *    mockRequest first and answers instantly. Handled commands are    *
+   *    consumed with stopImmediatePropagation so the bundle's built-in  *
+   *    mock never runs them: its login/register/logout handlers would   *
+   *    otherwise navigate the page away (location.href = appContext +   *
+   *    "/" + command) whenever appContext is not literally "offline".   *
    * ------------------------------------------------------------------ */
   window.addEventListener("message", function (event) {
     var data = event.data;
     if (!data || typeof data !== "object" || data.type !== "mockRequest") return;
     var handler = COMMANDS[data.command];
-    if (typeof handler === "function") {
-      try {
-        var parsed = typeof data.args === "string" ? JSON.parse(data.args || "null") : data.args;
-        respond(data.id, handler(parsed) || {});
-      } catch (e) {
-        respond(data.id, null);
+    if (typeof handler !== "function") return;
+    var handled = false;
+    try {
+      var parsed = typeof data.args === "string" ? JSON.parse(data.args || "null") : data.args;
+      var result = handler(parsed);
+      if (result !== undefined) {
+        respond(data.id, result);
+        handled = true;
+      }
+    } catch (e) {
+      respond(data.id, null);
+      handled = true;
+    }
+    if (handled) {
+      /* keep the built-in mock from executing the same command */
+      event.stopImmediatePropagation();
+      if (console && console.debug) {
+        try { console.debug("[owen-bridge] answered native/" + data.command); } catch (e) {}
       }
     }
-    /* Commands without a handler fall through to the bundle's own mock,
-     * which covers voice, party, settings and analytics defaults. */
+    /* Commands without a handler (or returning undefined) fall through to
+     * the bundle's own mock — it covers voice, party, settings and
+     * analytics defaults (and persists settings in localStorage). */
   });
 
-  /* ------------------------------------------------------------------ *
-   * 5. Identity check against the backend.                             *
-   *    The bundle exposes window.__executeBridgeCallAsMsg - the same   *
-   *    entry point the native layer uses. Calling "oss.identity /     *
-   *    getloggedinuserid" executes the bundle's own implementation,    *
-   *    which performs:                                                 *
-   *      POST {clientEnvConfig.EPIC_SERVICE_GRAPHQL_URL}               *
-   *      body: {"query":"query {Account { myAccount {id}}}"}           *
-   *    i.e. the request lands on YOUR backend.                         *
-   * ------------------------------------------------------------------ */
-  function runIdentityCheck() {
-    if (typeof window.__executeBridgeCallAsMsg !== "function") {
-      /* Bundle not ready yet - retry shortly. */
-      setTimeout(runIdentityCheck, 500);
-      return;
-    }
-    try {
-      window
-        .__executeBridgeCallAsMsg("oss.identity", "getloggedinuserid")
-        .then(function (userId) {
-          /* eslint-disable no-console */
-          console.log("[owen-bridge] identity check complete:", userId);
-        })
-        .catch(function (err) {
-          console.log("[owen-bridge] identity check failed (backend offline?):", err);
-        });
-    } catch (e) {
-      console.log("[owen-bridge] identity check error:", e);
-    }
-  }
-
-  /* Run once the page has settled so the bridge listeners are ready. */
-  if (document.readyState === "complete") {
-    setTimeout(runIdentityCheck, 800);
-  } else {
-    window.addEventListener("load", function () {
-      setTimeout(runIdentityCheck, 800);
-    });
-  }
-
   /* Mark presence for debugging. */
-  window.__owenBridge = { version: "1.0.0" };
+  window.__owenBridge = { version: "2.0.0", account: OWEN_ACCOUNT };
 })();

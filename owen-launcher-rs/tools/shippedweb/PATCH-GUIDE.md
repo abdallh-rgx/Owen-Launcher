@@ -1,10 +1,15 @@
-# Fortnite "shippedweb" Offline Entry - Custom Backend Guide
+# Fortnite "shippedweb" Offline Entry - Party Hub on a Custom Backend
 
-This document explains, end to end, how the offline Kairos login page that ships
+This document explains, end to end, how the offline Kairos page that ships
 inside Fortnite APKs (`assets/shippedweb/offline/entry/`) talks to its backend,
-how to point it at your own backend, and how to fix the page freezing on the
-Epic Games logo. Everything below was verified against the real files
-(`index.html` + `main.kairos.*.js`, build `8af1b828dc6188736f50`).
+how to point it at your own backend (Voltronite used here as the reference),
+and how to take it all the way to the **Party Hub interface** - not just past
+the frozen Epic logo, but past the "Checking your login info..." dead end and
+into the actual hub UI (friends list, party, settings, modals).
+
+Everything below was verified against the real files (`index.html` +
+`main.kairos.*.js`, build `8af1b828dc6188736f50`) in a real browser, with every
+forwarded request logged on the backend.
 
 ---
 
@@ -15,68 +20,49 @@ is injected at runtime by the host through a global:
 
 ```js
 window.clientEnvConfig = {
-  EPIC_SERVICE_GRAPHQL_URL: "http://192.168.1.10:8090/graphql",
-  ...
+  EPIC_SERVICE_GRAPHQL_URL: "./graphql",   // or an absolute http(s):// URL
+  EPIC_SERVICE_GRAPHQL_WITHCREDENTIALS: false,
 };
 ```
 
-`main.kairos.*.js` reads `window.clientEnvConfig` at configure time and calls
+`main.kairos.*.js` reads `window.clientEnvConfig` and calls
 `checkConfig("GraphQlService", config, "EPIC_SERVICE_GRAPHQL_URL")`, which
 **throws** if the key is missing - that is why a blank config also freezes the
-page. The injection must happen **before** `main.kairos.*.js` loads, i.e. as an
-inline `<script>` in `<head>` or as an external script placed before the
-`<script src="./main.kairos...js">` tag in `index.html`.
+page. The injection must happen **before** `main.kairos.*.js` loads.
 
-Required and useful keys:
+**Both `http://` and `https://` work.** The URL is passed verbatim to the HTTP
+client - nothing rewrites the scheme.
 
-| Key | Required | Used for |
-|---|---|---|
-| `EPIC_SERVICE_GRAPHQL_URL` | **yes** | Identity / EULA / friends GraphQL endpoint |
-| `EPIC_SERVICE_FRIENDS_URL` | no | Friends service (defaults fall back to the graphql URL) |
-| `EPIC_SERVICE_PRESENCE_URL` | no | Presence service |
-| `EPIC_SERVICE_PARTY_URL` | no | Party service |
-| `EPIC_SERVICE_GRAPHQL_WITHCREDENTIALS` | no | Set `false` for plain http backends |
-| `EPIC_ENV` | no | `"local-gamedev"` also enables the hidden debug menu |
-
-**Both `http://` and `https://` work.** The URL is passed verbatim to the
-HTTP client - nothing rewrites the scheme - so a local `http://` backend works
-as long as the page itself is served over `http://` (mixed-content rule).
-
-The concrete query the bundle sends during its identity check:
-
-```
-POST <EPIC_SERVICE_GRAPHQL_URL>
-Content-Type: application/json
-
-{"query":"query {Account { myAccount {id}}}"}
-```
-
-Expected success shape (what the bundle looks for at
-`data.data.Account.myAccount.id`):
-
-```json
-{ "data": { "Account": { "myAccount": { "id": "<32 hex chars>" } } } }
-```
+> **v2 note - the configure call itself is missing in the offline build.** The
+> online app's bootstrap calls `window.__GraphQlService.configure(config)`;
+> the offline bundle never does. Without patching, the singleton keeps its
+> constructor default `endpoint: ""` and **every** graphql query POSTs to an
+> empty URL (which the browser resolves to the page itself - you get HTML back
+> and the account/friends init silently fails). `patch_partyhub.py` therefore
+> also patches webpack module 170 to self-configure from
+> `window.clientEnvConfig`.
 
 ---
 
-## 2. Why the page freezes on the Epic Games logo (root cause)
+## 2. The three reasons the page hangs (root causes)
 
-The bundle communicates with the Fortnite app through a bridge. When the page
-is opened in a normal browser (or served without the app), no native bridge
-exists, so the bundle falls back to its **built-in mock bridge**. That mock
-answers the startup-status call with:
-
-```json
-{ "status": "authenticated" }
-```
-
-But `authenticated` is **not a handled case** in the LoginContainer state
-switch. The handled statuses are `init`, `authenticating`, `prelogin`,
-`postlogin`, `autherror`, `error`, `networkoffline`. An unhandled status falls
-through to the default branch, which renders the static `LoadingContainer` -
-the Epic Games logo - forever. This is the entire "stuck on the Epic screen"
-bug. It is not a network problem and not a missing GraphQL URL.
+1. **Frozen Epic logo** - the built-in mock bridge answers the
+   startup-status call with `{ "status": "authenticated" }`, which is **not a
+   handled case** in the LoginContainer switch (handled: `init`,
+   `authenticating`, `prelogin`, `postlogin`, `autherror`, `error`,
+   `networkoffline`). Unhandled falls through to the static loading screen -
+   the Epic logo - forever.
+2. **"Checking your login info..." dead end** - this build mounts *only* the
+   LoginContainer as its app root (webpack module 1041, rendered directly by
+   the bootstrap in module 982). The **entire Party Hub app ships inside the
+   same bundle** (route table in module 1291: home, party, friends, settings,
+   about 40 screens + modal routes) but is never mounted. The `postlogin`
+   screen ("Logging you in / Checking your login info...", localization key
+   `diesel.kairos.login.authenticating`) is a dead end by design - the native
+   app is supposed to take over at that point.
+3. **Unconfigured graphql singleton** - see the note in section 1: without the
+   module-170 patch, all service queries (account, friends, lightswitch,
+   settings) fail silently because they POST to an empty URL.
 
 ---
 
@@ -95,10 +81,6 @@ window.postMessage({
 }, "*");
 ```
 
-Inside the real app the equivalent native calls are
-`window.JSBridge.postMessage(id, subsystem, command, argsJson)` (Android) or
-`window.ue.embedded.postmessage(id, subsystem, command, argsJson)`.
-
 **Responses (host to JS):**
 
 ```js
@@ -106,14 +88,16 @@ window.postMessage({
   id: "web-<uuid>",
   type: "asyncResponse",
   payload: { ... },           // resolves the pending call
-  errors: undefined           // or a non-empty array to reject
 }, "*");
 ```
 
-Responses are single-shot: the first `asyncResponse` for an id wins, later
-ones are ignored. The built-in mock answers after a 100 ms delay, so a custom
-listener registered before `main.kairos.*.js` loads can answer **first** and
-take control of the flow.
+Responses are single-shot: the first `asyncResponse` for an id wins. The
+built-in mock answers after a 100 ms delay, so a listener registered before
+`main.kairos.*.js` loads can answer **first** and take control. v2 additionally
+calls `event.stopImmediatePropagation()` for handled commands - otherwise the
+built-in mock still *executes* them, and its `login`/`register`/`logout`
+handlers navigate the page away (`location.href = appContext + "/" + command`)
+whenever `window.appContext` is not literally `"offline"`.
 
 **Notifications (host to JS, unsolicited):**
 
@@ -124,49 +108,71 @@ window.postMessage({ type: "notification", command: "oss.identity.loginchanged",
                      args: [{ Status: "LoggedIn", UserId: "..." }] }, "*");
 ```
 
-Notification commands observed in the bundle: `startupstatuschanged`,
-`oss.identity.loginchanged`, `oss.presence.presencechanged`,
-`oss.socialban.banchanged`, `oss.party.partymemberconnectionschanged`,
-`lifecyclestatus`, `pushNotification`.
-
-**The login state machine** (driven by the host):
+**The v2 login state machine** (driven by the host):
 
 ```
 prelogin  -> "Played Fortnite before?" screen
             user taps "YES, FIND MY ACCOUNT"  ->  JS calls native/login
-            host performs the real Epic login, then pushes:
+            host performs the login, then pushes:
               oss.identity.loginchanged { Status: "LoggedIn", UserId }
               startupstatuschanged { status: "authenticated" }
-              startupstatuschanged { status: "postlogin" }
-postlogin -> "Logging you in" screen (final state of the entry page;
-             the app then opens the hub or launches the game)
+            ...and STOPS. No "postlogin"!
 ```
+
+Two statefulness rules matter once the full hub is mounted:
+
+- `getstartupstatus` must always report the **current** status. When the
+  patched root mounts the full app it re-registers the startup-state effect,
+  which re-queries the bridge; a bridge that keeps answering `prelogin` would
+  kick the user back to the login screen seconds after login.
+- Do **not** push `postlogin`. The app's initialization chain
+  (`useAppInitialization`) fires "once on status == authenticated"; if the
+  status races past `authenticated` to `postlogin` before the hub mounts, that
+  trigger never fires and the account/friends never initialize.
+
+Other commands the hub needs answered (all implemented in `owen-bridge.js`):
+`oss.identity/getconfiguredbackend` (queried before the lightswitch graphql
+call), `oss.identity/getloggedinuserid` (must return the same account id the
+backend reports), `native/getsetting` (persisted settings - the bridge seeds
+`<accountId>:onboardingComplete` and `<accountId>:introVideoWatched` so the
+hub renders in its final state; every other key falls through to the built-in
+mock, which stores settings in localStorage).
 
 ---
 
-## 4. Ready-made fix: `owen-bridge.js` + `patch_entry.py`
+## 4. Ready-made fix: `patch_partyhub.py` (v2)
 
-`owen-bridge.js` (same folder) implements everything above:
+`patch_partyhub.py` (same folder) produces a complete Party Hub web from any
+pristine shippedweb copy. It:
 
-- injects `window.clientEnvConfig` before the bundle loads,
-- wins the response race for `getstartupstatus` and answers `prelogin`
-  (fixes the frozen logo),
-- implements `login` / `register` / `RetryLogin` / `prelogin` / `logout`
-  and pushes the full notification sequence,
-- triggers the bundle's own identity check
-  (`oss.identity/getloggedinuserid`), which performs the
-  `query {Account { myAccount {id}}}` POST against your backend.
-
-Patch a shippedweb copy:
+1. replaces webpack **module 1041** (the LoginContainer root) with a hybrid
+   root (`partyhub-root.js`): the original login flow until the status is
+   `authenticated`, then the **real app** - `useAppInitialization()`,
+   `AppEffects` (lightswitch, content control, parties, presence, voice,
+   friends), `useInitializers(AppStateInitializers)`, and the real router
+   (`getRoutes(appRoutes)` + modal routes with the isModal location pattern);
+2. patches **module 170** so the GraphQlService singleton configures itself
+   from `window.clientEnvConfig` (see section 1);
+3. patches `index.html`: sets `window.appContext` (the route base - see
+   section 5), injects `clientEnvConfig`, and injects the stateful
+   **`owen-bridge.js`** before the polyfill bundle.
 
 ```bash
-python3 tools/shippedweb/patch_entry.py <shippedweb-folder> \
-        --graphql http://192.168.1.10:8090/graphql \
-        --out shippedweb-owen
+python3 tools/shippedweb/patch_partyhub.py \
+        --src <pristine-shippedweb> \
+        --out <patched-copy> \
+        --base "/partyhub/offline" \   # or "offline" when served from the root
+        --graphql "./graphql"
 ```
 
-The script writes a **new** folder (originals untouched) with
-`offline/entry/owen-bridge.js` injected before the bundle.
+`window.appContext` is both the URL prefix the router matches
+(`getPath()` + `":locale/" + route`) and the URL prefix under which the page
+is served:
+
+| --base            | page URL                        | served from                 |
+|-------------------|---------------------------------|-----------------------------|
+| `offline`         | `/offline/en-US/home`           | the shippedweb folder root  |
+| `/partyhub/offline` | `/partyhub/offline/en-US/home` | behind the console proxy    |
 
 ---
 
@@ -174,47 +180,110 @@ The script writes a **new** folder (originals untouched) with
 
 Any static file server works, with three rules:
 
-1. **Same origin for `/graphql`** - either serve the entry and the GraphQL
-   endpoint from one origin (use a relative `--graphql /graphql` URL), or pass
-   an absolute `http://<backend-host>:<port>/graphql` URL (kept verbatim).
-2. **SPA fallback** - the app routes look like `/offline/en-US/...`
-   (`appContext = "offline"` + `:locale/` prefix). Unknown paths under the
-   served root must return `offline/entry/index.html`.
+1. **Same origin for the graphql adapter** - use a relative `./graphql` URL
+   and make the serving host answer the graphql endpoint on **every** SPA
+   route (the page's URL changes as the router navigates; a relative URL
+   stays correct). Alternatively pass an absolute
+   `http://<backend-host>:<port>/graphql` URL.
+2. **SPA fallback** - the app routes look like `/<base>/:locale/...`
+   Unknown paths must return `offline/entry/index.html`.
 3. **Relative asset resolution** - the bundle uses `./main.kairos...js`, so a
-   page opened from a nested path (`/offline/en-US/`) must still resolve
-   assets from `offline/entry/`.
-
-Opening either `http://<host>:<port>/` or
-`http://<host>:<port>/offline/en-US/` works with the patched files.
-
-A minimal reference server (static + mock GraphQL + SPA fallback) ships in
-this repository as `mini-services/kairos-mock` (Bun), and the plain-Python
-`server.py` that ships inside the archive also works for a quick test -
-serve the `offline/entry` folder with it and open `http://<ip>:8081/`.
+   page opened from a nested path must still resolve assets from
+   `offline/entry/`.
 
 ---
 
-## 6. Verified behaviour (end-to-end)
+## 6. The Voltronite dialect adapter (`mini-services/partyhub-web`)
 
-Tested with the real `shippedweb.7z` contents served on `http://localhost:8090`:
+The Kairos web POSTs **raw graphql documents**:
 
-1. Open `http://localhost:8090/offline/en-US/` ->
-   the "Played Fortnite before?" login screen renders immediately
-   (no frozen logo).
-2. The bundle performs `POST /graphql` with
-   `{"query":"query {Account { myAccount {id}}}"}` - the backend receives the
-   request.
-3. Tapping "YES, FIND MY ACCOUNT" completes the whole sequence
-   (`login` -> `loginchanged` -> `authenticated` -> `postlogin`) and the page
-   settles on its final "Logging you in" screen - the same state the real app
-   reaches before it hands over to the hub.
+```json
+{ "query": "query { Account { myAccount { ... } }, Fortnite { myProfile { id } } }",
+  "variables": {} }
+```
 
-## 7. Version note
+- no `operationName`
+- no `Authorization` header (in the real app the native layer owns auth; the
+  web's `getAuthToken` helper is never called by this build)
+
+Voltronite's `/partyhub/graphql` switches on `body.operationName` and requires
+`Authorization: Bearer <token>`. The adapter in `mini-services/partyhub-web`
+(Bun) bridges the two:
+
+1. receives the raw document same-origin on any route ending in `/graphql`,
+2. fingerprints the query text and maps it to a Voltronite operation:
+
+   | raw query (fingerprint)                    | Voltronite operation        |
+   |--------------------------------------------|-----------------------------|
+   | `Account.myAccount` + `externalAuths`      | `GetMyAccount`              |
+   | `LightSwitch.fortniteStatus`+`kairosStatus`| `GetStatusPerService`       |
+   | `ContentControl ... canUseVoiceChat`       | `GetStatusPerService` (extract ContentControl) |
+   | `Eula.hasAccountAccepted`                  | `EulaAccepted`              |
+   | `UserSettings.mySetting`                   | `GetMySetting`              |
+   | `UserSettings.setting(key, accountIds)`    | `GetAccountSettings`        |
+   | `mutation UserSettings.updateSetting`      | `UpdateUserSetting`         |
+   | `notificationSettings` (Friends/Party)     | `GetNotificationSettings`   |
+   | `query {Account { myAccount {id}}}` probe  | `GetMyAccount`              |
+
+3. obtains a real access token from Voltronite's
+   `POST /account/api/oauth/token` (`grant_type=password&username=OwenTester`,
+   cached, refreshed on 401) - the account id is `hex(username)`, and the
+   bridge's `getloggedinuserid` answer **must match it** so the
+   persisted-settings keys line up;
+4. forwards `{operationName, query, variables}` + Bearer to
+   `/partyhub/graphql` - **the backend receives and answers the request**;
+5. applies two compatibility transforms: `kairosStatus.status` is forced to
+   `"UP"` (Voltronite reports `DOWN` for Kairos; the old client parks the hub
+   on a "service offline" warning without it), and `SocialBan.socialBan` is
+   added as `null` (the client reads `.starts_at`, absent -> not banned).
+
+Operations Voltronite does not implement (friends summary/blockList/getFriend,
+friend mutations, eula body, character profile, account lookups) are answered
+locally with neutral defaults so the hub renders cleanly. Run it with:
+
+```bash
+bun run mini-services/partyhub-web    # serves the patched copy + adapter :8091
+```
+
+Environment: `OWEN_WEB_ROOT` (patched copy), `VOLTRONITE_URL`
+(default `http://127.0.0.1:3551`), `OWEN_USER` (default `OwenTester`),
+`PORT` (default 8091). `GET /__status` returns the recent request log with
+which entries were forwarded to the backend.
+
+---
+
+## 7. Verified behaviour (end-to-end, real browser)
+
+With Voltronite on :3551 and partyhub-web on :8091 behind the console's
+`/partyhub` proxy:
+
+1. Open `/partyhub/offline/en-US` -> the "Played Fortnite before?" login
+   screen renders immediately (no frozen logo).
+2. Tap "YES, FIND MY ACCOUNT" -> `login` -> `loginchanged(LoggedIn)` ->
+   `startupstatuschanged(authenticated)`; the patched root mounts the full
+   app and the router lands on `/partyhub/offline/en-US/home`.
+3. The Party Hub home screen renders: onboarding cards, "ENABLE YOUR
+   MICROPHONE" / "ENABLE NOTIFICATIONS" permissions, the Llama Bell section,
+   the friend-request badge, "ADD FRIENDS" and "SHARE THE APP" actions. No
+   JavaScript errors (verified with the in-page error box).
+4. Modal routes work - "ADD FRIENDS" navigates to
+   `home/universal-search/PartyHubSearch` and renders the search modal over
+   the hub.
+5. The backend log shows every forwarded operation: `GetMyAccount`,
+   `GetStatusPerService`, `GetMySetting`, `GetAccountSettings`,
+   `UpdateUserSetting`, `GetNotificationSettings` - all answered by
+   Voltronite with real account data (`OwenTester` /
+   `4f77656e546573746572`).
+
+The whole flow is embedded live in the Owen web console (PartyHub tab).
+
+---
+
+## 8. Version note
 
 The `shippedweb/offline/entry` Kairos build is the web login introduced with
 the newer Fortnite mobile login flow (the PartyHub-era app). The old claim
 that versions 10.31-12.60 contain an `offline/index.html` with a party GraphQL
 URL was re-checked during this work: those old APKs do not ship this folder at
-all. If you have an APK that does contain `assets/shippedweb/`, the steps in
-this document apply to it directly - no smali edits, no manifest changes, only
-the `index.html` injection described above.
+all. If you have an APK that contains `assets/shippedweb/`, the steps in this
+document apply to it directly - no smali edits, no manifest changes.

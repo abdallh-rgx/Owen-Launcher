@@ -1,0 +1,13 @@
+[package]
+name = "owen-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Owen core: ELF analysis, curl_easy_setopt auto-detection, version profiles, URL redirect rules, pak parsing, manifest generation"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+sha2 = { workspace = true }
+aes = "0.8"

@@ -1,0 +1,17 @@
+[package]
+name = "owen-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Owen command line: scan, serve, pak, manifest, patch"
+
+[[bin]]
+name = "owen-cli"
+path = "src/main.rs"
+
+[dependencies]
+owen-core = { path = "../owen-core" }
+owen-server = { path = "../owen-server" }
+owen-patcher = { path = "../owen-patcher" }
+serde_json = { workspace = true }
+memmap2 = { workspace = true }

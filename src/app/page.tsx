@@ -1451,6 +1451,206 @@ const NO_SMALI_LAYERS: Array<{ title: string; body: string }> = [
   },
 ];
 
+interface PartyHubHit {
+  time: string;
+  method: string;
+  path: string;
+  op: string;
+  via: "voltronite" | "local" | "-";
+  detail: string;
+}
+
+interface PartyHubStatus {
+  ok: boolean;
+  voltronite: string;
+  user: string;
+  accountId: string;
+  hits: PartyHubHit[];
+}
+
+/**
+ * Live embed of the patched shippedweb Party Hub. The Kairos web itself runs in
+ * mini-services/partyhub-web (:8091) behind the /partyhub rewrite; its raw
+ * graphql dialect is adapted to the Voltronite backend (see the card below).
+ */
+function LivePartyHubDemo() {
+  const [status, setStatus] = useState<PartyHubStatus | null>(null);
+  const [alive, setAlive] = useState<boolean | null>(null);
+  const [nonce, setNonce] = useState(0);
+  const voltroniteHits = (status?.hits ?? []).filter((h) => h.via === "voltronite").length;
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const res = await fetch(`/api/partyhub-status?_=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(String(res.status));
+        const data: PartyHubStatus = await res.json();
+        if (!cancelled) {
+          setStatus(data);
+          setAlive(true);
+        }
+      } catch {
+        if (!cancelled) setAlive(false);
+      }
+    };
+    poll();
+    const t = setInterval(poll, 4000);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+    };
+  }, []);
+
+  return (
+    <Card className="mt-4 border-emerald-400/40 bg-gradient-to-b from-emerald-400/10 to-zinc-900">
+      <CardHeader className="pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-base text-emerald-300">
+            <span className="relative flex size-2.5">
+              <span
+                className={`absolute inline-flex h-full w-full animate-ping rounded-full ${
+                  alive ? "bg-emerald-400" : "bg-red-400"
+                } opacity-60`}
+              />
+              <span
+                className={`relative inline-flex size-2.5 rounded-full ${
+                  alive ? "bg-emerald-400" : "bg-red-500"
+                }`}
+              />
+            </span>
+            LIVE — shippedweb Party Hub on Voltronite
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge
+              variant="outline"
+              className={`border-zinc-700 font-mono text-[11px] ${
+                alive ? "text-emerald-300" : "text-red-300"
+              }`}
+            >
+              {alive === null ? "checking…" : alive ? "partyhub-web :8091 online" : "offline"}
+            </Badge>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 border-zinc-700 px-2 text-xs text-zinc-300"
+              onClick={() => setNonce((n) => n + 1)}
+            >
+              Reload embed
+            </Button>
+          </div>
+        </div>
+        <CardDescription className="text-zinc-500">
+          The real Kairos bundle (build 8af1b828) patched to mount the full Party Hub app — served
+          by partyhub-web, authenticated against the Voltronite backend.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
+          {/* phone frame */}
+          <div className="mx-auto w-full max-w-[380px]">
+            <div className="relative overflow-hidden rounded-[28px] border-4 border-zinc-700 bg-black shadow-2xl">
+              <div className="flex h-6 items-center justify-center bg-zinc-900">
+                <div className="h-1.5 w-16 rounded-full bg-zinc-700" />
+              </div>
+              <iframe
+                key={nonce}
+                src="/partyhub/offline/en-US"
+                title="Fortnite Party Hub (patched shippedweb)"
+                className="block h-[620px] w-full bg-black"
+                sandbox="allow-scripts allow-same-origin allow-forms"
+              />
+            </div>
+            <p className="mt-2 text-center text-xs text-zinc-500">
+              Tap <span className="text-zinc-300">YES, FIND MY ACCOUNT</span> — the app logs in
+              through the Owen bridge and lands on the Party Hub home screen.
+            </p>
+          </div>
+
+          {/* backend panel */}
+          <div className="min-w-0 space-y-3">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded-md border border-zinc-800 bg-zinc-950/60 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-zinc-500">Backend</p>
+                <p className="mt-1 truncate font-mono text-sm text-zinc-200">Voltronite</p>
+              </div>
+              <div className="rounded-md border border-zinc-800 bg-zinc-950/60 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-zinc-500">Account</p>
+                <p className="mt-1 truncate font-mono text-sm text-zinc-200">
+                  {status?.user ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-md border border-zinc-800 bg-zinc-950/60 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-zinc-500">Requests → backend</p>
+                <p className="mt-1 font-mono text-sm text-emerald-300">
+                  {voltroniteHits} (last 60)
+                </p>
+              </div>
+            </div>
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-zinc-400">
+                GraphQL request log (recent, newest first)
+              </p>
+              <div className="max-h-72 overflow-y-auto rounded-md border border-zinc-800 bg-zinc-950/80">
+                {status && status.hits.length > 0 ? (
+                  <table className="w-full text-left text-xs">
+                    <thead className="sticky top-0 bg-zinc-900 text-zinc-500">
+                      <tr>
+                        <th className="px-2 py-1.5 font-medium">time</th>
+                        <th className="px-2 py-1.5 font-medium">operation</th>
+                        <th className="px-2 py-1.5 font-medium">via</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {status.hits.map((h, i) => (
+                        <tr key={`${h.time}-${i}`} className="border-t border-zinc-800/70">
+                          <td className="whitespace-nowrap px-2 py-1.5 font-mono text-zinc-500">
+                            {h.time}
+                          </td>
+                          <td className="px-2 py-1.5 font-mono text-zinc-300">
+                            {h.op.includes("GRAPHQL") ? h.op.replace("GRAPHQL ", "") : h.op}
+                          </td>
+                          <td className="whitespace-nowrap px-2 py-1.5">
+                            <span
+                              className={`rounded px-1.5 py-0.5 font-mono text-[10px] ${
+                                h.via === "voltronite"
+                                  ? "bg-emerald-400/10 text-emerald-300"
+                                  : h.via === "local"
+                                    ? "bg-zinc-700/40 text-zinc-400"
+                                    : "bg-zinc-800 text-zinc-500"
+                              }`}
+                            >
+                              {h.via === "voltronite" ? "voltronite" : h.via}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p className="px-3 py-6 text-center text-xs text-zinc-500">
+                    {alive
+                      ? "No requests yet — open the embed on the left and log in."
+                      : "partyhub-web is not reachable on :8091."}
+                  </p>
+                )}
+              </div>
+            </div>
+            <p className="text-xs leading-relaxed text-zinc-500">
+              Requests tagged <span className="font-mono text-emerald-300">voltronite</span> were
+              forwarded to the real backend (
+              <span className="font-mono">{status?.voltronite ?? "http://127.0.0.1:3551"}</span>):
+              the adapter maps each raw Kairos query (no operationName, no auth header) to a
+              Voltronite operation and attaches the oauth token it obtained from
+              /account/api/oauth/token.
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function PartyHubSection() {
   return (
     <div>
@@ -1458,6 +1658,8 @@ function PartyHubSection() {
         title="PartyHub and Login"
         description="How the no-smali stack covers login and PartyHub across every game version."
       />
+
+      <LivePartyHubDemo />
 
       <Card className="border-zinc-800 bg-zinc-900">
         <CardHeader className="pb-3">
@@ -1493,54 +1695,76 @@ function PartyHubSection() {
       <Card className="mt-4 border-emerald-400/30 bg-emerald-400/5">
         <CardHeader className="pb-2">
           <CardTitle className="text-base text-emerald-300">
-            shippedweb offline entry — claim CONFIRMED and fixed
+            shippedweb offline entry — from frozen login to the full Party Hub
           </CardTitle>
           <CardDescription className="text-zinc-500">
-            Verified end to end against the real archive (Kairos build 8af1b828dc6188736f50).
+            Verified end to end against the real archive (Kairos build 8af1b828dc6188736f50) with
+            the Voltronite backend.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm leading-relaxed text-zinc-300">
-            <span className="font-medium text-zinc-100">GraphQL location found.</span> The entry
-            page (assets/shippedweb/offline/entry/) reads every endpoint from{" "}
+            <span className="font-medium text-zinc-100">Why it hung on “Checking your login info”.</span>{" "}
+            Three independent causes, all fixed: (1) the built-in mock bridge answers{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-amber-300">
+              getstartupstatus
+            </code>{" "}
+            with <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-amber-300">authenticated</code>{" "}
+            — not a case in the LoginContainer switch, so the Epic logo never clears; (2) the entry
+            build mounts <em>only</em> the LoginContainer as its root — the entire Party Hub router
+            (home, party, friends, settings, modals) ships inside the same bundle but is never
+            mounted, so “postlogin” is a dead-end screen by design; (3) the graphql singleton (
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-amber-300">
+              window.__GraphQlService
+            </code>
+            ) is never configured in the offline build — every query POSTs to an empty URL (the
+            page itself) and the account/friends initialization silently fails.
+          </p>
+          <p className="text-sm leading-relaxed text-zinc-300">
+            <span className="font-medium text-zinc-100">The v2 fix (three patches).</span>{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              patch_partyhub.py
+            </code>{" "}
+            replaces webpack module 1041 with a hybrid root (login flow until authenticated, then
+            the real app: router + AppEffects + useAppInitialization + AppStateInitializers), makes
+            module 170 self-configure the GraphQlService from{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
               window.clientEnvConfig
-            </code>{" "}
-            — injected in index.html <em>before</em> main.kairos.*.js loads. The one required key is{" "}
-            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              EPIC_SERVICE_GRAPHQL_URL
-            </code>{" "}
-            (GraphQlService.configure throws without it). http:// and https:// are both accepted
-            verbatim — the scheme is never rewritten.
+            </code>
+            , and injects the stateful Owen bridge (login → loginchanged → authenticated and stop;
+            getstartupstatus always reports the current status; getconfiguredbackend; seeded
+            onboarding settings). Handled commands are consumed with
+            stopImmediatePropagation so the built-in mock cannot navigate the page away.
           </p>
           <p className="text-sm leading-relaxed text-zinc-300">
-            <span className="font-medium text-zinc-100">Frozen Epic logo — root cause.</span> The
-            built-in mock bridge answers getstartupstatus with{" "}
-            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-amber-300">
-              authenticated
-            </code>
-            , which is not a case in the LoginContainer switch (handled: init, authenticating,
-            prelogin, postlogin, autherror, error, networkoffline) — so the UI falls through to the
-            static LoadingContainer forever. The fix is a listener registered before the bundle
-            that answers <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">prelogin</code> first
-            (responses are single-shot; the built-in mock answers 100 ms late and is ignored).
+            <span className="font-medium text-zinc-100">Voltronite dialect adapter.</span> The
+            Kairos web POSTs raw graphql documents (no operationName, no Authorization header);
+            Voltronite switches on operationName and requires a Bearer token.{" "}
+            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
+              mini-services/partyhub-web
+            </code>{" "}
+            fingerprints each query, obtains a real token from
+            /account/api/oauth/token (password grant), and forwards to /partyhub/graphql — the
+            backend receives and answers GetMyAccount, GetStatusPerService, EulaAccepted,
+            GetMySetting, GetAccountSettings, UpdateUserSetting, GetNotificationSettings. Only the
+            kairos lightswitch status (Voltronite reports DOWN for Kairos; the old client requires
+            UP) and queries Voltronite does not implement (friends lists, eula body, character
+            profile) are answered locally with neutral defaults.
           </p>
           <p className="text-sm leading-relaxed text-zinc-300">
-            <span className="font-medium text-zinc-100">Shipped fix.</span>{" "}
+            <span className="font-medium text-zinc-100">Verified in a real browser.</span> Login
+            screen renders → “YES, FIND MY ACCOUNT” → the router lands on{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              tools/shippedweb/owen-bridge.js
+              /offline/en-US/home
             </code>{" "}
-            injects the config, drives the full login state machine (login → loginchanged →
-            authenticated → postlogin) and fires the bundle&apos;s own identity check, which POSTs{" "}
+            with the Party Hub home screen (onboarding cards, microphone and notification
+            permissions, Llama Bell, friend-request badge, Add Friends and Share The App actions),
+            modal routes work (universal search), and the request log above shows every forwarded
+            operation. Patch any copy with{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              query {"{Account { myAccount {id}}}"}
-            </code>{" "}
-            to your GraphQL URL. Patch any copy with{" "}
-            <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
-              patch_entry.py &lt;shippedweb&gt; --graphql http://host:port/graphql
+              patch_partyhub.py &lt;shippedweb&gt; --out &lt;copy&gt; --base &lt;route-base&gt;
             </code>
-            . Verified in a real browser: login screen renders, the flow completes, and the backend
-            receives the GraphQL request. Full protocol and serving rules:{" "}
+            . Full protocol and serving rules:{" "}
             <code className="rounded bg-zinc-800 px-1 py-0.5 font-mono text-xs text-emerald-300">
               tools/shippedweb/PATCH-GUIDE.md
             </code>
