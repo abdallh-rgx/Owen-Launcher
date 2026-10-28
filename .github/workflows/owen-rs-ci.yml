@@ -190,14 +190,15 @@ jobs:
           printf '[target.aarch64-linux-android]\nlinker = "aarch64-linux-android24-clang"\n' > .cargo/config.toml
           export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
           cargo build --release -p owen-patcher-jni --target aarch64-linux-android
-          file target/aarch64-linux-android/release/libowenpatch.so
+          OUT="$CARGO_TARGET_DIR/aarch64-linux-android/release/libowenpatch.so"
+          file "$OUT"
           # the JNI export must be present
-          nm -D target/aarch64-linux-android/release/libowenpatch.so | grep Java_com_abdallhrgx_owenlauncher_core_apk_NativePatcher_patchApk
+          nm -D "$OUT" | grep Java_com_abdallhrgx_owenlauncher_core_apk_NativePatcher_patchApk
 
       - uses: actions/upload-artifact@v4
         with:
           name: libowenpatch-so-aarch64
-          path: ${{ github.workspace }}/target/aarch64-linux-android/release/libowenpatch.so
+          path: target/aarch64-linux-android/release/libowenpatch.so
           if-no-files-found: error
 
       # NOTE: the redirecter (libowen.so) itself is built and exercised on a
