@@ -8,7 +8,7 @@ use crate::platform;
 use crate::OwenApp;
 use egui::{Button, Color32, Layout, RichText, Sense, Vec2};
 use owen_launcher::backend;
-use owen_launcher::core::catalogs::{season_catalog, version_catalog};
+use owen_launcher::core::catalogs::{direct_overrides, season_catalog, version_catalog};
 use owen_launcher::i18n::LANGS;
 use owen_launcher::uptodown::installer::{InstallState, OgVersion as InstallerVersion};
 use std::path::Path;
@@ -16,9 +16,14 @@ use std::path::Path;
 const GOLD: Color32 = Color32::from_rgb(0xff, 0xb3, 0x00);
 const CHARCOAL: Color32 = Color32::from_rgb(0x14, 0x10, 0x09);
 const CARD: Color32 = Color32::from_rgb(0x1e, 0x1a, 0x12);
+const CARD_OFF: Color32 = Color32::from_rgb(0x14, 0x12, 0x0e);
 const MUTED: Color32 = Color32::from_rgb(0x9a, 0x9a, 0xa3);
 const GREEN: Color32 = Color32::from_rgb(0x54, 0xd1, 0x8a);
 const RED: Color32 = Color32::from_rgb(0xf2, 0x5c, 0x5c);
+
+/// Fortnite on Android launched with Season 5 — seasons 1-4 never existed
+/// on the platform and must render as disabled, art-less cards.
+const ANDROID_FIRST_SEASON: u32 = 5;
 
 /* ------------------------- shared async result slots ------------------------- */
 
@@ -626,43 +631,68 @@ fn seasons_view(app: &mut OwenApp, ui: &mut egui::Ui, ctx: &egui::Context) {
         let seasons = version_catalog::seasons();
         let width = ui.available_width();
         let per_row = if width > 720.0 { 3 } else if width > 460.0 { 2 } else { 1 };
-        let rows: Vec<u32> = seasons.iter().rev().copied().collect();
+        let mut rows: Vec<u32> = seasons.iter().rev().copied().collect();
+        // Seasons 1-4 pre-date the Android port — listed last, disabled,
+        // without art (see ANDROID_FIRST_SEASON).
+        rows.extend(1..ANDROID_FIRST_SEASON);
         for chunk in rows.chunks(per_row) {
             ui.horizontal(|ui| {
                 for n in chunk.iter().copied() {
                     let avail = ui.available_width() / per_row as f32;
+                    let pre_android = n < ANDROID_FIRST_SEASON;
                     let resp = egui::Frame::default()
-                        .fill(CARD)
+                        .fill(if pre_android { CARD_OFF } else { CARD })
                         .corner_radius(12)
                         .inner_margin(egui::Margin::same(8))
                         .show(ui, |ui| {
                             ui.set_min_size(Vec2::new(avail - 8.0, 120.0));
-                            if let Some(tex) = season_texture(app, ctx, n) {
-                                ui.add(
-                                    egui::Image::from_texture(&tex)
-                                        .fit_to_fraction(Vec2::new(1.0, 0.62))
-                                        .corner_radius(8),
+                            if pre_android {
+                                // no fake art for seasons that never shipped
+                                // on Android — a muted placeholder instead
+                                ui.add_space(52.0);
+                                ui.label(
+                                    RichText::new(format!("{} {}", app.t("seasonWord"), n))
+                                        .size(13.0)
+                                        .strong()
+                                        .color(MUTED),
+                                );
+                                ui.label(
+                                    RichText::new(app.t("season_not_on_android"))
+                                        .size(11.0)
+                                        .color(MUTED),
                                 );
                             } else {
-                                ui.add_space(52.0);
-                            }
-                            let info = season_catalog::get(n);
-                            ui.label(
-                                RichText::new(
-                                    info.map(|i| i.title.to_string())
-                                        .unwrap_or_else(|| format!("{} {}", app.t("seasonWord"), n)),
-                                )
-                                .size(13.0)
-                                .strong()
-                                .color(Color32::WHITE),
-                            );
-                            if let Some(i) = info {
-                                ui.label(RichText::new(i.chapter).size(10.0).color(GOLD));
+                                if let Some(tex) = season_texture(app, ctx, n) {
+                                    ui.add(
+                                        egui::Image::from_texture(&tex)
+                                            .fit_to_fraction(Vec2::new(1.0, 0.62))
+                                            .corner_radius(8),
+                                    );
+                                } else {
+                                    ui.add_space(52.0);
+                                }
+                                let info = season_catalog::get(n);
+                                ui.label(
+                                    RichText::new(
+                                        info.map(|i| i.title.to_string())
+                                            .unwrap_or_else(|| format!("{} {}", app.t("seasonWord"), n)),
+                                    )
+                                    .size(13.0)
+                                    .strong()
+                                    .color(Color32::WHITE),
+                                );
+                                if let Some(i) = info {
+                                    ui.label(RichText::new(i.chapter).size(10.0).color(GOLD));
+                                }
                             }
                         })
                         .response
-                        .interact(Sense::click());
-                    if resp.clicked() {
+                        .interact(if pre_android {
+                            Sense::hover()
+                        } else {
+                            Sense::click()
+                        });
+                    if !pre_android && resp.clicked() {
                         app.details_season = n;
                         app.phase = crate::Phase::Details(n);
                     }
@@ -707,6 +737,17 @@ fn details_screen(app: &mut OwenApp, root: &mut egui::Ui, ctx: &egui::Context) {
                 ui.add_space(8.0);
             }
 
+            // Official season trailer — opens the YouTube URL via
+            // ACTION_VIEW (see jni_android::open_url / platform::open_url).
+            if let Some(url) = season_trailer_url(&app.bundled, season) {
+                card(ui, |ui| {
+                    if gold_button(ui, app.t("watchTrailer"), true) {
+                        platform::open_url(&url);
+                    }
+                });
+                ui.add_space(8.0);
+            }
+
             let st = app.install_state.lock().ok().map(|g| g.clone());
             if let Some(st) = &st {
                 match st {
@@ -746,7 +787,7 @@ fn details_screen(app: &mut OwenApp, root: &mut egui::Ui, ctx: &egui::Context) {
                 RichText::new(format!(
                     "{} ({})",
                     app.t("allVersions"),
-                    version_catalog::by_season(season).len()
+                    direct_overrides::by_season_merged(&app.data_root, season).len()
                 ))
                 .size(14.0)
                 .strong()
@@ -754,7 +795,9 @@ fn details_screen(app: &mut OwenApp, root: &mut egui::Ui, ctx: &egui::Context) {
             );
             ui.add_space(4.0);
 
-            for v in version_catalog::by_season(season) {
+            // the static catalog + any owen-direct.json overrides (direct APK
+            // URLs for CI-pinned builds — see direct_overrides.rs)
+            for v in direct_overrides::by_season_merged(&app.data_root, season) {
                 let pkg = owen_patcher::owen_manager::package_name_for(&to_patch_version(v));
                 let installed = platform::installed_package(&pkg).is_some();
                 card(ui, |ui| {
@@ -1301,6 +1344,10 @@ fn season_texture(
     if app.host.is_wasm() {
         return None;
     }
+    if n < ANDROID_FIRST_SEASON {
+        // seasons 1-4 never shipped on Android — no art, ever
+        return None;
+    }
     if let Some(tex) = app.tex.get(&n) {
         return Some(tex.clone());
     }
@@ -1312,6 +1359,40 @@ fn season_texture(
     let tex = ctx.load_texture(format!("season_{n}"), color, egui::TextureOptions::default());
     app.tex.insert(n, tex.clone());
     Some(tex)
+}
+
+/* -------------------------------- trailers -------------------------------- */
+
+/// The official season trailer URL — from the `trailers/trailers.json`
+/// registry shipped as an APK asset (materialized into the bundled dir by
+/// `jni_android::bundled_dir`, mirroring the other asset trees). Falls back
+/// to the same JSON compiled into the binary when the file is not on disk
+/// (desktop dev runs, or an install whose bundled dir predates the
+/// registry). Video files are never bundled — only this registry.
+fn season_trailer_url(bundled: &Path, season: u32) -> Option<String> {
+    static TRAILERS: std::sync::OnceLock<std::collections::HashMap<String, String>> =
+        std::sync::OnceLock::new();
+    let map = TRAILERS.get_or_init(|| {
+        let raw = std::fs::read_to_string(bundled.join("trailers").join("trailers.json"))
+            .unwrap_or_else(|_| {
+                include_str!("../../../assets/trailers/trailers.json").to_string()
+            });
+        let mut m = std::collections::HashMap::new();
+        if let Ok(v) = serde_json::from_str::<serde_json::Value>(&raw) {
+            if let Some(obj) = v.as_object() {
+                for (k, val) in obj {
+                    if k.starts_with('_') {
+                        continue; // registry metadata (the "_note" field)
+                    }
+                    if let Some(url) = val.as_str() {
+                        m.insert(k.clone(), url.to_string());
+                    }
+                }
+            }
+        }
+        m
+    });
+    map.get(&season.to_string()).cloned()
 }
 
 // keep Path import referenced (used by signatures below in future passes)

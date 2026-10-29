@@ -123,8 +123,10 @@ const LIB_NAME: &str = "owen_app";
 /// The APK asset trees materialized into `cacheDir/bundled` on first launch.
 /// `lawin`/`owen`/`images`/`tools` mirror `LawinDataDeployer.DEPLOY_ROOTS`
 /// (the trees the launcher actually uses); `signing` carries the original
-/// ogfn key pair (`ui.rs` looks for `bundled/signing/ogfn-key.pem`).
-const BUNDLED_TREES: &[&str] = &["lawin", "owen", "images", "tools", "signing"];
+/// ogfn key pair (`ui.rs` looks for `bundled/signing/ogfn-key.pem`);
+/// `trailers` carries the season trailer registry
+/// (`trailers/trailers.json` — JSON only, never the videos themselves).
+const BUNDLED_TREES: &[&str] = &["lawin", "owen", "images", "tools", "signing", "trailers"];
 
 /// The APK asset files materialized at the bundled root.
 const BUNDLED_FILES: &[&str] = &["manifest.txt"];

@@ -124,6 +124,8 @@
   "statusOk": "OK",
   "statusRequired": "Wymagane",
   "seasonsTagline": "Wróć do starych dobrych czasów — każdy sezon, każdy build",
+  "season_not_on_android": "Niedostępne na Androidzie",
+  "watchTrailer": "Zobacz zwiastun",
   "by": "od",
   "allVersions": "Wszystkie wersje",
   "installedLaunch": "Zainstalowano — naciśnij, aby uruchomić",

@@ -124,6 +124,8 @@
   "statusOk": "ОК",
   "statusRequired": "Требуется",
   "seasonsTagline": "Вернитесь в старые добрые времена — каждый сезон, каждая сборка",
+  "season_not_on_android": "Недоступно на Android",
+  "watchTrailer": "Смотреть трейлер",
   "by": "от",
   "allVersions": "Все версии",
   "installedLaunch": "Установлено — нажмите для запуска",

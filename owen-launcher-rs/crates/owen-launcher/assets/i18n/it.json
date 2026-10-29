@@ -124,6 +124,8 @@
   "statusOk": "OK",
   "statusRequired": "Obbligatorio",
   "seasonsTagline": "Rivivi i vecchi tempi — ogni stagione, ogni build",
+  "season_not_on_android": "Non disponibile su Android",
+  "watchTrailer": "Guarda il trailer",
   "by": "di",
   "allVersions": "Tutte le versioni",
   "installedLaunch": "Installato — premi per avviare",

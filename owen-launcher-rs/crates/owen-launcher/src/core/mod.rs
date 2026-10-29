@@ -7,6 +7,9 @@ pub mod catalogs {
     //! Generated 1:1 from the original Kotlin catalogs.
     pub mod season_catalog;
     pub mod version_catalog;
+    // Runtime layer over the generated catalog (direct APK URL overrides,
+    // read from `owen-direct.json` in the data root).
+    pub mod direct_overrides;
 }
 
 pub mod lawin {

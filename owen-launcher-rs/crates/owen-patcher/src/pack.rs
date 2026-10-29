@@ -9,6 +9,7 @@
 //! assets/lawin/**       DEFLATE (data/lawin)
 //! assets/owen/**        DEFLATE (data/owen)
 //! assets/images/**      DEFLATE (public/owen/seasons/season_N_folder.png)
+//! assets/trailers/trailers.json  DEFLATE (season trailer URL registry — no videos)
 //! assets/tools/*        DEFLATE (ogfn-debug.keystore)
 //! assets/signing/*      DEFLATE (the ogfn key/cert the app re-uses)
 //! ```
@@ -295,6 +296,21 @@ pub fn pack(cfg: &PackConfig) -> Result<PackReport, String> {
     let cert = fs::read(&cfg.cert_der).map_err(|e| format!("{}: {e}", cfg.cert_der.display()))?;
     zip.add_entry("assets/signing/ogfn-key.pem", &key_pem);
     zip.add_entry("assets/signing/ogfn-cert.der", &cert);
+
+    // assets/trailers/trailers.json — the season trailer registry (URL map).
+    // JSON ONLY: the trailer videos themselves are never packed into the
+    // APK; they stream from YouTube or the "owen-trailers" GitHub release
+    // (see .github/workflows/fetch-trailers.yml).
+    let trailers = cfg.root.join("assets/trailers/trailers.json");
+    if trailers.is_file() {
+        let data = fs::read(&trailers).map_err(|e| format!("{}: {e}", trailers.display()))?;
+        zip.add_entry("assets/trailers/trailers.json", &data);
+        notes.push("assets: trailers/trailers.json (URL registry only — no videos)".into());
+    } else {
+        notes.push(
+            "NOTE: assets/trailers/trailers.json missing — trailer registry skipped".into(),
+        );
+    }
 
     // assets/manifest.txt — only if the data dir ships one.
     for candidate in ["data/lawin/manifest.txt", "data/owen/manifest.txt"] {

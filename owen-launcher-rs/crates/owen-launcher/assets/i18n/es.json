@@ -124,6 +124,8 @@
   "statusOk": "OK",
   "statusRequired": "Obligatorio",
   "seasonsTagline": "Revive los viejos tiempos — cada temporada, cada compilación",
+  "season_not_on_android": "No disponible en Android",
+  "watchTrailer": "Ver tráiler",
   "by": "de",
   "allVersions": "Todas las versiones",
   "installedLaunch": "Instalado — pulsa para iniciar",
