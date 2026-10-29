@@ -169,7 +169,7 @@ pub fn apply_for_version(
     );
     format!(
         "config.ini applied: GameServer={game_server_ip}:{game_server_port}, manifest={}",
-        version.manifest_hash.clone().unwrap_or_else(|| "kept".to_string())
+        version.manifest_hash.unwrap_or("kept")
     )
 }
 

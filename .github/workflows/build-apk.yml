@@ -1,0 +1,62 @@
+name: Build OwenLauncher APK
+
+# The pure-Rust APK pipeline: tools/build-apk.sh builds libowen.so (redirecter)
+# + libowen_app.so (the eframe app) for aarch64-linux-android, assembles
+# dist/OwenLauncher-v1.8.0-release.apk with the in-repo packer (owen-patcher
+# --bin pack: binary AXML writer + zipalign-style STORED layout + v1/v2
+# signing with the original ogfn certificate) and verifies it (verify_v1/v2 +
+# python zipfile/struct checks).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rust-rewrite]
+    paths:
+      - "owen-launcher-rs/**"
+      - ".github/workflows/build-apk.yml"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-apk:
+    name: OwenLauncher APK (aarch64, pure Rust)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: owen-launcher-rs
+    steps:
+      - uses: actions/checkout@v4
+
+      # tools/build-apk.sh extracts the runtime keystore asset via
+      # `git show main:app/src/main/assets/tools/ogfn-debug.keystore`.
+      - name: Fetch main (for the ogfn keystore asset)
+        run: git fetch --no-tags --depth=1 origin main || true
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: nttld/setup-ndk@v1
+        id: ndk
+        with:
+          ndk-version: r27c
+
+      - name: Build + pack + sign + verify (tools/build-apk.sh)
+        env:
+          ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq file
+          bash tools/build-apk.sh
+
+      - name: Artifact listing
+        run: |
+          ls -la dist/
+          file dist/*.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OwenLauncher-apk
+          path: owen-launcher-rs/dist/*.apk
+          if-no-files-found: warn

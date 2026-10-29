@@ -160,7 +160,7 @@ fn page() -> String {
     <div class="container">
         <div class="logo">OWEN</div>
         <div class="title">OWEN SERVER</div>
-        <input id="username" placeholder="Enter your name" maxlength="32" value="$safe" autocomplete="off">
+        <input id="username" placeholder="Enter your name" maxlength="32" value="{safe}" autocomplete="off">
         <button class="btn" onclick="redirect()">Launch Game</button>
         <div class="note">Enter the name you want to play with.<br>The game will open automatically.</div>
     </div>

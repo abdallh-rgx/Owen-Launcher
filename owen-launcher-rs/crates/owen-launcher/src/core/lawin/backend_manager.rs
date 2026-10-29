@@ -48,7 +48,7 @@ pub fn ensure_running(
 ) -> BackendState {
     let settings = lawin_settings::load(data_root);
     let version_tag = version
-        .map(|v| v.release_key.clone())
+        .map(|v| v.release_key.to_string())
         .unwrap_or_else(|| settings.game_version_tag.clone());
     {
         let current = STATE.lock().unwrap().clone();

@@ -54,6 +54,10 @@ pub struct ZipArchive {
     pub additions: BTreeMap<String, Vec<u8>>,
     /// Always-DEFLATED additions (v1 signature files under `META-INF/`).
     pub deflated_additions: BTreeMap<String, Vec<u8>>,
+    /// Explicitly-STORED additions, zipalign-style (4-byte aligned;
+    /// `lib/<abi>/*.so` still page-aligned) — used by the APK packer for
+    /// `AndroidManifest.xml` / `resources.arsc`.
+    pub stored_additions: BTreeMap<String, Vec<u8>>,
 }
 
 fn rd_u16(b: &[u8], o: usize) -> u16 {
@@ -140,6 +144,7 @@ impl ZipArchive {
             overrides: BTreeMap::new(),
             additions: BTreeMap::new(),
             deflated_additions: BTreeMap::new(),
+            stored_additions: BTreeMap::new(),
         })
     }
 
@@ -160,6 +165,9 @@ impl ZipArchive {
             return Some(v.clone());
         }
         if let Some(v) = self.deflated_additions.get(name) {
+            return Some(v.clone());
+        }
+        if let Some(v) = self.stored_additions.get(name) {
             return Some(v.clone());
         }
         let e = self.entries.iter().find(|e| e.name == name)?;
@@ -213,6 +221,14 @@ impl ZipArchive {
             .insert(name.to_string(), data.to_vec());
     }
 
+    /// Queue a new entry that is always STORED and (re)aligned like
+    /// zipalign does: `lib/<abi>/*.so` → 16 KiB page alignment, everything
+    /// else (`AndroidManifest.xml`, `resources.arsc`, …) → 4 bytes.
+    pub fn add_stored(&mut self, name: &str, data: &[u8]) {
+        self.stored_additions
+            .insert(name.to_string(), data.to_vec());
+    }
+
     /// Replace-or-add: when `name` already exists in the archive the data
     /// becomes an override (original method kept), otherwise a new entry.
     pub fn set_entry(&mut self, name: &str, data: &[u8]) {
@@ -243,6 +259,7 @@ impl ZipArchive {
             .keys()
             .chain(self.additions.keys())
             .chain(self.deflated_additions.keys())
+            .chain(self.stored_additions.keys())
             .filter(|n| *n == "META-INF" || n.starts_with("META-INF/"))
             .cloned()
             .collect();
@@ -250,6 +267,7 @@ impl ZipArchive {
             self.overrides.remove(&name);
             self.additions.remove(&name);
             self.deflated_additions.remove(&name);
+            self.stored_additions.remove(&name);
         }
     }
 
@@ -282,7 +300,10 @@ impl ZipArchive {
                 };
                 let name = e.name.as_bytes();
                 let extra_pad = align_pad(offset, name.len(), method, &e.name) as usize;
-                let mut lh = local_header(method, crc32(&raw), raw.len() as u32, usize_, name.len() as u16);
+                // CRC is over the UNCOMPRESSED data (zip spec) — `raw` is the
+                // compressed stream for method 8.
+                let crc = ziprw_crc32(new);
+                let mut lh = local_header(method, crc, raw.len() as u32, usize_, name.len() as u16);
                 lh[28..30].copy_from_slice(&(extra_pad as u16).to_le_bytes());
                 let pad = vec![0u8; extra_pad];
                 write_all(&mut out, &lh)?;
@@ -290,7 +311,7 @@ impl ZipArchive {
                 write_all(&mut out, &pad)?;
                 write_all(&mut out, &raw)?;
                 central.extend_from_slice(&central_header(
-                    method, crc32(&raw), raw.len() as u32, usize_, name.len() as u16, offset,
+                    method, crc, raw.len() as u32, usize_, name.len() as u16, offset,
                 ));
                 central.extend_from_slice(name);
                 offset += lh.len() as u64 + name.len() as u64 + pad.len() as u64 + raw.len() as u64;
@@ -347,10 +368,29 @@ impl ZipArchive {
             count += 1;
         }
 
-        // Additions: .so under lib/ → STORED + page-aligned; explicit
-        // deflated additions (v1 signature files); everything else deflated.
-        for (name, data) in self.additions.iter().chain(self.deflated_additions.iter()) {
-            let (raw, method): (Vec<u8>, u16) = if name.starts_with("lib/") && name.ends_with(".so") {
+        // Additions — merged and written in name order for a deterministic
+        // layout: `.so` under lib/ → STORED + page-aligned (whatever map it
+        // came from); explicit deflated additions (v1 signature files);
+        // explicit STORED additions (manifest/resources.arsc); everything
+        // else deflated.
+        let mut pending: Vec<(&str, u16, &Vec<u8>)> = Vec::new();
+        for (name, data) in &self.additions {
+            let method: u16 = if name.starts_with("lib/") && name.ends_with(".so") {
+                0
+            } else {
+                8
+            };
+            pending.push((name, method, data));
+        }
+        for (name, data) in &self.stored_additions {
+            pending.push((name, 0, data));
+        }
+        for (name, data) in &self.deflated_additions {
+            pending.push((name, 8, data));
+        }
+        pending.sort_by(|a, b| a.0.cmp(b.0));
+        for (name, method, data) in pending {
+            let (raw, method): (Vec<u8>, u16) = if method == 0 {
                 (data.clone(), 0)
             } else {
                 let mut enc =
@@ -360,9 +400,12 @@ impl ZipArchive {
             };
             let name_b = name.as_bytes();
             let extra_pad = align_pad(offset, name_b.len(), method, name) as usize;
+            // CRC over the UNCOMPRESSED bytes (zip spec; `raw` is the
+            // deflate stream for method 8).
+            let crc = ziprw_crc32(data);
             let lh = local_header(
                 method,
-                crc32(&raw),
+                crc,
                 raw.len() as u32,
                 data.len() as u32,
                 name_b.len() as u16,
@@ -376,7 +419,7 @@ impl ZipArchive {
             write_all(&mut out, &raw)?;
             central.extend_from_slice(&central_header(
                 method,
-                crc32(&raw),
+                crc,
                 raw.len() as u32,
                 data.len() as u32,
                 name_b.len() as u16,
@@ -462,6 +505,12 @@ fn write_all<W: std::io::Write>(w: &mut W, data: &[u8]) -> Result<(), String> {
     w.write_all(data).map_err(|e| e.to_string())
 }
 
+/// CRC-32 over the UNCOMPRESSED entry bytes — an alias so call sites read
+/// clearly next to `crc32(&raw)` mistakes of the past.
+fn ziprw_crc32(data: &[u8]) -> u32 {
+    crc32(data)
+}
+
 pub fn crc32(data: &[u8]) -> u32 {
     let mut crc: u32 = 0xFFFF_FFFF;
     for &b in data {
@@ -471,4 +520,54 @@ pub fn crc32(data: &[u8]) -> u32 {
         }
     }
     !crc
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Write as _;
+
+    /// Regression: the CRC of a DEFLATED entry must be over the UNCOMPRESSED
+    /// bytes (a previous version hashed the deflate stream — Python's
+    /// `ZipFile.testzip` / Android's installer both reject such zips).
+    #[test]
+    fn deflated_entry_crc_is_over_uncompressed_data() {
+        let dir = std::env::temp_dir().join(format!("owen-ziprw-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let empty = dir.join("empty.apk");
+        let mut eocd = [0u8; 22];
+        eocd[0..4].copy_from_slice(&0x0605_4b50u32.to_le_bytes());
+        std::fs::write(&empty, eocd).unwrap();
+
+        let data = vec![0xABu8; 100_000]; // highly compressible
+        let mut zip = ZipArchive::open(&empty).unwrap();
+        zip.add_entry("assets/payload.bin", &data);
+        zip.add_stored("resources.arsc", b"0123456789ab".as_slice());
+        let out = dir.join("out.apk");
+        zip.write_to(&out).unwrap();
+
+        // The written archive must expose the CRC of the ORIGINAL bytes.
+        let reread = ZipArchive::open(&out).unwrap();
+        let entry = reread
+            .list()
+            .iter()
+            .find(|e| e.name == "assets/payload.bin")
+            .expect("deflated entry");
+        assert_eq!(entry.method, 8);
+        assert_eq!(entry.crc, crc32(&data), "CRC must cover the uncompressed bytes");
+        assert_eq!(entry.uncompressed_size, data.len() as u64);
+        assert!(entry.compressed_size < data.len() as u64, "actually deflated");
+        // STORED entry: raw == data, CRC identical either way.
+        let arsc = reread
+            .list()
+            .iter()
+            .find(|e| e.name == "resources.arsc")
+            .expect("stored entry");
+        assert_eq!(arsc.method, 0);
+        assert_eq!(arsc.crc, crc32(b"0123456789ab"));
+        // and the payload round-trips
+        assert_eq!(reread.read_entry("assets/payload.bin").unwrap(), data);
+        let _ = std::io::stdout().flush();
+        std::fs::remove_dir_all(&dir).ok();
+    }
 }

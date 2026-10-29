@@ -307,8 +307,10 @@ pub fn sign_apk_v1(unsigned: &Path, output: &Path, key: &SigningKey) -> Result<(
         sf.extend_from_slice(&sec);
     }
 
-    // CERT.RSA: PKCS#7 SignedData over CERT.SF, same key as v2.
-    let cert_rsa = build_pkcs7(&sf, &key.private);
+    // CERT.RSA: PKCS#7 SignedData over CERT.SF, same key as v2. The
+    // embedded certificate comes from the key: the loaded `ogfn` pair when
+    // present, the self-signed one otherwise.
+    let cert_rsa = build_pkcs7(&sf, key);
 
     let mut out_zip = ZipArchive::open(unsigned)?;
     out_zip.remove_meta_inf();
@@ -319,10 +321,16 @@ pub fn sign_apk_v1(unsigned: &Path, output: &Path, key: &SigningKey) -> Result<(
 }
 
 /// Build the PKCS#7 `SignedData` DER for `CERT.RSA` (no signedAttrs — the
-/// signature covers the content directly).
-fn build_pkcs7(content: &[u8], private: &RsaPrivateKey) -> Vec<u8> {
-    let cert = self_signed_cert(private);
-    let signature = sign_raw(private, content);
+/// signature covers the content directly). The embedded certificate is
+/// `key.cert_for_v1()` — the loaded `ogfn` DER when the pair was provided,
+/// the self-signed one otherwise — and the SignerInfo's
+/// issuerAndSerialNumber is taken from that same certificate so real
+/// verifiers can match the signer to its cert.
+fn build_pkcs7(content: &[u8], key: &SigningKey) -> Vec<u8> {
+    let cert = key.cert_for_v1();
+    let (issuer, serial) = cert_issuer_and_serial(&cert)
+        .unwrap_or_else(|| (name_cn(), der_int(CERT_SERIAL)));
+    let signature = sign_raw(&key.private, content);
 
     let encap = der_seq(&[
         &der_oid(OID_DATA),
@@ -331,7 +339,7 @@ fn build_pkcs7(content: &[u8], private: &RsaPrivateKey) -> Vec<u8> {
     let certificates = tlv(0xA0, &cert); // [0] IMPLICIT SET OF Certificate
     let signer_info = der_seq(&[
         &der_int(1),
-        &der_seq(&[&name_cn(), &der_int(CERT_SERIAL)]), // issuerAndSerialNumber
+        &der_seq(&[&issuer, &serial]), // issuerAndSerialNumber
         &alg_sha256(),
         &alg_rsa(),
         &der_octet(&signature),
@@ -344,6 +352,40 @@ fn build_pkcs7(content: &[u8], private: &RsaPrivateKey) -> Vec<u8> {
         &der_set(&[&signer_info]),
     ]);
     der_seq(&[&der_oid(OID_SIGNED_DATA), &tlv(0xA0, &signed_data)])
+}
+
+/// Extract `(issuer Name TLV, serialNumber INTEGER TLV)` from a DER X.509
+/// certificate, so the PKCS#7 SignerInfo can reference the embedded cert
+/// exactly (Android locates the signer by issuer + serial).
+fn cert_issuer_and_serial(cert: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
+    let mut outer = DerWalker::new(cert);
+    let (t, cert_body) = outer.next()?;
+    if t != 0x30 {
+        return None;
+    }
+    // cert_body = [TBSCertificate TLV, signatureAlgorithm TLV, signature TLV]
+    let mut cert_w = DerWalker::new(cert_body);
+    let (t, tbs_body) = cert_w.next()?; // the TBSCertificate SEQUENCE
+    if t != 0x30 {
+        return None;
+    }
+    // tbs_body = [version [0]?, serialNumber, signature, issuer, validity, …]
+    let mut tbs = DerWalker::new(tbs_body);
+    let (first_tag, first) = tbs.next()?;
+    let serial_content = if first_tag == 0xA0 {
+        // version [0] EXPLICIT INTEGER — the serial follows it
+        let (_, serial) = tbs.next()?;
+        serial
+    } else {
+        first
+    };
+    let serial = tlv(0x02, serial_content);
+    let (_t, _sig_alg) = tbs.next()?;
+    let (t, issuer) = tbs.next()?;
+    if t != 0x30 {
+        return None;
+    }
+    Some((tlv(0x30, issuer), serial))
 }
 
 /* ------------------------------ verification ---------------------------- */
@@ -589,7 +631,7 @@ fn verify_pkcs7(block: &[u8], expected_content: &[u8]) -> Result<bool, String> {
     Ok(verifying.verify(content, &sig).is_ok())
 }
 
-fn extract_cert_public_key(certs: &[u8]) -> Option<RsaPublicKey> {
+pub(crate) fn extract_cert_public_key(certs: &[u8]) -> Option<RsaPublicKey> {
     let mut walker = DerWalker::new(certs);
     let (t, _cert) = walker.next()?;
     if t != 0x30 {
@@ -618,6 +660,7 @@ fn extract_cert_public_key(certs: &[u8]) -> Option<RsaPublicKey> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::sign;
     use crate::ziprw;
     use std::io::Write;
 
@@ -730,5 +773,86 @@ mod tests {
         let (t, _inner) = walker.next().unwrap();
         assert_eq!(t, 0x30, "certificate must be a DER SEQUENCE");
         assert!(extract_cert_public_key(&cert).is_some());
+        // the self-signed cert's issuer/serial extract cleanly too
+        let (issuer, serial) = cert_issuer_and_serial(&cert).unwrap();
+        assert_eq!(issuer, name_cn());
+        assert_eq!(serial, der_int(CERT_SERIAL));
+    }
+
+    /// The `ogfn` pair (assets/signing/) must sign + verify under BOTH
+    /// schemes, with `CERT.RSA` embedding the original 873-byte certificate
+    /// (not the self-signed one) and the v2 block carrying the same cert.
+    #[test]
+    fn sign_and_verify_with_ogfn_pair() {
+        let key_pem = concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets/signing/ogfn-key.pem");
+        let cert_der_path =
+            concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets/signing/ogfn-cert.der");
+        if !std::path::Path::new(key_pem).exists() || !std::path::Path::new(cert_der_path).exists()
+        {
+            eprintln!("skip: {key_pem} pair not present");
+            return;
+        }
+        let ogfn_cert = std::fs::read(cert_der_path).unwrap();
+        let key = SigningKey::load_pair(key_pem, cert_der_path).expect("ogfn pair loads");
+        assert_eq!(key.certificate_der(), ogfn_cert, "v2 embeds the ogfn cert");
+        assert_eq!(key.cert_for_v1(), ogfn_cert, "v1 embeds the ogfn cert");
+
+        let dir = std::env::temp_dir().join(format!("owen-ogfn-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let unsigned = dir.join("unsigned.apk");
+        build_zip(&unsigned);
+
+        // v1 with the ogfn pair
+        let signed = dir.join("ogfn-signed.apk");
+        sign_apk_v1(&unsigned, &signed, &key).expect("sign v1 (ogfn)");
+        let zip = ZipArchive::open(&signed).unwrap();
+        let cert_rsa_ogfn = zip.read_entry(CERT_RSA).unwrap();
+        assert!(
+            cert_rsa_ogfn.windows(ogfn_cert.len()).any(|w| w == ogfn_cert),
+            "CERT.RSA embeds the original ogfn certificate DER"
+        );
+
+        // Same zip signed with a self-signed key: different CERT.RSA length
+        // (873-byte ogfn cert vs the self-signed one) and no ogfn bytes.
+        let self_key = SigningKey::generate().unwrap();
+        let signed_self = dir.join("self-signed.apk");
+        sign_apk_v1(&unsigned, &signed_self, &self_key).expect("sign v1 (self)");
+        let zip_self = ZipArchive::open(&signed_self).unwrap();
+        let cert_rsa_self = zip_self.read_entry(CERT_RSA).unwrap();
+        assert_ne!(
+            cert_rsa_ogfn.len(),
+            cert_rsa_self.len(),
+            "CERT.RSA length changes with the ogfn cert ({} vs {})",
+            cert_rsa_ogfn.len(),
+            cert_rsa_self.len()
+        );
+        assert!(!cert_rsa_self.windows(ogfn_cert.len()).any(|w| w == ogfn_cert));
+
+        // v2 on top of the ogfn v1, then verify both schemes
+        sign::sign_apk_v2(&signed, &key).expect("sign v2 (ogfn)");
+        assert!(verify_v1(&signed).unwrap_or(false), "ogfn v1 must verify");
+        assert!(sign::verify_v2(&signed).unwrap_or(false), "ogfn v2 must verify");
+
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    /// A mismatched key/cert pair must be rejected by `load_pair`.
+    #[test]
+    fn load_pair_rejects_mismatched_cert() {
+        let key_pem = concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets/signing/ogfn-key.pem");
+        let cert_der_path =
+            concat!(env!("CARGO_MANIFEST_DIR"), "/../../assets/signing/ogfn-cert.der");
+        if !std::path::Path::new(key_pem).exists() || !std::path::Path::new(cert_der_path).exists()
+        {
+            eprintln!("skip: ogfn pair not present");
+            return;
+        }
+        let wrong = SigningKey::generate().unwrap();
+        let dir = std::env::temp_dir().join(format!("owen-mismatch-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let wrong_cert = dir.join("wrong.der");
+        std::fs::write(&wrong_cert, self_signed_cert(&wrong.private)).unwrap();
+        assert!(SigningKey::load_pair(key_pem, wrong_cert.to_str().unwrap()).is_err());
+        std::fs::remove_dir_all(&dir).ok();
     }
 }

@@ -44,6 +44,7 @@ pub mod manifest_renamer;
 pub mod native_builder;
 pub mod needed;
 pub mod owen_manager;
+pub mod pack;
 pub mod patch_cache;
 pub mod patch_plan;
 pub mod sign;

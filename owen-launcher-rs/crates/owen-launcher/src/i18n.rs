@@ -95,7 +95,7 @@ impl I18n {
     }
 
     /// Translate a key; English fallback, then the key itself.
-    pub fn t(&self, key: &str) -> &str {
+    pub fn t<'a>(&'a self, key: &'a str) -> &'a str {
         if let Some(v) = self.dict.get(key) {
             return v.as_str();
         }

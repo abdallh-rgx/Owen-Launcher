@@ -3,15 +3,17 @@ name = "owen-launcher"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Owen launcher core: Uptodown layer, install layer and the shared HTTP abstraction (the app/i18n/assets/backend layer is added on top)"
-
-# Library only — the launcher application binary is wired by the app layer.
+description = "Owen Launcher core: the 1:1 safe-Rust port of the Owen-Launcher Android app (http, uptodown, install, core, i18n, backend layers)"
 
 [dependencies]
 owen-core = { path = "../owen-core" }
 owen-patcher = { path = "../owen-patcher" }
+owen-server = { path = "../owen-server" }
 serde = { workspace = true }
 serde_json = { workspace = true }
+egui = "0.37"
+axum = { workspace = true }
+tokio = { workspace = true }
 
 # Native half: blocking reqwest (mirrors the HttpURLConnection calls of the
 # Kotlin original). The workspace reqwest already carries json + rustls-tls.

@@ -109,12 +109,16 @@ pub fn all_seasons() -> Vec<SeasonMeta> {
     TABLE.iter().map(meta_of).collect()
 }
 
-/// Season banner image path — images exist for seasons 5..=33 only.
+/// Season banner image path — all 42 seasons ship an original folder image
+/// (S1-4, S11, S34-42 generated for this release; the rest are the original
+/// app's asset set).
 pub fn season_image(n: u32) -> Option<&'static str> {
-    if !(5..=33).contains(&n) {
+    if !(1..=42).contains(&n) {
         return None;
     }
-    const IMAGES: [&str; 29] = [
+    const IMAGES: [&str; 42] = [
+        "/owen/seasons/season_1_folder.png", "/owen/seasons/season_2_folder.png",
+        "/owen/seasons/season_3_folder.png", "/owen/seasons/season_4_folder.png",
         "/owen/seasons/season_5_folder.png", "/owen/seasons/season_6_folder.png",
         "/owen/seasons/season_7_folder.png", "/owen/seasons/season_8_folder.png",
         "/owen/seasons/season_9_folder.png", "/owen/seasons/season_10_folder.png",
@@ -129,9 +133,13 @@ pub fn season_image(n: u32) -> Option<&'static str> {
         "/owen/seasons/season_27_folder.png", "/owen/seasons/season_28_folder.png",
         "/owen/seasons/season_29_folder.png", "/owen/seasons/season_30_folder.png",
         "/owen/seasons/season_31_folder.png", "/owen/seasons/season_32_folder.png",
-        "/owen/seasons/season_33_folder.png",
+        "/owen/seasons/season_33_folder.png", "/owen/seasons/season_34_folder.png",
+        "/owen/seasons/season_35_folder.png", "/owen/seasons/season_36_folder.png",
+        "/owen/seasons/season_37_folder.png", "/owen/seasons/season_38_folder.png",
+        "/owen/seasons/season_39_folder.png", "/owen/seasons/season_40_folder.png",
+        "/owen/seasons/season_41_folder.png", "/owen/seasons/season_42_folder.png",
     ];
-    IMAGES.get((n - 5) as usize).copied()
+    IMAGES.get((n - 1) as usize).copied()
 }
 
 /// Resolve the effective season: `X-Season` header > `?season=` query >
@@ -267,15 +275,15 @@ mod tests {
     }
 
     #[test]
-    fn image_range_is_5_to_33() {
-        for n in 5..=33 {
+    fn image_range_is_1_to_42() {
+        for n in 1..=42 {
             assert_eq!(
                 season_image(n).map(|s| s.to_string()),
                 Some(format!("/owen/seasons/season_{n}_folder.png")),
                 "season {n}"
             );
         }
-        for n in [1u32, 2, 3, 4, 34, 35, 42] {
+        for n in [0u32, 43, 99] {
             assert_eq!(season_image(n), None, "season {n} must have no image");
         }
     }

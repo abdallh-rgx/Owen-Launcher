@@ -17,7 +17,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 
-use crate::http::{fetch_async, HttpResponse};
+use crate::http::{fetch_async, fetch_async_post, HttpResponse};
 use serde_json::Value;
 
 /// Gateway port used by the wasm preview (matches mini-services/owen-server).
@@ -56,6 +56,7 @@ pub fn get_json(
     path: &str,
     on_done: impl FnOnce(Result<Value, String>) + Send + 'static,
 ) {
+    let ctx = ctx.clone();
     let url = api_url(path);
     fetch_async(
         url,
@@ -87,6 +88,7 @@ pub fn post_json(
     bearer: Option<&str>,
     on_done: impl FnOnce(Result<Value, String>) + Send + 'static,
 ) {
+    let ctx = ctx.clone();
     let url = api_url(path);
     let payload = body
         .map(|v| v.to_string().into_bytes())
@@ -96,9 +98,10 @@ pub fn post_json(
     if let Some(token) = bearer {
         headers.push(("Authorization".into(), format!("Bearer {token}")));
     }
-    fetch_async(
+    fetch_async_post(
         url,
         headers,
+        payload,
         move |result: Result<HttpResponse, String>| {
             let parsed = result.map_err(|e| e).and_then(|resp| {
                 if resp.status == 503 {
@@ -166,7 +169,7 @@ pub fn hosting_status(
                         .unwrap_or("")
                         .to_string(),
                 }),
-                Err("__stopped__") => Ok(HostingStatus {
+                Err(e) if e == "__stopped__" => Ok(HostingStatus {
                     running: false,
                     detail: "stopped".into(),
                 }),
@@ -411,6 +414,7 @@ pub fn login(
     password: &str,
     on_done: impl FnOnce(Result<AccountSession, String>) + Send + 'static,
 ) {
+    let ctx = ctx.clone();
     let form = format!(
         "grant_type=password&username={}&password={}",
         urlencode(email),
@@ -420,9 +424,10 @@ pub fn login(
     let headers = vec![
         ("Content-Type".to_string(), "application/x-www-form-urlencoded".to_string()),
     ];
-    fetch_async(
+    fetch_async_post(
         url,
         headers,
+        form.into_bytes(),
         move |result: Result<HttpResponse, String>| {
             let parsed = result.map_err(|e| e).and_then(|resp| {
                 if !(200..300).contains(&resp.status) {
@@ -440,7 +445,7 @@ pub fn login(
             let token = parsed
                 .as_ref()
                 .ok()
-                .and_then(|v| v.get("access_token").and_then(|x| x.as_str()))
+                .and_then(|v: &serde_json::Value| v.get("access_token").and_then(|x| x.as_str()))
                 .map(|s| s.to_string());
             let Some(token) = token else {
                 ctx.request_repaint();
@@ -448,9 +453,8 @@ pub fn login(
                 return;
             };
             // confirm + enrich through /me
-            let ctx2 = ctx.clone();
             get_json(
-                &ctx2,
+                &ctx,
                 "/api/launcher/me",
                 move |me: Result<Value, String>| {
                     let out = me.map(|v| AccountSession {
@@ -462,7 +466,6 @@ pub fn login(
                             .to_string(),
                         email: v.get("email").and_then(|x| x.as_str()).unwrap_or("").to_string(),
                     });
-                    ctx2.request_repaint();
                     on_done(out);
                 },
             );
@@ -475,7 +478,7 @@ fn urlencode(s: &str) -> String {
     let mut out = String::new();
     for b in s.as_bytes() {
         let c = *b as char;
-        if c.is_ascii_alphanumeric() || "-_.!~*'()".contains(c) {
+        if c.is_ascii_alphanumeric() || "-_.~".contains(c) {
             out.push(c);
         } else {
             out.push_str(&format!("%{:02X}", b));
@@ -561,7 +564,11 @@ mod native_server {
                     }
                 };
                 rt.block_on(async move {
-                    let config = owen_redirecter::config::OwenConfig::load();
+                    let mut config = owen_core::config::OwenConfig::default();
+                    config.http_port = http_port2;
+                    config.login_port = http_port2;
+                    config.xmpp_port = xmpp_port;
+                    let _ = config.set_backend_url(&format!("http://127.0.0.1:{http_port2}"));
                     let state = std::sync::Arc::new(owen_server::state::AppState::load(
                         server_data.clone(),
                         config,
@@ -571,10 +578,16 @@ mod native_server {
                         "backend",
                         &format!("Owen Server listening on 127.0.0.1:{http_port2} (xmpp {xmpp_port})"),
                     );
-                    let _xmpp = crate::core::diag::i(
-                        "backend",
-                        &format!("xmpp listener: {}", start_xmpp(xmpp_port)),
-                    );
+                    let xmpp_state = state.clone();
+                    let xmpp_port2 = xmpp_port;
+                    tokio::spawn(async move {
+                        match owen_server::xmpp::run_xmpp(xmpp_state, xmpp_port2).await {
+                            Ok(()) => crate::core::diag::i("backend", "xmpp listener stopped"),
+                            Err(e) => {
+                                crate::core::diag::e("backend", &format!("xmpp listener disabled ({e})"))
+                            }
+                        }
+                    });
                     let listener = match tokio::net::TcpListener::bind(("127.0.0.1", http_port2)).await {
                         Ok(l) => l,
                         Err(e) => {
@@ -606,25 +619,19 @@ mod native_server {
         Err("Owen Server did not come up within 10s".to_string())
     }
 
-    /// XMPP side listener (std TcpListener threads); returns a description.
-    fn start_xmpp(port: u16) -> String {
-        match owen_server::xmpp::spawn_listener(port) {
-            Ok(()) => format!("spawned on {port}"),
-            Err(e) => format!("disabled ({e})"),
-        }
-    }
-
     pub fn stop() -> Result<(), String> {
         let taken = HANDLE.lock().unwrap().take();
         NATIVE_RUNNING.store(false, Ordering::SeqCst);
         if let Some(r) = taken {
             let _ = r.shutdown.send(());
         }
-        owen_server::xmpp::stop_listener();
         crate::core::diag::i("backend", "Owen Server stopped");
         Ok(())
     }
 }
+
+#[cfg(not(target_arch = "wasm32"))]
+pub use native_server::set_bundled_hint;
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn start_backend(data_root: &Path, http_port: u16, xmpp_port: u16) -> Result<(), String> {

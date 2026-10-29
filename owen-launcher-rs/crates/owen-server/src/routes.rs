@@ -1386,13 +1386,13 @@ mod tests {
         assert_eq!(item["freeTiers"], 0);
         assert_eq!(item["active"], false, "past window and not current");
 
-        // seasons outside 5..=33 have no image
+        // all 42 seasons carry a folder image
         let meta = seasons::season_info(2).expect("season 2");
         let item = season_item(meta, None, 42);
-        assert!(item["image"].is_null());
+        assert_eq!(item["image"], "/owen/seasons/season_2_folder.png");
         let meta = seasons::season_info(34).expect("season 34");
         let item = season_item(meta, None, 42);
-        assert!(item["image"].is_null());
+        assert_eq!(item["image"], "/owen/seasons/season_34_folder.png");
     }
 
     #[test]

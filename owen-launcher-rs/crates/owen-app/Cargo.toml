@@ -1,0 +1,29 @@
+[package]
+name = "owen-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "The Owen Launcher app — egui UI (Android NativeActivity / desktop / wasm preview) over the safe-Rust core"
+
+[dependencies]
+owen-launcher = { path = "../owen-launcher" }
+owen-patcher = { path = "../owen-patcher" }
+egui = "0.37"
+owen-core = { path = "../owen-core" }
+serde_json = { workspace = true }
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[target.'cfg(target_os = "android")'.dependencies]
+android-activity = "0.6"
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "glow", "android-native-activity"] }
+ndk = "0.9"
+jni = "0.21"
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+eframe = { version = "0.37" }
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"

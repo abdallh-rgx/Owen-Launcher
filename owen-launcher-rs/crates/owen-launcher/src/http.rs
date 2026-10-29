@@ -326,6 +326,47 @@ pub fn fetch_async(
     }
 }
 
+/// Asynchronous one-shot `POST` that works on **both** native and wasm.
+///
+/// native: the blocking [`ReqwestBackend`] runs on a background thread.
+/// wasm:   `ehttp::fetch` (browser `fetch`) drives the request.
+pub fn fetch_async_post(
+    url: String,
+    headers: Vec<(String, String)>,
+    body: Vec<u8>,
+    on_done: impl FnOnce(Result<HttpResponse, String>) + Send + 'static,
+) {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        std::thread::spawn(move || {
+            let backend = ReqwestBackend::new();
+            on_done(backend.post(&url, &headers, &body));
+        });
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    {
+        let mut request = ehttp::Request::post(url);
+        let borrowed: Vec<(&str, &str)> = headers
+            .iter()
+            .map(|(k, v)| (k.as_str(), v.as_str()))
+            .collect();
+        request.headers = ehttp::Headers::new(&borrowed);
+        request.body = body;
+        ehttp::fetch(request, move |result: ehttp::Result<ehttp::Response>| {
+            match result {
+                Ok(resp) => on_done(Ok(HttpResponse {
+                    status: resp.status,
+                    headers: resp.headers.headers,
+                    body: resp.bytes,
+                    url: resp.url,
+                })),
+                Err(err) => on_done(Err(err)),
+            }
+        });
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

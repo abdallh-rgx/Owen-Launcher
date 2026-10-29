@@ -1,0 +1,1 @@
+{ "name": "owen-supervisor", "scripts": { "dev": "bun --hot index.ts" } }

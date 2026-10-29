@@ -4,6 +4,8 @@
 //! * `axml` — binary AndroidManifest editor: rename the package / raise
 //!   minSdk/targetSdk by editing the string pool in place (the Rust port of
 //!   the original `ManifestRenamer.kt`).
+//! * `axmlwriter` — binary AndroidManifest.xml WRITER (AOSP binary XML) for
+//!   assembling the pure-Rust launcher APK from scratch.
 //! * `needed` — **zero-smali loader injection**: instead of patching dex,
 //!   `libowen.so` is added to `lib/arm64-v8a/` and written into the dynamic
 //!   section of the engine library as a `DT_NEEDED` dependency. The Android
@@ -17,5 +19,6 @@
 #![forbid(unsafe_code)]
 
 pub mod axml;
+pub mod axmlwriter;
 pub mod needed;
 pub mod zip;

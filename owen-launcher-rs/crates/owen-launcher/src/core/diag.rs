@@ -47,7 +47,8 @@ pub fn fmt_hms_millis(epoch_ms: u64) -> String {
 }
 
 fn now_ms() -> u64 {
-    SystemTime::duration_since(UNIX_EPOCH, SystemTime::now())
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
         .map(|d| d.as_millis() as u64)
         .unwrap_or(0)
 }

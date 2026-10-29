@@ -40,6 +40,11 @@ const CHUNK_LIMIT: u64 = 1_048_576;
 
 pub struct SigningKey {
     pub private: RsaPrivateKey,
+    /// Optional externally-provided signing certificate (e.g. the original
+    /// `ogfn` debug keystore pair). `None` keeps today's self-signed
+    /// behavior (v1: [`crate::sign_v1::self_signed_cert`], v2:
+    /// [`x509_minimal`]).
+    pub cert_der: Option<Vec<u8>>,
 }
 
 impl SigningKey {
@@ -48,7 +53,7 @@ impl SigningKey {
         let mut rng = rand::thread_rng();
         let private =
             RsaPrivateKey::new(&mut rng, 2048).map_err(|e| format!("rsa keygen: {e}"))?;
-        Ok(Self { private })
+        Ok(Self { private, cert_der: None })
     }
 
     /// Load from a PKCS#8 PEM file, generating and saving when missing.
@@ -56,12 +61,12 @@ impl SigningKey {
         if let Ok(pem) = std::fs::read_to_string(path) {
             let private =
                 RsaPrivateKey::from_pkcs8_pem(&pem).map_err(|e| format!("key load: {e}"))?;
-            return Ok(Self { private });
+            return Ok(Self { private, cert_der: None });
         }
         // Legacy: try PKCS#1 PEM.
         if let Ok(pem) = std::fs::read_to_string(path) {
             if let Ok(private) = RsaPrivateKey::from_pkcs1_pem(&pem) {
-                return Ok(Self { private });
+                return Ok(Self { private, cert_der: None });
             }
         }
         let key = Self::generate()?;
@@ -74,15 +79,62 @@ impl SigningKey {
         Ok(key)
     }
 
+    /// Load a pre-existing key/certificate pair (PKCS#8 PEM private key +
+    /// DER X.509 certificate) — the `ogfn` pair extracted from the original
+    /// `ogfn-debug.keystore`. Every signature block (v1 `CERT.RSA` and the
+    /// v2 signed-data) then embeds the ORIGINAL certificate, so the output
+    /// installs as an update over the Kotlin app.
+    pub fn load_pair(key_pem_path: &str, cert_der_path: &str) -> Result<Self, String> {
+        let text = std::fs::read_to_string(key_pem_path)
+            .map_err(|e| format!("key read {key_pem_path}: {e}"))?;
+        // The `ogfn` key file is a `openssl pkcs12` bag dump: `Bag Attributes`
+        // preamble + the PRIVATE KEY block + an extra CERTIFICATE block. Pull
+        // just the private-key PEM section out.
+        let pem = pem_section(&text, "PRIVATE KEY")
+            .or_else(|| pem_section(&text, "RSA PRIVATE KEY"))
+            .ok_or_else(|| format!("no PRIVATE KEY PEM section in {key_pem_path}"))?;
+        let private = RsaPrivateKey::from_pkcs8_pem(&pem)
+            .or_else(|_| RsaPrivateKey::from_pkcs1_pem(&pem))
+            .map_err(|e| format!("key parse {key_pem_path}: {e}"))?;
+        let cert = std::fs::read(cert_der_path)
+            .map_err(|e| format!("cert read {cert_der_path}: {e}"))?;
+        // Sanity: the certificate must wrap exactly this key's public key
+        // (Android's v2 verifier checks cert-SPKI == embedded public key).
+        let embedded = crate::sign_v1::extract_cert_public_key(&cert)
+            .ok_or_else(|| format!("cert parse {cert_der_path}: not an X.509 DER cert"))?;
+        let mine = RsaPublicKey::from(&private);
+        if embedded != mine {
+            return Err(format!(
+                "key/cert mismatch: {cert_der_path} does not wrap {key_pem_path}'s public key"
+            ));
+        }
+        Ok(Self { private, cert_der: Some(cert) })
+    }
+
     pub fn public(&self) -> RsaPublicKey {
         RsaPublicKey::from(&self.private)
     }
 
     pub fn certificate_der(&self) -> Vec<u8> {
-        // A minimal self-signed X.509 wrapper around the public key.
-        // Android only parses the certificate for display; verification
-        // uses the public key and signature.
-        crate::sign::x509_minimal(&self.public())
+        match &self.cert_der {
+            Some(der) => der.clone(),
+            // A minimal self-signed X.509 wrapper around the public key.
+            // Android only parses the certificate for display; verification
+            // uses the public key and signature.
+            None => crate::sign::x509_minimal(&self.public()),
+        }
+    }
+
+    /// The certificate embedded into signature blocks by the v1 signer:
+    /// unlike [`Self::certificate_der`] (whose fallback `x509_minimal` has no
+    /// issuer/serial/validity structure), `CERT.RSA` requires a fully
+    /// parseable certificate — so the fallback here is the proper
+    /// self-signed one (today's behavior).
+    pub fn cert_for_v1(&self) -> Vec<u8> {
+        match &self.cert_der {
+            Some(der) => der.clone(),
+            None => crate::sign_v1::self_signed_cert(&self.private),
+        }
     }
 
     fn sign(&self, data: &[u8]) -> Vec<u8> {
@@ -97,6 +149,19 @@ fn u32lp(data: &[u8]) -> Vec<u8> {
     out.extend_from_slice(&(data.len() as u32).to_le_bytes());
     out.extend_from_slice(data);
     out
+}
+
+/// Extract one `-----BEGIN <label>----- … -----END <label>-----` section
+/// from a (possibly noisy) PEM file. The `ogfn` key file is an
+/// `openssl pkcs12` bag dump — `Bag Attributes` preamble, the private-key
+/// block, then an extra CERTIFICATE block — so a plain
+/// `RsaPrivateKey::from_pkcs8_pem(file)` chokes on it.
+pub fn pem_section(text: &str, label: &str) -> Option<String> {
+    let begin = format!("-----BEGIN {label}-----");
+    let end = format!("-----END {label}-----");
+    let start = text.find(&begin)?;
+    let stop = start + text[start..].find(&end)? + end.len();
+    Some(text[start..stop].to_string())
 }
 
 fn u64le(v: u64) -> [u8; 8] {
