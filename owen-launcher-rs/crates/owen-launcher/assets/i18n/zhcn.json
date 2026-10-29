@@ -124,6 +124,8 @@
   "statusOk": "正常",
   "statusRequired": "必需",
   "seasonsTagline": "重温旧日时光 — 每个赛季、每个构建",
+  "season_not_on_android": "Android 上不可用",
+  "watchTrailer": "观看预告片",
   "by": "来自",
   "allVersions": "全部版本",
   "installedLaunch": "已安装 — 点按即可启动",

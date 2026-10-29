@@ -109,16 +109,15 @@ pub fn all_seasons() -> Vec<SeasonMeta> {
     TABLE.iter().map(meta_of).collect()
 }
 
-/// Season banner image path — all 42 seasons ship an original folder image
-/// (S1-4, S11, S34-42 generated for this release; the rest are the original
-/// app's asset set).
+/// Season banner image path — the Android seasons 5..=42 ship a folder image
+/// (S11, S34-42 generated for this release; the rest are the original app's
+/// asset set). Seasons 1-4 never existed on Android (Fortnite mobile
+/// launched with Season 5), so they intentionally carry no art.
 pub fn season_image(n: u32) -> Option<&'static str> {
-    if !(1..=42).contains(&n) {
+    if !(5..=42).contains(&n) {
         return None;
     }
-    const IMAGES: [&str; 42] = [
-        "/owen/seasons/season_1_folder.png", "/owen/seasons/season_2_folder.png",
-        "/owen/seasons/season_3_folder.png", "/owen/seasons/season_4_folder.png",
+    const IMAGES: [&str; 38] = [
         "/owen/seasons/season_5_folder.png", "/owen/seasons/season_6_folder.png",
         "/owen/seasons/season_7_folder.png", "/owen/seasons/season_8_folder.png",
         "/owen/seasons/season_9_folder.png", "/owen/seasons/season_10_folder.png",
@@ -139,7 +138,7 @@ pub fn season_image(n: u32) -> Option<&'static str> {
         "/owen/seasons/season_39_folder.png", "/owen/seasons/season_40_folder.png",
         "/owen/seasons/season_41_folder.png", "/owen/seasons/season_42_folder.png",
     ];
-    IMAGES.get((n - 1) as usize).copied()
+    IMAGES.get((n - 5) as usize).copied()
 }
 
 /// Resolve the effective season: `X-Season` header > `?season=` query >
@@ -275,8 +274,13 @@ mod tests {
     }
 
     #[test]
-    fn image_range_is_1_to_42() {
-        for n in 1..=42 {
+    fn image_range_is_5_to_42() {
+        // Seasons 1-4 pre-date the Android port (Fortnite mobile launched
+        // with Season 5) — they must never resolve to art.
+        for n in 1..=4u32 {
+            assert_eq!(season_image(n), None, "season {n} must have no image (pre-Android)");
+        }
+        for n in 5..=42 {
             assert_eq!(
                 season_image(n).map(|s| s.to_string()),
                 Some(format!("/owen/seasons/season_{n}_folder.png")),

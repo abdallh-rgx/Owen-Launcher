@@ -1386,10 +1386,11 @@ mod tests {
         assert_eq!(item["freeTiers"], 0);
         assert_eq!(item["active"], false, "past window and not current");
 
-        // all 42 seasons carry a folder image
+        // seasons 5-42 carry a folder image; 1-4 pre-date the Android port
+        // (Fortnite mobile launched with Season 5) and carry none
         let meta = seasons::season_info(2).expect("season 2");
         let item = season_item(meta, None, 42);
-        assert_eq!(item["image"], "/owen/seasons/season_2_folder.png");
+        assert!(item["image"].is_null(), "season 2 must have no image (pre-Android)");
         let meta = seasons::season_info(34).expect("season 34");
         let item = season_item(meta, None, 42);
         assert_eq!(item["image"], "/owen/seasons/season_34_folder.png");

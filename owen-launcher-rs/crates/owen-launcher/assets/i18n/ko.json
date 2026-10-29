@@ -124,6 +124,8 @@
   "statusOk": "OK",
   "statusRequired": "필수",
   "seasonsTagline": "그 시절을 다시 — 모든 시즌, 모든 빌드",
+  "season_not_on_android": "Android에서는 이용할 수 없습니다",
+  "watchTrailer": "트레일러 보기",
   "by": "by",
   "allVersions": "모든 버전",
   "installedLaunch": "설치됨 — 눌러서 실행",

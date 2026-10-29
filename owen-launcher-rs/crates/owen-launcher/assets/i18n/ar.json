@@ -124,6 +124,8 @@
   "statusOk": "تم",
   "statusRequired": "مطلوب",
   "seasonsTagline": "استعراض الأيام القديمة — كل موسم، كل إصدار",
+  "season_not_on_android": "غير متاح على Android",
+  "watchTrailer": "مشاهدة المقطع الدعائي",
   "by": "من",
   "allVersions": "كل الإصدارات",
   "installedLaunch": "مثبتة — اضغط للإطلاق",

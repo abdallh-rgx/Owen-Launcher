@@ -124,6 +124,8 @@
   "statusOk": "OK",
   "statusRequired": "Required",
   "seasonsTagline": "Relive the old days — every season, every build",
+  "season_not_on_android": "Not available on Android",
+  "watchTrailer": "Watch trailer",
   "by": "by",
   "allVersions": "All versions",
   "installedLaunch": "Installed — press to launch",
