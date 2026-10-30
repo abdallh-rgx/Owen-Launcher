@@ -110,6 +110,7 @@ fn cmd_patch(args: &[String]) -> ExitCode {
         no_sign,
         key_path: key,
         rename_package: rename,
+        extra_libs: Vec::new(),
     };
     match owen_patcher::patch_apk(input, output, &opts) {
         Ok(report) => {
