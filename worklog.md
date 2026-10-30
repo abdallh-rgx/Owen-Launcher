@@ -704,3 +704,21 @@ Stage Summary:
 signatures, zipalign clean, 65.7 MB). Workspace tests: 32 suites green (~200
 tests, incl. 7 new BTI/relocation tests, the poisoned-gap regression, the INI
 template test, the doubled-scheme healing, and the 9-check selftest).
+
+---
+Task ID: 33
+Agent: main (Z.ai Code)
+Task: "ركّز على شيء واحد: تحويل OGS-12.41 إلى Android + اختباره من داخل اللعبة على محاكي + لقطة lobby ولقطة مباراة" + MobileDumper-7 كـ SDK
+
+Work Log:
+- الاستكشاف: APK فورتنايت 12.41 الأندرويد (147MB, arm64, curl مُصدَّر بالكامل 466 رمزاً) + libUE4.so موجودون في asset-store؛ flow تسجيل الدخول 12.41 استُخرج من ثنائية اللعبة: UTF-16 strings كشفت LoginPortalUrl/device_auth/exchange_code + `/exchange?exchangeCode=`code&redirectUrl=`desturl` → بنيت صفحة /login ذاتية الإكمال (password grant → exchange code → redirect إلى RedirectUrl/exchange) + منح exchange_code في oauth
+- الحقن الجديد (قتل فئة الانهيار): shim injection — libUE4.so الأصلي (268MB) يُعاد تسميته libUE4real.so داخل الـ APK و libUE4.so الجديد هو محمّل C 7KB (tools/shim) يفتح المحرك ثم libOwen.so/libOwenOGS.so/libOwenDumper.so؛ صفر جراحة ELF، صفر dex، صفر manifest — owen-patcher/src/shim.rs + bin/shim CLI: اختُبر فعلياً على APK اللعبة الحقيقي: v1+v2 تحققا تشفيرياً (154MB out)؛ resolving وحدة المحرك في redirecter/OGS حُدّثت (libUE4real أولاً + أكبر امتداد في dl_iterate_phdr)
+- ogs_main (كان مفقوداً تماماً من النقل!): كتبت مستخرج الإقلاع كاملاً — WaitForEngine/WaitForLogin(Frontend+InProgress) → 12 namespace hook → FlipGIS (gis_client مكتشف 12.41 +启发 gis_server=+1 مع تحقق قراءة 0) → world_open_delay قابل للضبط (نافذة لقطة الـ lobby) → LoadWorld (open Apollo_Terrain + LocalPlayers.Remove) + علامات قابلة للـ grep للـ CI: OGS: phase=…/match world up؛ + نقل PhantomBoothSpawner (PC.h الضخم يبقى للتكرار التالي — التصميم fail-safe يسمح)
+- owen-server: clouddir.rs (12.41: الباقة المحلية أولاً ثم 302 إلى akamaized — chunkdbs الـ 3GB تجري مباشرة من CDN الحقيقي)، منح exchange_code، BACKEND_URL من دمج جلسة 33 أصبح أساس templating للـ ini
+- الدمج: remote rust-rewrite كان يحمل جلسة 33 كاملة (BTI-safe hook engine، embedded server data، فن المواسم الحقيقي 34-40، android-e2e.yml + fetch-trailers) — دُمج مع union needed.rs (حارس DT_NULL عندي + تصلية الفجوة عندهم) و routes/lib خادم أعيد تطبيق clouddir+exchange_code فوق نسختهم
+- CI الجديد ogs-1241-e2e.yml: 3 مراحل مطلوبة (needs) — sdk-dump (المحاكي + اللعبة الأصلية + MobileDumper-7 x86_64 exe، fallback: shim+libOwenDumper) يلتزم الـ dump في dumps/، build-mod (libOwenOGS ضد الـ dump الفعلي + shim-patch؛ فشل الترجمة لا يوقف السلسلة)، game-e2e (owen-server:8080 + adb reverse + drive.py: تنزيل المحتوى الحقيقي → نقرات الدخول → لقطة lobby عند exchange_code → لقطة مباراة عند "OGS: match world up")
+- واجهة الويب: تبويب "OGS 12.41" جديد (OgsEvidence + /api/ogs-e2e) يعرض لقطات المحاكي الحقيقية من docs/e2e/12.41 التي يلتزمها CI — لا صور مزيّفة أبداً
+- الجولة 1: فشل android-actions/setup-android@v3 (حزمة tools القديمة حُذفت من مستودع SDK) — أُزيل (المتشغل يملك SDK مسبقاً)؛ إعادة الدفع
+
+Stage Summary:
+- السلسلة الكاملة منصوبة ودافئة؛ جولة CI الثانية قادمة بعد إصلاح setup-android؛ المتبقي: موجات أخطاء ترجمة C++ المتوقعة ضد dump أندرويد حقيقي + معايرة نقرات الدخول من لقطات CI

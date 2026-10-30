@@ -4,14 +4,14 @@
  * the sticky glass status bar. */
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, Home, Layers, Settings2, Smartphone, User } from "lucide-react";
+import { Download, Gamepad2, Home, Layers, Settings2, Smartphone, User } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Dict, Lang } from "@/lib/launcher/i18n";
 import type { ServerStatus } from "@/lib/launcher/api";
 import { SPRING, StatusDot, Wordmark } from "./glass";
 import { cn } from "@/lib/utils";
 
-export type ViewId = "home" | "seasons" | "downloads" | "partyhub" | "profile" | "settings";
+export type ViewId = "home" | "seasons" | "downloads" | "partyhub" | "ogs" | "profile" | "settings";
 
 export function MainShell({
   d,
@@ -43,6 +43,7 @@ export function MainShell({
     { id: "seasons", label: d.seasons, icon: <Layers size={20} /> },
     { id: "downloads", label: d.downloads, icon: <Download size={20} /> },
     { id: "partyhub", label: d.partyhub, icon: <Smartphone size={20} /> },
+    { id: "ogs", label: "OGS 12.41", icon: <Gamepad2 size={20} /> },
     { id: "profile", label: d.profile, icon: <User size={20} /> },
     { id: "settings", label: d.settings, icon: <Settings2 size={20} /> },
   ];

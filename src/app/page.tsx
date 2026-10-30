@@ -25,6 +25,7 @@ import { AuthView } from "@/components/launcher/AuthView";
 import { MainShell, type ViewId } from "@/components/launcher/MainShell";
 import { DownloadsView, HomeView, SeasonsView } from "@/components/launcher/views";
 import { OfflineView, PartyHubView, ProfileView, SettingsView } from "@/components/launcher/views2";
+import { OgsEvidence } from "@/components/launcher/OgsEvidence";
 
 type Phase = "boot" | "auth" | "main" | "offline";
 
@@ -263,6 +264,7 @@ export default function Page() {
                   )}
                   {view === "downloads" && <DownloadsView d={d} manifests={manifests} />}
                   {view === "partyhub" && <PartyHubView d={d} status={status} />}
+                  {view === "ogs" && <OgsEvidence />}
                   {view === "profile" && (
                     <ProfileView
                       d={d}

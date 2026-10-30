@@ -45,7 +45,6 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-      - uses: android-actions/setup-android@v3
 
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
@@ -54,7 +53,7 @@ jobs:
         run: |
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          sudo mkdir -p /home/z
+          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo mkdir -p /home/z/ndk
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
@@ -106,7 +105,6 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-      - uses: android-actions/setup-android@v3
 
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
@@ -115,7 +113,7 @@ jobs:
         run: |
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          sudo mkdir -p /home/z /home/z/ndk
+          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
 
@@ -158,7 +156,6 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-      - uses: android-actions/setup-android@v3
 
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
@@ -167,7 +164,7 @@ jobs:
         run: |
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          sudo mkdir -p /home/z /home/z/ndk
+          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
 
