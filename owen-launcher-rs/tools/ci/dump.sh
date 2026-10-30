@@ -31,7 +31,7 @@ ls -la "$EXE" "$LIB"
 echo "== building libowen.so + the loader shim"
 mkdir -p target/shim
 aarch64-linux-android24-clang -shared -fPIC -O2 -o target/shim/libUE4shim.so tools/shim/libue4_shim.c -landroid -llog
-CARGO_TARGET_DIR="$PWD/target" cargo build -p owen-redirecter --target aarch64-linux-android --release 2>&1 | rg -v "warning" || true
+CARGO_TARGET_DIR="$PWD/target" cargo build -p owen-redirecter --target aarch64-linux-android --release 2>&1 | grep -v "warning" || true
 test -f target/aarch64-linux-android/release/libowen.so
 
 # ---- the stock APK ----------------------------------------------------------

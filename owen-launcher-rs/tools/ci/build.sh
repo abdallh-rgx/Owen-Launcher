@@ -62,4 +62,4 @@ echo "== shim-patch: $MODS"
 cp /tmp/phase2/patch-report.json /tmp/phase2/patch-report.json.bak 2>/dev/null || true
 ls -la /tmp/fortnite-12.41-owen.apk
 echo "WITH_OGS=$([ -n "$OGS" ] && echo 1 || echo 0)" > /tmp/phase2/flags
-unzip -l /tmp/fortnite-12.41-owen.apk | rg 'lib/' | head -12
+unzip -l /tmp/fortnite-12.41-owen.apk | grep 'lib/' | head -12
