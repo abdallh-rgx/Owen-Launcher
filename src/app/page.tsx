@@ -9,7 +9,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, animate, motion, useMotionValue } from "framer-motion";
 import { toast } from "sonner";
 import {
   api,
@@ -41,6 +41,10 @@ export default function Page() {
   const [ping, setPing] = useState<number | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [seasonBusy, setSeasonBusy] = useState(false);
+  /* The main-shell entry blur is driven by a hand-owned motion value so it can
+   * END at "none": a lingering `filter: blur(0px)` on this wrapper creates a
+   * containing block that breaks the mobile bottom tab bar's position:fixed. */
+  const mainBlur = useMotionValue("blur(10px)");
 
   const d = useMemo(() => tr(lang), [lang]);
 
@@ -137,6 +141,18 @@ export default function Page() {
     return () => clearInterval(iv);
   }, []);
 
+  /* ---------- main-shell entry blur ---------- */
+  useEffect(() => {
+    if (phase !== "main") return;
+    mainBlur.set("blur(10px)");
+    const controls = animate(mainBlur, "blur(0px)", {
+      duration: 0.55,
+      ease: [0.34, 1.56, 0.64, 1],
+      onComplete: () => mainBlur.set("none"),
+    });
+    return () => controls.stop();
+  }, [phase, mainBlur]);
+
   /* ---------- handlers ---------- */
   const onAuthed = useCallback(
     (acc: Account, _token: string) => {
@@ -223,7 +239,13 @@ export default function Page() {
         )}
 
         {phase === "main" && account && (
-          <motion.div key="main" initial={{ opacity: 0, scale: 1.02, filter: "blur(10px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}>
+          <motion.div
+            key="main"
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+            style={{ filter: mainBlur }}
+          >
             <MainShell
               d={d}
               lang={lang}
