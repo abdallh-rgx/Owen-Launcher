@@ -42,7 +42,11 @@ if [ -n "${ANDROID_NDK_HOME:-}" ] && [ -d "${ANDROID_NDK_HOME}/toolchains/llvm/p
     fi
     export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
     export CC_aarch64_linux_android=aarch64-linux-android24-clang
+    export CXX_aarch64_linux_android=aarch64-linux-android24-clang++
     export AR_aarch64_linux_android=llvm-ar
+    # The NDK sysroot ships no C library headers; the shim in tools/ndk-include
+    # provides the handful ring needs (assert.h/string.h/stdlib.h).
+    export CFLAGS_aarch64_linux_android="-I$ROOT/tools/ndk-include"
 fi
 
 # --- 1. the redirecter (nothing blocks this) -------------------------------

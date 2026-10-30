@@ -26,6 +26,7 @@ extern "C" {
         fd: i32,
         off: i64,
     ) -> *mut core::ffi::c_void;
+    fn munmap(addr: *mut core::ffi::c_void, len: usize) -> i32;
     fn mprotect(
         addr: *mut core::ffi::c_void,
         len: usize,
@@ -105,6 +106,71 @@ pub(crate) fn alloc_code(size: usize) -> Option<Addr> {
 
 pub(crate) fn alloc_data(size: usize) -> Option<Addr> {
     alloc_from(size, false)
+}
+
+/// The reach of a direct AArch64 `b` instruction (26-bit signed word offset).
+pub(crate) const DIRECT_B_REACH: usize = 120 * 1024 * 1024; // ±120 MiB (margin)
+
+/// Allocate an executable block **near** `hint` (within `DIRECT_B_REACH`).
+///
+/// The BTI-safe jump-back at the end of a relocated block is a **direct**
+/// `b target+N` — direct branches are never BTI-gated, but their range is
+/// ±128 MiB, so the block must live close to the hooked function. Linux
+/// honors a non-null `mmap` hint whenever the page is free, so we probe a
+/// handful of candidate pages around the target module before falling back
+/// to the normal allocator.
+pub(crate) fn alloc_code_near(size: usize, hint: Addr) -> Option<Addr> {
+    if size == 0 || size > page_size() {
+        return None;
+    }
+    let ps = page_size();
+    let stride = 2 * 1024 * 1024usize; // one probe every 2 MiB
+    for k in 0..24u32 {
+        let delta = (k as usize / 2 + 1) * stride;
+        let candidate = if k % 2 == 0 {
+            hint.saturating_add(delta)
+        } else {
+            hint.saturating_sub(delta)
+        } & !(ps - 1);
+        // SAFETY: mmap with MAP_ANONYMOUS, a page-aligned hint and no
+        // MAP_FIXED either returns usable fresh memory or fails — it can
+        // never clobber an existing mapping.
+        let ptr = unsafe {
+            mmap(
+                candidate as *mut _,
+                ps,
+                Prot::Read as i32 | Prot::Exec as i32,
+                MAP_PRIVATE | MAP_ANONYMOUS,
+                -1,
+                0,
+            )
+        };
+        if ptr as usize == MAP_FAILED {
+            continue;
+        }
+        let got = ptr as Addr;
+        // The kernel may ignore the hint — only keep the page when it is
+        // actually within direct-branch reach of the target.
+        if got.abs_diff(hint) <= DIRECT_B_REACH && got % ps == 0 {
+            let mut guard = POOLS.lock().ok()?;
+            let pools = guard.get_or_insert_with(|| Pools {
+                code: Vec::new(),
+                data: Vec::new(),
+            });
+            let mut pool = Pool {
+                base: got,
+                cursor: 0,
+                capacity: ps,
+            };
+            let a = pool.alloc(size, 8)?;
+            pools.code.push(pool);
+            return Some(a);
+        }
+        // Wrong neighborhood — give the page back and try the next probe.
+        // SAFETY: exactly the page mmap just returned, full length.
+        unsafe { munmap(ptr, ps) };
+    }
+    None
 }
 
 fn alloc_from(size: usize, code: bool) -> Option<Addr> {

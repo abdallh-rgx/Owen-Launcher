@@ -232,3 +232,59 @@ pub fn url_encode(src: &str) -> String {
     }
     out
 }
+
+/// Strip the scheme the game's identity layer blindly prepends.
+///
+/// `OnlineSubsystemMcp.OnlineIdentityMcp` builds the login/portal URL by
+/// unconditionally prefixing `https://` to whatever `RedirectUrl` contains,
+/// so `RedirectUrl="http://127.0.0.1:8080"` surfaces as
+/// `https://http://127.0.0.1:8080/login` — and an `https://` target becomes
+/// `https://https://ex.com/...`. The redirecter honors **the protocol that
+/// was written from the start**: every auto-prepended outer scheme is peeled
+/// off until the first real one is exposed. Single source of truth — used by
+/// libowen.so (curl hook + WebView) and the Owen Server selftest.
+pub fn normalize_scheme(url: &str) -> &str {
+    let mut u = url;
+    while let Some(rest) = u.strip_prefix("https://") {
+        if rest.starts_with("http://") || rest.starts_with("https://") {
+            u = rest;
+        } else {
+            break;
+        }
+    }
+    u
+}
+
+#[cfg(test)]
+mod normalize_tests {
+    use super::normalize_scheme;
+
+    #[test]
+    fn doubled_http_scheme_from_the_identity_layer() {
+        // RedirectUrl="http://127.0.0.1:8080" + the game's blind prefix
+        assert_eq!(
+            normalize_scheme("https://http://127.0.0.1:8080/login"),
+            "http://127.0.0.1:8080/login"
+        );
+    }
+
+    #[test]
+    fn doubled_https_scheme_from_the_identity_layer() {
+        assert_eq!(
+            normalize_scheme("https://https://ex.com/login"),
+            "https://ex.com/login"
+        );
+    }
+
+    #[test]
+    fn idempotent_and_peels_repeatedly() {
+        assert_eq!(normalize_scheme("https://https://https://ex.com/a"), "https://ex.com/a");
+        assert_eq!(normalize_scheme("http://plain.example/x"), "http://plain.example/x");
+        assert_eq!(normalize_scheme("https://normal.example/x"), "https://normal.example/x");
+        // a path that merely contains "http://" is NOT touched
+        assert_eq!(
+            normalize_scheme("https://ex.com/http://not.a.prefix/"),
+            "https://ex.com/http://not.a.prefix/"
+        );
+    }
+}

@@ -7,6 +7,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod embedded;
 pub mod login_page;
 pub mod partyhub;
 pub mod pbkdf2;

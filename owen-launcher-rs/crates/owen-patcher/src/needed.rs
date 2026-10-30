@@ -106,11 +106,28 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
         (at, at as u64 - strtab_off as u64)
     });
 
-    // ---- 2) inter-section alignment gaps after the strtab ----
+    // ---- 2) the alignment gap IMMEDIATELY after the strtab ----
+    // Hardened after a real-device crash report: only a gap that directly
+    // follows the strtab (no other section's data in between) and is
+    // verifiably zero-filled may host the name. Extending DT_STRSZ over
+    // non-zero bytes (or over .dynsym/.rela data sitting between the strtab
+    // and the next gap) poisons every subsequent string lookup the dynamic
+    // linker makes — the game dies during loading, before any code runs.
     let placement = placement.or_else(|| {
         let gaps = section_gaps_after(&data, strtab_end);
         for (start, end) in gaps {
             if end > start && end - start >= need {
+                // The gap must start exactly where the strtab ends —
+                // otherwise sections live in between and would be swallowed
+                // by the DT_STRSZ extension below.
+                if start != strtab_end {
+                    break;
+                }
+                // …and every byte we are about to cover must be zero
+                // (alignment padding, never live data).
+                if data[start..start + need].iter().any(|&b| b != 0) {
+                    break;
+                }
                 let at = start;
                 // The gap must be inside a PT_LOAD (so it is mapped) and
                 // its VA must be resolvable.
@@ -119,6 +136,7 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
                         return Some((at, va - strtab_va));
                     }
                 }
+                break;
             }
         }
         None
@@ -184,9 +202,14 @@ fn section_gaps_after(data: &[u8], after_off: usize) -> Vec<(usize, usize)> {
     }
     sections.sort();
     for w in sections.windows(2) {
-        let (_a_start, a_end) = w[0];
+        let (a_start, a_end) = w[0];
         let (b_start, _) = w[1];
-        if a_end > after_off && b_start > a_end {
+        // Any gap that still has room at/after `after_off` counts — the
+        // pushed range starts at `after_off` when the gap straddles it, so
+        // a gap IMMEDIATELY following the strtab is included (a_end ==
+        // after_off), which is exactly the only placement the caller
+        // accepts after the hardening.
+        if b_start > after_off && b_start > a_end {
             out.push((a_end.max(after_off), b_start));
         }
     }

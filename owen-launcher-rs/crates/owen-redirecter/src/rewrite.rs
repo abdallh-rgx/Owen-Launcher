@@ -9,30 +9,10 @@ use crate::config::OwenConfig;
 
 pub const MAX_URL: usize = 8192;
 
-/// Strip the scheme the game's identity layer blindly prepends.
-///
-/// `OnlineSubsystemMcp.OnlineIdentityMcp` builds the login/portal URL by
-/// unconditionally prefixing `https://` to whatever `RedirectUrl` contains,
-/// so `RedirectUrl="http://127.0.0.1:3551"` surfaces in curl as
-/// `https://http://127.0.0.1:3551/login` — and an `https://` target becomes
-/// `https://https://ex.com/...`. The redirecter honors **the protocol that
-/// was written from the start**: every auto-prepended outer scheme is peeled
-/// off until the first real one is exposed.
-pub fn normalize_scheme(url: &str) -> &str {
-    let mut u = url;
-    // The identity layer prepends `https://` to the ORIGINAL value, so a
-    // mangled URL is `https://` + (something that itself starts with a
-    // scheme). Peel the spurious outer prefix — keep the scheme that was
-    // written from the start — but never touch a genuine `https://host` URL.
-    while let Some(rest) = u.strip_prefix("https://") {
-        if rest.starts_with("http://") || rest.starts_with("https://") {
-            u = rest;
-        } else {
-            break;
-        }
-    }
-    u
-}
+/// Strip the scheme the game's identity layer blindly prepends — the shared
+/// implementation lives in `owen_core::urlrule` (single source of truth,
+/// also exercised by the Owen Server selftest endpoint).
+pub use owen_core::urlrule::normalize_scheme;
 
 /// Effective TCP port of a parsed URL (explicit port or the scheme default).
 fn effective_port(p: &ParsedUrl) -> Option<u16> {

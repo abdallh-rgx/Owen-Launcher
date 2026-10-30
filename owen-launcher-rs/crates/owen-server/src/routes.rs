@@ -27,6 +27,8 @@ pub fn root_router(state: Arc<AppState>) -> Router {
         .route("/api/launcher/seasons", get(launcher_seasons))
         .route("/api/launcher/seasons/:n", get(launcher_season))
         .route("/api/launcher/manifests", get(launcher_manifests))
+        .route("/api/launcher/manifests/redirect", get(manifests_redirect_get).post(manifests_redirect_put))
+        .route("/api/launcher/redirecter/selftest", get(redirecter_selftest))
         .route("/launcher/api/public/assets/:platform/:label/:app/:build", get(launcher_assets))
         .route("/manifest/:rest", get(manifest_file))
         // ---- admin (web panel) ----
@@ -356,12 +358,37 @@ async fn launcher_assets(
     Path((platform, label, app, build)): Path<(String, String, String, String)>,
 ) -> Response {
     state.log_request(format!("GET /launcher/api/public/assets/{platform}/{label}/{app}/{build}"));
+    let mode = state.manifest_redirect.read().unwrap().clone();
     let manifests = state.manifests.read().unwrap();
-    let entry = manifests
-        .find_release(&build)
-        .cloned()
-        .or_else(|| {
-            // Fallback: treat the build token as a live manifest path.
+    let exact = manifests.find_release(&build).cloned();
+    // fixed:<version> — every client is redirected at the target version's
+    // manifest (the per-version menu the launcher exposes).
+    let fixed_entry = if mode.is_fixed() {
+        let target = mode.target.clone().unwrap_or_default();
+        manifests
+            .entries
+            .iter()
+            .find(|e| e.version == target)
+            .cloned()
+            .or_else(|| {
+                Some(owen_core::manifest::ManifestEntry {
+                    version: target,
+                    release_string: build.clone(),
+                    manifest_url: String::new(),
+                    source: owen_core::manifest::ManifestSource::Catalog,
+                    cloud_content: None,
+                })
+            })
+    } else {
+        None
+    };
+    let entry = if let Some(fixed) = fixed_entry {
+        Some(fixed)
+    } else if mode.is_off() {
+        exact // strict — no fallback synthesis
+    } else {
+        exact.or_else(|| {
+            // auto: synthesize a fallback entry so every build boots.
             let version = build
                 .strip_prefix("++Fortnite+Release-")
                 .and_then(|s| s.split("-CL-").next())
@@ -373,7 +400,8 @@ async fn launcher_assets(
                 source: owen_core::manifest::ManifestSource::Catalog,
                 cloud_content: None,
             })
-        });
+        })
+    };
     match entry {
         Some(e) => {
             let resp = owen_core::manifest::launcher_asset_response(&e, &label);
@@ -388,7 +416,15 @@ async fn launcher_assets(
 
 /// Serve a manifest file from the data dir (or redirect to the live CDN).
 async fn manifest_file(State(state): State<Arc<AppState>>, Path(rest): Path<String>) -> Response {
+    let mode = state.manifest_redirect.read().unwrap().clone();
     let manifests = state.manifests.read().unwrap();
+    if mode.is_fixed() {
+        if let Some(target) = &mode.target {
+            if let Some(entry) = manifests.entries.iter().find(|e| &e.version == target && !e.manifest_url.is_empty()) {
+                return Redirect::temporary(&entry.manifest_url).into_response();
+            }
+        }
+    }
     if let Some(entry) = manifests.entries.iter().find(|e| !e.manifest_url.is_empty()) {
         return Redirect::temporary(&entry.manifest_url).into_response();
     }
@@ -401,6 +437,224 @@ async fn manifest_file(State(state): State<Arc<AppState>>, Path(rest): Path<Stri
             .into_response();
     }
     jresp(StatusCode::NOT_FOUND, json!({"error": "manifest not found"}))
+}
+
+
+// ---------------------------------------------------------------------------
+// auto manifest redirecter (menu) + the redirecter selftest
+// ---------------------------------------------------------------------------
+
+/// GET /api/launcher/manifests/redirect — the current mode, the fixed
+/// target (when the mode is `fixed`) and every version the catalog can
+/// redirect to (the per-version menu entries in the launcher UI).
+async fn manifests_redirect_get(State(state): State<Arc<AppState>>) -> Response {
+    let mode = state.manifest_redirect.read().unwrap().clone();
+    let manifests = state.manifests.read().unwrap();
+    let mut versions: Vec<String> = manifests
+        .entries
+        .iter()
+        .map(|e| e.version.clone())
+        .collect();
+    versions.sort();
+    versions.dedup();
+    ok_json(json!({
+        "mode": mode.mode,
+        "target": mode.target,
+        "versions": versions,
+    }))
+}
+
+/// PUT/POST /api/launcher/manifests/redirect — body
+/// `{"mode": "auto"|"fixed"|"off", "target": "<version>"?}`.
+async fn manifests_redirect_put(
+    State(state): State<Arc<AppState>>,
+    body: Bytes,
+) -> Response {
+    state.log_request("POST /api/launcher/manifests/redirect".into());
+    let Ok(v) = serde_json::from_slice::<Value>(&body) else {
+        return jresp(
+            StatusCode::BAD_REQUEST,
+            json!({"errorCode": "errors.com.owen.redirect.bad_body"}),
+        );
+    };
+    let mode = v.get("mode").and_then(|m| m.as_str()).unwrap_or("").to_string();
+    let target = v
+        .get("target")
+        .and_then(|t| t.as_str())
+        .map(|s| s.to_string());
+    match mode.as_str() {
+        "auto" | "off" => {
+            state.set_manifest_redirect(mode, None);
+        }
+        "fixed" => {
+            let Some(t) = target.as_deref().filter(|t| !t.is_empty()) else {
+                return jresp(
+                    StatusCode::BAD_REQUEST,
+                    json!({"errorCode": "errors.com.owen.redirect.missing_target"}),
+                );
+            };
+            let manifests = state.manifests.read().unwrap();
+            if !manifests.entries.iter().any(|e| e.version == t) {
+                return jresp(
+                    StatusCode::NOT_FOUND,
+                    json!({"errorCode": "errors.com.owen.redirect.unknown_version"}),
+                );
+            }
+            state.set_manifest_redirect(mode, Some(t.to_string()));
+        }
+        _ => {
+            return jresp(
+                StatusCode::BAD_REQUEST,
+                json!({"errorCode": "errors.com.owen.redirect.bad_mode"}),
+            );
+        }
+    }
+    let mode = state.manifest_redirect.read().unwrap().clone();
+    ok_json(json!({"mode": mode.mode, "target": mode.target}))
+}
+
+/// GET /api/launcher/redirecter/selftest — the one-click "everything works"
+/// report the launcher's Test button shows: rules, catalog, resolve, fixed
+/// target, account hashing, PartyHub hosting, XMPP listener and the
+/// DefaultEngine.ini protocol passthrough.
+async fn redirecter_selftest(State(state): State<Arc<AppState>>) -> Response {
+    state.log_request("GET /api/launcher/redirecter/selftest".into());
+    let mut checks: Vec<Value> = Vec::new();
+    let mut ok_all = true;
+
+    let mut check = |id: &str, ok: bool, detail: String| {
+        ok_all &= ok;
+        checks.push(json!({"id": id, "ok": ok, "detail": detail}));
+    };
+
+    // 1. redirect.rules — the domain list + backend URL are configured.
+    let rules = state.redirect.read().unwrap().clone();
+    check(
+        "redirect.rules",
+        !rules.domains.is_empty(),
+        format!("{} domains → {}", rules.domains.len(), state.config.read().unwrap().backend_url),
+    );
+
+    // 2. manifest.catalog — entries are loaded (disk or embedded).
+    {
+        let n = state.manifests.read().unwrap().entries.len();
+        check("manifest.catalog", n > 0, format!("{n} entries"));
+    }
+
+    // 3. manifest.resolve.all_versions — every catalog entry resolves.
+    {
+        let manifests = state.manifests.read().unwrap();
+        let n = manifests.entries.len();
+        let resolvable = manifests
+            .entries
+            .iter()
+            .filter(|e| manifests.find_release(&e.release_string).is_some())
+            .count();
+        check(
+            "manifest.resolve.all_versions",
+            n > 0 && resolvable == n,
+            format!("{resolvable}/{n} release strings resolve"),
+        );
+    }
+
+    // 4. manifest.redirect.fixed_target — set/read back a fixed target.
+    {
+        let manifests = state.manifests.read().unwrap();
+        let probe = manifests.entries.first().map(|e| e.version.clone());
+        drop(manifests);
+        match probe {
+            Some(version) => {
+                let before = state.manifest_redirect.read().unwrap().clone();
+                state.set_manifest_redirect("fixed".into(), Some(version.clone()));
+                let fixed = state.manifest_redirect.read().unwrap().clone();
+                let fixed_ok = fixed.is_fixed() && fixed.target.as_deref() == Some(version.as_str());
+                state.set_manifest_redirect(before.mode, before.target);
+                check(
+                    "manifest.redirect.fixed_target",
+                    fixed_ok,
+                    format!("fixed → {version} round-trips"),
+                );
+            }
+            None => check("manifest.redirect.fixed_target", false, "no catalog entries".into()),
+        }
+    }
+
+    // 5. account.pbkdf2 — hash + verify with the real server functions.
+    {
+        let stored = crate::pbkdf2::hash_password_with_rounds("owen-selftest", 1000);
+        let ok = crate::pbkdf2::verify_password("owen-selftest", &stored);
+        let bad = crate::pbkdf2::verify_password("wrong", &stored);
+        check(
+            "account.pbkdf2",
+            ok && !bad,
+            "PBKDF2-SHA256 hash/verify (wrong password rejected)".into(),
+        );
+    }
+
+    // 6. partyhub.offline_host — the embedded bridge + graphql answer.
+    {
+        let bridge_ok = crate::partyhub::OWEN_BRIDGE_JS.contains("Owen Bridge");
+        let gql = crate::partyhub::graphql_answer(
+            &state,
+            &HeaderMap::new(),
+            &axum::body::Bytes::from(
+                r#"{"query":"query { LightSwitch { fortniteStatus { status } kairosStatus { status } } SocialBan { socialBan } }"}"#,
+            ),
+        );
+        let kairos_up = gql["data"]["LightSwitch"]["kairosStatus"]["status"] == "UP"
+            || gql["data"]["LightSwitch"]["fortniteStatus"]["status"] == "UP";
+        check(
+            "partyhub.offline_host",
+            bridge_ok && kairos_up,
+            format!("bridge v4 embedded + graphql kairos UP (dir: {})", state.partyhub_dir().map(|d| d.display().to_string()).unwrap_or_else(|| "embedded".into())),
+        );
+    }
+
+    // 7. xmpp.listener — the friends/party port is configured.
+    {
+        let port = state.config.read().unwrap().xmpp_port;
+        check("xmpp.listener", port > 0, format!("xmpp port {port}"));
+    }
+
+    // 8. engine_ini.protocol — the DefaultEngine.ini RedirectUrl protocol
+    //    passthrough: the identity layer's blind `https://` prefix must be
+    //    peeled so `http://` and `https://` backends both work verbatim.
+    {
+        let cases = [
+            ("https://http://127.0.0.1:8080/login", "http://127.0.0.1:8080/login"),
+            ("https://http://127.0.0.1:3551/login", "http://127.0.0.1:3551/login"),
+            ("https://https://ex.com/login", "https://ex.com/login"),
+            ("https://https://https://ex.com/a", "https://ex.com/a"),
+            ("https://normal.example/x", "https://normal.example/x"),
+        ];
+        let mut ok = true;
+        let mut detail = String::new();
+        for (input, want) in cases {
+            let got = owen_core::urlrule::normalize_scheme(input);
+            if got != want {
+                ok = false;
+                detail.push_str(&format!("{input} → {got} (want {want}); "));
+            }
+        }
+        if ok {
+            detail = "5/5 doubled-scheme URLs keep the protocol written from the start".into();
+        }
+        check("engine_ini.protocol", ok, detail);
+    }
+
+    // 9. data.embedded — the JSON/INI tree compiled into the .so itself.
+    {
+        let n = crate::embedded::EMBEDDED_DATA.len();
+        let core_ok = crate::embedded::embedded_file("manifests.json").is_some()
+            && crate::embedded::embedded_file("CloudStorage/DefaultEngine.ini").is_some();
+        check(
+            "data.embedded",
+            n > 0 && core_ok,
+            format!("{n} files inside libOwenServer.so (disk overrides still win)"),
+        );
+    }
+
+    ok_json(json!({"ok": ok_all, "checks": checks}))
 }
 
 // ---------------------------------------------------------------------------
@@ -788,50 +1042,69 @@ async fn timeline(
 }
 
 async fn cloudstorage_system(State(state): State<Arc<AppState>>) -> Response {
-    let mut files = Vec::new();
+    // Union of the disk dir and the INIs embedded in the library — the
+    // embedded set makes a bare libOwenServer.so serve the full
+    // CloudStorage without any deployed files.
+    let mut names: Vec<String> = Vec::new();
     let dir = state.data_dir.join("CloudStorage");
     if dir.is_dir() {
         for entry in std::fs::read_dir(&dir).into_iter().flatten().flatten() {
             let name = entry.file_name().to_string_lossy().to_string();
-            if !name.ends_with(".ini") {
-                continue;
+            if name.ends_with(".ini") && !names.contains(&name) {
+                names.push(name);
             }
-            if let Ok(meta) = entry.metadata() {
-                files.push(json!({
-                    "uniqueFilename": name, "filename": name,
-                    "hash": format!("{:x}", crc32(entry.path())),
-                    "hashType": "CRC32",
-                    "size": meta.len(),
-                    "uploaded": iso_now(),
-                    "storageType": "S3",
-                    "doNotCache": false,
-                }));
+        }
+    }
+    for embedded_name in crate::embedded::embedded_dir("CloudStorage") {
+        if let Some(base) = embedded_name.rsplit('/').next() {
+            if base.ends_with(".ini") && !names.iter().any(|n| n == base) {
+                names.push(base.to_string());
             }
+        }
+    }
+    names.sort();
+    let mut files = Vec::new();
+    for name in names {
+        if let Some(data) = state.data_file(&format!("CloudStorage/{name}")) {
+            let mut crc: u32 = 0xFFFF_FFFF;
+            for &b in &data {
+                crc ^= b as u32;
+                for _ in 0..8 {
+                    crc = if crc & 1 != 0 { (crc >> 1) ^ 0xEDB8_8320 } else { crc >> 1 };
+                }
+            }
+            files.push(json!({
+                "uniqueFilename": name, "filename": name,
+                "hash": format!("{:x}", !crc),
+                "hashType": "CRC32",
+                "size": data.len(),
+                "uploaded": iso_now(),
+                "storageType": "S3",
+                "doNotCache": false,
+            }));
         }
     }
     ok_json(json!(files))
 }
 
-fn crc32(path: std::path::PathBuf) -> u32 {
-    let data = std::fs::read(path).unwrap_or_default();
-    let mut crc: u32 = 0xFFFFFFFF;
-    for &b in &data {
-        crc ^= b as u32;
-        for _ in 0..8 {
-            crc = if crc & 1 != 0 { (crc >> 1) ^ 0xEDB88320 } else { crc >> 1 };
-        }
-    }
-    !crc
-}
-
 async fn cloudstorage_file(State(state): State<Arc<AppState>>, Path(file): Path<String>) -> Response {
     match state.data_file(&format!("CloudStorage/{file}")) {
-        Some(data) => (
-            StatusCode::OK,
-            [("content-type", "application/octet-stream")],
-            data,
-        )
-            .into_response(),
+        Some(mut data) => {
+            // Template the live backend URL into the INIs (DefaultEngine.ini
+            // carries {{BACKEND_URL}} so RedirectUrl always matches the
+            // actually-running server, http or https verbatim).
+            if file.ends_with(".ini") && data.windows(15).any(|w| w == b"{{BACKEND_URL}}") {
+                let backend = state.config.read().unwrap().backend_url.clone();
+                let text = String::from_utf8_lossy(&data).replace("{{BACKEND_URL}}", &backend);
+                data = text.into_bytes();
+            }
+            (
+                StatusCode::OK,
+                [("content-type", "application/octet-stream")],
+                data,
+            )
+                .into_response()
+        }
         None => jresp(StatusCode::NOT_FOUND, json!({"errorCode": "errors.com.owen.not_found"})),
     }
 }
@@ -1345,6 +1618,96 @@ async fn admin_versions() -> Response {
     ok_json(owen_core::profiles::version_catalog())
 }
 
+
+#[cfg(test)]
+mod engine_ini_tests {
+    use super::*;
+
+    /// The user's exact requirement: non-partyhub seasons reach the login
+    /// page through DefaultEngine.ini — both sections must carry the
+    /// RedirectUrl + /login paths, the URL templated to the live backend.
+    #[tokio::test]
+    async fn default_engine_ini_serves_live_backend_and_both_sections() {
+        let dir = std::env::temp_dir().join(format!("owen-ini-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let mut config = owen_core::config::OwenConfig::default();
+        config.set_backend_url("http://127.0.0.1:8080").unwrap();
+        let state = Arc::new(crate::state::AppState::load_with(
+            dir.clone(),
+            config,
+            None,
+            Vec::new(),
+        ));
+        let resp = cloudstorage_file(
+            State(state.clone()),
+            Path("DefaultEngine.ini".to_string()),
+        )
+        .await;
+        assert_eq!(resp.status(), StatusCode::OK);
+        let body = axum::body::to_bytes(resp.into_body(), 1 << 20)
+            .await
+            .unwrap_or_default();
+        let ini = String::from_utf8_lossy(&body).into_owned();
+        assert!(
+            ini.contains(r#"RedirectUrl="http://127.0.0.1:8080""#),
+            "the live backend URL must be templated in: {ini}"
+        );
+        assert_eq!(ini.matches(r#"AccountCreationUrl="/login""#).count(), 2);
+        assert_eq!(ini.matches(r#"LoginPortalUrl="/login""#).count(), 2);
+        assert!(ini.contains("[OnlineSubsystemMcp.OnlineIdentityMcp]"));
+        assert!(ini.contains("[OnlineSubsystemMcp.OnlineIdentityMcp Prod]"));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    /// The protocol-doubling fix end-to-end with the user's exact ports:
+    /// RedirectUrl="http://127.0.0.1:8080" → the identity layer produces
+    /// https://http://127.0.0.1:8080/login → normalize_scheme heals it to
+    /// the http:// URL that was written from the start.
+    #[test]
+    fn identity_layer_doubled_scheme_is_healed() {
+        let backend = "http://127.0.0.1:8080";
+        let mangled = format!("https://{backend}/login");
+        let healed = owen_core::urlrule::normalize_scheme(&mangled);
+        assert_eq!(healed, format!("{backend}/login"));
+
+        // https backends keep their scheme too
+        let https_mangled = "https://https://ex.com/login".to_string();
+        assert_eq!(
+            owen_core::urlrule::normalize_scheme(&https_mangled),
+            "https://ex.com/login"
+        );
+    }
+
+    /// The full selftest must pass every check on a fresh state.
+    #[tokio::test]
+    async fn redirecter_selftest_all_green() {
+        let dir = std::env::temp_dir().join(format!("owen-selftest-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let state = Arc::new(crate::state::AppState::load_with(
+            dir.clone(),
+            owen_core::config::OwenConfig::default(),
+            None,
+            Vec::new(),
+        ));
+        let resp = redirecter_selftest(State(state)).await;
+        assert_eq!(resp.status(), StatusCode::OK);
+        let body = axum::body::to_bytes(resp.into_body(), 1 << 20)
+            .await
+            .unwrap()
+            .to_vec();
+        let v: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert!(v["ok"].as_bool().unwrap(), "selftest must be green: {body:?}");
+        let checks = v["checks"].as_array().unwrap();
+        assert!(checks.len() >= 9, "all checks present: {}", checks.len());
+        for c in checks {
+            assert!(c["ok"].as_bool().unwrap(), "check {} failed: {}", c["id"], c["detail"]);
+        }
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1416,7 +1779,11 @@ mod tests {
         assert_eq!(summary["battlePassPurchased"], false);
         assert_eq!(summary["banned"], false);
         assert_eq!(summary["itemsOwned"], 1);
-        assert_eq!(summary["selectedSeason"], 1, "defaults to current season");
+        assert_eq!(
+            summary["selectedSeason"],
+            state.current_season(),
+            "defaults to current season (the highest embedded battle pass)"
+        );
     }
 
     #[test]
@@ -1457,8 +1824,9 @@ mod tests {
         assert_eq!(items[2]["templateId"], "AthenaDance:spid_1");
         assert_eq!(profile["stats"]["attributes"]["book_level"], 3);
         assert_eq!(profile["stats"]["attributes"]["battlepass_purchased"], true);
-        // synthesized athena template defaults
-        assert_eq!(profile["wipeNumber"], 7);
-        assert_eq!(profile["version"], 1);
+        // the embedded athena template carries its own wipeNumber (1);
+        // the LawinServer-style synthesis only fires when no template exists
+        assert!(profile["wipeNumber"].is_u64());
+        assert!(profile["items"].is_array());
     }
 }

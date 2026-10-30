@@ -399,9 +399,16 @@
     } catch (err) { /* ignore */ }
     var handler = COMMANDS[data.command];
     if (typeof handler !== "function") {
+      /* Unknown command: ack with a neutral empty object instead of letting
+       * the built-in mock answer with a dead-end status — that was what
+       * disabled most of the hub's buttons. Fire-and-forget settings and
+       * feature queries all tolerate {} (and the mock still wins the race
+       * for the few commands it genuinely handles better). */
       try {
-        console.debug("[owen-bridge] unhandled command:", data.command, data.args);
+        console.debug("[owen-bridge] ack unhandled command:", data.command);
       } catch (err) { /* ignore */ }
+      respond(data.id, {});
+      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
       return;
     }
     var handled = false;
@@ -933,6 +940,32 @@
   } else {
     document.addEventListener("DOMContentLoaded", boot);
   }
+
+  /* ------------------------------------------------------------------ *
+   * 8. CONNECTING watchdog — the "stuck on CONNECTING…" fix.             *
+   * If the app has not driven the startup state machine (no prelogin /   *
+   * login / register call) within 8 seconds — a dead relay, a stale      *
+   * bundle, a missed handshake — force the PRELOGIN state and surface    *
+   * the glass login so the user is never stranded on a spinner.          *
+   * ------------------------------------------------------------------ */
+  var sawHandshake = false;
+  try {
+    window.addEventListener("message", function (event) {
+      var d = event && event.data;
+      if (d && typeof d === "object" && d.type === "mockRequest" &&
+          (d.command === "prelogin" || d.command === "login" ||
+           d.command === "register" || d.command === "RetryLogin")) {
+        sawHandshake = true;
+      }
+    }, true);
+  } catch (err) { /* ignore */ }
+  setTimeout(function () {
+    if (!sawHandshake && currentStatus === STARTUP_STATUS.PRELOGIN) {
+      try { console.warn("[owen-bridge] handshake watchdog fired — driving PRELOGIN manually"); } catch (e) {}
+      setStartupStatus(STARTUP_STATUS.PRELOGIN);
+      showGlassLogin(true);
+    }
+  }, 8000);
 
   /* Mark presence for debugging. */
   window.__owenBridge = {

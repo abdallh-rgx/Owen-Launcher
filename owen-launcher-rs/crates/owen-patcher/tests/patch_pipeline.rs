@@ -574,3 +574,107 @@ fn adaptive_icon_alignment_preserved_after_patch() {
 
     std::fs::remove_dir_all(&dir).ok();
 }
+
+/* ---------------- DT_NEEDED gap hardening (real-device crash fix) ------- */
+
+/// Engine variant WITH section headers, a tight strtab (no inner padding)
+/// and a 32-byte alignment gap immediately after it. `poison_gap` decides
+/// whether the gap contains live-looking non-zero bytes.
+fn build_engine_with_gap(poison_gap: bool) -> Vec<u8> {
+    // Layout (every region disjoint — the program headers end at 0xB0):
+    //   0x00  ELF header          (64)
+    //   0x40  phdrs ×2            (112 → ends 0xB0)
+    //   0xB0  .dynstr "libc.so\0" (8 bytes, DT_STRSZ == 8 — no inner room)
+    //   0xB8  32-byte gap         (zero or poisoned)
+    //   0xD8  .dummy section      (16 bytes)
+    //   0xE8  dynamic table       (6 * 16)
+    //   0x148 section headers     (null + .dynstr + .dummy)
+    let strtab_off: u64 = 0xB0;
+    let gap_off: u64 = 0xB8;
+    let dummy_off: u64 = 0xD8;
+    let dyn_off: u64 = 0xE8;
+    let shoff: u64 = dyn_off + 6 * 16;
+    let file_size: u64 = shoff + 3 * 64;
+    let mut b = vec![0u8; file_size as usize];
+
+    b[0..4].copy_from_slice(b"\x7fELF");
+    b[4] = 2;
+    b[5] = 1;
+    b[6] = 1;
+    b[16..18].copy_from_slice(&3u16.to_le_bytes());
+    b[18..20].copy_from_slice(&0xB7u16.to_le_bytes());
+    b[20..24].copy_from_slice(&1u32.to_le_bytes());
+    b[32..40].copy_from_slice(&0x40u64.to_le_bytes());
+    b[40..48].copy_from_slice(&shoff.to_le_bytes()); // section headers present
+    b[52..54].copy_from_slice(&64u16.to_le_bytes());
+    b[54..56].copy_from_slice(&56u16.to_le_bytes());
+    b[56..58].copy_from_slice(&2u16.to_le_bytes()); // phnum
+    b[58..60].copy_from_slice(&64u16.to_le_bytes()); // shentsize
+    b[60..62].copy_from_slice(&3u16.to_le_bytes()); // shnum (null + 2)
+
+    let ph = |b: &mut Vec<u8>, at: usize, p_type: u32, flags: u32, off: u64, va: u64, filesz: u64| {
+        b[at..at + 4].copy_from_slice(&p_type.to_le_bytes());
+        b[at + 4..at + 8].copy_from_slice(&flags.to_le_bytes());
+        b[at + 8..at + 16].copy_from_slice(&off.to_le_bytes());
+        b[at + 16..at + 24].copy_from_slice(&va.to_le_bytes());
+        b[at + 32..at + 40].copy_from_slice(&filesz.to_le_bytes());
+        b[at + 40..at + 48].copy_from_slice(&filesz.to_le_bytes());
+    };
+    ph(&mut b, 0x40, 1, 5, 0, 0, file_size);
+    ph(&mut b, 0x40 + 56, 2, 6, dyn_off, dyn_off, 6 * 16);
+
+    let libc = b"libc.so\0";
+    b[strtab_off as usize..strtab_off as usize + 8].copy_from_slice(libc);
+    if poison_gap {
+        b[gap_off as usize..gap_off as usize + 32].fill(0xAA); // live data!
+    }
+
+    let d = |b: &mut Vec<u8>, i: usize, tag: i64, val: u64| {
+        let at = dyn_off as usize + i * 16;
+        b[at..at + 8].copy_from_slice(&tag.to_le_bytes());
+        b[at + 8..at + 16].copy_from_slice(&val.to_le_bytes());
+    };
+    d(&mut b, 0, 5 /*DT_STRTAB*/, strtab_off);
+    d(&mut b, 1, 10 /*DT_STRSZ*/, 8); // tight — forces the gap path
+    d(&mut b, 2, 1 /*DT_NEEDED*/, 0);
+    d(&mut b, 3, 0, 0);
+    d(&mut b, 4, 0, 0);
+    d(&mut b, 5, 0, 0);
+
+    // Section headers: [0] null, [1] .dynstr (SHT_STRTAB), [2] .dummy.
+    let sh = |b: &mut Vec<u8>, i: usize, sh_type: u32, off: u64, size: u64| {
+        let at = shoff as usize + i * 64;
+        b[at + 4..at + 8].copy_from_slice(&sh_type.to_le_bytes());
+        b[at + 24..at + 32].copy_from_slice(&off.to_le_bytes());
+        b[at + 32..at + 40].copy_from_slice(&size.to_le_bytes());
+    };
+    sh(&mut b, 0, 0, 0, 0);
+    sh(&mut b, 1, 3 /*SHT_STRTAB*/, strtab_off, 8);
+    sh(&mut b, 2, 1 /*SHT_PROGBITS*/, dummy_off, 16);
+    b
+}
+
+#[test]
+fn dt_needed_refuses_poisoned_gap_and_uses_clean_gap() {
+    // A gap full of non-zero bytes must NEVER host the dependency name —
+    // the previous behavior extended DT_STRSZ over it and the dynamic
+    // linker read garbage strings (game crashes during loading).
+    let poisoned = build_engine_with_gap(true);
+    let err = needed::inject_needed(&poisoned, "libOwen.so")
+        .err()
+        .expect("injection into a poisoned gap must be refused");
+    assert!(
+        err.contains("no safe padding"),
+        "unexpected error: {err}"
+    );
+
+    // The same layout with a clean zero gap injects fine.
+    let clean = build_engine_with_gap(false);
+    let (patched, injected) = needed::inject_needed(&clean, "libOwen.so")
+        .expect("clean gap must host the name");
+    assert!(injected);
+    let image = owen_core::elf::ElfImage::parse(&patched).unwrap();
+    let names = image.needed_libraries_from(&patched);
+    assert!(names.iter().any(|n| n == "libOwen.so"), "found {:?}", names);
+    assert!(names.iter().any(|n| n == "libc.so"));
+}
