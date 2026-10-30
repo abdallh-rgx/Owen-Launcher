@@ -14,6 +14,10 @@ set -euo pipefail
 AVD="${OWEN_AVD:-owen1241}"
 TIMEOUT="${OWEN_BOOT_TIMEOUT:-900}"
 export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+# cmdline-tools live off PATH by default; put every flavor on it.
+for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do
+  [ -d "$d" ] && export PATH="$d:$PATH"
+done
 
 echo "== kvm: $(test -e /dev/kvm && echo yes || echo 'NO (TCG — will be slow)')"
 test -e /dev/kvm || echo "::warning::no /dev/kvm on this runner — emulator runs under TCG"
