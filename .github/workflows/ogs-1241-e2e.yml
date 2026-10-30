@@ -45,21 +45,21 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
 
       - name: NDK r27c at the path the workspace expects
         run: |
           for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
-          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
+          command -v sdkmanager
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z
-          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
+          echo "installed ndks:"; ls "$ANDROID_HOME/ndk"
           sudo mkdir -p /home/z/ndk
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
-          ls /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar
+          sudo ls -la /home/z/ndk/
+          test -x /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar && echo "llvm-ar OK"
 
       - name: Run the dump phase
         working-directory: owen-launcher-rs
@@ -107,19 +107,19 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
 
       - name: NDK r27c at the path the workspace expects
         run: |
           for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
-          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
+          command -v sdkmanager
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk
+          sudo mkdir -p /home/z/ndk
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
+          test -x /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar && echo "llvm-ar OK"
 
       - name: Restore the dump (artifact first, committed fallback)
         uses: actions/download-artifact@v4
@@ -160,19 +160,19 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
 
-
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
 
       - name: NDK r27c at the path the workspace expects
         run: |
           for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
-          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
+          command -v sdkmanager
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk
+          sudo mkdir -p /home/z/ndk
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
           sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
+          test -x /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar && echo "llvm-ar OK"
 
       - name: Restore the play APK
         uses: actions/download-artifact@v4
@@ -183,10 +183,10 @@ jobs:
         run: |
           mkdir -p /tmp/phase2
           if [ -f fortnite-12.41-owen.apk ]; then mv fortnite-12.41-owen.apk /tmp/; fi
-          if [ -f phase2/flags ]; then mv phase2/flags /tmp/phase2/ 2>/dev/null; fi
+          if [ -d phase2 ]; then cp -r phase2/. /tmp/phase2/ 2>/dev/null || true; fi
           ls -la /tmp/fortnite-12.41-owen.apk || true
 
-      - name: Build owen-server + the redirecter config shim
+      - name: Build owen-server
         working-directory: owen-launcher-rs
         run: |
           export ANDROID_NDK_HOME=/home/z/ndk/android-ndk-r27c
@@ -209,15 +209,13 @@ jobs:
       - name: Drive the game (login → lobby → match)
         working-directory: owen-launcher-rs
         env:
-          WITH_OGS: ${{ (contains(needs.build-mod.result, 'success') && '1') || '0' }}
           OWEN_WORLD_OPEN_DELAY: "90"
           OWEN_DOWNLOAD_TIMEOUT: "2700"
           OWEN_LOGIN_TIMEOUT: "900"
           OWEN_MATCH_TIMEOUT: "1500"
         run: |
-          # WITH_OGS comes from the phase-2 flags file when present
-          if [ -f /tmp/phase2/flags ]; then export WITH_OGS=$(rg -o '1|0' <(rg WITH_OGS /tmp/phase2/flags) | head -1); fi
-          [ -f /tmp/phase2/flags ] && cat /tmp/phase2/flags || true
+          if [ -f /tmp/phase2/flags ]; then export WITH_OGS=$(sed -n 's/WITH_OGS=//p' /tmp/phase2/flags); fi
+          echo "WITH_OGS=${WITH_OGS:-0}"
           python3 tools/ci/drive.py /tmp/fortnite-12.41-owen.apk || true
 
       - name: Always upload the evidence
