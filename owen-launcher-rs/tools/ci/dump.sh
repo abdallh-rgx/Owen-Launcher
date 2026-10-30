@@ -35,10 +35,10 @@ CARGO_TARGET_DIR="$PWD/target" cargo build -p owen-redirecter --target aarch64-l
 test -f target/aarch64-linux-android/release/libowen.so
 
 # ---- the stock APK ----------------------------------------------------------
-tools/ci/reassemble.sh /tmp/fortnite-12.41.apk
+bash tools/ci/reassemble.sh /tmp/fortnite-12.41.apk
 
 # ---- the emulator (API 30 google_apis x86_64, ARM translation) ----------------
-tools/ci/emulator-up.sh
+bash tools/ci/emulator-up.sh
 
 launch() { adb shell monkey -p com.epicgames.fortnite -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1; }
 

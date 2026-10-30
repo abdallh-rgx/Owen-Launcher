@@ -49,7 +49,7 @@ fi
 [ -s /tmp/phase2/ogs-build.log ] && { echo '--- last 40 lines ---'; tail -40 /tmp/phase2/ogs-build.log; } || true
 
 # ---- shim-patch the game ------------------------------------------------------
-tools/ci/reassemble.sh /tmp/fortnite-12.41.apk
+bash tools/ci/reassemble.sh /tmp/fortnite-12.41.apk
 CARGO_TARGET_DIR="$PWD/target" cargo build --release -p owen-patcher --bin shim >/tmp/phase2/shimbin.log 2>&1 || true
 [ -x target/release/shim ] || { tail -20 /tmp/phase2/shimbin.log; exit 1; }
 
