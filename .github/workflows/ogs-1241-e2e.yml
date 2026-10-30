@@ -51,6 +51,8 @@ jobs:
 
       - name: NDK r27c at the path the workspace expects
         run: |
+          for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
+          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
           echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z
@@ -111,6 +113,8 @@ jobs:
 
       - name: NDK r27c at the path the workspace expects
         run: |
+          for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
+          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
           echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk
@@ -162,6 +166,8 @@ jobs:
 
       - name: NDK r27c at the path the workspace expects
         run: |
+          for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
+          command -v sdkmanager || ls "$ANDROID_HOME/cmdline-tools"
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager --install "ndk;27.2.12479018" >/dev/null
           echo "ANDROID_HOME=$ANDROID_HOME"          sudo mkdir -p /home/z /home/z/ndk

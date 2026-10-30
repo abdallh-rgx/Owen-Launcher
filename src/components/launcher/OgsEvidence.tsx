@@ -67,7 +67,6 @@ function Shot({ name, title, subtitle, ok }: { name: string; title: string; subt
         </span>
       </div>
       <div className="relative overflow-hidden rounded-2xl bg-black/40 ring-1 ring-white/10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/api/ogs-e2e?image=${name}`}
           alt={`${title} — real Android emulator screenshot`}
