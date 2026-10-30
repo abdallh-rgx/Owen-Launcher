@@ -1,15 +1,26 @@
 //! Instruction rewriter — makes the first N instructions of the hook target
 //! position-independent so they can be copied into the "relocated" block.
 //!
-//! Faithful port of the `relocate()` pass in the original `Owen.c`:
+//! ## BTI-safe branch re-encoding (the Android 12+ crash fix)
 //!
-//! * `b` / `bl`            -> `ldr x17, =target; br x17` / `...; blr x17`
-//! * `ldr xN, [pc, #imm]`  -> `mov x17, #dst; ldr xN, [x17]` (w or x by opc)
-//! * `adr` / `adrp`        -> `mov xD, #dst`
-//! * `b.cond` / `cbz/cbnz` / `tbz/tbnz`
-//!                         -> inverted branch over a `ldr x17,=dst; br x17`
+//! The relocated block is entered with `blr` from the hook and left with a
+//! **direct `b`** back into the original function. To keep the block itself
+//! free of **indirect** branches (which would need BTI landing pads at their
+//! destinations — mid-function targets have none, and BTI-enforced libraries
+//! would SIGILL), every PC-relative branch is re-encoded as the SAME direct
+//! branch form with a recomputed displacement:
 //!
-//! Everything else is copied verbatim.
+//! * `b` / `bl`       -> `b` / `bl` to the same absolute destination (±128 MiB)
+//! * `b.cond`         -> `b.cond` to the same destination (±1 MiB)
+//! * `cbz/cbnz`       -> `cbz/cbnz` recomputed (±1 MiB)
+//! * `tbz/tbnz`       -> `tbz/tbnz` recomputed (±32 KiB)
+//! * `ldr xN, [pc,#]` -> `movz/movk x17, =dst; ldr xN, [x17]`
+//! * `adr` / `adrp`   -> `movz/movk xD, =dst` (page-absolute for adrp)
+//!
+//! A displacement that no longer fits its immediate field is a hard
+//! relocation error — the hook is then **refused** (`HookError::
+//! RelocationFailed`), never installed as a broken trampoline. Graceful
+//! degradation beats crashing the game.
 
 use crate::assemble::Assembler;
 use crate::Addr;
@@ -17,7 +28,6 @@ use crate::Addr;
 const UNCONDITIONAL_BRANCH_FIXED_MASK: u32 = 0x7C00_0000;
 const UNCONDITIONAL_BRANCH_FIXED: u32 = 0x1400_0000;
 const UNCONDITIONAL_BRANCH_MASK: u32 = 0xFC00_0000;
-const B_INST: u32 = 0x1400_0000;
 const BL_INST: u32 = 0x9400_0000;
 
 const LOAD_REG_LITERAL_FIXED_MASK: u32 = 0x3B00_0000;
@@ -45,11 +55,17 @@ fn sign_extend(x: u32, bits: u32) -> i64 {
     ((x ^ sign) as i64) - (sign as i64)
 }
 
+/// Bitfield extract for `obj[st..=en]`. The mask covers EXACTLY the field
+/// width — a wider mask leaks the opcode bits above `en` into every
+/// displacement decode (the historical bug: `bits(i,5,23)` returned 24 bits
+/// for the 19-bit imm19 field, so `b.cond`/`cbz`/`adrp` relocations jumped
+/// to wildly wrong addresses).
 fn bits(obj: u32, st: u32, en: u32) -> u32 {
-    let mask = if en >= 31 {
+    let width = en.saturating_sub(st) + 1;
+    let mask = if width >= 32 {
         u32::MAX
     } else {
-        (1u32 << (en + 1)) - 1
+        (1u32 << width) - 1
     };
     (obj >> st) & mask
 }
@@ -101,15 +117,27 @@ fn decode_immhi_immlo(i: u32) -> i64 {
     sign_extend((immlo | (immhi << 2)) as u32, 2 + 19)
 }
 
-/// Reads `len` instructions starting at `origin` and appends relocated
-/// equivalents to `as_`. Returns the number of source bytes consumed.
+/// How the relocated block returns to the original function.
+#[derive(Debug, Clone, Copy)]
+pub(crate) enum BackRef {
+    /// `b back` — a DIRECT branch (never BTI-gated; needs the block near
+    /// the target; validated when `finalize_bytes` gets the real base).
+    Near(Addr),
+    /// `ldr x17, =back; br x17` — indirect, legacy (non-BTI) libraries only.
+    Far(Addr),
+}
+
+/// Reads `len` bytes (a multiple of 4) starting at `origin` and appends
+/// relocated equivalents to `as_`. Direct-branch displacements are recorded
+/// absolute and patched in `Assembler::finalize_bytes` once the block's
+/// final address is known. Returns the number of source bytes consumed.
 ///
 /// SAFETY (caller): `origin..origin+len` must be readable executable memory.
 pub(crate) unsafe fn relocate(
     as_: &mut Assembler,
     origin: Addr,
     len: usize,
-    branch_back_to: Option<Addr>,
+    branch_back: Option<BackRef>,
 ) -> Result<usize, ()> {
     let mut offset = 0usize;
     while offset < len {
@@ -120,12 +148,9 @@ pub(crate) unsafe fn relocate(
         if inst_is_b_bl(inst) {
             let dst = (pc as i64 + decode_imm26(inst)) as u64;
             let is_bl = (inst & UNCONDITIONAL_BRANCH_MASK) == BL_INST;
-            as_.ldr_label(crate::assemble::TMP, dst);
-            if is_bl {
-                as_.blr(crate::assemble::TMP);
-            } else {
-                as_.br(crate::assemble::TMP);
-            }
+            // Re-encode as the SAME direct branch form, displacement
+            // recomputed for the block — patched once the base is final.
+            as_.direct_branch(is_bl, dst, 26);
         } else if inst_is_ldr_literal(inst) {
             let dst = (pc as i64 + decode_imm19(inst)) as u64;
             let rt = bits(inst, 0, 4);
@@ -146,51 +171,117 @@ pub(crate) unsafe fn relocate(
             as_.mov_imm64(rd, dst & !0xFFF);
         } else if inst_is_b_cond(inst) {
             let dst = (pc as i64 + decode_imm19(inst)) as u64;
-            let mut branch_inst = inst;
-            let cond = bits(inst, 0, 3) ^ 1;
-            branch_inst = (branch_inst & !0xF) | cond;
-            // branch +3 instructions forward (over ldr+br)
-            let new_off = 4 * 3;
-            let imm19 = ((new_off >> 2) as u32) & 0x7FFFF;
-            branch_inst = (branch_inst & !(0x7FFFF << 5)) | (imm19 << 5);
-            // raw emit of modified instruction
-            emit_raw(as_, branch_inst);
-            as_.ldr_label(crate::assemble::TMP, dst);
-            as_.br(crate::assemble::TMP);
+            as_.direct_cond_branch(inst, dst);
         } else if inst_is_compare_b(inst) {
             let dst = (pc as i64 + decode_imm19(inst)) as u64;
-            let mut branch_inst = inst;
-            let op = bits(inst, 24, 24) ^ 1;
-            branch_inst = (branch_inst & !(1 << 24)) | (op << 24);
-            let new_off = 4 * 3;
-            let imm19 = ((new_off >> 2) as u32) & 0x7FFFF;
-            branch_inst = (branch_inst & !(0x7FFFF << 5)) | (imm19 << 5);
-            emit_raw(as_, branch_inst);
-            as_.ldr_label(crate::assemble::TMP, dst);
-            as_.br(crate::assemble::TMP);
+            as_.direct_compare_branch(inst, dst);
         } else if inst_is_test_b(inst) {
             let dst = (pc as i64 + decode_imm14(inst)) as u64;
-            let mut branch_inst = inst;
-            let op = bits(inst, 24, 24) ^ 1;
-            branch_inst = (branch_inst & !(1 << 24)) | (op << 24);
-            let new_off = 4 * 3;
-            let imm14 = ((new_off >> 2) as u32) & 0x3FFF;
-            branch_inst = (branch_inst & !(0x3FFF << 5)) | (imm14 << 5);
-            emit_raw(as_, branch_inst);
-            as_.ldr_label(crate::assemble::TMP, dst);
-            as_.br(crate::assemble::TMP);
+            as_.direct_test_branch(inst, dst);
         } else {
-            emit_raw(as_, inst);
+            // Everything else (including BTI/PAC hints, stp, mov, …) is
+            // copied verbatim — register semantics are preserved.
+            as_.push_word(inst);
         }
         offset += 4;
     }
 
-    if let Some(back) = branch_back_to {
-        as_.literal_ldr_branch(back);
+    match branch_back {
+        Some(BackRef::Near(back)) => as_.direct_branch(false, back as u64, 26),
+        Some(BackRef::Far(back)) => as_.literal_ldr_branch(back),
+        None => {}
     }
     Ok(offset)
 }
 
-fn emit_raw(as_: &mut Assembler, inst: u32) {
-    as_.push_word(inst);
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::trampoline;
+
+    #[test]
+    fn bti_and_pac_hints_are_verbatim() {
+        // A BTI-c-first prologue (BTI c + PACIBSP + stp) must relocate to
+        // exactly those three words — no re-encoding, no clobbering.
+        let mut asm = Assembler::new();
+        let words: [u32; 3] = [trampoline::BTI_C, 0xD503_23BF, 0xA9BF_7BFD];
+        let mut buf = Vec::new();
+        for w in words {
+            buf.extend_from_slice(&w.to_le_bytes());
+        }
+        // SAFETY: host test buffer, readable for the length passed.
+        unsafe {
+            relocate(
+                &mut asm,
+                buf.as_ptr() as Addr,
+                12,
+                Some(BackRef::Far(0x2000)),
+            )
+        }
+        .unwrap();
+        let bytes = asm.finalize_bytes(0x1000).unwrap();
+        assert_eq!(bytes.len() % 4, 0);
+        let got: Vec<u32> = bytes
+            .chunks_exact(4)
+            .map(|c| u32::from_le_bytes([c[0], c[1], c[2], c[3]]))
+            .collect();
+        assert_eq!(got[0], trampoline::BTI_C, "BTI kept verbatim");
+        assert_eq!(got[1], 0xD503_23BF, "PACIBSP kept verbatim");
+        assert_eq!(got[2], 0xA9BF_7BFD, "STP kept verbatim");
+        // the far jump-back: ldr x17, [pc,#8]; br x17; .quad 0x2000
+        assert_eq!(got[3] & 0xFF00_0000, 0x5800_0000, "ldr x17 literal");
+        assert_eq!(got[4] & 0xFFFF_FC00, 0xD61F_0000, "br opcode");
+        assert_eq!(got[4] & 0x03E0, 17 << 5, "br x17 register field");
+    }
+
+    #[test]
+    fn direct_b_displacement_is_recomputed_for_the_block_base() {
+        let mut asm = Assembler::new();
+        // a direct b at block offset 0 to absolute 0x10010 (block base 0x10000)
+        asm.direct_branch(false, 0x10010, 26);
+        let bytes = asm.finalize_bytes(0x10000).unwrap();
+        let w0 = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+        assert_eq!(w0 & 0xFC00_0000, 0x1400_0000, "still a direct b");
+        assert_eq!(w0 & 0x03FF_FFFF, 0x10 >> 2, "displacement = dst - (base+0)");
+    }
+
+    #[test]
+    fn out_of_range_direct_b_is_a_hard_error() {
+        let mut asm = Assembler::new();
+        // 256 MiB away — beyond the ±128 MiB imm26 reach
+        asm.direct_branch(false, 0x1000_0000 + 0x1000_0000, 26);
+        assert!(asm.finalize_bytes(0x1000).is_err());
+    }
+
+    #[test]
+    fn cond_branch_kinds_survive_reencoding() {
+        // b.eq +0x20
+        let mut asm = Assembler::new();
+        let beq = 0x5400_0000u32 | (((0x20 >> 2) as u32) << 5) | 0; // cond=eq(0)
+        let mut buf = Vec::new();
+        buf.extend_from_slice(&beq.to_le_bytes());
+        // SAFETY: host test buffer.
+        let origin = buf.as_ptr() as Addr;
+        unsafe {
+            relocate(
+                &mut asm,
+                origin,
+                4,
+                None,
+            )
+        }
+        .unwrap();
+        // finalize with the block placed at the same address as the buffer so
+        // the displacement is preserved
+        let base = buf.as_ptr() as Addr;
+        let bytes = asm.finalize_bytes(base).unwrap();
+        let w0 = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+        assert_eq!(w0 & 0xFF00_0000, 0x5400_0000, "still b.cond");
+        assert_eq!(w0 & 0xF, 0, "cond preserved");
+        assert_eq!(
+            (w0 >> 5) & 0x7FFFF,
+            0x20 >> 2,
+            "same displacement (block at the origin)"
+        );
+    }
 }

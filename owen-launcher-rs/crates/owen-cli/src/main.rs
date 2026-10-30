@@ -6,6 +6,8 @@
 //! owen-cli pak   <file.pak>      parse a pak index and list entries
 //! owen-cli pak   <file.pak> --cosmetics [--version 12.50]
 //! owen-cli manifest <cloudcontent.json | apk-dir>  build manifest entries
+//! owen-cli patch  <in.apk> <out.apk> --owen-lib libowen.so [--key PEM]
+//!                                 host-side APK patch (the CI/E2E driver)
 //! ```
 #![forbid(unsafe_code)]
 
@@ -24,6 +26,7 @@ fn main() -> ExitCode {
         Some("scan") => cmd_scan(&args[1..]),
         Some("pak") => cmd_pak(&args[1..]),
         Some("manifest") => cmd_manifest(&args[1..]),
+        Some("patch") => cmd_patch(&args[1..]),
         Some("serve") => {
             owen_server::run_server_from_args(&args[1..]);
             ExitCode::SUCCESS
@@ -43,6 +46,95 @@ fn main() -> ExitCode {
     }
 }
 
+/// `owen-cli patch <in.apk> <out.apk> --owen-lib libowen.so [--key PEM]`
+/// — the host-side patch driver used by the Android E2E workflow (and any
+/// operator who wants to patch on a PC instead of on-device).
+fn cmd_patch(args: &[String]) -> ExitCode {
+    let mut positional: Vec<PathBuf> = Vec::new();
+    let mut owen_lib: Option<PathBuf> = None;
+    let mut key: Option<PathBuf> = None;
+    let mut no_sign = false;
+    let mut rename: Option<String> = None;
+    let mut target_lib: Option<String> = None;
+    let mut i = 0;
+    while i < args.len() {
+        match args[i].as_str() {
+            "--owen-lib" | "-l" => {
+                i += 1;
+                if let Some(v) = args.get(i) {
+                    owen_lib = Some(PathBuf::from(v));
+                }
+            }
+            "--key" | "-k" => {
+                i += 1;
+                if let Some(v) = args.get(i) {
+                    key = Some(PathBuf::from(v));
+                }
+            }
+            "--rename-package" => {
+                i += 1;
+                if let Some(v) = args.get(i) {
+                    rename = Some(v.clone());
+                }
+            }
+            "--target-lib" => {
+                i += 1;
+                if let Some(v) = args.get(i) {
+                    target_lib = Some(v.clone());
+                }
+            }
+            "--no-sign" => no_sign = true,
+            _ => positional.push(PathBuf::from(&args[i])),
+        }
+        i += 1;
+    }
+    let (Some(input), Some(output)) = (positional.first(), positional.get(1)) else {
+        eprintln!("usage: owen-cli patch <in.apk> <out.apk> --owen-lib <libowen.so> [--key PEM] [--no-sign]");
+        return ExitCode::FAILURE;
+    };
+    let Some(owen_lib) = owen_lib else {
+        eprintln!("error: --owen-lib <libowen.so> is required (build owen-redirecter for aarch64-linux-android)");
+        return ExitCode::FAILURE;
+    };
+    if !input.is_file() {
+        eprintln!("error: input APK {} not found", input.display());
+        return ExitCode::FAILURE;
+    }
+    if !owen_lib.is_file() {
+        eprintln!("error: libOwen.so {} not found", owen_lib.display());
+        return ExitCode::FAILURE;
+    }
+    let opts = owen_patcher::PatchOptions {
+        owen_lib,
+        target_lib,
+        no_sign,
+        key_path: key,
+        rename_package: rename,
+    };
+    match owen_patcher::patch_apk(input, output, &opts) {
+        Ok(report) => {
+            println!("patched: {}", output.display());
+            println!("  dt_needed_injected : {}", report.dt_needed_injected);
+            println!("  lib_added          : {}", report.lib_added.as_deref().unwrap_or("-"));
+            println!("  signed_v2          : {}", report.signed_v2);
+            println!("  signature_verified : {}", report.signature_verified);
+            for step in &report.steps {
+                println!("  step: {step}");
+            }
+            if report.signature_verified {
+                ExitCode::SUCCESS
+            } else {
+                eprintln!("warning: signature did not verify");
+                ExitCode::FAILURE
+            }
+        }
+        Err(e) => {
+            eprintln!("error: {e}");
+            ExitCode::FAILURE
+        }
+    }
+}
+
 fn print_help() {
     println!("owen-cli {} — Owen Launcher toolbelt (safe Rust)", env!("CARGO_PKG_VERSION"));
     println!();
@@ -56,6 +148,10 @@ fn print_help() {
     println!("      Build auto-redirect manifest catalog entries.");
     println!("  owen-cli serve [--port N] [--backend-url URL]");
     println!("      Run the local Owen backend server.");
+    println!("  owen-cli patch <in.apk> <out.apk> --owen-lib <libowen.so> [options]");
+    println!("      Patch a Fortnite APK on the host: inject libOwen.so (DT_NEEDED),");
+    println!("      keep zipalign (STORED 16K-aligned .so), sign v1+v2.");
+    println!("      options: --key <pem>  --no-sign  --rename-package <pkg>  --target-lib <name>");
 }
 
 fn cmd_scan(args: &[String]) -> ExitCode {

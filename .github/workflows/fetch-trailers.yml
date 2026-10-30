@@ -1,0 +1,198 @@
+name: "Fetch season trailers"
+
+# Downloads the official season trailers listed in
+# owen-launcher-rs/assets/trailers/trailers.json (seasons 5-40) with yt-dlp,
+# zips them, uploads a workflow artifact, and refreshes the `trailers`
+# GitHub prerelease with the zip + the individual mp4s.
+#
+# Triggers:
+#   * schedule         - monthly, the 1st, at 03:00 UTC
+#   * workflow_dispatch - manual, with optional inputs (season filter, size cap)
+#
+# Release policy (documented choice): the `trailers` prerelease is
+# published/updated ONLY from the default branch (refs/heads/main).
+# Scheduled runs always execute on the default branch, so they always
+# refresh the prerelease; a manual dispatch from any other branch still
+# produces the workflow artifact but never touches the public release.
+
+"on":
+  schedule:
+    # 03:00 UTC on the 1st of every month
+    - cron: "0 3 1 * *"
+  workflow_dispatch:
+    inputs:
+      seasons:
+        description: "Comma-separated season numbers to fetch (e.g. '34,35,36'). Empty = every season in trailers.json"
+        required: false
+        default: ""
+      max-filesize-mb:
+        description: "Per-trailer size cap in MB (yt-dlp --max-filesize)"
+        required: false
+        default: "80"
+
+permissions:
+  # the release step needs this to create/update the `trailers` prerelease
+  contents: write
+
+concurrency:
+  group: fetch-trailers
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    name: "yt-dlp season trailers (5-40)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yt-dlp + ffmpeg
+        run: |
+          python -m pip install --upgrade yt-dlp
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg
+          yt-dlp --version
+          ffmpeg -version | head -n 1
+
+      # Cross-run cache of the downloaded trailers/ directory. The key rotates
+      # whenever trailers.json changes, so new/changed URLs re-download while
+      # unchanged seasons are restored from the cache. The download step below
+      # also skips any file that already exists on disk.
+      - name: Cache downloaded trailers
+        uses: actions/cache@v4
+        with:
+          path: trailers
+          key: trailers-${{ hashFiles('owen-launcher-rs/assets/trailers/trailers.json') }}
+          restore-keys: |
+            trailers-
+
+      # Reads owen-launcher-rs/assets/trailers/trailers.json (jq; the "_note"
+      # key is ignored) and downloads every season N -> URL with yt-dlp.
+      # A failing season is logged as a warning and NEVER aborts the run.
+      - name: Download trailers
+        id: dl
+        env:
+          SEASONS_FILTER: ${{ inputs.seasons || '' }}
+          MAX_MB: ${{ inputs.max-filesize-mb || '80' }}
+        run: |
+          set +e  # per-season failures are logged, never fatal
+          REGISTRY=owen-launcher-rs/assets/trailers/trailers.json
+          mkdir -p trailers
+          MAX_MB="${MAX_MB:-80}"
+          FILTER="${SEASONS_FILTER:-}"
+          ok=0; fail=0; cached=0
+          total=$(jq 'to_entries | map(select(.key != "_note")) | length' "$REGISTRY")
+          while read -r n url; do
+            [ -n "$n" ] || continue
+            # optional manual season filter
+            if [ -n "$FILTER" ]; then
+              case ",$FILTER," in
+                *",$n,"*) ;;
+                *) continue ;;
+              esac
+            fi
+            out="trailers/season_${n}.mp4"
+            if [ -s "$out" ]; then
+              echo "season $n: already present (cache), skipping"
+              cached=$((cached + 1)); ok=$((ok + 1)); continue
+            fi
+            echo "season $n: fetching $url"
+            if yt-dlp \
+                --no-playlist \
+                --max-filesize "${MAX_MB}M" \
+                -f "bv*[height<=720]+ba/b[height<=720]/best" \
+                --merge-output-format mp4 \
+                -o "trailers/season_${n}.%(ext)s" \
+                "$url"; then
+              # if a single-file fallback landed in another container,
+              # remux/re-encode it to mp4 with ffmpeg
+              if [ ! -s "$out" ]; then
+                alt=$(find trailers -maxdepth 1 -name "season_${n}.*" ! -name "*.mp4" | head -n 1)
+                if [ -n "$alt" ]; then
+                  echo "season $n: remuxing $alt -> mp4"
+                  ffmpeg -y -loglevel error -i "$alt" -c copy "$out" \
+                    || ffmpeg -y -loglevel error -i "$alt" "$out"
+                  rm -f "$alt"
+                fi
+              fi
+              if [ -s "$out" ]; then
+                echo "season $n: OK ($(du -h "$out" | cut -f1))"
+                ok=$((ok + 1))
+              else
+                echo "::warning::season $n: yt-dlp finished but season_${n}.mp4 is missing (skipped by the ${MAX_MB}MB cap?)"
+                fail=$((fail + 1))
+              fi
+            else
+              echo "::warning::season $n: download FAILED ($url) - continuing with the next season"
+              fail=$((fail + 1))
+            fi
+          done < <(jq -r 'to_entries | map(select(.key != "_note")) | .[] | "\(.key) \(.value)"' "$REGISTRY")
+          echo "count=$ok"        >> "$GITHUB_OUTPUT"
+          echo "failed=$fail"     >> "$GITHUB_OUTPUT"
+          echo "cached=$cached"   >> "$GITHUB_OUTPUT"
+          echo "registry=$total"  >> "$GITHUB_OUTPUT"
+          echo "Fetched $ok/$total trailers ($cached from cache, $((ok - cached)) fresh, $fail failed)."
+
+      - name: Zip the trailers
+        id: zip
+        run: |
+          set +e
+          shopt -s nullglob
+          files=(trailers/*.mp4)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::warning::no trailers on disk - nothing to zip"
+            exit 0
+          fi
+          zip -q owen-trailers.zip trailers/*.mp4
+          ls -la owen-trailers.zip
+
+      - name: Upload workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owen-trailers
+          path: owen-trailers.zip
+          if-no-files-found: warn
+
+      # Create/update the `trailers` prerelease. softprops/action-gh-release
+      # upserts the release for tag `trailers` and replaces same-named assets,
+      # so re-runs refresh the mp4s in place. Main-branch only (see header).
+      - name: Publish the trailers prerelease
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: trailers
+          name: "Season trailers (auto-fetched)"
+          prerelease: true
+          body: |
+            Official Fortnite season trailers (seasons 5-40) fetched with
+            yt-dlp by the `Fetch season trailers` workflow (monthly schedule
+            + manual dispatch). Refreshed automatically; individual mp4s are
+            attached alongside `owen-trailers.zip`.
+          files: |
+            owen-trailers.zip
+            trailers/*.mp4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        if: always()
+        run: |
+          total="${{ steps.dl.outputs.registry }}"
+          ok="${{ steps.dl.outputs.count }}"
+          fail="${{ steps.dl.outputs.failed }}"
+          cached="${{ steps.dl.outputs.cached }}"
+          total="${total:-0}"; ok="${ok:-0}"; fail="${fail:-0}"; cached="${cached:-0}"
+          size=$(du -sh trailers 2>/dev/null | cut -f1); size="${size:-0B}"
+          zsize=0
+          [ -f owen-trailers.zip ] && zsize=$(du -h owen-trailers.zip | cut -f1)
+          {
+            echo "## Season trailers"
+            echo "- Registry: **$total** seasons in \`trailers.json\`"
+            echo "- Trailers on disk: **$ok** ($cached served from cache, $((ok - cached)) downloaded this run)"
+            echo "- Failed downloads (non-fatal): **$fail**"
+            echo -e "- Total size: **$size** (zip: $zsize)"
+            echo "- Release: refreshed at the [\`trailers\`](${{ github.server_url }}/${{ github.repository }}/releases/tag/trailers) prerelease tag (main branch only)"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "SUMMARY: $ok/$total trailers, $fail failed, $size on disk, zip $zsize"

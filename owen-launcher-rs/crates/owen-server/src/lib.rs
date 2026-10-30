@@ -8,6 +8,7 @@
 #![forbid(unsafe_code)]
 
 pub mod clouddir;
+pub mod embedded;
 pub mod login_page;
 pub mod partyhub;
 pub mod pbkdf2;

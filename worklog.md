@@ -619,3 +619,88 @@ Work Log:
 
 Stage Summary:
 - The Rust launcher is a real, installable app again — OwenLauncher-v1.8.0-release.apk — and the repo (Owen-Launcher, default branch rust-rewrite) carries it. Remaining known gaps: the wasm preview build of owen-app is not yet embedded in the web console, the egui app keeps an LTR layout for Arabic, owen-app has no automated tests yet, and the APK needs a real-device install test (impossible in this sandbox — CI's emulator workflow is the path).
+
+## Session 33 — the crash is fixed, everything is embedded, everything is tested
+
+**User reports addressed:**
+1. **"جربت libowen.so و اللعبة كرشت فور التشغيل"** — the game crashed instantly. Root
+   causes found and fixed in the hook engine (`owen-hook`):
+   - **BTI violation (the killer):** modern Fortnite builds compile with
+     `-mbranch-protection=standard` — every function starts with `BTI c` and the ELF
+     carries the BTI note, so ARMv8.5+ kernels map the text with PROT_BTI. The old
+     `ADRP+ADD+BR` patch destroyed the landing pad: the first PLT call to
+     curl_easy_setopt raised SIGILL. New design: the BTI word stays at offset 0, the
+     patch branches into libowen.so (no BTI note → never enforced), the hook reaches
+     the relocated block via blr (anonymous page → never PROT_BTI), and the block
+     jumps back with a **direct `b`** (direct branches are never BTI-gated) placed
+     within ±128 MiB by the new `alloc_code_near` allocator. BTI libraries where no
+     near page can be allocated are **refused**, never crashed.
+   - **bits() field-width bug (real, from the original port):** `bits(i,5,23)` masked
+     24 bits for the 19-bit imm19 field — the opcode bits leaked into every b.cond /
+     cbz / tbz / adrp displacement decode, so relocated prologues jumped to garbage.
+     Fixed: exact field width. Direct branches are now re-encoded as the SAME branch
+     form with recomputed displacements, and out-of-range = refused hook.
+2. **DT_NEEDED hardening** (`needed.rs`): the gap placement now requires the gap to
+   start exactly at the strtab end AND be verifiably zero-filled — the old code
+     extended DT_STRSZ over live section data, which corrupted every string lookup
+   during loading (the other instant-crash candidate). Regression test included.
+3. **JSON محقون داخل libOwenServer.so نفسه** — `owen-server/build.rs` embeds all 72
+   files of `data/owen` (battlepass, profiles, responses, manifests, CloudStorage
+   INIs) into the library; `data_file()` = disk first, embedded fallback. A bare
+   `libOwenServer.so` now serves the complete backend with zero external files
+   (selftest check `data.embedded`, live-verified with an empty data dir).
+4. **PartyHub CONNECTING-stuck fix:** `serve_partyhub_path` now always answers
+   `owen-bridge.js` with the embedded v4 bridge (stale on-disk v3 copies pointed at
+   a dead relay), injects the bridge tag into shipped index.html, serves a fully
+   embedded fallback page when no third-party tree exists, the bridge acks unknown
+   native commands with `{}` (the built-in mock's dead-end answers were disabling
+   the buttons), and an 8-second watchdog force-drives PRELOGIN + the glass login.
+5. **DefaultEngine.ini + protocol doubling:** the INI ships the exact
+   `[OnlineSubsystemMcp.OnlineIdentityMcp]` (+Prod) structure with
+   `RedirectUrl="{{BACKEND_URL}}"` templated to the live backend at serve time
+   (http or https, verbatim). The doubled-scheme healing
+   (`normalize_scheme`, single source of truth in owen-core, used by libowen's curl
+   hook + WebView layer + the server selftest) keeps the protocol written from the
+   start: `https://http://127.0.0.1:8080/login` → `http://127.0.0.1:8080/login`,
+   `https://https://ex.com/…` → `https://ex.com/…`. Selftest check
+   `engine_ini.protocol` (5/5 cases, incl. the user's exact 8080 INI).
+6. **Auto manifest redirecter menu endpoints** (they were referenced by the launcher
+   but missing): GET/POST `/api/launcher/manifests/redirect` (auto | fixed:<version>
+   | off, persisted atomically, per-version list) wired into `launcher_assets` +
+   `manifest_file`; GET `/api/launcher/redirecter/selftest` — 9 checks, all green.
+7. **tierOfferId / battlePassOfferId / battleBundleOfferId** — they come from the
+   per-season battlepass JSONs (extracted from the game paks by
+   `owen_core::battlepass::extract`, `tools/battlepass/build_battlepass_v2.py`) and
+   are integrated with Owen Server via `enrich_athena` (MCP profile grants) and the
+   season detail API. The index.html login page is the server's `/login` (glass) +
+   the v4 PartyHub bridge — both now embedded in the .so.
+8. **Every-season testing on real Android:** `.github/workflows/android-e2e.yml` —
+   KVM emulator (API 30 google_apis x86_64 with ndk_translation, required because
+   Fortnite ships arm64-only), a season matrix from the version catalog (default
+   12.61/13.40/18.40/23.50/28.00/33.00, `all` = every season), build launcher APK →
+   boot emulator → install → adb reverse → host owen-server → strict endpoint chain
+   (index/login/timeline/oauth/register/selftest) → real uptodown download
+   (`tools/e2e/fetch_fortnite_apk.py`, fails loudly) → **host patch via the new
+   `owen-cli patch`** → install patched game → launch → logcat assertions (`owen:
+   detected game version`, `curl_easy_setopt … hooked`) + server traffic delta.
+   Screenshots/logcat/server.log always uploaded.
+9. **OGS-12.41:** cloned + studied — it is a client-side Win64 DLL mod (MinHook +
+   GIsClient flip), NOT a server: no HTTP data to absorb. Its BotNames.h and
+   POI_Locs.h were mirrored into `data/ogs-12.41/` for future synthetic-roster /
+   drop-zone endpoints.
+10. **Season art:** 34-40 replaced with the REAL official key art (1344×768 PNG,
+    vision-verified per image; the repo's own trailers.json/battlepass data fixed
+    the season identities: 34=Lawless, 35=Galactic Battle, 36=Shock 'N Awesome,
+    37=Pacific Break, 38=Showdown, 39=Runners, 40=Override). 1-4 remain artless
+    placeholders (never shipped on Android — listed last, disabled).
+    **Trailers:** `.github/workflows/fetch-trailers.yml` downloads every official
+    trailer (yt-dlp ≤720p, cached, artifact + `trailers` prerelease).
+11. **Repo/CI health:** `.cargo/config.toml` de-sandboxed (portable linker),
+    `build-apk.sh` exports CC/CXX/AR/CFLAGS, fresh ogfn signing pair committed
+    (the old private key was sandbox-local and lost; same CN=OGFN Manager identity),
+    `owen-cli patch` host driver added.
+
+**Build:** APK rebuilt + verified (223 entries, 38 season arts, dex, v1+v2
+signatures, zipalign clean, 65.7 MB). Workspace tests: 32 suites green (~200
+tests, incl. 7 new BTI/relocation tests, the poisoned-gap regression, the INI
+template test, the doubled-scheme healing, and the 9-check selftest).

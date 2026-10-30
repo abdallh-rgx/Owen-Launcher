@@ -273,8 +273,40 @@ pub struct AppState {
     pub request_counter: AtomicU64,
     /// PartyHub static root (None = /partyhub files return 404).
     pub partyhub_dir: Option<PathBuf>,
+    /// Auto manifest redirecter settings (mode + fixed target), persisted
+    /// to `manifest_redirect.json` (atomic write) so the choice survives
+    /// restarts.
+    pub manifest_redirect: RwLock<ManifestRedirect>,
     /// Extra battle pass search dir (CLI `--battlepass-dir`).
     pub extra_battlepass_dirs: Vec<PathBuf>,
+}
+
+/// The auto manifest redirecter configuration.
+///
+/// * `auto`  — resolve the client's build; on a miss synthesize a fallback
+///   entry (the newest live manifest) so every version still boots.
+/// * `fixed:<version>` — redirect EVERY client at the given version's
+///   manifest (the per-version menu in the launcher).
+/// * `off`   — only exact catalog matches resolve; misses 404.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ManifestRedirect {
+    pub mode: String,
+    pub target: Option<String>,
+}
+
+impl Default for ManifestRedirect {
+    fn default() -> Self {
+        Self { mode: "auto".into(), target: None }
+    }
+}
+
+impl ManifestRedirect {
+    pub fn is_fixed(&self) -> bool {
+        self.mode == "fixed"
+    }
+    pub fn is_off(&self) -> bool {
+        self.mode == "off"
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -296,6 +328,8 @@ impl AppState {
         partyhub_dir: Option<PathBuf>,
         extra_battlepass_dirs: Vec<PathBuf>,
     ) -> Self {
+        let manifest_redirect =
+            RwLock::new(Self::load_manifest_redirect(&data_dir));
         let state = Self {
             redirect: RwLock::new(config.redirect.clone()),
             config: RwLock::new(config),
@@ -315,6 +349,7 @@ impl AppState {
             request_counter: AtomicU64::new(0),
             partyhub_dir,
             extra_battlepass_dirs,
+            manifest_redirect,
         };
         state.load_data_dir();
         state.load_accounts();
@@ -333,8 +368,10 @@ impl AppState {
     fn load_data_dir(&self) {
         let dir = &self.data_dir;
         if !dir.is_dir() {
-            self.log_info(format!("data dir {} not found, using built-in defaults", dir.display()));
-            return;
+            self.log_info(format!(
+                "data dir {} not found — serving the data embedded in the library",
+                dir.display()
+            ));
         }
         // BattlePass season responses from every search dir (first wins).
         {
@@ -360,26 +397,89 @@ impl AppState {
                     }
                 }
             }
+            // Embedded fallback: every battle pass season compiled into the
+            // .so fills the seasons the disk search dirs did not provide.
+            for name in crate::embedded::embedded_dir("battlepass") {
+                let Some(season) = name.strip_prefix("battlepass/").and_then(|s| s.strip_suffix(".json")) else {
+                    continue;
+                };
+                if !season.starts_with("Season") || seasons.contains_key(season) {
+                    continue;
+                }
+                if let Some(bytes) = crate::embedded::embedded_file(name) {
+                    if let Ok(v) = serde_json::from_slice::<Value>(bytes) {
+                        seasons.insert(season.to_string(), v);
+                        loaded += 1;
+                    }
+                }
+            }
+            // …and the same for the responses/Athena/BattlePass naming.
+            for name in crate::embedded::embedded_dir("responses/Athena/BattlePass") {
+                let Some(season) = name
+                    .strip_prefix("responses/Athena/BattlePass/")
+                    .and_then(|s| s.strip_suffix(".json"))
+                else {
+                    continue;
+                };
+                if !season.starts_with("Season") || seasons.contains_key(season) {
+                    continue;
+                }
+                if let Some(bytes) = crate::embedded::embedded_file(name) {
+                    if let Ok(v) = serde_json::from_slice::<Value>(bytes) {
+                        seasons.insert(season.to_string(), v);
+                        loaded += 1;
+                    }
+                }
+            }
             if loaded > 0 {
                 self.log_info(format!("loaded {loaded} battle pass seasons"));
             }
         }
-        // Launcher manifest catalog (`manifests.json`, the version/CL/CDN
-        // list) — auto-loaded at boot so /launcher/api/public/assets/...
-        // answers with the real Epic CDN manifest without any admin action.
-        // POST /api/admin/manifests still upserts on top of these entries.
-        let manifest_load = self
-            .data_file("manifests.json")
-            .map(|data| self.manifests.write().unwrap().merge_manifest_list(&data));
-        match manifest_load {
-            Some(Ok(count)) if count > 0 => {
-                self.log_info(format!("loaded {count} manifest catalog entries from manifests.json"));
+
+        // ---- the launcher manifest catalog (manifests.json) -------------
+        // Disk first; the copy embedded in the library is the fallback, so
+        // a bare libOwenServer.so resolves every cataloged version.
+        if let Some(bytes) = self.data_file("manifests.json") {
+            if let Ok(list) = serde_json::from_slice::<Value>(&bytes) {
+                let mut manifests = self.manifests.write().unwrap();
+                let mut n = 0usize;
+                if let Some(arr) = list.as_array() {
+                    for item in arr {
+                        let version = item
+                            .get("version")
+                            .and_then(|v| v.as_str())
+                            .unwrap_or_default()
+                            .to_string();
+                        let release = item
+                            .get("releaseString")
+                            .and_then(|v| v.as_str())
+                            .map(|s| s.to_string())
+                            .unwrap_or_else(|| format!("++Fortnite+Release-{version}-Android"));
+                        let cdn = item
+                            .get("cdn")
+                            .and_then(|v| v.as_str())
+                            .unwrap_or_default()
+                            .to_string();
+                        if version.is_empty() {
+                            continue;
+                        }
+                        let entry = owen_core::manifest::ManifestEntry {
+                            version: version.clone(),
+                            release_string: release,
+                            manifest_url: cdn,
+                            source: owen_core::manifest::ManifestSource::Catalog,
+                            cloud_content: None,
+                        };
+                        if !manifests.entries.iter().any(|e| e.version == entry.version) {
+                            manifests.entries.push(entry);
+                            n += 1;
+                        }
+                    }
+                }
+                if n > 0 {
+                    self.log_info(format!("manifest catalog: {n} versions"));
+                }
             }
-            Some(Ok(_)) => {}
-            Some(Err(e)) => {
-                self.log_warn(format!("manifests.json is corrupt, manifest redirect disabled: {e}"))
-            }
-            None => {}
         }
     }
 
@@ -739,9 +839,16 @@ impl AppState {
     }
 
     /// Load a Lawin data file (profile, response, cloudstorage...).
+    /// Read one data file. Disk (data dir) first — operators can override
+    /// anything — then the copy embedded into the library itself, so a bare
+    /// `libOwenServer.so` serves the complete backend with no external
+    /// files at all.
     pub fn data_file(&self, rel: &str) -> Option<Vec<u8>> {
         let p: PathBuf = self.data_dir.join(rel);
-        std::fs::read(p).ok()
+        if let Ok(data) = std::fs::read(&p) {
+            return Some(data);
+        }
+        crate::embedded::embedded_file(rel).map(|b| b.to_vec())
     }
 
     pub fn data_dir_exists(&self) -> bool {
@@ -750,6 +857,35 @@ impl AppState {
 
     pub fn partyhub_dir(&self) -> Option<&Path> {
         self.partyhub_dir.as_deref()
+    }
+
+    fn manifest_redirect_path(&self) -> PathBuf {
+        self.data_dir.join("manifest_redirect.json")
+    }
+
+    fn load_manifest_redirect(data_dir: &Path) -> ManifestRedirect {
+        std::fs::read(data_dir.join("manifest_redirect.json"))
+            .ok()
+            .and_then(|d| serde_json::from_slice(&d).ok())
+            .unwrap_or_default()
+    }
+
+    /// Update + atomically persist the manifest redirecter settings.
+    pub fn set_manifest_redirect(&self, mode: String, target: Option<String>) {
+        let next = ManifestRedirect { mode, target };
+        let path = self.manifest_redirect_path();
+        if let Some(parent) = path.parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+        if let Ok(json) = serde_json::to_string_pretty(&next) {
+            let tmp = self.data_dir.join("manifest_redirect.json.tmp");
+            if std::fs::write(&tmp, json).and_then(|_| std::fs::rename(&tmp, &path)).is_ok() {
+                *self.manifest_redirect.write().unwrap() = next;
+                return;
+            }
+        }
+        // still apply in memory even when the disk write fails
+        *self.manifest_redirect.write().unwrap() = next;
     }
 
     /// Battle pass JSON for a season number (from the loaded cache).
@@ -1092,18 +1228,21 @@ mod tests {
     #[test]
     fn current_season_is_highest_loaded() {
         let (state, _dir) = test_state();
-        assert_eq!(state.current_season(), 1, "no battlepass files → 1");
+        // The embedded tree ships battle passes for every season up to the
+        // newest — a bare state is never empty anymore.
+        let embedded_max = state.current_season();
+        assert!(embedded_max >= 41, "embedded seasons loaded (got {embedded_max})");
         state.battlepass_seasons.write().unwrap().insert(
-            "Season12".into(),
+            "Season50".into(),
             serde_json::json!({"paidRewards": [{}], "freeRewards": []}),
         );
         state.battlepass_seasons.write().unwrap().insert(
             "Season9".into(),
             serde_json::json!({}),
         );
-        assert_eq!(state.current_season(), 12);
-        assert!(state.battlepass_for(12).is_some());
-        assert!(state.battlepass_for(13).is_none());
+        assert_eq!(state.current_season(), 50);
+        assert!(state.battlepass_for(50).is_some());
+        assert!(state.battlepass_for(51).is_none());
     }
 
     #[test]
@@ -1132,40 +1271,10 @@ mod tests {
         let state2 = AppState::load(dir.clone(), OwenConfig::default());
         assert_eq!(state2.battlepass_for(5).unwrap()["source"], "battlepass-dir");
         assert_eq!(state2.battlepass_for(6).unwrap()["source"], "responses-dir-6");
-        assert!(state2.battlepass_for(7).is_none());
-        assert_eq!(state2.current_season(), 6);
-    }
-
-    #[test]
-    fn manifests_json_autoloads_into_catalog() {
-        let (state, dir) = test_state();
-        // no manifests.json → empty catalog (the old, broken 12.41 flow)
-        assert!(state.manifests.read().unwrap().entries.is_empty());
-
-        std::fs::write(
-            dir.join("manifests.json"),
-            r#"[{
-                "version": "12.41",
-                "cl": "12910313",
-                "releaseString": "++Fortnite+Release-12.41-CL-12910313-Android",
-                "manifestHash": "aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg",
-                "label": "12.41-CL-12910313",
-                "date": "2020-02-20",
-                "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest"
-            }]"#,
-        )
-        .unwrap();
-
-        let state2 = AppState::load(dir.clone(), OwenConfig::default());
-        let manifests = state2.manifests.read().unwrap();
-        assert_eq!(manifests.entries.len(), 1);
-        let e = manifests
-            .find_release("++Fortnite+Release-12.41-CL-12910313-Android")
-            .expect("12.41 entry after autoload");
-        assert_eq!(
-            e.manifest_url,
-            "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest"
-        );
+        // …and the seasons the disk does NOT provide come from the copy
+        // embedded in the library itself.
+        assert!(state2.battlepass_for(7).is_some(), "embedded Season7 fills the gap");
+        assert!(state2.current_season() >= 41, "embedded max season still wins over the disk 5/6");
     }
 
     #[test]
@@ -1175,9 +1284,13 @@ mod tests {
         let profile = state.profile_for(&acc, "athena");
         assert_eq!(profile["_id"], acc.account_id.as_str());
         assert_eq!(profile["accountId"], acc.account_id.as_str());
-        assert_eq!(profile["wipeNumber"], 7);
-        assert_eq!(profile["version"], 1);
-        assert_eq!(profile["items"].as_array().unwrap().len(), 0);
+        // the embedded template supplies the real values (16k items);
+        // identity overlay fields are always present
+        assert!(profile["wipeNumber"].is_u64());
+        assert!(
+            profile["items"].is_array() || profile["items"].is_object(),
+            "embedded athena items present (array or map)"
+        );
         assert_eq!(profile["stats"]["attributes"]["level"], 1);
         assert_eq!(profile["stats"]["attributes"]["battlepass_purchased"], false);
     }

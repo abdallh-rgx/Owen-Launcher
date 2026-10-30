@@ -79,16 +79,50 @@ async fn partyhub_static_post(
 
 /// Serve a file from the PartyHub dir with path-traversal protection,
 /// correct MIME and SPA fallback to `offline/entry/index.html`.
+///
+/// Two overrides keep a stale third-party copy from breaking the hub:
+/// * any path ending in `owen-bridge.js` is answered with the **embedded
+///   v4 bridge** (the on-disk copies in old shippedweb trees are the v3
+///   relay edition, which hangs the app on "CONNECTING…" when its relay is
+///   not running);
+/// * `index.html` gets the bridge `<script>` tag injected when the shipped
+///   copy predates the Owen patch.
 pub fn serve_partyhub_path(state: &AppState, rest: &str) -> Response {
     if rest.contains("..") || rest.starts_with('/') || rest.contains('\\') {
         return not_found();
     }
+    // The embedded v4 bridge always wins — the CONNECTING-stuck bug was a
+    // stale v3 bridge on disk pointing at a dead relay.
+    let base = rest.rsplit('/').next().unwrap_or("");
+    if base == "owen-bridge.js" {
+        return (
+            StatusCode::OK,
+            [
+                ("content-type", "application/javascript"),
+                ("cache-control", "no-store"),
+            ],
+            OWEN_BRIDGE_JS,
+        )
+            .into_response();
+    }
     let Some(dir) = state.partyhub_dir() else {
-        return not_found();
+        // No third-party tree deployed: serve the embedded fallback page so
+        // /partyhub never 404s (the login + install flow still works).
+        return embedded_fallback_page(rest);
     };
     let candidate = dir.join(rest);
     if candidate.is_file() {
         if let Ok(data) = std::fs::read(&candidate) {
+            if base == "index.html" {
+                if let Some(page) = inject_bridge(&data) {
+                    return (
+                        StatusCode::OK,
+                        [("content-type", "text/html"), ("cache-control", "no-store")],
+                        page,
+                    )
+                        .into_response();
+                }
+            }
             return (
                 StatusCode::OK,
                 [
@@ -137,6 +171,47 @@ pub fn serve_partyhub_path(state: &AppState, rest: &str) -> Response {
         }
     }
     not_found()
+}
+
+/// Inject `<script src="./owen-bridge.js"></script>` before the first
+/// script/polyfill tag when the shipped index.html has none yet. Returns
+/// None when the page already carries the bridge (or is not HTML).
+fn inject_bridge(html: &[u8]) -> Option<Vec<u8>> {
+    let text = std::str::from_utf8(html).ok()?;
+    if text.contains("owen-bridge.js") {
+        return None;
+    }
+    let tag = "<script src=\"./owen-bridge.js\"></script>\n";
+    let marker = text
+        .find("<script")
+        .or_else(|| text.find("</head>"))
+        .or_else(|| text.find("<body"))?;
+    let mut out = Vec::with_capacity(html.len() + tag.len());
+    out.extend_from_slice(&html[..marker]);
+    out.extend_from_slice(tag.as_bytes());
+    out.extend_from_slice(&html[marker..]);
+    Some(out)
+}
+
+/// The fully-embedded PartyHub fallback page (no third-party Kairos tree
+/// required): the v4 bridge + the glass login + an immediate transition
+/// off the CONNECTING screen, so the hub always renders.
+fn embedded_fallback_page(rest: &str) -> Response {
+    // Asset-looking paths (a file extension) stay 404 — only SPA routes
+    // and the entry get the embedded page.
+    let last = rest.rsplit('/').next().unwrap_or("");
+    if !rest.ends_with('/') && last.contains('.') {
+        return not_found();
+    }
+    let page = format!(
+        "<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Owen PartyHub</title>\n<style>html,body{{margin:0;height:100%;background:#05060b;color:#f4f6fb;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}}#app{{display:flex;align-items:center;justify-content:center;height:100%}}</style>\n<script src=\"./owen-bridge.js\"></script>\n</head><body><div id=\"root\"></div>\n<script>/* The Kairos bundle normally mounts here; without it the v4 bridge\n   still answers the native handshake and drives the login flow. */\ndocument.getElementById('root').innerHTML = '<div style=\"text-align:center\"><h2>Owen PartyHub</h2><p>offline · bridge v4</p></div>';</script>\n</body></html>\n"
+    );
+    (
+        StatusCode::OK,
+        [("content-type", "text/html"), ("cache-control", "no-store")],
+        page,
+    )
+        .into_response()
 }
 
 fn not_found() -> Response {
@@ -669,9 +744,17 @@ mod tests {
             let resp = serve_partyhub_path(&state, bad);
             assert_eq!(resp.status(), StatusCode::NOT_FOUND, "{bad}");
         }
-        // no partyhub dir → 404
+        // no partyhub dir → the EMBEDDED fallback page (the hub never 404s;
+        // stale-tree CONNECTING hangs are gone)
         let (state3, _d3) = test_state();
         let resp = serve_partyhub_path(&state3, "anything");
+        assert_eq!(resp.status(), StatusCode::OK);
+        // …but a missing asset-looking path still 404s
+        let resp = serve_partyhub_path(&state3, "assets/missing.png");
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
+        // the bridge is ALWAYS the embedded v4, even when a stale v3 sits
+        // on disk
+        let resp = serve_partyhub_path(&state, "offline/entry/owen-bridge.js");
+        assert_eq!(resp.status(), StatusCode::OK);
     }
 }

@@ -1,0 +1,291 @@
+{
+  "source": "POI_Locs.h (OGS-12.41 by ObsessedTech, https://github.com/MarvelcoCode/OGS-12.41)",
+  "fortnite_version": "12.41",
+  "map": "Chapter 2 Season 2 (Apollo)",
+  "coordinate_system": "Unreal world units (FVector), as used by the 12.41 Android/Win64 builds",
+  "count": 47,
+  "drop_zones": [
+    {
+      "name": "The Shark (Complete)",
+      "x": 106902,
+      "y": -84901,
+      "z": -1834
+    },
+    {
+      "name": "Top of The Shark",
+      "x": 107834,
+      "y": -78584,
+      "z": -783
+    },
+    {
+      "name": "The Shark Prison",
+      "x": 120009,
+      "y": -84032,
+      "z": -3370
+    },
+    {
+      "name": "The Shark Choppa Spawn",
+      "x": 112255,
+      "y": -91220,
+      "z": -3011
+    },
+    {
+      "name": "The Shark Basketball Court",
+      "x": 99820,
+      "y": -82200,
+      "z": -3370
+    },
+    {
+      "name": "Craggy Cliffs",
+      "x": 96764,
+      "y": 29166,
+      "z": -2226
+    },
+    {
+      "name": "Fishsticks restruant",
+      "x": 104078,
+      "y": 26670,
+      "z": -1834
+    },
+    {
+      "name": "Shadow RadioTower thing idk",
+      "x": 94032,
+      "y": 51513,
+      "z": 4693
+    },
+    {
+      "name": "Steamy Stacks",
+      "x": 76334,
+      "y": 90345,
+      "z": -1450
+    },
+    {
+      "name": "Kevolution Energy",
+      "x": 81669,
+      "y": 90762,
+      "z": 469
+    },
+    {
+      "name": "Unnamed drop zone 11",
+      "x": 80258,
+      "y": 95433,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 12",
+      "x": 86691,
+      "y": 102076,
+      "z": 69
+    },
+    {
+      "name": "The Yacht (Complete)",
+      "x": 113312,
+      "y": 113547,
+      "z": -1837
+    },
+    {
+      "name": "The Yacht",
+      "x": 116567,
+      "y": 113665,
+      "z": -2602
+    },
+    {
+      "name": "The Yacht",
+      "x": 109895,
+      "y": 113636,
+      "z": -2986
+    },
+    {
+      "name": "The Yacht Island",
+      "x": 106233,
+      "y": 108428,
+      "z": -3762
+    },
+    {
+      "name": "Pleasant Park",
+      "x": 64240,
+      "y": -16323,
+      "z": 69
+    },
+    {
+      "name": "PP Shadow Henchmen Base",
+      "x": 60290,
+      "y": -16240,
+      "z": 69
+    },
+    {
+      "name": "Sweaty Sands",
+      "x": 31257,
+      "y": -77599,
+      "z": 69
+    },
+    {
+      "name": "Salty Springs",
+      "x": 13637,
+      "y": -24219,
+      "z": 69
+    },
+    {
+      "name": "Risky Reels",
+      "x": 30808,
+      "y": 10669,
+      "z": 69
+    },
+    {
+      "name": "Frenzy Farm",
+      "x": 30536,
+      "y": 42295,
+      "z": 69
+    },
+    {
+      "name": "Shadow Henchmen Gas Station",
+      "x": 30437,
+      "y": 69691,
+      "z": 69
+    },
+    {
+      "name": "Dirty Docks",
+      "x": 17963,
+      "y": 112955,
+      "z": 69
+    },
+    {
+      "name": "Agency",
+      "x": 6364,
+      "y": 4866,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 26",
+      "x": 6426,
+      "y": 7100,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 27",
+      "x": 6245,
+      "y": 1741,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 28",
+      "x": 11188,
+      "y": 4863,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 29",
+      "x": 657,
+      "y": 4334,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 30",
+      "x": 4084,
+      "y": 7167,
+      "z": 69
+    },
+    {
+      "name": "Holly Hedges",
+      "x": -13311,
+      "y": -81033,
+      "z": 69
+    },
+    {
+      "name": "Weeping Woods",
+      "x": -28997,
+      "y": -31787,
+      "z": 69
+    },
+    {
+      "name": "Slurpy Swamp",
+      "x": -64881,
+      "y": -46495,
+      "z": 69
+    },
+    {
+      "name": "The Rig",
+      "x": -77143,
+      "y": -80634,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 35",
+      "x": -73305,
+      "y": -90910,
+      "z": 69
+    },
+    {
+      "name": "Misty Meadows",
+      "x": -88282,
+      "y": 23038,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 37",
+      "x": -88329,
+      "y": 31859,
+      "z": 69
+    },
+    {
+      "name": "Misty henchmen house",
+      "x": -68041,
+      "y": 29906,
+      "z": 69
+    },
+    {
+      "name": "Lazy Lake",
+      "x": -43937,
+      "y": 52030,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 40",
+      "x": -54818,
+      "y": 57400,
+      "z": 69
+    },
+    {
+      "name": "Catty Corner",
+      "x": -68550,
+      "y": 80804,
+      "z": 69
+    },
+    {
+      "name": "Mountain henchmen base",
+      "x": -92971,
+      "y": 78709,
+      "z": 69
+    },
+    {
+      "name": "Retail Row",
+      "x": -39867,
+      "y": 91323,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 44",
+      "x": -38750,
+      "y": 102176,
+      "z": 69
+    },
+    {
+      "name": "Grotto",
+      "x": -19544,
+      "y": 105594,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 46",
+      "x": -17383,
+      "y": 112993,
+      "z": 69
+    },
+    {
+      "name": "Unnamed drop zone 47",
+      "x": -22500,
+      "y": 112479,
+      "z": 69
+    }
+  ]
+}

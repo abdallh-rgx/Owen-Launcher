@@ -1,15 +1,13 @@
-[target.aarch64-linux-android]
-linker = "/home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
+# Portable toolchain config — works on CI and on any machine with the NDK
+# under /opt/android-ndk or $ANDROID_NDK_HOME. The previous version carried
+# sandbox-absolute paths (/home/z/ndk/...) which broke every CI build.
 
-# cc-rs (ring/zstd & friends) probes for `aarch64-linux-android-clang`, which
-# the NDK does not ship (only API-level-suffixed wrappers). Point it (and the
-# archiver) at the NDK toolchain explicitly so build scripts work on this target.
-[env]
-CC_aarch64-linux-android = "/home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
-CXX_aarch64-linux-android = "/home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang++"
-AR_aarch64-linux-android = "/home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar"
-# The NDK sysroot ships no C library headers; the shim in tools/ndk-include
-# provides the handful ring needs (assert.h/string.h/stdlib.h).
-CFLAGS_aarch64-linux-android = "-I/home/z/my-project/owen-launcher-rs/tools/ndk-include"
+# NOTE: environment-style config ([env]) does not expand $ANDROID_NDK_HOME
+# here on purpose — tools/build-apk.sh and the CI workflows export
+# CC/CXX/AR themselves from whatever NDK they installed.
+
+[target.aarch64-linux-android]
+linker = "aarch64-linux-android24-clang"
 
 [target.wasm32-unknown-unknown]
+# (kept from the previous config)
