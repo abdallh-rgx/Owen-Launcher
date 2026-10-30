@@ -1,7 +1,7 @@
 //! HTTP routes: the game-facing API surface (LawinServer v2 compatible,
 //! plus Reload-Backend features) and the Owen-specific endpoints.
 
-use crate::login_page::LOGIN_PAGE;
+use crate::clouddir;
 use crate::seasons::{self, MAX_SEASON, SeasonMeta};
 use crate::state::{iso_now, today, Account, AppState, Session};
 use axum::body::Bytes;
@@ -20,6 +20,9 @@ pub fn root_router(state: Arc<AppState>) -> Router {
         .route("/", get(index))
         .route("/login", get(login_page))
         .merge(crate::partyhub::partyhub_router())
+        // ---- CloudDir (12.41 content-build flow: local package, CDN bounce) ----
+        .merge(crate::clouddir::clouddir_router())
+        .route("/api/launcher/clouddir", get(clouddir_summary))
         .route("/api/launcher/register", post(launcher_register))
         .route("/api/launcher/me", get(launcher_me))
         .route("/api/launcher/me/season", post(launcher_me_season))
@@ -27,7 +30,12 @@ pub fn root_router(state: Arc<AppState>) -> Router {
         .route("/api/launcher/seasons", get(launcher_seasons))
         .route("/api/launcher/seasons/:n", get(launcher_season))
         .route("/api/launcher/manifests", get(launcher_manifests))
-        .route("/launcher/api/public/assets/:platform/:label/:app/:build", get(launcher_assets))
+        .route(
+            "/launcher/api/public/assets/:platform/:label/:app/:build",
+            // GET is what the game's cloudcontent flow uses; POST answers
+            // identically so both client shapes keep working.
+            get(launcher_assets).post(launcher_assets),
+        )
         .route("/manifest/:rest", get(manifest_file))
         // ---- admin (web panel) ----
         .merge(admin_router())
@@ -160,7 +168,12 @@ async fn index(State(state): State<Arc<AppState>>) -> Response {
 
 async fn login_page(Query(q): Query<HashMap<String, String>>) -> Html<&'static str> {
     let _ = q;
-    Html(LOGIN_PAGE)
+    Html(crate::LOGIN_PAGE_1241)
+}
+
+/// Local CloudDir package summary (the E2E script polls this).
+async fn clouddir_summary(State(state): State<Arc<AppState>>) -> Response {
+    ok_json(clouddir::local_package_summary(&state).0)
 }
 
 // ---------------------------------------------------------------------------
@@ -389,7 +402,18 @@ async fn launcher_assets(
 /// Serve a manifest file from the data dir (or redirect to the live CDN).
 async fn manifest_file(State(state): State<Arc<AppState>>, Path(rest): Path<String>) -> Response {
     let manifests = state.manifests.read().unwrap();
-    if let Some(entry) = manifests.entries.iter().find(|e| !e.manifest_url.is_empty()) {
+    // A request naming a registered manifest (`/manifest/<hash>.manifest` —
+    // what the game asks for after the redirecter rewrote a CDN URL) goes
+    // back to that exact live manifest; anything else falls back to the
+    // first registered live manifest, then to a local responses/CloudDir
+    // file.
+    let file = rest.rsplit('/').next().unwrap_or_default();
+    let matched = manifests.entries.iter().find(|e| {
+        !e.manifest_url.is_empty() && !file.is_empty() && e.manifest_url.ends_with(file)
+    });
+    let entry = matched
+        .or_else(|| manifests.entries.iter().find(|e| !e.manifest_url.is_empty()));
+    if let Some(entry) = entry {
         return Redirect::temporary(&entry.manifest_url).into_response();
     }
     if let Some(data) = state.data_file(&format!("responses/CloudDir/{rest}")) {
@@ -446,6 +470,26 @@ async fn oauth_token(
                     return jresp(
                         StatusCode::BAD_REQUEST,
                         json!({"error": "invalid_grant", "error_description": "Unknown device credentials"}),
+                    )
+                }
+            }
+        }
+        // The MCP identity's webview handshake (12.41): the login page
+        // redirects the in-game browser to `{RedirectUrl}/exchange?…`, the
+        // identity layer redeems the code with grant_type=exchange_code and
+        // the form field `exchange_code` (older builds: authorization_code).
+        "exchange_code" => {
+            let code = form
+                .get("exchange_code")
+                .or_else(|| form.get("code"))
+                .cloned()
+                .unwrap_or_default();
+            match state.exchange_account(&code) {
+                Some(id) => state.account_by_id(&id).unwrap_or_else(|| state.account_by_name("OwenPlayer")),
+                None => {
+                    return jresp(
+                        StatusCode::BAD_REQUEST,
+                        json!({"error": "invalid_grant", "error_description": "Unknown exchange code"}),
                     )
                 }
             }
@@ -826,12 +870,30 @@ fn crc32(path: std::path::PathBuf) -> u32 {
 
 async fn cloudstorage_file(State(state): State<Arc<AppState>>, Path(file): Path<String>) -> Response {
     match state.data_file(&format!("CloudStorage/{file}")) {
-        Some(data) => (
-            StatusCode::OK,
-            [("content-type", "application/octet-stream")],
-            data,
-        )
-            .into_response(),
+        Some(data) => {
+            // DefaultEngine.ini is served with the SERVER'S OWN PORT — the
+            // game's MCP identity builds every later URL from RedirectUrl, so
+            // the ini and the running backend must agree on the port.
+            if file == "DefaultEngine.ini" {
+                let port = state.config.read().map(|c| c.http_port).unwrap_or(3551);
+                let text = String::from_utf8_lossy(&data);
+                let templated = text
+                    .replace("127.0.0.1:3551", &format!("127.0.0.1:{port}"))
+                    .replace("localhost:3551", &format!("127.0.0.1:{port}"));
+                return (
+                    StatusCode::OK,
+                    [("content-type", "text/plain; charset=utf-8")],
+                    templated.into_bytes(),
+                )
+                    .into_response();
+            }
+            (
+                StatusCode::OK,
+                [("content-type", "application/octet-stream")],
+                data,
+            )
+                .into_response()
+        }
         None => jresp(StatusCode::NOT_FOUND, json!({"errorCode": "errors.com.owen.not_found"})),
     }
 }
@@ -1460,5 +1522,185 @@ mod tests {
         // synthesized athena template defaults
         assert_eq!(profile["wipeNumber"], 7);
         assert_eq!(profile["version"], 1);
+    }
+
+    // ---- 12.41 end-to-end: the real Epic CDN manifest flow ------------------
+
+    const CDN_1241_CL_12910313: &str = "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest";
+    const CDN_1241_CL_12948829: &str = "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/qEuvqZqHRP9IipPXDUK-c7g2-oa6Zg.manifest";
+
+    /// Boot the real router over a repo data tree on an ephemeral loopback
+    /// port; the server task dies with the test's tokio runtime.
+    async fn boot_router(data_dir: &str) -> String {
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(data_dir);
+        assert!(dir.is_dir(), "test data dir {} missing", dir.display());
+        let state = Arc::new(crate::state::AppState::load(
+            dir,
+            owen_core::config::OwenConfig::default(),
+        ));
+        let app = root_router(state);
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        tokio::spawn(async move {
+            let _ = axum::serve(listener, app).await;
+        });
+        format!("http://{addr}")
+    }
+
+    #[tokio::test]
+    async fn launcher_assets_1241_serves_the_real_epic_cdn_manifest() {
+        let base = boot_router("../../data/owen").await;
+        for (cl, cdn) in [
+            ("12910313", CDN_1241_CL_12910313),
+            ("12948829", CDN_1241_CL_12948829),
+        ] {
+            let build = format!("++Fortnite+Release-12.41-CL-{cl}-Android");
+            let url = format!("{base}/launcher/api/public/assets/Android/Live/FortniteContentBuilds/{build}");
+            // GET is what the game's cloudcontent flow sends; POST answers
+            // identically.
+            let responses = [
+                reqwest::get(&url).await.unwrap().json::<Value>().await.unwrap(),
+                reqwest::Client::new()
+                    .post(&url)
+                    .send()
+                    .await
+                    .unwrap()
+                    .json::<Value>()
+                    .await
+                    .unwrap(),
+            ];
+            for v in responses {
+                let assets = v["assets"].as_array().expect("assets array");
+                assert_eq!(assets.len(), 1, "one CloudDir asset for CL {cl}");
+                assert_eq!(v["appName"], "FortniteContentBuilds");
+                assert_eq!(v["labelName"], "Live");
+                assert_eq!(v["buildVersion"], build);
+                assert_eq!(assets[0]["appName"], "FortniteContentBuilds");
+                assert_eq!(assets[0]["labelName"], "Live");
+                assert_eq!(assets[0]["buildVersion"], build);
+                assert_eq!(assets[0]["itemName"], "CloudDir");
+                assert_eq!(assets[0]["itemFormat"], "HTTP");
+                assert_eq!(assets[0]["distribution"], cdn, "distribution for CL {cl}");
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn cloudstorage_system_lists_the_default_ini_files() {
+        let base = boot_router("../../data/owen").await;
+        let v: Value = reqwest::get(format!("{base}/fortnite/api/cloudstorage/system"))
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        let files = v.as_array().expect("cloudstorage file list");
+        let names: Vec<&str> = files
+            .iter()
+            .filter_map(|f| f["uniqueFilename"].as_str())
+            .collect();
+        for expected in [
+            "DefaultEngine.ini",
+            "DefaultGame.ini",
+            "DefaultInput.ini",
+            "DefaultRuntimeOptions.ini",
+        ] {
+            assert!(names.contains(&expected), "{expected} missing from {names:?}");
+        }
+        // ...and the engine ini is served with the XMPP port the local
+        // server actually listens on (127.0.0.1:8080).
+        let engine = reqwest::get(format!("{base}/fortnite/api/cloudstorage/system/DefaultEngine.ini"))
+            .await
+            .unwrap();
+        assert_eq!(engine.status(), 200);
+        let raw = engine.bytes().await.unwrap();
+        let text = String::from_utf8_lossy(&raw);
+        assert!(text.contains("[OnlineSubsystemMcp.Xmpp]"), "xmpp section present");
+        assert!(text.contains("ServerPort=8080"), "xmpp port must be 8080");
+    }
+
+    #[tokio::test]
+    async fn manifest_request_redirects_to_the_matching_live_manifest() {
+        let base = boot_router("../../data/owen").await;
+        let client = reqwest::Client::builder()
+            .redirect(reqwest::redirect::Policy::none())
+            .build()
+            .unwrap();
+        for hash in ["aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg", "qEuvqZqHRP9IipPXDUK-c7g2-oa6Zg"] {
+            let resp = client
+                .get(format!("{base}/manifest/{hash}.manifest"))
+                .send()
+                .await
+                .unwrap();
+            assert_eq!(resp.status(), 307, "temporary redirect for {hash}");
+            let location = resp
+                .headers()
+                .get("location")
+                .and_then(|v| v.to_str().ok())
+                .unwrap_or_default();
+            assert_eq!(
+                location,
+                format!("https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/{hash}.manifest")
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn admin_manifests_post_merges_on_top_of_the_loaded_catalog() {
+        let base = boot_router("../../data/owen").await;
+        // the boot-time catalog is populated from manifests.json
+        let v: Value = reqwest::get(format!("{base}/api/admin/manifests"))
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        let entries = v["entries"].as_array().expect("entries");
+        assert!(
+            entries.len() >= 30,
+            "catalog auto-load: got {} entries",
+            entries.len()
+        );
+
+        // a cloudcontent POST upserts on top (manual override of 12.41)
+        let cc = json!({
+            "AppName": "FortniteContentBuilds",
+            "BuildVersion": "++Fortnite+Release-12.41-CL-12910313-Android",
+            "Platform": "Android",
+            "ManifestPath": "Builds/Fortnite/Content/CloudDir/manual-override.manifest",
+            "ManifestHash": "manual"
+        });
+        let v: Value = reqwest::Client::new()
+            .post(format!("{base}/api/admin/manifests"))
+            .json(&cc)
+            .send()
+            .await
+            .unwrap()
+            .json()
+            .await
+            .unwrap();
+        let entry = v["entries"]
+            .as_array()
+            .expect("entries")
+            .iter()
+            .find(|e| e["release_string"] == "++Fortnite+Release-12.41-CL-12910313-Android")
+            .expect("12.41 entry");
+        assert_eq!(
+            entry["manifest_url"],
+            "https://download.akamaized.net/Builds/Fortnite/Content/CloudDir/manual-override.manifest"
+        );
+        // the override is live on the asset endpoint too
+        let v: Value = reqwest::get(format!(
+            "{base}/launcher/api/public/assets/Android/Live/FortniteContentBuilds/++Fortnite+Release-12.41-CL-12910313-Android"
+        ))
+        .await
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+        assert_eq!(
+            v["assets"][0]["distribution"],
+            "https://download.akamaized.net/Builds/Fortnite/Content/CloudDir/manual-override.manifest"
+        );
     }
 }

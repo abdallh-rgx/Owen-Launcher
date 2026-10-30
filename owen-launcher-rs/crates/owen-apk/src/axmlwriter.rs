@@ -6,7 +6,7 @@
 //! element chunks — for a manifest that byte-matches what the original app
 //! needs so the Rust build installs as an *update* over the Kotlin one:
 //!
-//! * package `com.abdallhrgx.owenlauncher`, `versionCode 18` (`1.8.0`)
+//! * package `com.abdallhrgx.owenlauncher`, `versionCode 19` (`1.9.0`)
 //! * the 9 original `uses-permission`s, `minSdk 24` / `targetSdk 34`
 //! * an `android.app.NativeActivity` application with
 //!   `android.app.lib_name` (the `libowen_app.so` eframe crate)
@@ -49,9 +49,10 @@ pub const TYPE_INT_BOOLEAN: u8 = 0x12;
 
 /// The original application id — kept so the Rust build updates it.
 pub const PACKAGE: &str = "com.abdallhrgx.owenlauncher";
-/// One past the Kotlin app's `versionCode 17` (`1.7.4`).
-pub const VERSION_CODE: u32 = 18;
-pub const VERSION_NAME: &str = "1.8.0";
+/// One past the handcrafted `versionCode 18` (`1.8.0`) build — matches
+/// `app/AndroidManifest.xml` (the aapt2 prebuilt path).
+pub const VERSION_CODE: u32 = 19;
+pub const VERSION_NAME: &str = "1.9.0";
 pub const MIN_SDK: u32 = 24;
 pub const TARGET_SDK: u32 = 34;
 /// The original app's app label.
@@ -91,7 +92,7 @@ pub enum AttrValue {
     /// `TYPE_INT_BOOLEAN` (`0xFFFFFFFF` = true).
     Bool(bool),
     /// `TYPE_INT_DEC` with the original raw text kept (aapt-style:
-    /// `(type 0x10)0x12 (Raw: "18")`).
+    /// `(type 0x10)0x13 (Raw: "19")`).
     IntDec(u32, &'static str),
     /// `TYPE_INT_HEX` for enum/flag attributes (launchMode, configChanges,
     /// windowSoftInputMode) with the raw flag string kept.
@@ -326,7 +327,7 @@ pub fn manifest_tree(lib_name: &str) -> Element {
         "manifest",
         vec![
             Attr { android: false, name: "package", value: AttrValue::Str(PACKAGE.to_string()) },
-            a_int("versionCode", VERSION_CODE, "18"),
+            a_int("versionCode", VERSION_CODE, "19"),
             a_str("versionName", VERSION_NAME),
         ],
     );
@@ -529,7 +530,7 @@ mod tests {
         for expected in [
             PACKAGE,
             VERSION_NAME,
-            "18",
+            "19",
             APP_LABEL,
             META_LIB_NAME,
             "owen_app",
@@ -583,8 +584,8 @@ mod tests {
             .find(|(n, ..)| *n == "versionCode")
             .expect("versionCode attr");
         assert_eq!(version_code.1, TYPE_INT_DEC);
-        assert_eq!(version_code.2, 18);
-        assert_eq!(version_code.3, Some("18"));
+        assert_eq!(version_code.2, 19);
+        assert_eq!(version_code.3, Some("19"));
 
         // the manifest children in order
         let names: Vec<&str> = elements.iter().map(|e| e.name).collect();

@@ -24,8 +24,43 @@ use serde_json::Value;
 pub const GATEWAY_PORT: u16 = 3010;
 /// The port the in-process/native server binds (the original HTTP port).
 pub const NATIVE_HTTP_PORT: u16 = 3551;
+/// The XMPP port the in-process/native server binds — must match the
+/// `ServerPort` the bundled `CloudStorage/DefaultEngine.ini` points the game
+/// at (see data/owen/CloudStorage and owen-patcher's `owen_config_json`).
+pub const NATIVE_XMPP_PORT: u16 = 8080;
 
 static NATIVE_RUNNING: AtomicBool = AtomicBool::new(false);
+
+/* --------------------------- the host-foreground hook --------------------- */
+
+/// The host-foreground hook: `running == true` → promote this process to a
+/// foreground service, `false` → demote it again.
+///
+/// On Android the app layer (owen-app's `jni_android`) installs it at
+/// `JNI_OnLoad` to start/stop `com.abdallhrgx.owenlauncher.core.HostService`
+/// — the dex foreground service that keeps the in-process Owen Server alive
+/// while the launcher is backgrounded and the game runs (the reason game
+/// sessions used to die). On every other host (desktop / wasm preview) it
+/// stays unset and [`notify_host_service`] is a no-op.
+pub type HostServiceHook = Box<dyn Fn(bool) + Send + Sync>;
+
+static HOST_SERVICE_HOOK: std::sync::OnceLock<HostServiceHook> = std::sync::OnceLock::new();
+
+/// Install the host-foreground hook (idempotent — the first install wins,
+/// like every other `OnceLock` in this module). Returns whether THIS call
+/// installed the hook.
+pub fn set_host_service_hook(hook: HostServiceHook) -> bool {
+    HOST_SERVICE_HOOK.set(hook).is_ok()
+}
+
+/// Fire the host-foreground hook, if any. Best-effort by design: the hook
+/// itself (see owen-app) clears Java exceptions and logs through `diag` — a
+/// failed foreground promotion must never fail hosting.
+fn notify_host_service(running: bool) {
+    if let Some(hook) = HOST_SERVICE_HOOK.get() {
+        hook(running);
+    }
+}
 
 pub fn is_wasm() -> bool {
     cfg!(target_arch = "wasm32")
@@ -187,10 +222,20 @@ pub fn hosting_start(
     on_done: impl FnOnce(Result<HostingStatus, String>) + Send + 'static,
 ) {
     if !is_wasm() {
-        let result = start_backend(data_root, NATIVE_HTTP_PORT, 8080)
-            .map(|_| HostingStatus {
-                running: true,
-                detail: format!("in-process · 127.0.0.1:{NATIVE_HTTP_PORT}"),
+        // Port contract of the on-device app: HTTP 3551 + XMPP 8080, both on
+        // 127.0.0.1 (native_server::start binds the loopback listener and
+        // spawns the XMPP listener on the same pair).
+        let result = start_backend(data_root, NATIVE_HTTP_PORT, NATIVE_XMPP_PORT)
+            .map(|_| {
+                // The server is up — keep the process alive while the app is
+                // backgrounded and the game runs (HostService on Android;
+                // a no-op everywhere else). Fired only on success: a failed
+                // host start must not promote the service.
+                notify_host_service(true);
+                HostingStatus {
+                    running: true,
+                    detail: format!("in-process · 127.0.0.1:{NATIVE_HTTP_PORT}"),
+                }
             })
             .map_err(|e| e);
         ctx.request_repaint();
@@ -223,6 +268,9 @@ pub fn hosting_stop(
             running: false,
             detail: "stopped".into(),
         });
+        // Demote the host service whatever stop_backend said (it cannot
+        // fail — see native_server::stop); hosting reported stopped.
+        notify_host_service(false);
         ctx.request_repaint();
         on_done(result);
         return;
@@ -514,9 +562,13 @@ mod native_server {
 
     /// Ensure the server data tree exists under `data_root/owen` (copy from
     /// the bundled `owen` tree once — the deployer's 1:1 roots stay untouched).
+    /// Re-copy when the deployed tree predates the CloudStorage inis so
+    /// upgrades from older bundles pick up the fixed XMPP port (8080).
     fn ensure_server_data(data_root: &Path) -> PathBuf {
         let target = data_root.join("owen");
-        if !target.join("manifests.json").is_file() {
+        if !target.join("manifests.json").is_file()
+            || !target.join("CloudStorage/DefaultEngine.ini").is_file()
+        {
             let bundled = bundled_hint().join("owen");
             if bundled.is_dir() {
                 copy_tree(&bundled, &target);

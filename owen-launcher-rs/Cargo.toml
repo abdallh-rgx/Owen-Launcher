@@ -15,6 +15,7 @@ members = [
     "crates/owen-patcher-jni",
     "crates/owen-launcher",
     "crates/owen-app",
+    "crates/owen-ogs",
 ]
 
 [workspace.package]

@@ -2815,6 +2815,14 @@ name = "owen-lawin"
 version = "2.0.0"
 
 [[package]]
+name = "owen-ogs"
+version = "2.0.0"
+dependencies = [
+ "owen-hook",
+ "serde_json",
+]
+
+[[package]]
 name = "owen-pak"
 version = "2.0.0"
 

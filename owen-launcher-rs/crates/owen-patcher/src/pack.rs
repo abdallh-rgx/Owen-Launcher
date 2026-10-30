@@ -1,10 +1,14 @@
-//! The pure-Rust APK packer — assembles `dist/OwenLauncher-v1.8.0-release.apk`
-//! from the workspace's own outputs, with zero Android SDK involvement:
+//! The pure-Rust APK packer — assembles `dist/OwenLauncher-v1.9.0-release.apk`
+//! from the workspace's own outputs, with zero Android SDK involvement at
+//! pack time:
 //!
 //! ```text
-//! AndroidManifest.xml   STORED  (axmlwriter, 4-aligned)
-//! resources.arsc        STORED  (empty 12-byte table, 4-aligned)
-//! classes.dex           DEFLATE (the T5-JNI agent's dex)
+//! AndroidManifest.xml   STORED  (aapt2 link output when prebuilt, else
+//!                               axmlwriter; 4-aligned either way)
+//! resources.arsc        STORED  (aapt2 link output when prebuilt, else the
+//!                               empty 12-byte table; 4-aligned either way)
+//! classes.dex           DEFLATE (javac+d8 output when prebuilt, else
+//!                               assets/dex/classes.dex)
 //! lib/arm64-v8a/*.so    STORED  (16 KiB page-aligned: libowen_app + libowen)
 //! assets/lawin/**       DEFLATE (data/lawin)
 //! assets/owen/**        DEFLATE (data/owen)
@@ -13,6 +17,15 @@
 //! assets/tools/*        DEFLATE (ogfn-debug.keystore)
 //! assets/signing/*      DEFLATE (the ogfn key/cert the app re-uses)
 //! ```
+//!
+//! The **prebuilt** inputs ([`PackConfig::prebuilt_manifest`] /
+//! [`PackConfig::prebuilt_arsc`] / [`PackConfig::prebuilt_dex`], produced by
+//! `aapt2` + `javac` + `d8` in `tools/build-apk.sh`) are the REAL Android
+//! build-tooling artifacts and are strongly preferred — the handcrafted
+//! axmlwriter manifest and the 12-byte stub arsc remain only as the fallback
+//! for SDK-less smoke builds. Prebuilt inputs are roundtrip-validated before
+//! they enter the zip (see [`validate_prebuilt_manifest`] /
+//! [`validate_prebuilt_arsc`] / [`validate_prebuilt_dex`]).
 //!
 //! Then v1 (`CERT.RSA` with the ORIGINAL ogfn certificate) + v2 signing and a
 //! full self-verification (verify_v1 + verify_v2 + zipalign checks).
@@ -32,7 +45,12 @@ use std::path::{Path, PathBuf};
 
 /// The final artifact name (matches the Kotlin app's package so it installs
 /// as an update).
-pub const OUT_NAME: &str = "OwenLauncher-v1.8.0-release.apk";
+pub const OUT_NAME: &str = "OwenLauncher-v1.9.0-release.apk";
+
+/// The dex foreground service the JNI layer starts when hosting toggles
+/// (`app/src/com/abdallhrgx/owenlauncher/core/HostService.java`). Prebuilt
+/// manifests are checked for it (soft — a warning note, not an error).
+pub const HOST_SERVICE_CLASS: &str = "com.abdallhrgx.owenlauncher.core.HostService";
 
 /// The redirecter's output file (`owen-redirecter` `[lib] name = "owen"`).
 pub const REDIRECTER_SO: &str = "libowen.so";
@@ -57,6 +75,188 @@ pub fn empty_resources_arsc() -> Vec<u8> {
     out
 }
 
+/* ---------------------- prebuilt-input validation ----------------------- */
+
+/// Little-endian u16 read with bounds checking (`None` when out of range).
+fn u16_le(d: &[u8], off: usize) -> Option<u16> {
+    Some(u16::from_le_bytes([*d.get(off)?, *d.get(off + 1)?]))
+}
+
+/// Little-endian u32 read with bounds checking (`None` when out of range).
+fn u32_le(d: &[u8], off: usize) -> Option<u32> {
+    let b = d.get(off..off + 4)?;
+    Some(u32::from_le_bytes([b[0], b[1], b[2], b[3]]))
+}
+
+/// What [`validate_prebuilt_manifest`] found in the manifest.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ManifestCheck {
+    /// Number of strings in the manifest's string pool.
+    pub strings: usize,
+    /// Whether `com.abdallhrgx.owenlauncher.core.HostService` (the foreground
+    /// hosting service) is declared in the pool.
+    pub host_service: bool,
+}
+
+/// Roundtrip-validate a prebuilt (aapt2) binary `AndroidManifest.xml` with
+/// the EXISTING owen-apk reader — the same discipline the axmlwriter
+/// self-test applies to its own output, now applied to aapt2's:
+///
+/// * the AXML file header must be `RES_XML_TYPE` with a size that matches the
+///   buffer exactly,
+/// * the chunk chain must cover the file with no gaps/overlaps and contain
+///   at least one `START_ELEMENT` chunk,
+/// * the string pool must parse with `owen_apk::axml::StringPool::parse_pool`
+///   (UTF-8 or UTF-16 — both real aapt2 outputs),
+/// * the pool must carry every string the launcher's install/boot contract
+///   needs — package, `android.app.lib_name` **matching `lib_name`** (the
+///   manifest ↔ packed `.so` contract), the NativeActivity, the receiver +
+///   its action, MAIN/LAUNCHER and all 9 permissions.
+///
+/// The HostService declaration is reported (soft) rather than required so
+/// minimal smoke manifests still pack — `pack()` turns it into a warning.
+pub fn validate_prebuilt_manifest(bytes: &[u8], lib_name: &str) -> Result<ManifestCheck, String> {
+    let bad = |msg: String| format!("prebuilt AndroidManifest.xml: {msg}");
+    use owen_apk::axml::{
+        StringPool, RES_STRING_POOL_TYPE, RES_XML_START_ELEMENT_TYPE, RES_XML_TYPE,
+    };
+
+    // --- file header ------------------------------------------------------
+    if bytes.len() < 8 {
+        return Err(bad("shorter than an AXML file header".into()));
+    }
+    if u16_le(bytes, 0) != Some(RES_XML_TYPE) {
+        return Err(bad(
+            "file header type is not RES_XML_TYPE — not binary AXML (aapt2 link output \
+             expected, not the text manifest)"
+                .into(),
+        ));
+    }
+    if u16_le(bytes, 2) != Some(8) {
+        return Err(bad("file header size is not 8".into()));
+    }
+    let total = u32_le(bytes, 4).unwrap_or(0) as usize;
+    if total != bytes.len() {
+        return Err(bad(format!(
+            "header size {total} != buffer size {}",
+            bytes.len()
+        )));
+    }
+
+    // --- chunk walk -------------------------------------------------------
+    let mut off = 8usize;
+    let mut pool: Option<StringPool> = None;
+    let mut elements = 0usize;
+    while off < bytes.len() {
+        let Some(ctype) = u16_le(bytes, off) else {
+            return Err(bad(format!("truncated chunk header at {off}")));
+        };
+        let header_size = u16_le(bytes, off + 2).unwrap_or(0) as usize;
+        let csize = u32_le(bytes, off + 4).unwrap_or(0) as usize;
+        if header_size < 8 || csize < header_size || off + csize > bytes.len() {
+            return Err(bad(format!(
+                "chunk {ctype:#06x} at {off} has an inconsistent size (header {header_size}, \
+                 size {csize}, buffer {})",
+                bytes.len()
+            )));
+        }
+        if ctype == RES_STRING_POOL_TYPE && pool.is_none() {
+            let chunk = &bytes[off..off + csize];
+            pool = Some(StringPool::parse_pool(chunk).ok_or_else(|| {
+                bad("string pool does not parse with the owen-apk reader (roundtrip \
+                     broken — not an aapt2 binary manifest?)"
+                    .into())
+            })?);
+        }
+        if ctype == RES_XML_START_ELEMENT_TYPE {
+            elements += 1;
+        }
+        off += csize;
+    }
+    if off != bytes.len() {
+        return Err(bad("chunks do not cover the file exactly".into()));
+    }
+    let pool = pool.ok_or_else(|| bad("no RES_STRING_POOL_TYPE chunk found".into()))?;
+    if elements == 0 {
+        return Err(bad("no START_ELEMENT chunks — an empty AXML file".into()));
+    }
+
+    // --- the install/boot contract in the pool ----------------------------
+    let strings: Vec<&str> = pool.strings.iter().map(|s| s.as_str()).collect();
+    let need = |s: &str| -> Result<(), String> {
+        if strings.contains(&s) {
+            Ok(())
+        } else {
+            Err(bad(format!(
+                "string pool is missing {s:?} — the manifest does not match the launcher \
+                 component set"
+            )))
+        }
+    };
+    need(axmlwriter::PACKAGE)?;
+    // The manifest ↔ packed .so contract: android.app.lib_name's value must
+    // equal PackConfig::lib_name() (libowen_app.so → "owen_app").
+    need(lib_name)?;
+    need(axmlwriter::META_LIB_NAME)?;
+    need("android.app.NativeActivity")?;
+    need(axmlwriter::INSTALL_RESULT_RECEIVER)?;
+    need(axmlwriter::ACTION_INSTALL_RESULT)?;
+    need("android.intent.action.MAIN")?;
+    need("android.intent.category.LAUNCHER")?;
+    for perm in axmlwriter::PERMISSIONS {
+        need(perm)?;
+    }
+    let host_service = strings.contains(&HOST_SERVICE_CLASS);
+    Ok(ManifestCheck { strings: strings.len(), host_service })
+}
+
+/// Validate a prebuilt (aapt2) `resources.arsc`: a `RES_TABLE_TYPE` chunk
+/// whose header size matches the buffer and which carries at least one
+/// package (the empty 12-byte stub has zero).
+pub fn validate_prebuilt_arsc(bytes: &[u8]) -> Result<(), String> {
+    let bad = |msg: &str| format!("prebuilt resources.arsc: {msg}");
+    if bytes.len() < 12 {
+        return Err(bad("shorter than a RES_TABLE_TYPE header"));
+    }
+    if u16_le(bytes, 0) != Some(0x0002) {
+        return Err(bad("chunk type is not RES_TABLE_TYPE (0x0002)"));
+    }
+    let header_size = u16_le(bytes, 2).unwrap_or(0) as usize;
+    let size = u32_le(bytes, 4).unwrap_or(0) as usize;
+    let packages = u32_le(bytes, 8).unwrap_or(0);
+    if header_size < 12 {
+        return Err(bad(&format!("header size {header_size} < 12")));
+    }
+    if size != bytes.len() {
+        return Err(bad(&format!(
+            "table size {size} != buffer size {}",
+            bytes.len()
+        )));
+    }
+    if packages == 0 {
+        return Err(bad(
+            "packageCount is 0 — that is the empty stub, not an aapt2 table",
+        ));
+    }
+    Ok(())
+}
+
+/// Validate a prebuilt (javac + d8) `classes.dex`: the `dex\n035` magic d8
+/// emits for `--min-api 24`, plus a whole DEX header present.
+pub fn validate_prebuilt_dex(bytes: &[u8]) -> Result<(), String> {
+    if !bytes.starts_with(b"dex\n035") {
+        return Err(
+            "prebuilt classes.dex: magic is not \"dex\\n035\" (d8 --min-api 24 output expected)"
+                .to_string(),
+        );
+    }
+    if bytes.len() < 0x70 {
+        return Err("prebuilt classes.dex: shorter than a DEX header (0x70)".to_string());
+    }
+    Ok(())
+}
+
+
 #[derive(Debug, Clone)]
 pub struct PackConfig {
     /// Workspace root (`owen-launcher-rs/`).
@@ -74,6 +274,18 @@ pub struct PackConfig {
     /// `classes.dex` (T5-JNI agent output) — required unless
     /// `allow_missing_dex`.
     pub dex: Option<PathBuf>,
+    /// Prebuilt **binary** `AndroidManifest.xml` (aapt2 link output — real
+    /// build tooling). When present it REPLACES the axmlwriter manifest in
+    /// the zip (same entry name, same STORED/4-aligned rules) and is
+    /// roundtrip-validated against the owen-apk AXML reader first.
+    pub prebuilt_manifest: Option<Vec<u8>>,
+    /// Prebuilt `resources.arsc` (aapt2 link output). When present it
+    /// REPLACES the empty 12-byte stub table (same entry name, STORED,
+    /// 4-aligned).
+    pub prebuilt_arsc: Option<Vec<u8>>,
+    /// Prebuilt `classes.dex` (javac + d8 output). When present it REPLACES
+    /// the `assets/dex/classes.dex` input (same entry name, DEFLATE).
+    pub prebuilt_dex: Option<Vec<u8>>,
     /// `ogfn-debug.keystore` (extracted from git by `tools/build-apk.sh`).
     pub keystore: PathBuf,
     /// Season folder PNGs (defaults to `<repo>/public/owen/seasons`).
@@ -118,6 +330,9 @@ impl PackConfig {
             app_so,
             redirecter_so,
             dex: dex_path.is_file().then_some(dex_path),
+            prebuilt_manifest: None,
+            prebuilt_arsc: None,
+            prebuilt_dex: None,
             keystore: root.join("assets/tools/ogfn-debug.keystore"),
             seasons_dir: root
                 .parent()
@@ -222,25 +437,36 @@ pub fn pack(cfg: &PackConfig) -> Result<PackReport, String> {
         )
     })?;
 
-    let dex = match &cfg.dex {
-        Some(path) => Some(
-            fs::read(path).map_err(|e| format!("dex {}: {e}", path.display()))?,
-        ),
-        None => {
-            if cfg.allow_missing_dex {
-                notes.push(
-                    "WARNING: classes.dex missing — packed without it (--allow-missing-dex); \
-                     an APK with hasCode=true will NOT boot without the dex. Final assembly \
-                     must include it."
-                        .to_string(),
-                );
-                None
-            } else {
-                return Err(
-                    "classes.dex missing (expected at assets/dex/classes.dex). The dex comes \
-                     from the T5-JNI agent; pass --allow-missing-dex only for stub smoke builds."
-                        .to_string(),
-                );
+    let dex = if let Some(bytes) = cfg.prebuilt_dex.clone() {
+        // REAL build tooling: javac + d8 output (tools/build-apk.sh phase 3).
+        validate_prebuilt_dex(&bytes)?;
+        notes.push(format!(
+            "dex: prebuilt (javac + d8) — {} bytes, magic ok",
+            bytes.len()
+        ));
+        Some(bytes)
+    } else {
+        match &cfg.dex {
+            Some(path) => Some(
+                fs::read(path).map_err(|e| format!("dex {}: {e}", path.display()))?,
+            ),
+            None => {
+                if cfg.allow_missing_dex {
+                    notes.push(
+                        "WARNING: classes.dex missing — packed without it (--allow-missing-dex); \
+                         an APK with hasCode=true will NOT boot without the dex. Final assembly \
+                         must include it."
+                            .to_string(),
+                    );
+                    None
+                } else {
+                    return Err(
+                        "classes.dex missing (expected at assets/dex/classes.dex, or pass \
+                         --prebuilt-dex with the d8 output). The real path is javac + d8 in \
+                         tools/build-apk.sh; --allow-missing-dex is only for stub smoke builds."
+                            .to_string(),
+                    );
+                }
             }
         }
     };
@@ -251,10 +477,62 @@ pub fn pack(cfg: &PackConfig) -> Result<PackReport, String> {
     let unsigned = tmp_dir.join("unsigned.apk");
     write_empty_zip(&unsigned)?;
 
-    let manifest = axmlwriter::build_manifest(&lib_name);
+    // AndroidManifest.xml — the aapt2 prebuilt when given, else the
+    // handcrafted axmlwriter fallback. Same entry name + STORED/4-aligned
+    // rules either way; the prebuilt is roundtrip-validated first.
+    let manifest = match cfg.prebuilt_manifest.clone() {
+        Some(bytes) => {
+            let check = validate_prebuilt_manifest(&bytes, &lib_name)?;
+            notes.push(format!(
+                "manifest: prebuilt (aapt2) — {} bytes, {} pool strings, chunk walk ok",
+                bytes.len(),
+                check.strings
+            ));
+            if check.host_service {
+                notes.push(format!(
+                    "manifest: {HOST_SERVICE_CLASS} declared (foreground hosting)"
+                ));
+            } else {
+                notes.push(
+                    "WARNING: prebuilt manifest does not declare \
+                     {HOST_SERVICE_CLASS} — hosting will NOT survive the app being \
+                     backgrounded while the game runs"
+                        .to_string(),
+                );
+            }
+            bytes
+        }
+        None => {
+            notes.push(
+                "manifest: axmlwriter fallback (handcrafted — NOT produced by aapt2; \
+                 device-verified builds must pass --prebuilt-manifest)"
+                    .to_string(),
+            );
+            axmlwriter::build_manifest(&lib_name)
+        }
+    };
+
+    // resources.arsc — the aapt2 prebuilt when given, else the empty stub.
+    let arsc = match cfg.prebuilt_arsc.clone() {
+        Some(bytes) => {
+            validate_prebuilt_arsc(&bytes)?;
+            notes.push(format!(
+                "resources.arsc: prebuilt (aapt2) — {} bytes, table header ok",
+                bytes.len()
+            ));
+            bytes
+        }
+        None => {
+            notes.push(
+                "resources.arsc: empty 12-byte stub (no prebuilt passed)".to_string(),
+            );
+            empty_resources_arsc()
+        }
+    };
+
     let mut zip = ziprw::ZipArchive::open(&unsigned)?;
     zip.add_stored("AndroidManifest.xml", &manifest);
-    zip.add_stored("resources.arsc", &empty_resources_arsc());
+    zip.add_stored("resources.arsc", &arsc);
     if let Some(dex) = &dex {
         zip.add_entry("classes.dex", dex);
     }
@@ -419,3 +697,85 @@ pub fn check_alignment(apk: &Path) -> Result<Vec<String>, String> {
     }
     Ok(problems)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn manifest_validator_accepts_valid_axml() {
+        // The axmlwriter fallback output must pass the same validator the
+        // aapt2 prebuilts go through (it lacks HostService → soft flag only).
+        let bytes = axmlwriter::build_manifest("owen_app");
+        let check = validate_prebuilt_manifest(&bytes, "owen_app")
+            .expect("axmlwriter output must roundtrip-validate");
+        assert!(check.strings >= 16, "a plausible pool size");
+        assert!(!check.host_service, "the fallback manifest has no HostService");
+    }
+
+    #[test]
+    fn manifest_validator_rejects_garbage() {
+        for garbage in [
+            &b""[..],
+            b"not axml at all, just text",
+            b"\x03\x00\x08\x00\xff\xff\xff\xff", // header size != buffer
+        ] {
+            assert!(
+                validate_prebuilt_manifest(garbage, "owen_app").is_err(),
+                "garbage {garbage:?} must not validate"
+            );
+        }
+    }
+
+    #[test]
+    fn manifest_validator_enforces_lib_name_contract() {
+        // A manifest built for `owen_app` must NOT validate against a packed
+        // .so whose lib_name is different (the manifest ↔ .so contract).
+        let bytes = axmlwriter::build_manifest("owen_app");
+        let err = validate_prebuilt_manifest(&bytes, "owenapp").unwrap_err();
+        assert!(err.contains("owenapp"), "error must name the missing string: {err}");
+    }
+
+    #[test]
+    fn arsc_validator() {
+        // the empty stub is NOT a valid prebuilt (0 packages) …
+        assert!(validate_prebuilt_arsc(&empty_resources_arsc()).is_err());
+        // … but a one-package table is: header + a minimal package body.
+        let mut table: Vec<u8> = Vec::new();
+        table.extend_from_slice(&0x0002u16.to_le_bytes()); // RES_TABLE_TYPE
+        table.extend_from_slice(&12u16.to_le_bytes()); // headerSize
+        table.extend_from_slice(&(12u32 + 8).to_le_bytes()); // size (== len)
+        table.extend_from_slice(&1u32.to_le_bytes()); // packageCount
+        table.extend_from_slice(&[0u8; 8]); // minimal package body
+        assert_eq!(u32_le(&table, 4), Some(table.len() as u32));
+        validate_prebuilt_arsc(&table).expect("one-package table must validate");
+        // wrong type byte → reject
+        let mut bad_type = table.clone();
+        bad_type[0..2].copy_from_slice(&0x0001u16.to_le_bytes());
+        assert!(validate_prebuilt_arsc(&bad_type).is_err());
+        // size mismatch → reject
+        let mut bad_size = table.clone();
+        bad_size.truncate(bad_size.len() - 1);
+        assert!(validate_prebuilt_arsc(&bad_size).is_err());
+    }
+
+    #[test]
+    fn dex_validator() {
+        let mut dex = vec![0u8; 0x70];
+        dex[..7].copy_from_slice(b"dex\n035");
+        validate_prebuilt_dex(&dex).expect("dex\\n035 magic must validate");
+        dex[3] = b'x';
+        assert!(validate_prebuilt_dex(&dex).is_err(), "wrong magic must fail");
+        assert!(
+            validate_prebuilt_dex(b"dex\n035 short").is_err(),
+            "shorter than a header must fail"
+        );
+        // the CURRENT handcrafted dex (assets/dex/classes.dex) is 035 too —
+        // if present it must satisfy the same check.
+        if let Ok(bytes) = fs::read("assets/dex/classes.dex") {
+            validate_prebuilt_dex(&bytes)
+                .expect("the handcrafted dex is also 035 and must validate");
+        }
+    }
+}
+

@@ -1,0 +1,241 @@
+name: OGS 12.41 E2E (dump → build → play)
+
+# The chain the user demanded: convert OGS-12.41 to Android and TEST it from
+# inside the game, in an emulator, with screenshots of the lobby and of a
+# live match.
+#
+#   sdk-dump  : stock Fortnite 12.41 APK + MobileDumper-7 (MJx0) in the
+#               emulator → the REAL Android SDK dump (offsets + layouts)
+#   build-mod : libOwenOGS.so (the OGS port) built against that dump +
+#               the shim-injected play APK (libUE4.so → libUE4real.so)
+#   game-e2e  : owen-server + adb reverse + the game driven to the lobby
+#               (screenshot) and into a live match (screenshot)
+#
+# Every phase commits its evidence back to the repo (dumps/, docs/e2e/12.41/)
+# so the web console can render it.
+on:
+  push:
+    branches: ["**"]
+    paths-ignore: ["**.md", "web/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ogs-1241-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  sdk-dump:
+    name: "Phase 1 · MobileDumper-7 SDK dump"
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Disk + KVM report
+        run: |
+          df -h / /mnt
+          test -e /dev/kvm && echo "KVM: yes" || echo "KVM: NO — TCG (slow)"
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+        with: { targets: aarch64-linux-android }
+
+      - name: NDK r27c at the path the workspace expects
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "ndk;27.2.12479018" >/dev/null
+          sudo mkdir -p /home/z
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
+          sudo mkdir -p /home/z/ndk
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
+          ls /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar
+
+      - name: Run the dump phase
+        working-directory: owen-launcher-rs
+        env:
+          ANDROID_NDK_HOME: /home/z/ndk/android-ndk-r27c
+          OWEN_BOOT_TIMEOUT: "1500"
+        run: bash tools/ci/dump.sh
+
+      - name: Upload the dump
+        uses: actions/upload-artifact@v4
+        with:
+          name: og-dump
+          path: /tmp/og-dump.tar.zst
+          retention-days: 30
+
+      - name: Logcat + emulator evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dump-phase-logs
+          path: |
+            /tmp/dump-phase-logcat.txt
+            /tmp/emulator.log
+            /tmp/md-exe-run.log
+          if-no-files-found: ignore
+
+      - name: Commit the dump into the repo (dumps/)
+        run: |
+          mkdir -p dumps
+          cp /tmp/og-dump.tar.zst dumps/ogs-1241-android.tar.zst
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dumps/ogs-1241-android.tar.zst
+          git commit -m "ogs-1241: android sdk dump (MobileDumper-7) — $(date -u +%F)" || echo "nothing to commit"
+          git push
+
+  build-mod:
+    name: "Phase 2 · libOwenOGS + the play APK"
+    needs: sdk-dump
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+        with: { targets: aarch64-linux-android }
+
+      - name: NDK r27c at the path the workspace expects
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "ndk;27.2.12479018" >/dev/null
+          sudo mkdir -p /home/z /home/z/ndk
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
+
+      - name: Restore the dump (artifact first, committed fallback)
+        uses: actions/download-artifact@v4
+        with: { name: og-dump }
+        continue-on-error: true
+
+      - name: Place the dump where build.sh expects it
+        run: |
+          if [ -f og-dump.tar.zst ]; then
+            mkdir -p /tmp/og-dump
+            tar -xf og-dump.tar.zst -C /tmp
+            find /tmp/og-dump -maxdepth 3 -name 'SDK.hpp' || true
+          fi
+
+      - name: Run the build phase
+        working-directory: owen-launcher-rs
+        env:
+          ANDROID_NDK_HOME: /home/z/ndk/android-ndk-r27c
+        run: bash tools/ci/build.sh
+
+      - name: Upload the play APK + build logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: play-apk
+          path: |
+            /tmp/fortnite-12.41-owen.apk
+            /tmp/phase2/
+          retention-days: 30
+
+  game-e2e:
+    name: "Phase 3 · lobby + match in the emulator"
+    needs: build-mod
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+        with: { targets: aarch64-linux-android }
+
+      - name: NDK r27c at the path the workspace expects
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "ndk;27.2.12479018" >/dev/null
+          sudo mkdir -p /home/z /home/z/ndk
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
+          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
+
+      - name: Restore the play APK
+        uses: actions/download-artifact@v4
+        with: { name: play-apk }
+        continue-on-error: true
+
+      - name: Place the artifacts
+        run: |
+          mkdir -p /tmp/phase2
+          if [ -f fortnite-12.41-owen.apk ]; then mv fortnite-12.41-owen.apk /tmp/; fi
+          if [ -f phase2/flags ]; then mv phase2/flags /tmp/phase2/ 2>/dev/null; fi
+          ls -la /tmp/fortnite-12.41-owen.apk || true
+
+      - name: Build owen-server + the redirecter config shim
+        working-directory: owen-launcher-rs
+        run: |
+          export ANDROID_NDK_HOME=/home/z/ndk/android-ndk-r27c
+          CARGO_TARGET_DIR="$PWD/target" cargo build --release -p owen-server -p owen-patcher 2>&1 | tail -3
+
+      - name: Start owen-server on :8080
+        working-directory: owen-launcher-rs
+        run: |
+          nohup ./target/release/owen-server --port 8080 --bind 0.0.0.0 --data-dir data/owen > /tmp/e2e-server.log 2>&1 &
+          sleep 3
+          curl -s http://127.0.0.1:8080/ | head -c 300
+          mkdir -p /tmp/e2e && cp /tmp/e2e-server.log /tmp/e2e/server.log
+
+      - name: Boot the emulator
+        working-directory: owen-launcher-rs
+        env:
+          OWEN_BOOT_TIMEOUT: "1500"
+        run: bash tools/ci/emulator-up.sh
+
+      - name: Drive the game (login → lobby → match)
+        working-directory: owen-launcher-rs
+        env:
+          WITH_OGS: ${{ (contains(needs.build-mod.result, 'success') && '1') || '0' }}
+          OWEN_WORLD_OPEN_DELAY: "90"
+          OWEN_DOWNLOAD_TIMEOUT: "2700"
+          OWEN_LOGIN_TIMEOUT: "900"
+          OWEN_MATCH_TIMEOUT: "1500"
+        run: |
+          # WITH_OGS comes from the phase-2 flags file when present
+          if [ -f /tmp/phase2/flags ]; then export WITH_OGS=$(rg -o '1|0' <(rg WITH_OGS /tmp/phase2/flags) | head -1); fi
+          [ -f /tmp/phase2/flags ] && cat /tmp/phase2/flags || true
+          python3 tools/ci/drive.py /tmp/fortnite-12.41-owen.apk || true
+
+      - name: Always upload the evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-evidence
+          path: /tmp/e2e/
+          retention-days: 90
+
+      - name: Commit the screenshots into the repo
+        if: always()
+        run: |
+          mkdir -p docs/e2e/12.41
+          cp /tmp/e2e/lobby.png docs/e2e/12.41/lobby.png 2>/dev/null || true
+          cp /tmp/e2e/match.png docs/e2e/12.41/match.png 2>/dev/null || true
+          cp /tmp/e2e/status.json docs/e2e/12.41/status.json 2>/dev/null || true
+          cp /tmp/e2e/server.log docs/e2e/12.41/server.log 2>/dev/null || true
+          cp /tmp/e2e/logcat.txt docs/e2e/12.41/logcat.txt 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/e2e/12.41 || true
+          git commit -m "ogs-1241 e2e evidence — $(date -u +%F' '%T)" || echo "nothing to commit"
+          git push

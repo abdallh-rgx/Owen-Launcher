@@ -165,6 +165,7 @@ fn full_patch_pipeline_synthetic_apk() {
         no_sign: false,
         key_path: Some(key.clone()),
         rename_package: None,
+        extra_libs: Vec::new(),
     };
     let report = patch_apk(&input, &output, &opts).expect("patch_apk");
     assert!(report.dt_needed_injected, "DT_NEEDED must be injected");
@@ -477,6 +478,7 @@ fn adaptive_icon_alignment_preserved_after_patch() {
         no_sign: false,
         key_path: Some(key),
         rename_package: Some("com.owen.aligned1".to_string()),
+        extra_libs: Vec::new(),
     };
     let report = patch_apk(&input, &output, &opts).expect("patch_apk");
 

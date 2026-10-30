@@ -47,6 +47,7 @@ pub mod owen_manager;
 pub mod pack;
 pub mod patch_cache;
 pub mod patch_plan;
+pub mod shim;
 pub mod sign;
 pub mod sign_v1;
 pub mod ziprw;
@@ -126,6 +127,12 @@ pub struct PatchOptions {
     /// Optional package rename (binary AXML string-pool edit). `None` keeps
     /// the original package.
     pub rename_package: Option<String>,
+    /// Extra companion libs injected *alongside* libOwen.so into the same
+    /// target library's DT_NEEDED list and embedded under
+    /// `lib/arm64-v8a/<name>` — the seam the E2E pipeline uses for
+    /// `libOwenDumper.so` (MobileDumper-7) and `libOwenOGS.so` (the in-game
+    /// server). Empty for stock installs.
+    pub extra_libs: Vec<(String, PathBuf)>,
 }
 
 impl Default for PatchOptions {
@@ -136,6 +143,7 @@ impl Default for PatchOptions {
             no_sign: false,
             key_path: None,
             rename_package: None,
+            extra_libs: Vec::new(),
         }
     }
 }
@@ -231,16 +239,52 @@ pub fn patch_apk_with_plan(
     let lib_bytes = zip
         .read_entry(&target)
         .ok_or_else(|| PatchFailure::new("inject", format!("cannot read {target}")))?;
-    let (patched_lib, injected) = needed::inject_needed(&lib_bytes, "libOwen.so")
+    let mut working = lib_bytes;
+    let mut injected_any = false;
+    let (patched_lib, injected) = needed::inject_needed(&working, "libOwen.so")
         .map_err(|e| PatchFailure::new("inject", e))?;
+    working = patched_lib;
+    injected_any |= injected;
     if injected {
         report.dt_needed_injected = true;
-        zip.replace_entry(&target, &patched_lib)
-            .map_err(|e| PatchFailure::new("inject", e))?;
         report.notes.push(format!("DT_NEEDED injected into {target}"));
     } else {
         // Already present.
         report.notes.push("libOwen.so already in DT_NEEDED".into());
+    }
+
+    // ---- extra companion libs (libOwenDumper.so / libOwenOGS.so) ----------
+    // Each one gets its own DT_NEEDED entry (chained: every call converts the
+    // next spare DT_NULL) and its own zip entry under lib/arm64-v8a/.
+    let mut extra_bytes: Vec<(String, Vec<u8>)> = Vec::new();
+    for (name, path) in &plan.extra_libs {
+        if name.contains('/') || name.contains('\\') {
+            return Err(PatchFailure::new(
+                "inject",
+                format!("extra lib name {name:?} must be a bare file name"),
+            ));
+        }
+        let bytes = std::fs::read(path).map_err(|e| {
+            PatchFailure::new("inject", format!("cannot read extra lib {}: {e}", path.display()))
+        })?;
+        if bytes.len() < 64 || &bytes[..4] != b"\x7fELF" {
+            return Err(PatchFailure::new(
+                "inject",
+                format!("{} is not an ELF library", path.display()),
+            ));
+        }
+        let (patched, injected_extra) = needed::inject_needed(&working, name)
+            .map_err(|e| PatchFailure::new("inject", format!("extra lib {name}: {e}")))?;
+        working = patched;
+        injected_any |= injected_extra;
+        report
+            .notes
+            .push(format!("extra lib {name}: {}", if injected_extra { "DT_NEEDED injected" } else { "already present" }));
+        extra_bytes.push((name.clone(), bytes));
+    }
+    if injected_any {
+        zip.replace_entry(&target, &working)
+            .map_err(|e| PatchFailure::new("inject", e))?;
     }
 
     // ---- console / PartyHub (runtime flags → owen.json) -------------------
@@ -282,6 +326,11 @@ pub fn patch_apk_with_plan(
     }
     zip.set_entry(OWEN_LIB_ENTRY, &owen_bytes);
     report.lib_added = Some(OWEN_LIB_ENTRY.into());
+    for (name, bytes) in &extra_bytes {
+        let entry = format!("lib/arm64-v8a/{name}");
+        zip.set_entry(&entry, bytes);
+        report.lib_added = Some(entry);
+    }
 
     let unsigned = unsigned_path(output);
     zip.write_to(&unsigned)
@@ -548,7 +597,7 @@ fn rewrite_manifest(
 
 /// The unsigned intermediate path next to `output`
 /// (Kotlin: `workDir/owen_unsigned_<name>.apk`).
-fn unsigned_path(output: &Path) -> PathBuf {
+pub(crate) fn unsigned_path(output: &Path) -> PathBuf {
     let stem = output
         .file_stem()
         .and_then(|s| s.to_str())

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  app/res/values/strings.xml — the single resource of the app.
+
+  Deliberately unreferenced (the manifest labels the app with a literal
+  string, exactly like the handcrafted AXML did); it exists so the aapt2
+  link step has a resource table to link against. tools/build-apk.sh
+  compiles app/res and links it into app/build/base.apk.
+-->
+<resources>
+    <string name="app_name">Owen Launcher</string>
+</resources>

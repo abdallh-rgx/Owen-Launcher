@@ -277,9 +277,15 @@ pub fn patch_step(
     input: &Path,
     on_status: &mut dyn FnMut(String),
 ) -> Result<(PathBuf, String), String> {
-    // 1. cache hit?
+    // 0. extra companion libs (E2E seam): a `owen-libs.json` next to the
+    // app's data root names bare file names; the bytes are read from
+    // `<files>/ogs/<name>`. Stock installs have no such file → empty list.
+    let extra_libs = resolve_extra_libs();
+
+    // 1. cache hit? (the key folds in the extra-lib fingerprint so a
+    // changed dumper/OGS lib invalidates the cache)
     let mut cache = owen_patcher::patch_cache::PatchCache::open(&ctx.cache_dir);
-    let key = owen_patcher::patch_cache::key_for(
+    let key = owen_patcher::patch_cache::key_for_with(
         &ctx.version,
         &ctx.backend_url,
         if owen_patcher::owen_manager::is_party_hub_version(&ctx.version) {
@@ -287,6 +293,7 @@ pub fn patch_step(
         } else {
             ""
         },
+        &extra_libs_fingerprint(&extra_libs),
     );
     if let Some(hit) = cache.lookup(&key) {
         on_status("Patched build restored from cache".into());
@@ -308,6 +315,7 @@ pub fn patch_step(
         no_sign: false,
         key_path: Some(ctx.key_path.clone()),
         rename_package: target_pkg.clone(),
+        extra_libs: extra_libs.clone(),
     };
     let plan = owen_patcher::patch_plan::PatchPlan::from_options(&opts);
     match owen_patcher::patch_apk_with_plan(input, &out, &plan) {
@@ -328,6 +336,57 @@ pub fn patch_step(
 }
 
 /* --------------------------- the host installers --------------------------- */
+
+/// Read `<data root>/owen-libs.json` (a plain JSON array of bare file
+/// names, e.g. `["libOwenDumper.so"]`) and pair each with
+/// `<data root>/ogs/<name>`. Any missing file drops out with a logged
+/// warning instead of failing the patch.
+fn resolve_extra_libs() -> Vec<(String, std::path::PathBuf)> {
+    let root = data_root();
+    let list = root.join("owen-libs.json");
+    let Ok(text) = std::fs::read_to_string(&list) else {
+        return Vec::new();
+    };
+    let Ok(names) = serde_json::from_str::<Vec<String>>(&text) else {
+        return Vec::new();
+    };
+    let mut out = Vec::new();
+    for name in names {
+        if name.contains('/') || name.contains('\\') {
+            continue;
+        }
+        let path = root.join("ogs").join(&name);
+        if path.is_file() {
+            out.push((name, path));
+        }
+    }
+    out
+}
+
+/// Conservative cache fingerprint for the extra libs: name + length +
+/// first 8 bytes. Enough to invalidate on any real change without a hash
+/// dependency (the CI device starts with an empty cache anyway).
+fn extra_libs_fingerprint(libs: &[(String, std::path::PathBuf)]) -> String {
+    if libs.is_empty() {
+        return String::new();
+    }
+    libs.iter()
+        .map(|(name, path)| {
+            let head = std::fs::read(path)
+                .ok()
+                .map(|b| {
+                    b.iter()
+                        .take(8)
+                        .map(|x| format!("{x:02x}"))
+                        .collect::<String>()
+                })
+                .unwrap_or_default();
+            let len = std::fs::metadata(path).map(|m| m.len()).unwrap_or(0);
+            format!("{name}:{len}:{head}")
+        })
+        .collect::<Vec<_>>()
+        .join(",")
+}
 
 /// Android: real PackageInstaller sessions through the JNI bridge; the
 /// patch core runs before the session.

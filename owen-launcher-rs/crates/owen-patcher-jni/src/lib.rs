@@ -65,6 +65,7 @@ fn inner(
         no_sign: false,
         key_path,
         rename_package,
+        extra_libs: Vec::new(),
     };
     let report = patch_apk(PathBuf::from(&input).as_path(), PathBuf::from(&output).as_path(), &opts)
         .map_err(|e| format!("patchApk failed: {e}"))?;

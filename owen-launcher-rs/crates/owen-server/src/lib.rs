@@ -7,6 +7,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod clouddir;
 pub mod login_page;
 pub mod partyhub;
 pub mod pbkdf2;
@@ -14,6 +15,9 @@ pub mod routes;
 pub mod seasons;
 pub mod state;
 pub mod xmpp;
+
+/// The 12.41 login page (routes.rs serves this at `/login`).
+pub use login_page::LOGIN_PAGE_1241;
 
 use std::net::SocketAddr;
 use std::path::PathBuf;

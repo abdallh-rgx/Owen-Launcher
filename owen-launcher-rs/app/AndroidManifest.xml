@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  app/AndroidManifest.xml — the REAL text manifest for the Rust launcher.
+
+  Compiled by aapt2 (tools/build-apk.sh phase 3):
+
+      aapt2 compile   (app/res, to app/build/res.zip)
+      aapt2 link      (this manifest + android.jar + res.zip,
+                       to app/build/base.apk)
+
+  It replicates the component set the handcrafted AXML writer emitted
+  (crates/owen-apk/src/axmlwriter.rs::manifest_tree) 1:1 — same package,
+  same 9 permissions, same NativeActivity + InstallResultReceiver — and adds:
+
+    * android:foregroundServiceType="dataSync" (application + service)
+    * the HostService foreground service the JNI layer starts when hosting
+      toggles, so the in-process Owen Server (127.0.0.1:3551 HTTP +
+      127.0.0.1:8080 XMPP) survives the launcher being backgrounded while
+      the game runs.
+
+  versionCode 19 / versionName 1.9.0 (one past the handcrafted 18 / 1.8.0).
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.abdallhrgx.owenlauncher"
+    android:versionCode="19"
+    android:versionName="1.9.0">
+
+    <!-- The 9 original uses-permissions (KILL_BACKGROUND_PROCESSES was dropped
+         with the Kotlin kill-switch; FOREGROUND_SERVICE* + POST_NOTIFICATIONS
+         back the HostService). -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-sdk
+        android:minSdkVersion="24"
+        android:targetSdkVersion="34" />
+
+    <application
+        android:label="Owen Launcher"
+        android:hasCode="true"
+        android:extractNativeLibs="true"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:debuggable="false"
+        android:foregroundServiceType="dataSync">
+
+        <!-- The whole UI: eframe on a NativeActivity. android.app.lib_name
+             MUST equal PackConfig::lib_name() (libowen_app.so → "owen_app");
+             owen-patcher validates it against the packed .so at build time. -->
+        <activity
+            android:name="android.app.NativeActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="owen_app" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Foreground host service — started/stopped from Rust through the
+             JNI bridge (crates/owen-app/src/jni_android.rs) whenever the
+             hosting panel toggles. Not exported, no intent filters. -->
+        <service
+            android:name="com.abdallhrgx.owenlauncher.core.HostService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- The install-result receiver — the other dex class. Its
+             <clinit> System.loadLibrary("owen_app") pulls in the Rust
+             cdylib whose JNI_OnLoad RegisterNatives-es nativeOnReceive. -->
+        <receiver
+            android:name="com.abdallhrgx.owenlauncher.core.patch.InstallResultReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.abdallhrgx.owenlauncher.INSTALL_RESULT" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

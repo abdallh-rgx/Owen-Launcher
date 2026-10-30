@@ -30,10 +30,14 @@
 
 mod allocator;
 mod assemble;
+mod capi;
 mod hook;
 mod relocate;
 mod trampoline;
 
+pub use capi::{
+    owen_hook_install, owen_hook_restore_all, owen_hook_trampoline,
+};
 pub use hook::{install, restore_all, Installed, OriginalFn};
 
 use core::fmt;

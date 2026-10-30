@@ -91,6 +91,27 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
             _ => {}
         }
     }
+    // ---- terminator guard ----
+    // Converting the first DT_NULL must never leave the array unterminated:
+    // bionic walks PT_DYNAMIC until a DT_NULL, so the entry AFTER the
+    // converted slot has to be another DT_NULL (or, for an array whose last
+    // entry is the candidate, we simply refuse). Without this, a lib whose
+    // spare slots are exhausted produces a dynamic array that runs into
+    // garbage -> the linker rejects the whole .so -> the game dies at load
+    // (the "instant crash" class of bug). The same guard exists in
+    // owen-apk/src/needed.rs; keep the two in sync.
+    if let Some(off) = null_slot {
+        let next_off = off + 16;
+        let in_bounds = next_off + 16 <= dyn_off + dyn_size && next_off + 16 <= data.len();
+        let next_is_null = in_bounds
+            && rd_u64(&data, next_off).map(|t| t as i64) == Some(DT_NULL as i64);
+        if !next_is_null {
+            return Err(
+                "no spare DT_NULL slot in PT_DYNAMIC (converting the last NULL would leave the array unterminated)"
+                    .into(),
+            );
+        }
+    }
     let strtab_va = strtab_va.ok_or("no DT_STRTAB")?;
     let strtab_off = elf
         .va_to_off(strtab_va)
@@ -107,16 +128,23 @@ pub fn inject_needed(lib: &[u8], lib_name: &str) -> Result<(Vec<u8>, bool), Stri
     });
 
     // ---- 2) inter-section alignment gaps after the strtab ----
+    // The placement bytes must be all zero before we write: repeated
+    // injections (libOwen.so + libOwenDumper.so + …) each re-run this scan
+    // over the *patched* image, and a gap already consumed by a previous
+    // name must not be handed out twice. Zero-run scan inside each gap,
+    // exactly like `find_nul_run` but over the gap range.
     let placement = placement.or_else(|| {
         let gaps = section_gaps_after(&data, strtab_end);
         for (start, end) in gaps {
             if end > start && end - start >= need {
-                let at = start;
-                // The gap must be inside a PT_LOAD (so it is mapped) and
-                // its VA must be resolvable.
-                if let Some(va) = elf.off_to_va(at as u64) {
-                    if va >= strtab_va + strsz {
-                        return Some((at, va - strtab_va));
+                if let Some(rel) = find_zero_run(&data[start..end], need) {
+                    let at = start + rel;
+                    // The gap must be inside a PT_LOAD (so it is mapped) and
+                    // its VA must be resolvable.
+                    if let Some(va) = elf.off_to_va(at as u64) {
+                        if va >= strtab_va + strsz {
+                            return Some((at, va - strtab_va));
+                        }
                     }
                 }
             }
@@ -203,6 +231,26 @@ fn find_nul_run(buf: &[u8], len: usize) -> Option<usize> {
             run += 1;
             if run >= len {
                 return Some(i);
+            }
+        } else {
+            run = 0;
+        }
+    }
+    None
+}
+
+/// First all-zero window of `len` bytes inside `buf` (front-anchored).
+/// Shared by the gap placement so repeat injections never collide.
+fn find_zero_run(buf: &[u8], len: usize) -> Option<usize> {
+    if buf.len() < len {
+        return None;
+    }
+    let mut run = 0usize;
+    for (i, &b) in buf.iter().enumerate() {
+        if b == 0 {
+            run += 1;
+            if run >= len {
+                return Some(i + 1 - len);
             }
         } else {
             run = 0;

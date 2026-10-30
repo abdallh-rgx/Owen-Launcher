@@ -17,7 +17,7 @@
 //! ```json
 //! {
 //!   "version": 1,
-//!   "server":   { "base_url": "...", "xmpp_host": "127.0.0.1", "xmpp_port": 5222,
+//!   "server":   { "base_url": "...", "xmpp_host": "127.0.0.1", "xmpp_port": 8080,
 //!                 "login_path": "/login", "graphql_path": "/partyhub/graphql" },
 //!   "webview":  { "login_url": "...", "force_cleartext": true, "partyhub": "auto" },
 //!   "console":  { "enabled": false }
@@ -71,6 +71,9 @@ pub struct PatchPlan {
     /// Write the derived `owen.json` next to the output APK (the runtime
     /// replacement for the console/PartyHub smali patches).
     pub emit_owen_config: bool,
+    /// Extra companion libs (name → path on disk) injected alongside
+    /// libOwen.so — see [`crate::PatchOptions::extra_libs`].
+    pub extra_libs: Vec<(String, PathBuf)>,
 }
 
 impl PatchPlan {
@@ -92,6 +95,7 @@ impl PatchPlan {
             key_path: opts.key_path.clone(),
             min_output_bytes: 0,
             emit_owen_config: false,
+            extra_libs: opts.extra_libs.clone(),
         }
     }
 
@@ -109,7 +113,9 @@ impl PatchPlan {
             "server": {
                 "base_url": base_url,
                 "xmpp_host": "127.0.0.1",
-                "xmpp_port": 5222,
+                // The on-device XMPP port (mirrors owen-launcher's
+                // NATIVE_XMPP_PORT and the CloudStorage ini ServerPort).
+                "xmpp_port": 8080,
                 "login_path": "/login",
                 "graphql_path": "/partyhub/graphql"
             },
@@ -145,6 +151,7 @@ mod tests {
         let json = plan.owen_config_json();
         let v: serde_json::Value = serde_json::from_str(&json).unwrap();
         assert_eq!(v["server"]["base_url"], "http://192.168.1.5:3551");
+        assert_eq!(v["server"]["xmpp_port"], 8080);
         assert_eq!(v["webview"]["partyhub"], "off");
         assert_eq!(v["console"]["enabled"], false);
         assert_eq!(v["webview"]["login_url"], "http://192.168.1.5:3551/login");

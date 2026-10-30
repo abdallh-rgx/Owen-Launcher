@@ -1,0 +1,18 @@
+[package]
+name = "owen-ogs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "libOwenOGS.so — the OGS 12.41 in-game match server mod ported to Android (Fortnite 12.41 client turned into a standalone server: hooks, bots, loot, booths, vehicles). C++ port lives in cpp/, compiled against the MobileDumper-7 SDK dump by build.rs when OGS_SDK_DIR is set."
+
+[lib]
+name = "owen_ogs"
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+owen-hook = { path = "../owen-hook" }
+serde_json = { workspace = true }
+
+[build-dependencies]
+serde_json = { workspace = true }

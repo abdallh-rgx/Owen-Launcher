@@ -161,20 +161,47 @@ pub fn key(
 /// `PatchCache.keyFor(version: OgVersion, backendUrl, loginUrl)` — the
 /// PartyHub flag is derived from the major version (seasons 12–15).
 pub fn key_for(version: &OgVersion, backend_url: &str, login_url: &str) -> String {
+    key_for_with(version, backend_url, login_url, "")
+}
+
+/// `keyFor` + the extra companion libs fingerprint (see
+/// `owen_app::platform::extra_libs_fingerprint`) so a changed
+/// `libOwenDumper.so` / `libOwenOGS.so` invalidates the cached patch.
+pub fn key_for_with(
+    version: &OgVersion,
+    backend_url: &str,
+    login_url: &str,
+    extras_fp: &str,
+) -> String {
     let major = version
         .version
         .split('.')
         .next()
         .and_then(|m| m.parse::<i64>().ok())
         .unwrap_or(0);
-    key(
-        &version.version,
+    let effective_login = if (12..=15).contains(&major) {
+        login_url
+    } else {
+        ""
+    };
+    let joined = format!(
+        "{}|{}|{}|{}|{}|{}|{}|{}",
+        CACHE_VERSION,
+        version.version,
         version.cl,
         version.is_dev,
         backend_url,
-        login_url,
+        effective_login,
         (12..=15).contains(&major),
-    )
+        extras_fp
+    );
+    let digest = Sha256::digest(joined.as_bytes());
+    let mut sb = String::with_capacity(32);
+    for b in digest {
+        sb.push(HEX[(b >> 4) as usize] as char);
+        sb.push(HEX[(b & 0xF) as usize] as char);
+    }
+    sb.chars().take(16).collect()
 }
 
 #[cfg(test)]
@@ -202,9 +229,26 @@ mod tests {
             is_dev: false,
             fixed_package: String::new(),
         };
+        let v11 = OgVersion {
+            season: 11,
+            version: "11.50".into(),
+            cl: 11265652,
+            is_dev: false,
+            fixed_package: String::new(),
+        };
+        // 12.41 is a PartyHub build (major 12): the login URL participates.
         let a = key_for(&v, "http://127.0.0.1:3551", "http://x/login");
-        let expected = key("12.41", 14009477, false, "http://127.0.0.1:3551", "http://x/login", true);
-        assert_eq!(a, expected);
+        assert_eq!(a.len(), 16);
+        assert!(a.chars().all(|c| c.is_ascii_hexdigit()));
+        // changing the login URL changes the key for 12..=15 only
+        let a2 = key_for(&v, "http://127.0.0.1:3551", "http://other/login");
+        assert_ne!(a, a2, "login url must count for PartyHub builds (12-15)");
+        // 11.50 is not: same login url, different key than the 12.41 shape,
+        // and its own login url must NOT participate
+        let b = key_for(&v11, "http://127.0.0.1:3551", "http://x/login");
+        let b2 = key_for(&v11, "http://127.0.0.1:3551", "http://other/login");
+        assert_eq!(b, b2, "login url must NOT count for non-PartyHub builds");
+        assert_ne!(a, b, "different versions derive different keys");
     }
 
     #[test]

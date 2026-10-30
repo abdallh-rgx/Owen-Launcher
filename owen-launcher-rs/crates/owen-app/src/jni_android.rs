@@ -19,6 +19,7 @@
 //! | [`installed_package`]                      | `OwenManager.isInstalled` / `getPackageInfo` (+ versionName/versionCode for the season list) |
 //! | [`JniInstaller`]                           | `PackageInstallHelper.kt` (`object PackageInstallHelper`) |
 //! | `native_on_receive` + the dex receiver     | `InstallResultReceiver.kt` |
+//! | [`host_service_start`] / [`host_service_stop`] | the two original foreground services (now `app/src/.../HostService.java`), fired by owen-launcher's `hosting_start`/`hosting_stop` |
 //!
 //! Safety model (same spirit as `owen-art`): this is the audited unsafe core
 //! of the app crate — `lib.rs` has `#![cfg_attr(not(target_os = "android"),
@@ -112,6 +113,15 @@ const INTENT_EXTRA_INTENT: &str = "android.intent.extra.INTENT";
 /// The receiver dex class (`com.abdallhrgx.owenlauncher.core.patch.InstallResultReceiver`
 /// in JNI form).
 const RECEIVER_CLASS: &str = "com/abdallhrgx/owenlauncher/core/patch/InstallResultReceiver";
+
+/// The host foreground service (`com.abdallhrgx.owenlauncher.core.HostService`
+/// in JNI form — `app/src/com/abdallhrgx/owenlauncher/core/HostService.java`),
+/// the Rust twin of the original Kotlin app's two foreground services. Its
+/// static `start(Context)`/`stop(Context)` entry points are driven by
+/// [`host_service_start`]/[`host_service_stop`], which owen-launcher's
+/// `hosting_start`/`hosting_stop` fire through the hook installed in
+/// [`JNI_OnLoad`].
+const HOST_SERVICE_CLASS: &str = "com/abdallhrgx/owenlauncher/core/HostService";
 
 /// The smali `<clinit>` loads the app library under this name
 /// (`System.loadLibrary("owen_app")` — cargo's default cdylib name of the
@@ -471,6 +481,22 @@ pub extern "C" fn JNI_OnLoad(vm: *mut std::ffi::c_void, _reserved: *mut std::ffi
             TAG,
             &format!("JNI_OnLoad: could not register the receiver natives: {e}"),
         ),
+    }
+    // Install the hosting foreground-service hook (owen-launcher's
+    // hosting_start/hosting_stop fires it): HostService keeps this process
+    // foreground — and with it the in-process Owen Server (HTTP 3551 + XMPP
+    // 8080) — alive while the launcher is backgrounded and the game runs.
+    // Desktop/wasm never load this library, so the hook stays unset there
+    // (a no-op in owen-launcher).
+    let hooked = owen_launcher::backend::set_host_service_hook(Box::new(|running| {
+        if running {
+            host_service_start();
+        } else {
+            host_service_stop();
+        }
+    }));
+    if !hooked {
+        diag::add('W', TAG, "JNI_OnLoad: host-service hook already installed (reload?)");
     }
     JNI_VERSION_1_6
 }
@@ -939,6 +965,48 @@ pub fn native_library_dir() -> PathBuf {
             PathBuf::new()
         }
     }
+}
+
+/* --------------------- the host foreground service ----------------------- */
+
+/// `HostService.start(context)` / `HostService.stop(context)` — the static
+/// entry points of the dex foreground service ([`HOST_SERVICE_CLASS`]).
+/// Mirrors the style of the other Java calls here: attach, find the class,
+/// call the static with the Application Context, clear + report any pending
+/// exception. NEVER propagates — a failed foreground promotion must not
+/// fail hosting (it is logged and the server keeps running).
+fn host_service(method: &str) {
+    let called = jni_run::<()>(|env| {
+        let ctx = context_global()?;
+        let class = env.find_class(HOST_SERVICE_CLASS)?;
+        env.call_static_method(
+            &class,
+            method,
+            "(Landroid/content/Context;)V",
+            &[(ctx.as_obj()).into()],
+        )?;
+        if exception_pending(env) {
+            return Err(format!("HostService.{method} threw").into());
+        }
+        Ok(())
+    });
+    match called {
+        Ok(()) => diag::i(TAG, &format!("HostService.{method} ok")),
+        Err(e) => diag::e(TAG, &format!("HostService.{method} failed: {e}")),
+    }
+}
+
+/// `HostService.start(context)` — promote this process to a foreground
+/// service so the in-process Owen Server survives the app being backgrounded
+/// while the game runs. Installed as the owen-launcher hosting hook in
+/// [`JNI_OnLoad`]; also callable directly.
+pub fn host_service_start() {
+    host_service("start");
+}
+
+/// `HostService.stop(context)` — demote it again (hosting stopped).
+pub fn host_service_stop() {
+    host_service("stop");
 }
 
 /* --------------------- public items 6-8: the OS intents -------------------- */

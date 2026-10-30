@@ -56,7 +56,9 @@ impl Default for ServerConfig {
         ServerConfig {
             base_url: default_base_url(),
             xmpp_host: "127.0.0.1".into(),
-            xmpp_port: 5222,
+            // The on-device XMPP port (matches owen-launcher's
+            // NATIVE_XMPP_PORT and the CloudStorage ini ServerPort).
+            xmpp_port: 8080,
             login_path: "/login".into(),
             graphql_path: "/partyhub/graphql".into(),
         }

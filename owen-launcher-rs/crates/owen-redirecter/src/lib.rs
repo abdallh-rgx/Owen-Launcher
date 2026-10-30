@@ -38,7 +38,12 @@ use std::sync::atomic::{AtomicBool, Ordering};
 static STARTED: AtomicBool = AtomicBool::new(false);
 
 /// The libraries we hook, in priority order.
-const TARGET_LIBS: &[&str] = &["libUE4.so", "libUnreal.so", "libEOSSDK.so"];
+///
+/// `libUE4real.so` comes first: with the shim injection (owen-patcher
+/// `shim_patch`), the engine library is renamed to `libUE4real.so` and the
+/// 20KB loader shim takes the `libUE4.so` slot — the real engine must win
+/// every module-name race (hook target, version detect, signature scan).
+const TARGET_LIBS: &[&str] = &["libUE4real.so", "libUE4.so", "libUnreal.so", "libEOSSDK.so"];
 
 #[no_mangle]
 pub extern "C" fn JNI_OnLoad(_vm: *mut c_void, _reserved: *mut c_void) -> i32 {
@@ -107,8 +112,10 @@ fn worker() {
     let mut hooked: Vec<String> = Vec::new();
     let mut version: Option<String> = None;
 
-    // Wait up to 20s for the first engine library.
-    let Some((first_name, first_mod)) = maps::wait_for_module(&["libUE4.so", "libUnreal.so"], 20)
+    // Wait up to 20s for the first engine library (libUE4real first: the
+    // shim injection renames the engine; the shim itself carries no curl).
+    let Some((first_name, first_mod)) =
+        maps::wait_for_module(&["libUE4real.so", "libUE4.so", "libUnreal.so"], 20)
     else {
         owen_log::warn("owen: no engine library appeared within 20s");
         return;

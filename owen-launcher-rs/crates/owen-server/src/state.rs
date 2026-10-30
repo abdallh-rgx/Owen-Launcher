@@ -364,6 +364,23 @@ impl AppState {
                 self.log_info(format!("loaded {loaded} battle pass seasons"));
             }
         }
+        // Launcher manifest catalog (`manifests.json`, the version/CL/CDN
+        // list) — auto-loaded at boot so /launcher/api/public/assets/...
+        // answers with the real Epic CDN manifest without any admin action.
+        // POST /api/admin/manifests still upserts on top of these entries.
+        let manifest_load = self
+            .data_file("manifests.json")
+            .map(|data| self.manifests.write().unwrap().merge_manifest_list(&data));
+        match manifest_load {
+            Some(Ok(count)) if count > 0 => {
+                self.log_info(format!("loaded {count} manifest catalog entries from manifests.json"));
+            }
+            Some(Ok(_)) => {}
+            Some(Err(e)) => {
+                self.log_warn(format!("manifests.json is corrupt, manifest redirect disabled: {e}"))
+            }
+            None => {}
+        }
     }
 
     fn accounts_path(&self) -> PathBuf {
@@ -1117,6 +1134,38 @@ mod tests {
         assert_eq!(state2.battlepass_for(6).unwrap()["source"], "responses-dir-6");
         assert!(state2.battlepass_for(7).is_none());
         assert_eq!(state2.current_season(), 6);
+    }
+
+    #[test]
+    fn manifests_json_autoloads_into_catalog() {
+        let (state, dir) = test_state();
+        // no manifests.json → empty catalog (the old, broken 12.41 flow)
+        assert!(state.manifests.read().unwrap().entries.is_empty());
+
+        std::fs::write(
+            dir.join("manifests.json"),
+            r#"[{
+                "version": "12.41",
+                "cl": "12910313",
+                "releaseString": "++Fortnite+Release-12.41-CL-12910313-Android",
+                "manifestHash": "aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg",
+                "label": "12.41-CL-12910313",
+                "date": "2020-02-20",
+                "cdn": "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest"
+            }]"#,
+        )
+        .unwrap();
+
+        let state2 = AppState::load(dir.clone(), OwenConfig::default());
+        let manifests = state2.manifests.read().unwrap();
+        assert_eq!(manifests.entries.len(), 1);
+        let e = manifests
+            .find_release("++Fortnite+Release-12.41-CL-12910313-Android")
+            .expect("12.41 entry after autoload");
+        assert_eq!(
+            e.manifest_url,
+            "https://epicgames-download1.akamaized.net/Builds/Fortnite/Content/CloudDir/aEzFZyiSFDrqiS_7jkqD6K8KN4zQEg.manifest"
+        );
     }
 
     #[test]
