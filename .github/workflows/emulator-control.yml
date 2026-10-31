@@ -96,10 +96,12 @@ jobs:
           # المحاكي عندها يموت فوراً بـ «x86_64 emulation currently requires
           # hardware acceleration». الحل القياسي في CI:
           sudo chmod 666 /dev/kvm 2>/dev/null || true
-          # فحص حقيقي (لا يكفي وجود الملف):
-          "$ANDROID_HOME/emulator/emulator" -accel-check || {
-            echo "::error::KVM exists but is not usable (accel-check failed)"; exit 1;
-          }
+          ls -l /dev/kvm
+          if [ ! -r /dev/kvm ] || [ ! -w /dev/kvm ]; then
+            echo "::error::/dev/kvm is not readable/writable by this user even after chmod"
+            exit 1
+          fi
+          echo "KVM device OK (rw for this user)"
 
       - name: Install emulator + system image (API ${{ inputs.api_level }})
         run: |
@@ -188,6 +190,11 @@ jobs:
           ADB="$ANDROID_HOME/platform-tools/adb"
           EMU="$ANDROID_HOME/emulator/emulator"
           export ANDROID_AVD_HOME="$HOME/.android/avd"
+
+          # فحص تسارع حقيقي — الآن والمحاكي مثبت فعلاً (في خطوة KVM لم يكن موجوداً بعد)
+          "$EMU" -accel-check || {
+            echo "::error::emulator -accel-check failed — KVM not usable"; exit 1;
+          }
 
           rm -f /tmp/boot-finished
           nohup "$EMU" -avd "$AVD_NAME" \
