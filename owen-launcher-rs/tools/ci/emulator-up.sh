@@ -73,11 +73,20 @@ yes | timeout 240 "$SM" --licenses >/dev/null 2>&1 || true
 echo no | "$AVDM" create avd --force --name "$AVD" --device pixel_5 \
   --package "$IMG" --sdcard 2048M 2>&1 | tail -3
 "$AVDM" list avd 2>/dev/null | head -8 || true
-if [ ! -f "$HOME/.android/avd/$AVD.ini" ]; then
-  echo "::error::AVD $AVD was not created (no $HOME/.android/avd/$AVD.ini)"; exit 1
-fi
 
-AVD_HOME="$HOME/.android/avd/$AVD.avd"
+# round 14: the AVD landed in $HOME/.config/.android/avd (XDG) — discover
+# wherever it went and export ANDROID_AVD_HOME so the emulator finds it.
+AVD_INI=""
+for c in "$HOME/.android/avd/$AVD.ini" "$HOME/.config/.android/avd/$AVD.ini" "${ANDROID_SDK_HOME:-/nonexistent}/avd/$AVD.ini"; do
+  [ -f "$c" ] && AVD_INI="$c" && break
+done
+if [ -z "$AVD_INI" ]; then
+  echo "::error::AVD $AVD was not created anywhere"; exit 1
+fi
+export ANDROID_AVD_HOME="$(dirname "$AVD_INI")"
+echo "== AVD ini: $AVD_INI (ANDROID_AVD_HOME=$ANDROID_AVD_HOME)"
+AVD_HOME=$(sed -n 's/^path=//p' "$AVD_INI" | head -1)
+[ -n "$AVD_HOME" ] || AVD_HOME="$ANDROID_AVD_HOME/$AVD.avd"
 if [ -f "$AVD_HOME/config.ini" ]; then
   if grep -q '^disk.dataPartition.size' "$AVD_HOME/config.ini"; then
     sed -i 's/^disk.dataPartition.size=.*/disk.dataPartition.size=16G/' "$AVD_HOME/config.ini"
