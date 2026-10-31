@@ -36,7 +36,10 @@ echo "== kvm: $(test -e /dev/kvm && ls -l /dev/kvm || echo 'NO (TCG — will be 
 
 # ---- system image + platform: one call, real-file validation ----------------
 WANT="system-images;android-30;google_apis;x86_64"
-img_dir() { echo "$ANDROID_HOME/system-images/${1#system-images;}"; }
+# `;`-form ids ↔ `/`-form dirs.  THE round-12 bug: img_dir kept the
+# semicolons (`…/system-images/android-30;google_apis;x86_64`) so every
+# have_image probed a ghost path while the real image sat installed.
+img_dir() { local p="${1#system-images;}"; p="${p//;//}"; echo "$ANDROID_HOME/system-images/$p"; }
 have_image() { [ -f "$(img_dir "$1")/system.img" ] || [ -f "$(img_dir "$1")/system.img.androidbuild" ]; }
 
 if ! have_image "$WANT"; then
