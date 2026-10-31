@@ -93,3 +93,55 @@ model ScanRecord {
   variadic  Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+// ---------------------------------------------------------------------------
+// Owen Control Room — human-in-the-loop emulator annotation (Task 33)
+// ---------------------------------------------------------------------------
+// The GitHub Actions driver (emulator-control.yml) posts a screenshot here as
+// a PENDING ControlTask; the human clicks the button location on the site,
+// describes it and sets a wait; the driver polls the answer, taps the
+// emulator and marks the task APPLIED (with an "after" screenshot).
+
+/// One annotation request: "where is the button on this screenshot?".
+model ControlTask {
+  id           String    @id @default(cuid())
+  seq          Int       @unique
+  stepKey      String    @default("step")
+  title        String
+  instruction  String
+  /// PENDING | ANSWERED | APPLIED | FAILED | CANCELLED
+  status       String    @default("PENDING")
+  /// tap | swipe | wait | back | home | done | skip (user's answer)
+  action       String?
+  x            Float?
+  y            Float?
+  x2           Float?
+  y2           Float?
+  description  String?
+  waitMs       Int?
+  imageName    String?
+  afterName    String?
+  imageW       Int?
+  imageH       Int?
+  imageVersion Int       @default(1)
+  wantsRetake  Boolean   @default(false)
+  /// JSON string with driver context (current app, focus window, uptime…)
+  meta         String?
+  error        String?
+  answeredAt   DateTime?
+  appliedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+/// Singleton (id = 1) driver heartbeat, refreshed every ~20s by the runner.
+model ControlHeartbeat {
+  id        Int      @id @default(1)
+  state     String   @default("BOOT")
+  phase     String   @default("")
+  device    String   @default("")
+  message   String   @default("")
+  logTail   String   @default("")
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}

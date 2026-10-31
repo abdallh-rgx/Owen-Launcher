@@ -1,317 +1,324 @@
 "use client";
 
-/* Owen Launcher — Liquid Glass (iOS 26 style).
+/* Owen Control Room — غرفة تحكم أوين
  *
- * The complete launcher experience: boot splash → authentication with real
- * accounts (email + username + password, PBKDF2-verified by the Owen Rust
- * backend) → the main launcher with seasons, downloads, the native PartyHub,
- * profile and settings — all wired live to owen-server via /owen-api.
+ * Human-in-the-loop annotation UI: a GitHub Actions runner drives an Android
+ * emulator and posts PENDING tasks (screenshot + instruction). The operator
+ * clicks the button location on the screenshot, describes it, sets a wait
+ * duration and submits; the runner polls the answer and taps the emulator.
+ *
+ * The page polls GET /api/control/state every POLL_INTERVAL_MS and renders
+ * the current task, the runner pipeline status and the request history.
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, animate, motion, useMotionValue } from "framer-motion";
-import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  api,
-  tokenStore,
-  type Account,
-  type ManifestEntry,
-  type SeasonMeta,
-  type ServerStatus,
-} from "@/lib/launcher/api";
-import { tr, type Lang } from "@/lib/launcher/i18n";
-import { AuroraBackground, BootSplash } from "@/components/launcher/glass";
-import { AuthView } from "@/components/launcher/AuthView";
-import { MainShell, type ViewId } from "@/components/launcher/MainShell";
-import { DownloadsView, HomeView, SeasonsView } from "@/components/launcher/views";
-import { OfflineView, PartyHubView, ProfileView, SettingsView } from "@/components/launcher/views2";
-import { OgsEvidence } from "@/components/launcher/OgsEvidence";
+  HEARTBEAT_STALE_MS,
+  POLL_INTERVAL_MS,
+  type StateDTO,
+  type TaskDTO,
+} from "@/lib/control-types";
+import { Skeleton } from "@/components/ui/skeleton";
+/* لوحة المشغل القديمة (Liquid Glass + أدلة OGS) — محفوظة كتبويب بديل */
+import LauncherConsole from "@/components/launcher/launcher-console";
+import { ConnectionCard } from "@/components/control/connection-card";
+import { EmptyState } from "@/components/control/empty-state";
+import { HeaderBar } from "@/components/control/header-bar";
+import { HistoryList } from "@/components/control/history-list";
+import { PipelineStatus } from "@/components/control/pipeline-status";
+import { TaskCard } from "@/components/control/task-card";
+import {
+  beepNewTask,
+  type AnswerPayload,
+  type ApiResult,
+} from "@/components/control/utils";
 
-type Phase = "boot" | "auth" | "main" | "offline";
+const CONSECUTIVE_FAILURES_FOR_ERROR = 2;
+const MUTED_STORAGE_KEY = "owen-ctl-muted";
 
 export default function Page() {
-  const [phase, setPhase] = useState<Phase>("boot");
-  const [lang, setLang] = useState<Lang>("ar");
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [view, setView] = useState<ViewId>("home");
-  const [account, setAccount] = useState<Account | null>(null);
-  const [status, setStatus] = useState<ServerStatus | null>(null);
-  const [seasons, setSeasons] = useState<SeasonMeta[]>([]);
-  const [manifests, setManifests] = useState<ManifestEntry[]>([]);
-  const [ping, setPing] = useState<number | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [seasonBusy, setSeasonBusy] = useState(false);
-  /* The main-shell entry blur is driven by a hand-owned motion value so it can
-   * END at "none": a lingering `filter: blur(0px)` on this wrapper creates a
-   * containing block that breaks the mobile bottom tab bar's position:fixed. */
-  const mainBlur = useMotionValue("blur(10px)");
+  const [state, setState] = useState<StateDTO | null>(null);
+  const [connError, setConnError] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [view, setView] = useState<"control" | "launcher">("control");
 
-  const d = useMemo(() => tr(lang), [lang]);
+  const ctrlRef = useRef<AbortController | null>(null);
+  const failStreakRef = useRef(0);
+  const lastPendingIdRef = useRef<string | null>(null);
+  const firstLoadRef = useRef(true);
+  const mutedRef = useRef(false);
+  const baseTitleRef = useRef<string | null>(null);
+  const flashRef = useRef<{ iv: number | null; to: number | null }>({
+    iv: null,
+    to: null,
+  });
 
-  /* ---------- theme + direction ---------- */
+  /* ---------- كتم الصوت (محفوظ في localStorage) ---------- */
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("owen:web-lang") as Lang | null;
-      if (saved === "ar" || saved === "en") setLang(saved);
-      const savedTheme = localStorage.getItem("owen:web-theme");
-      if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
+      setMuted(window.localStorage.getItem(MUTED_STORAGE_KEY) === "1");
     } catch {
       /* ignore */
     }
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    try {
-      localStorage.setItem("owen:web-lang", lang);
-    } catch {
-      /* ignore */
-    }
-  }, [lang]);
+    mutedRef.current = muted;
+  }, [muted]);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-owen-theme", theme);
-    try {
-      localStorage.setItem("owen:web-theme", theme);
-    } catch {
-      /* ignore */
-    }
-  }, [theme]);
-
-  /* ---------- data loading ---------- */
-  const loadPublic = useCallback(async (): Promise<boolean> => {
-    const t0 = performance.now();
-    try {
-      const [st, ss, mf] = await Promise.all([
-        api.status(),
-        api.seasons().then((r) => r.seasons).catch(() => [] as SeasonMeta[]),
-        api.manifests().catch(() => [] as ManifestEntry[]),
-      ]);
-      setPing(Math.round(performance.now() - t0));
-      setStatus(st);
-      setSeasons(ss);
-      setManifests(mf);
-      return true;
-    } catch {
-      return false;
-    }
-  }, []);
-
-  const refreshAccount = useCallback(async () => {
-    if (!tokenStore.get()) return;
-    try {
-      const me = await api.me();
-      setAccount(me);
-      tokenStore.cacheMe(me);
-    } catch {
-      /* keep cached */
-    }
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const ok = await loadPublic();
-      if (cancelled) return;
-      if (!ok) {
-        setPhase("offline");
-        return;
-      }
-      // session restore happens inside AuthView's boot check
-      setPhase((p) => (p === "boot" ? "auth" : p));
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [loadPublic]);
-
-  /* periodic status ping */
-  useEffect(() => {
-    const iv = setInterval(async () => {
-      const t0 = performance.now();
+  const toggleMute = useCallback(() => {
+    setMuted((m) => {
+      const v = !m;
       try {
-        const st = await api.status();
-        setPing(Math.round(performance.now() - t0));
-        setStatus(st);
+        window.localStorage.setItem(MUTED_STORAGE_KEY, v ? "1" : "0");
       } catch {
-        setPing(null);
+        /* ignore */
       }
-    }, 30000);
-    return () => clearInterval(iv);
-  }, []);
-
-  /* ---------- main-shell entry blur ---------- */
-  useEffect(() => {
-    if (phase !== "main") return;
-    mainBlur.set("blur(10px)");
-    const controls = animate(mainBlur, "blur(0px)", {
-      duration: 0.55,
-      ease: [0.34, 1.56, 0.64, 1],
-      onComplete: () => mainBlur.set("none"),
+      return v;
     });
-    return () => controls.stop();
-  }, [phase, mainBlur]);
-
-  /* ---------- handlers ---------- */
-  const onAuthed = useCallback(
-    (acc: Account, _token: string) => {
-      setAccount(acc);
-      setPhase("main");
-      setView("home");
-      setRefreshKey((k) => k + 1);
-    },
-    [],
-  );
-
-  const onPlay = useCallback(async () => {
-    if (!account) return;
-    setSeasonBusy(true);
-    try {
-      const me = await api.setSeason(account.selectedSeason);
-      setAccount(me);
-      toast(`${d.playNow} — ${me.displayName} · ${d.seasonWord} ${me.selectedSeason}`);
-    } catch {
-      toast(d.errServer);
-    } finally {
-      setSeasonBusy(false);
-    }
-  }, [account, d]);
-
-  const onSeasonSelect = useCallback(
-    async (n: number) => {
-      try {
-        const me = await api.setSeason(n);
-        setAccount(me);
-        toast(`${d.seasonActive}: ${d.seasonWord} ${n}`);
-      } catch {
-        toast(d.errServer);
-      }
-    },
-    [d],
-  );
-
-  const onLogout = useCallback(async () => {
-    try {
-      await api.logout();
-    } catch {
-      /* ignore */
-    }
-    tokenStore.clear();
-    setAccount(null);
-    setPhase("auth");
   }, []);
 
-  const onRetry = useCallback(async () => {
-    const ok = await loadPublic();
-    if (ok) setPhase(account ? "main" : "auth");
-  }, [account, loadPublic]);
+  /* ---------- وميض عنوان الصفحة عند وصول طلب جديد ---------- */
+  const stopTitleFlash = useCallback(() => {
+    if (flashRef.current.iv !== null) window.clearInterval(flashRef.current.iv);
+    if (flashRef.current.to !== null) window.clearTimeout(flashRef.current.to);
+    if (baseTitleRef.current !== null) document.title = baseTitleRef.current;
+    flashRef.current = { iv: null, to: null };
+  }, []);
 
-  /* ---------- render ---------- */
-  const online = phase !== "offline";
+  const flashTitle = useCallback(() => {
+    stopTitleFlash();
+    const original = baseTitleRef.current ?? document.title;
+    let on = false;
+    const iv = window.setInterval(() => {
+      on = !on;
+      document.title = on ? "🔔 طلب جديد!" : original;
+    }, 800);
+    const to = window.setTimeout(() => stopTitleFlash(), 6000);
+    flashRef.current = { iv, to };
+  }, [stopTitleFlash]);
+
+  useEffect(() => {
+    baseTitleRef.current = document.title;
+    return () => stopTitleFlash();
+  }, [stopTitleFlash]);
+
+  /* ---------- جلب الحالة (استقصاء كل ثانيتين) ---------- */
+  const fetchState = useCallback(async () => {
+    ctrlRef.current?.abort();
+    const ctrl = new AbortController();
+    ctrlRef.current = ctrl;
+    try {
+      const res = await fetch("/api/control/state", {
+        cache: "no-store",
+        signal: ctrl.signal,
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as StateDTO;
+      if (ctrl.signal.aborted) return;
+      setState(data);
+      failStreakRef.current = 0;
+      setConnError(false);
+
+      // كشف الطلب الجديد → صافرة + وميض العنوان
+      const id = data.current?.id ?? null;
+      if (firstLoadRef.current) {
+        firstLoadRef.current = false;
+      } else if (id !== null && id !== lastPendingIdRef.current) {
+        if (!mutedRef.current) beepNewTask();
+        flashTitle();
+      }
+      lastPendingIdRef.current = id;
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      failStreakRef.current += 1;
+      if (failStreakRef.current >= CONSECUTIVE_FAILURES_FOR_ERROR) {
+        setConnError(true);
+      }
+    }
+  }, [flashTitle]);
+
+  useEffect(() => {
+    void fetchState();
+    const iv = window.setInterval(() => void fetchState(), POLL_INTERVAL_MS);
+    return () => {
+      window.clearInterval(iv);
+      ctrlRef.current?.abort();
+    };
+  }, [fetchState]);
+
+  /* إعادة الجلب فور عودة التبويب إلى الواجهة */
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "visible") void fetchState();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [fetchState]);
+
+  /* ---------- نداءات الـ API ---------- */
+  const submitAnswer = useCallback(
+    async (task: TaskDTO, payload: AnswerPayload): Promise<ApiResult> => {
+      try {
+        const res = await fetch(
+          `/api/control/tasks/${encodeURIComponent(task.id)}/answer`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            cache: "no-store",
+          },
+        );
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+        };
+        if (!res.ok || !data.ok) {
+          return { ok: false, error: data.error ?? `فشل الإرسال (${res.status})` };
+        }
+        await fetchState();
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "مشكلة في الاتصال بالموقع" };
+      }
+    },
+    [fetchState],
+  );
+
+  const retakeTask = useCallback(
+    async (task: TaskDTO): Promise<ApiResult> => {
+      try {
+        const res = await fetch(
+          `/api/control/tasks/${encodeURIComponent(task.id)}/retake`,
+          { method: "POST", cache: "no-store" },
+        );
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+        };
+        if (!res.ok || !data.ok) {
+          return { ok: false, error: data.error ?? "تعذّر طلب لقطة جديدة" };
+        }
+        await fetchState();
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "مشكلة في الاتصال بالموقع" };
+      }
+    },
+    [fetchState],
+  );
+
+  const current = state?.current ?? null;
+  const runnerLive =
+    state?.heartbeat != null &&
+    Date.now() - new Date(state.heartbeat.updatedAt).getTime() <
+      HEARTBEAT_STALE_MS;
+
+  /* تبويب لوحة المشغل — التطبيق الكامل السابق (Liquid Glass) */
+  if (view === "launcher") {
+    return (
+      <>
+        <LauncherConsole />
+        <button
+          type="button"
+          onClick={() => setView("control")}
+          className="fixed bottom-4 left-4 z-[120] rounded-full border border-amber-400/40 bg-black/80 px-4 py-2 text-xs font-bold text-amber-300 shadow-lg backdrop-blur transition hover:border-amber-300 hover:text-amber-200"
+        >
+          ← رجوع إلى غرفة التحكم
+        </button>
+      </>
+    );
+  }
 
   return (
-    <div
-      className="relative min-h-dvh overflow-x-hidden"
-      style={{ background: "var(--owen-bg)", color: "var(--owen-text)" }}
-    >
-      <AuroraBackground />
+    <div className="flex min-h-screen flex-col bg-[#05060b] text-[#f4f6fb]">
+      <HeaderBar
+        heartbeat={state?.heartbeat ?? null}
+        pending={state?.stats.pending ?? 0}
+        connError={connError}
+        muted={muted}
+        onToggleMute={toggleMute}
+      />
 
-      <AnimatePresence mode="wait">
-        {phase === "boot" && (
-          <motion.div key="boot" exit={{ opacity: 0 }}>
-            <div className="flex min-h-dvh items-center justify-center">
-              <BootSplash label={d.loading} />
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        {state === null ? (
+          /* الهيكل الأولي أثناء التحميل */
+          <div className="grid gap-5 lg:grid-cols-3 lg:gap-6">
+            <div className="space-y-5 lg:col-start-2 lg:col-span-2 lg:row-start-1">
+              <Skeleton className="h-[520px] w-full rounded-2xl bg-white/[0.05]" />
             </div>
-          </motion.div>
-        )}
-
-        {phase === "offline" && (
-          <motion.div key="offline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <OfflineView d={d} onRetry={onRetry} />
-          </motion.div>
-        )}
-
-        {phase === "auth" && (
-          <motion.div key="auth" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.03, filter: "blur(8px)" }}>
-            <AuthView d={d} lang={lang} onAuthed={onAuthed} serverUp />
-          </motion.div>
-        )}
-
-        {phase === "main" && account && (
-          <motion.div
-            key="main"
-            initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-            style={{ filter: mainBlur }}
-          >
-            <MainShell
-              d={d}
-              lang={lang}
-              onLang={setLang}
-              theme={theme}
-              onTheme={setTheme}
-              view={view}
-              onView={setView}
-              status={status}
-              online={online}
-              ping={ping}
-            >
+            <aside className="space-y-5 lg:col-start-1 lg:row-start-1">
+              <Skeleton className="h-72 w-full rounded-2xl bg-white/[0.05]" />
+              <Skeleton className="h-60 w-full rounded-2xl bg-white/[0.05]" />
+              <Skeleton className="h-80 w-full rounded-2xl bg-white/[0.05]" />
+            </aside>
+          </div>
+        ) : (
+          <div className="grid items-start gap-5 lg:grid-cols-3 lg:gap-6">
+            {/* بطاقة المهمة الحالية — عمودان */}
+            <div className="lg:col-start-2 lg:col-span-2 lg:row-start-1">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={refreshKey}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  {view === "home" && (
-                    <HomeView
-                      d={d}
-                      account={account}
-                      status={status}
-                      seasons={seasons}
-                      activeSeason={account.selectedSeason}
-                      onPlay={onPlay}
-                      seasonDetailBusy={seasonBusy}
+                {current ? (
+                  <motion.div
+                    key={current.id}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  >
+                    <TaskCard
+                      task={current}
+                      queueCount={state.queue.length}
+                      onAnswer={(payload) => submitAnswer(current, payload)}
+                      onRetake={() => retakeTask(current)}
                     />
-                  )}
-                  {view === "seasons" && (
-                    <SeasonsView
-                      d={d}
-                      seasons={seasons}
-                      activeSeason={account.selectedSeason}
-                      onSelect={onSeasonSelect}
-                      refreshKey={refreshKey}
-                    />
-                  )}
-                  {view === "downloads" && <DownloadsView d={d} manifests={manifests} />}
-                  {view === "partyhub" && <PartyHubView d={d} status={status} />}
-                  {view === "ogs" && <OgsEvidence />}
-                  {view === "profile" && (
-                    <ProfileView
-                      d={d}
-                      account={account}
-                      seasons={seasons}
-                      onLogout={onLogout}
-                      refreshKey={refreshKey}
-                    />
-                  )}
-                  {view === "settings" && (
-                    <SettingsView
-                      d={d}
-                      lang={lang}
-                      onLang={setLang}
-                      theme={theme}
-                      onTheme={setTheme}
-                      status={status}
-                    />
-                  )}
-                </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="empty"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  >
+                    <EmptyState runnerLive={runnerLive} />
+                  </motion.div>
+                )}
               </AnimatePresence>
-            </MainShell>
-          </motion.div>
+            </div>
+
+            {/* الشريط الجانبي — العمود الأيمن */}
+            <aside
+              className="space-y-5 lg:col-start-1 lg:row-start-1"
+              aria-label="لوحة التشغيل والمتابعة"
+            >
+              <ConnectionCard token={state.token} />
+              <PipelineStatus
+                heartbeat={state.heartbeat}
+                stats={state.stats}
+              />
+              <HistoryList recent={state.recent} />
+            </aside>
+          </div>
         )}
-      </AnimatePresence>
+      </main>
+
+      <footer className="mt-auto border-t border-white/10 bg-black/30">
+        <div className="mx-auto w-full max-w-7xl px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-zinc-500">
+          Owen Control Room — القيادة اليدوية للمحاكي • يعمل الموقع بلا توقف،
+          والـ Action يشغّل المحاكي حتى ٦ ساعات
+        </div>
+      </footer>
+
+      {/* مبدّل إلى لوحة المشغل (التطبيق السابق) */}
+      <button
+        type="button"
+        onClick={() => setView("launcher")}
+        className="fixed bottom-4 left-4 z-[120] rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs font-bold text-zinc-300 shadow-lg backdrop-blur transition hover:border-amber-400/50 hover:text-amber-200"
+      >
+        لوحة المشغل ←
+      </button>
     </div>
   );
 }
