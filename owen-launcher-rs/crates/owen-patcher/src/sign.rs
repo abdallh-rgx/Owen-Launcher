@@ -178,30 +178,32 @@ fn u64le(v: u64) -> [u8; 8] {
 /// length and SHA-256'd; the top-level digest is SHA-256 over
 /// `0x5a || uint32(total length) || concatenation of chunk digests`.
 fn top_digest(regions: &[&[u8]]) -> Vec<u8> {
+    // ONE continuous stream: [contents][CD][EOCD], chunked at 1 MiB
+    // boundaries ACROSS region borders — the per-region remainder is NOT its
+    // own chunk. This is what Android verifies (apksig concatenates then
+    // chunks); the per-region chunking here produced a different top digest
+    // whenever a region boundary did not land on a 1 MiB multiple —
+    // on-device: "SHA-256 digest of contents did not verify".
     let mut total_len: u64 = 0;
-    let mut chunks: Vec<&[u8]> = Vec::new();
+    let mut all: Vec<u8> = Vec::new();
     for r in regions {
         total_len += r.len() as u64;
-        if r.is_empty() {
-            continue;
-        }
-        let mut rest: &[u8] = r;
-        while rest.len() > CHUNK_LIMIT as usize {
-            chunks.push(&rest[..CHUNK_LIMIT as usize]);
-            rest = &rest[CHUNK_LIMIT as usize..];
-        }
-        if !rest.is_empty() {
-            chunks.push(rest);
-        }
+        all.extend_from_slice(r);
     }
-    if chunks.is_empty() {
-        // Degenerate: one empty chunk (still prefixed + digested).
-        chunks.push(&[]);
-        total_len = 0;
+    let stream: &[u8] = &all;
+    let mut chunks: Vec<(usize, usize)> = Vec::new(); // (start, len)
+    let mut off = 0usize;
+    while stream.len() - off > CHUNK_LIMIT as usize {
+        chunks.push((off, CHUNK_LIMIT as usize));
+        off += CHUNK_LIMIT as usize;
+    }
+    if off < stream.len() || chunks.is_empty() {
+        chunks.push((off, stream.len() - off));
     }
     let n = chunks.len();
     let mut sub_digests: Vec<u8> = Vec::with_capacity(32 * n);
-    for (i, c) in chunks.iter().enumerate() {
+    for (i, (s, l)) in chunks.iter().enumerate() {
+        let c = &stream[*s..*s + *l];
         let prefix: u8 = if i == n - 1 { 0x5a } else { 0xa5 };
         let mut sc = Vec::with_capacity(5 + c.len());
         sc.push(prefix);
