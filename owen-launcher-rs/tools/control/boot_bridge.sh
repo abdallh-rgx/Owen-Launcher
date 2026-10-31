@@ -60,4 +60,28 @@ PY
       '{state:"BOOT", phase:"المحاكي يقلع (جسر السجل)", device:"emulator (booting)", message:$m, logTail:""}')"
   fi
 done
+# flush نهائي: أي بايتات متبقية من السجل تُشحن قبل الخروج
+final_flush() {
+  sz=$(stat -c%s "$LOG" 2>/dev/null || echo 0)
+  if [ "$sz" -gt "$last" ]; then
+    LAST_OFF="$last" python3 - > /tmp/boot-bridge-payload.json <<'PY'
+import json, os
+off = int(os.environ.get("LAST_OFF", "0"))
+data = open("/tmp/emulator.log", "rb").read()[off:off + 24000]
+text = data.decode("utf-8", "replace")
+lines = [l for l in text.splitlines() if l.strip()][-60:]
+print(json.dumps({
+    "lines": [
+        {"level": "DRIVER", "src": "driver", "text": "[emulator] " + l}
+        for l in lines
+    ]
+}))
+PY
+    if [ -s /tmp/boot-bridge-payload.json ]; then
+      post /api/control/live/log "$(cat /tmp/boot-bridge-payload.json)"
+    fi
+  fi
+}
+trap final_flush EXIT
+
 echo "boot bridge: marker seen — exiting"
