@@ -22,10 +22,33 @@ done
 echo "== kvm: $(test -e /dev/kvm && echo yes || echo 'NO (TCG — will be slow)')"
 test -e /dev/kvm || echo "::warning::no /dev/kvm on this runner — emulator runs under TCG"
 
-yes | sdkmanager --licenses >/dev/null 2>&1 || true
-sdkmanager --install "platform-tools" "emulator" "system-images;android-30;google_apis;x86_64" >/dev/null
+# ---- system image: prefer what's already on the runner, else install with a
+# hard timeout (sdkmanager hung 67 minutes on "Loading local repository" once —
+# never again: every invocation gets `timeout` and </dev/null).
+want="system-images;android-30;google_apis;x86_64"
+have_image() { [ -d "$ANDROID_HOME/system-images/${1#system-images;}" ]; }
+if ! have_image "$want"; then
+  echo "== installing $want (timeout 480s)"
+  timeout 480 sdkmanager --install "$want" </dev/null >/tmp/sdk-img.log 2>&1 \
+    || echo "::warning::image install incomplete — $(tail -2 /tmp/sdk-img.log | tr '\n' ' ')"
+fi
+IMG="$want"
+if ! have_image "$IMG"; then
+  echo "== android-30 image unavailable — falling back to any preinstalled google_apis x86_64 image"
+  FOUND=$(ls -d "$ANDROID_HOME"/system-images/*/google_apis/x86_64 "$ANDROID_HOME"/system-images/*/*google*x86_64 2>/dev/null | head -1 || true)
+  if [ -n "$FOUND" ]; then
+    REL=${FOUND#"$ANDROID_HOME"/system-images/}
+    IMG="system-images;${REL////;}"
+    echo "== using $IMG"
+  else
+    echo "::error::no x86_64 system image available and none could be installed"; exit 1
+  fi
+fi
+yes | timeout 240 sdkmanager --licenses </dev/null >/dev/null 2>&1 || true
 
-echo no | avdmanager create avd -n "$AVD" -k "system-images;android-30;google_apis;x86_64" --device pixel 2>/dev/null || true
+echo no | avdmanager create avd -n "$AVD" -k "$IMG" --device pixel 2>/dev/null \
+  || echo "::warning::avdmanager create failed (existing AVD?)"
+
 AVD_HOME="$HOME/.android/avd/$AVD.avd"
 test -d "$AVD_HOME" && {
   cat >> "$AVD_HOME/config.ini" <<'EOF'
