@@ -92,6 +92,8 @@ jobs:
             /tmp/dump-phase-logcat.txt
             /tmp/emulator.log
             /tmp/md-exe-run.log
+            /tmp/sdk-img.log
+            /tmp/og-dump.tar.zst
           if-no-files-found: ignore
 
       - name: Commit the dump into the repo (dumps/)
