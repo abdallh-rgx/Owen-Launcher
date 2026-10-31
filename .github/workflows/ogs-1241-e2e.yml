@@ -191,17 +191,6 @@ jobs:
           sudo udevadm trigger --name-match=kvm
           ls -l /dev/kvm || true
 
-      - name: NDK r27c at the path the workspace expects
-        run: |
-          for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
-          command -v sdkmanager
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager --install "ndk;27.2.12479018" >/dev/null
-          sudo mkdir -p /home/z/ndk
-          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk-r27c
-          sudo ln -sfn "$ANDROID_HOME/ndk/27.2.12479018" /home/z/ndk/android-ndk-r27c
-          test -x /home/z/ndk/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar && echo "llvm-ar OK"
-
       - name: Restore the play APK
         uses: actions/download-artifact@v4
         with: { name: play-apk }

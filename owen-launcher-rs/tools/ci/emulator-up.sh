@@ -88,10 +88,16 @@ echo "== AVD ini: $AVD_INI (ANDROID_AVD_HOME=$ANDROID_AVD_HOME)"
 AVD_HOME=$(sed -n 's/^path=//p' "$AVD_INI" | head -1)
 [ -n "$AVD_HOME" ] || AVD_HOME="$ANDROID_AVD_HOME/$AVD.avd"
 if [ -f "$AVD_HOME/config.ini" ]; then
+  # Adaptive userdata: the emulator demands dataPartition + ~20% overhead
+  # upfront (round 19 died demanding 19.6GB with 9.6GB free). Fit the disk.
+  AVAIL_GB=$(df -BG --output=avail "$HOME" | tail -1 | tr -dc '0-')
+  AVAIL_GB=${AVAIL_GB:-10}
+  DATA_GB=$(( AVAIL_GB - 4 )); [ "$DATA_GB" -lt 4 ] && DATA_GB=4; [ "$DATA_GB" -gt 14 ] && DATA_GB=14
+  echo "== userdata: ${DATA_GB}G of ${AVAIL_GB}G available"
   if grep -q '^disk.dataPartition.size' "$AVD_HOME/config.ini"; then
-    sed -i 's/^disk.dataPartition.size=.*/disk.dataPartition.size=16G/' "$AVD_HOME/config.ini"
+    sed -i "s/^disk.dataPartition.size=.*/disk.dataPartition.size=${DATA_GB}G/" "$AVD_HOME/config.ini"
   else
-    echo 'disk.dataPartition.size=16G' >> "$AVD_HOME/config.ini"
+    echo "disk.dataPartition.size=${DATA_GB}G" >> "$AVD_HOME/config.ini"
   fi
   grep -q '^hw.ramSize' "$AVD_HOME/config.ini" || echo 'hw.ramSize=4096' >> "$AVD_HOME/config.ini"
   grep -q '^hw.lcd.width' "$AVD_HOME/config.ini" || { echo 'hw.lcd.width=1280' >> "$AVD_HOME/config.ini"; echo 'hw.lcd.height=720' >> "$AVD_HOME/config.ini"; }
@@ -100,8 +106,7 @@ fi
 # Kill anything stale, boot headless.
 adb kill-server 2>/dev/null || true
 pkill -f "qemu-system" 2>/dev/null || true
-nohup emulator -avd "$AVD" -no-window -gpu swiftshader_indirect -no-snapshot \
-  -no-audio -no-boot-anim -camera-back none -wipe-data >/tmp/emulator.log 2>&1 &
+nohup emulator -avd "$AVD" -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim -camera-back none -wipe-data -no-metrics >/tmp/emulator.log 2>&1 &
 EMU_PID=$!
 
 # wait-for-device without a timeout hangs forever on a dead emulator.
