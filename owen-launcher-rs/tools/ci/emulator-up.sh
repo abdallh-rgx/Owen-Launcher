@@ -44,19 +44,24 @@ if ! have_image "$WANT"; then
   yes | timeout 480 "$SM" --licenses >/dev/null 2>&1 || true
   timeout 480 "$SM" --install "$WANT" "platforms;android-30" "platform-tools" >/tmp/sdk-img.log 2>&1 \
     || echo "::warning::image install incomplete — $(tail -2 /tmp/sdk-img.log | tr '\n' ' ')"
+  echo "== sdk-img.log tail:"; tail -6 /tmp/sdk-img.log 2>/dev/null || true
+  echo "== system-images tree:"; ls -la "$ANDROID_HOME/system-images/" "$ANDROID_HOME/system-images/"*/ "$ANDROID_HOME/system-images/"*/*/ "$ANDROID_HOME/system-images/"*/*/x86_64/ 2>/dev/null | head -40 || true
 fi
 
 IMG="$WANT"
 if ! have_image "$IMG"; then
   echo "== android-30 image unavailable — falling back to any google_apis x86_64 image WITH system.img"
   for FOUND in $(ls -d "$ANDROID_HOME"/system-images/*/*/x86_64 2>/dev/null); do
+    echo "  candidate: $FOUND ($(ls "$FOUND" 2>/dev/null | tr '\n' ' ' | head -c 120))"
     if [ -f "$FOUND/system.img" ] || [ -f "$FOUND/system.img.androidbuild" ]; then
       REL=${FOUND#"$ANDROID_HOME"/system-images/}
       IMG="system-images;${REL////;}"; echo "== using $IMG"; break
     fi
   done
-  have_image "$IMG" || { echo "::error::no usable x86_64 system image"; exit 1; }
 fi
+echo "== IMG='$IMG' dir='$(img_dir "$IMG")'"
+ls -la "$(img_dir "$IMG")" 2>&1 | head -12 || true
+have_image "$IMG" || { echo "::error::no usable x86_64 system image"; exit 1; }
 
 yes | timeout 240 "$SM" --licenses >/dev/null 2>&1 || true
 
