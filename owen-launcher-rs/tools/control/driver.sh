@@ -70,7 +70,10 @@ DEV_H=2280
 log() { printf '%s %s\n' "$(date -u +%H:%M:%S)" "$*" >> /tmp/owen-driver.log; }
 
 die() { log "FATAL: $*"; STATE="ERROR"; PHASE="توقف"; MESSAGE="$*";
-  hb_now; exit 1; }
+  hb_save 2>/dev/null || true; hb_now; exit 1; }
+
+# حلقة النبضة تعمل في subshell ولا ترى تحديثات المتغيرات — نكتبها في ملف مشترك
+hb_save() { printf 'STATE=%q\nPHASE=%q\nMESSAGE=%q\nDEVICE=%q\n' "$STATE" "$PHASE" "$MESSAGE" "$DEVICE" > /tmp/owen-hb.env; }
 
 # --- http helpers -------------------------------------------------------------
 auth_headers=(-H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json')
@@ -91,18 +94,20 @@ uptime_str() { printf '%dm%02ds' $((SECONDS/60)) $((SECONDS%60)); }
 
 hb_now() {
   local logtail crashmsg
+  [ -f /tmp/owen-hb.env ] && . /tmp/owen-hb.env 2>/dev/null || true
   logtail="$( { tail -n 30 /tmp/owen-driver.log; echo '--- logcat ---';
                 tail -n 60 "$LOGCAT_FILE"; } | tail -n 110 )"
   crashmsg="$(cat /tmp/owen-crash-msg 2>/dev/null | head -c 300)"
   [ -n "$crashmsg" ] && MESSAGE="🚨 $crashmsg"
-  jq -n --arg s "$STATE" --arg p "$PHASE" --arg d "$DEVICE" \
-        --arg m "$MESSAGE" --arg l "$logtail" \
+  jq -n --arg s "${STATE:-BOOT}" --arg p "${PHASE:-}" --arg d "${DEVICE:-emulator}" \
+        --arg m "${MESSAGE:-}" --arg l "$logtail" \
     '{state:$s, phase:$p, device:$d, message:$m, logTail:$l}' \
   | post_json "$BASE/api/control/heartbeat" >/dev/null
   [ -n "$crashmsg" ] || true
 }
 
 hb_loop() { while [ $SECONDS -lt $DEADLINE ]; do hb_now; sleep 20; done; }
+hb_save   # الحالة الابتدائية قبل انطلاق الحلقة
 hb_loop & HB_PID=$!
 trap 'kill $HB_PID 2>/dev/null; true' EXIT
 
@@ -297,6 +302,8 @@ signal_loop() {
 run_sdk_dump() {
   STATE="SDK_DUMP"; PHASE="توليد SDK (MobileDumper)"
   MESSAGE="بدء روتين توليد SDK…"
+  hb_save
+  hb_now
   log "SDK dump routine started (dump_apk=${DUMP_APK:-none})"
   hb_now
   if [ -z "$DUMP_APK" ] || [ ! -f "$DUMP_APK" ]; then
@@ -348,7 +355,7 @@ run_sdk_dump() {
 }
 
 # --- boot -----------------------------------------------------------------------
-STATE="WAIT_BOOT"; PHASE="بانتظار إقلاع المحاكي"; MESSAGE="المحاكي يقلع…"
+STATE="WAIT_BOOT"; PHASE="بانتظار إقلاع المحاكي"; MESSAGE="المحاكي يقلع…"; hb_save
 log "waiting for emulator boot (adb=$ADB)"
 [ -x "$(command -v "$ADB" 2>/dev/null)" ] || die "adb not found on PATH"
 "$ADB" wait-for-device || die "adb wait-for-device failed"
@@ -368,6 +375,8 @@ if [ -n "$wm_line" ]; then
   [ -n "$DEV_W" ] && [ -n "$DEV_H" ] || { DEV_W=1080; DEV_H=2280; }
 fi
 log "booted: $DEVICE (${DEV_W}x${DEV_H})"
+DEVICE="Android $("$ADB" shell getprop ro.build.version.release 2>/dev/null | tr -d '\r') • $("$ADB" shell getprop ro.product.model 2>/dev/null | tr -d '\r')"
+hb_save
 
 # Wake the screen, kill animations, keep it awake, skip the setup wizard.
 "$ADB" shell input keyevent 224 || true
@@ -393,7 +402,7 @@ trap 'kill $HB_PID $FRAME_PID $LOG_PID $CRASH_PID $SIG_PID 2>/dev/null; true' EX
 log "background loops started: frame(1/${FRAME_IVL}s) log(2s) crash(3s) signals(5s)"
 
 # --- install (adb install -g = grant all runtime permissions) -----------------
-STATE="INSTALL"; PHASE="تثبيت OwenLauncher"; MESSAGE="adb install -g …"
+STATE="INSTALL"; PHASE="تثبيت OwenLauncher"; MESSAGE="adb install -g …"; hb_save
 log "installing $APK_PATH (grant all permissions)"
 [ -f "$APK_PATH" ] || die "APK not found at $APK_PATH"
 ok=""
@@ -406,7 +415,7 @@ done
 log "installed + granted: $PKG"
 
 # --- launch -------------------------------------------------------------------
-STATE="LAUNCH"; PHASE="فتح OwenLauncher"; MESSAGE="monkey launch…"
+STATE="LAUNCH"; PHASE="فتح OwenLauncher"; MESSAGE="monkey launch…"; hb_save
 "$ADB" shell monkey -p "$PKG" -c android.intent.category.LAUNCHER 1 >> /tmp/owen-driver.log 2>&1 || true
 sleep 10
 
@@ -421,6 +430,7 @@ while [ $SECONDS -lt $DEADLINE ]; do
   STATE="ASK"
   STEP=$((STEP+1))
   PHASE="لقطة الشاشة للخطوة $STEP"
+  hb_save
   if ! take_shot; then log "screencap failed, retry in 3s"; sleep 3; continue; fi
   cp /tmp/owen-shot.png "$SHOTS_ARCHIVE/step-$(printf '%03d' "$STEP")-$(date +%H%M%S).png"
 
@@ -453,6 +463,7 @@ while [ $SECONDS -lt $DEADLINE ]; do
   log "step $STEP posted as task $TASK_ID — waiting for the human"
   PHASE="بانتظار إجابتك على الخطوة $STEP"
   MESSAGE="الخطوة $STEP معروضة على الموقع — بانتظار تحديدك للزر"
+  hb_save
 
   ACTION=""; X=""; Y=""; X2=""; Y2=""; WAITMS="0"; DESC=""
   last_refresh=$SECONDS
@@ -542,7 +553,7 @@ while [ $SECONDS -lt $DEADLINE ]; do
     continue
   fi
 
-  STATE="APPLY"; PHASE="تنفيذ: $ACTION ($X,$Y) ثم انتظار ${WAITMS}ms"
+  STATE="APPLY"; PHASE="تنفيذ: $ACTION ($X,$Y) ثم انتظار ${WAITMS}ms"; hb_save
   case "$ACTION" in
     tap)   "$ADB" shell input tap "$X" "$Y" >> /tmp/owen-driver.log 2>&1 || true ;;
     swipe) "$ADB" shell input swipe "$X" "$Y" "$X2" "$Y2" 600 >> /tmp/owen-driver.log 2>&1 || true ;;
@@ -588,6 +599,7 @@ done
 
 STATE="DONE"; PHASE="انتهت الجلسة"
 MESSAGE="انتهت جلسة القيادة ($STEP خطوة). يمكنك إعادة تشغيل الجلسة من الموقع في أي وقت."
+hb_save
 log "session finished after $STEP steps"
 hb_now
 exit 0
