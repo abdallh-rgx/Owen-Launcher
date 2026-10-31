@@ -49,21 +49,53 @@ launch() {
 
 # The game boots through an Android runtime-permission gate ("Choose what to
 # allow Fortnite to access") BEFORE GameActivity ever loads libUE4 — the
-# engine wait loop dead-ends on it (round 17: 5 silent minutes, pid none).
-# Blind-tap "Continue" (bottom-right) + center, then re-check.
+# engine wait loop dead-ends on it. The gate is a REAL system view, so
+# uiautomator sees its buttons: dump the tree, tap the exact node centers
+# (Continue / Allow / button1), fall back to blind taps.
+gate_tap_text() {
+  # $1 = the text to find; taps the node's bounds center via uiautomator.
+  adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 || return 1
+  local xml
+  xml=$(adb shell cat /sdcard/ui.xml 2>/dev/null | tr -d '\r') || return 1
+  local m
+  m=$(printf '%s' "$xml" | grep -o "text=\"$1\"[^>]*bounds=\"\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]\"" | head -1)
+  [ -z "$m" ] && return 1
+  local b
+  b=$(printf '%s' "$m" | grep -o '\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]')
+  local x1 y1 x2 y2
+  x1=$(printf '%s' "$b" | cut -d, -f1 | tr -d '[')
+  y1=$(printf '%s' "$b" | cut -d, -f2 | tr -d ']')
+  x2=$(printf '%s' "$b" | cut -d, -f3 | tr -d '[')
+  y2=$(printf '%s' "$b" | cut -d, -f4 | tr -d ']')
+  adb shell input tap $(((x1 + x2) / 2)) $(((y1 + y2) / 2)) >/dev/null 2>&1 && echo "  tapped '$1' @ ($(((x1 + x2) / 2)),$(((y1 + y2) / 2)))"
+}
+
 dismiss_gates() {
-  local size W H focus
+  local size W H focus i
   size=$(adb shell wm size 2>/dev/null | grep -o '[0-9]*x[0-9]*' | head -1)
   W=${size%x*}; W=${W:-1080}
   H=${size#*x}; H=${H:-2340}
-  echo "== gate dismissal (${W}x${H})"
-  for i in 1 2 3 4 5 6 7 8; do
-    sleep 5
-    focus=$(adb shell dumpsys window 2>/dev/null | grep -m1 -E 'mCurrentFocus|mFocusedApp' || true)
-    echo "  gate[$i]: ${focus:0:100}"
-    adb shell input tap $((W * 78 / 100)) $((H * 87 / 100)) >/dev/null 2>&1 || true
-    sleep 2
-    adb shell input tap $((W / 2)) $((H / 2)) >/dev/null 2>&1 || true
+  echo "== gate dismissal (${W}x${H}, uiautomator-precise)"
+  for i in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 4
+    focus=$(adb shell dumpsys window 2>/dev/null | grep -m1 -E 'mCurrentFocus' || true)
+    echo "  gate[$i]: ${focus:0:96}"
+    case "$focus" in *permissioncontroller*|*GrantPermissions*|*packageinstaller*|*installer*)
+      gate_tap_text "Continue" || gate_tap_text "ALLOW" || gate_tap_text "Allow" || {
+        adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
+        # generic: tap android:id/button1 (the affirmative) from the dump
+        local xml b x1 y1 x2 y2
+        xml=$(adb shell cat /sdcard/ui.xml 2>/dev/null | tr -d '\r')
+        b=$(printf '%s' "$xml" | grep -o 'resource-id="android:id/button1"[^>]*bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | head -1)
+        if [ -n "$b" ]; then
+          b=$(printf '%s' "$b" | grep -o '\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]')
+          x1=$(printf '%s' "$b" | cut -d, -f1 | tr -d '['); y1=$(printf '%s' "$b" | cut -d, -f2 | tr -d ']')
+          x2=$(printf '%s' "$b" | cut -d, -f3 | tr -d '['); y2=$(printf '%s' "$b" | cut -d, -d4 | tr -d ']')
+          adb shell input tap $(((x1 + x2) / 2)) $(((y1 + y2) / 2)) >/dev/null 2>&1 && echo "  tapped button1"
+        fi
+      }
+      ;;
+    esac
     if adb shell 'grep -q libUE4.so /proc/$(pidof com.epicgames.fortnite)/maps 2>/dev/null' 2>/dev/null; then
       echo "  gate[$i]: libUE4 mapped — engine is up"
       return 0

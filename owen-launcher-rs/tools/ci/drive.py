@@ -15,6 +15,7 @@ Outputs: /tmp/e2e/{lobby.png,match.png,status.json,logcat.txt,server.log,shots/}
 Exit code 0 iff lobby.png exists (match.png best-effort — reported honestly).
 """
 import json
+import re
 import os
 import subprocess
 import sys
@@ -190,22 +191,37 @@ def do_login(timeout):
 
 
 
+def _ui_tap(pattern):
+    """uiautomator dump → find a node matching `pattern` (text= or
+    resource-id=) → tap the exact center of its bounds."""
+    adb("shell", "uiautomator", "dump", "/sdcard/ui.xml", timeout=30)
+    xml = adb("shell", "cat", "/sdcard/ui.xml", timeout=30).stdout or ""
+    m = None
+    for node in re.finditer(r"<node[^>]*/>", xml):
+        s = node.group(0)
+        if re.search(pattern, s):
+            m = re.search(r"bounds=\[(\d+),(\d+)\]\[(\d+),(\d+)\]", s)
+            if m:
+                x = (int(m.group(1)) + int(m.group(3))) // 2
+                y = (int(m.group(2)) + int(m.group(4))) // 2
+                adb_ok("shell", "input", "tap", str(x), str(y))
+                print(f"[gates] tapped {pattern!r} @ ({x},{y})")
+                return True
+    return False
+
+
 def dismiss_gates():
     """The runtime-permission gate ("Choose what to allow Fortnite to access")
-    blocks GameActivity before libUE4 ever loads — blind-tap through it."""
-    import re as _re
-    r = adb("shell", "wm", "size")
-    m = _re.search(r"(\d+)x(\d+)", r.stdout or "")
-    w, h = (int(m.group(1)), int(m.group(2))) if m else (1080, 2340)
-    print(f"[gates] dismissal loop ({w}x{h})")
-    for i in range(8):
-        time.sleep(5)
+    blocks GameActivity before libUE4 ever loads. The gate is a real system
+    view, so uiautomator sees its buttons — tap the exact node centers."""
+    for i in range(10):
+        time.sleep(4)
         f = adb("shell", "dumpsys", "window")
-        focus = next((l.strip()[:90] for l in (f.stdout or "").splitlines() if "mCurrentFocus" in l), "")
+        focus = next((l.strip()[:96] for l in (f.stdout or "").splitlines() if "mCurrentFocus" in l), "")
         print(f"[gates] {i}: {focus}")
-        adb_ok("shell", "input", "tap", str(w * 78 // 100), str(h * 87 // 100))
-        time.sleep(2)
-        adb_ok("shell", "input", "tap", str(w // 2), str(h // 2))
+        low = focus.lower()
+        if any(k in low for k in ("permissioncontroller", "grantpermissions", "packageinstaller", "installer")):
+            _ui_tap(r'text="Continue"') or _ui_tap(r'text="ALLOW"') or _ui_tap(r'text="Allow"') or _ui_tap(r'resource-id="android:id/button1"')
         m2 = adb("shell", "pidof", PKG)
         if m2.stdout.strip():
             return
