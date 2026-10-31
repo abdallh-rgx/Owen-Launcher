@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.abdallhrgx.owenlauncher"
+    android:versionCode="18"
+    android:versionName="1.8.0">
+
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+  <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+  <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+  <application
+      android:label="Owen Launcher"
+      android:hasCode="true"
+      android:extractNativeLibs="true"
+      android:allowBackup="true"
+      android:supportsRtl="true">
+
+    <activity
+        android:name="android.app.NativeActivity"
+        android:exported="true"
+        android:launchMode="singleTask"
+        android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+        android:windowSoftInputMode="adjustResize">
+      <meta-data android:name="android.app.lib_name" android:value="owen_app" />
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <receiver
+        android:name="com.abdallhrgx.owenlauncher.core.patch.InstallResultReceiver"
+        android:exported="false">
+      <intent-filter>
+        <action android:name="com.abdallhrgx.owenlauncher.INSTALL_RESULT" />
+      </intent-filter>
+    </receiver>
+  </application>
+</manifest>
