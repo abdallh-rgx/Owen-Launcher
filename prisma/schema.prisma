@@ -145,3 +145,18 @@ model ControlHeartbeat {
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
+
+/// Manual operator signals: download_done | start_sdk | restart_app |
+/// crash_report | note — created from the site, consumed + acked by the driver.
+model ControlSignal {
+  id        String    @id @default(cuid())
+  seq       Int       @unique
+  type      String
+  note      String    @default("")
+  /// PENDING | ACK
+  status    String    @default("PENDING")
+  /// Driver's ack result text (what it did with the signal)
+  result    String?
+  createdAt DateTime  @default(now())
+  ackedAt   DateTime?
+}

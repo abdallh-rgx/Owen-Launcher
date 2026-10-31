@@ -284,3 +284,22 @@
     transition-duration: 0.001s !important;
   }
 }
+
+/* Owen Control Room v2 — سجل مباشر */
+.owen-log-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.owen-log-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+.owen-log-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.owen-log-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.owen-log-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}

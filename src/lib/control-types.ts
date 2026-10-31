@@ -62,6 +62,71 @@ export interface HeartbeatDTO {
   updatedAt: string;
 }
 
+// ---------------------------------------------------------------------------
+// Live channel (screen stream + merged log) + manual signals + GitHub run
+// ---------------------------------------------------------------------------
+
+export interface LiveFrameDTO {
+  seq: number;
+  dataUrl: string;
+  w: number;
+  h: number;
+  deviceW: number;
+  deviceH: number;
+  app: string;
+  ts: number;
+}
+
+export type LiveLogLevel = 'INFO' | 'WARN' | 'ERROR' | 'CRASH' | 'DRIVER';
+export type LiveLogSource = 'logcat' | 'driver' | 'crash' | 'signal';
+
+export interface LiveLogLineDTO {
+  seq: number;
+  ts: number;
+  level: LiveLogLevel;
+  src: LiveLogSource;
+  text: string;
+}
+
+export type SignalType =
+  | 'download_done'
+  | 'start_sdk'
+  | 'restart_app'
+  | 'crash_report'
+  | 'note';
+
+export interface SignalDTO {
+  id: string;
+  seq: number;
+  type: SignalType;
+  note: string;
+  status: 'PENDING' | 'ACK';
+  result: string | null;
+  createdAt: string;
+  ackedAt: string | null;
+}
+
+export const SIGNAL_LABELS_AR: Record<SignalType, string> = {
+  download_done: 'انتهى التحميل الداخلي',
+  start_sdk: 'ابدأ توليد SDK',
+  restart_app: 'إعادة فتح التطبيق',
+  crash_report: 'بلّغ عن كراش',
+  note: 'ملاحظة',
+};
+
+export interface RunStatusDTO {
+  id: number;
+  number: number;
+  status: string;
+  conclusion: string | null;
+  url: string;
+  htmlUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  headBranch: string;
+  event: string;
+}
+
 export interface ControlStats {
   pending: number;
   answered: number;
@@ -79,6 +144,7 @@ export interface StateDTO {
   current: TaskDTO | null;
   queue: TaskDTO[];
   recent: TaskDTO[];
+  signals: SignalDTO[];
 }
 
 export const CONTROL_ACTIONS: ControlAction[] = [
