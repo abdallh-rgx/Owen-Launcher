@@ -74,8 +74,13 @@ die() { log "FATAL: $*"; STATE="ERROR"; PHASE="توقف"; MESSAGE="$*";
 
 # --- http helpers -------------------------------------------------------------
 auth_headers=(-H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json')
-post_json() { # $1=url  $2=json body
-  curl -sS -m 25 -X POST "$1" "${auth_headers[@]}" --data-binary "$2" 2>/dev/null || true
+post_json() { # $1=url ; body = $2 أو عبر stdin (أنبوب)
+  local url="$1"
+  if [ -n "${2-}" ]; then
+    curl -sS -m 25 -X POST "$url" "${auth_headers[@]}" --data-binary "$2" 2>/dev/null || true
+  else
+    curl -sS -m 25 -X POST "$url" "${auth_headers[@]}" --data-binary @- 2>/dev/null || true
+  fi
 }
 
 # --- heartbeat -----------------------------------------------------------------
