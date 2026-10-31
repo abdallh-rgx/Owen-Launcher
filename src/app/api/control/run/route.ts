@@ -2,7 +2,7 @@
 // (and for the agent's monitoring loop). Public: contains no secrets.
 import { jsonError } from '@/lib/control';
 import { latestRun, ghToken } from '@/lib/gh';
-import { liveStore } from '@/lib/live-store';
+import { liveStore, lastSeenOrigin } from '@/lib/live-store';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +13,12 @@ export async function GET() {
       {
         run,
         tokenAvailable: Boolean(ghToken()),
-        lastOrigin: liveStore.lastOrigin,
+        lastOrigin: lastSeenOrigin(),
+        preferredOrigin: liveStore.preferredOrigin,
+        knownOrigins: [...liveStore.origins.entries()].map(([url, ts]) => ({
+          url,
+          ts,
+        })),
         serverTime: new Date().toISOString(),
       },
       { headers: { 'Cache-Control': 'no-store' } },

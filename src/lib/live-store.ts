@@ -38,8 +38,10 @@ interface LiveStoreState {
   logSeq: number;
   /** bumped whenever a ControlSignal is created or acked */
   signalsVersion: number;
-  /** last origin a real browser was seen from (for agent-side re-dispatch) */
-  lastOrigin: { url: string; ts: number } | null;
+  /** every origin a real browser was seen from recently (url → last-seen ts) */
+  origins: Map<string, number>;
+  /** sticky origin that passed the reachability probe (used for dispatches) */
+  preferredOrigin: string | null;
   waiters: Set<() => void>;
 }
 
@@ -52,7 +54,8 @@ function makeStore(): LiveStoreState {
     logs: [],
     logSeq: 0,
     signalsVersion: 0,
-    lastOrigin: null,
+    origins: new Map(),
+    preferredOrigin: null,
     waiters: new Set(),
   };
 }
@@ -61,6 +64,13 @@ function makeStore(): LiveStoreState {
 const g = globalThis as unknown as { __owenLiveStore?: LiveStoreState };
 export const liveStore: LiveStoreState = g.__owenLiveStore ?? makeStore();
 g.__owenLiveStore = liveStore;
+/* migrate stores cached by older module versions (hot reload) */
+if (!liveStore.origins) {
+  (liveStore as { origins?: Map<string, number> }).origins = new Map();
+}
+if (liveStore.preferredOrigin === undefined) {
+  (liveStore as { preferredOrigin?: string | null }).preferredOrigin = null;
+}
 
 export function notifyLive(): void {
   for (const wake of liveStore.waiters) {
@@ -150,23 +160,36 @@ export function waitForChange(ms: number): Promise<void> {
   });
 }
 
-/** Remember the origin the operator's browser came from (agent relaunches). */
+/** Remember the origin the operator's browser came from (agent relaunches).
+ * Keeps a map of every recent origin — some preview gateways only work with
+ * session headers (fcapp.run), so the launch route probes them all. */
 export function recordOrigin(req: Request): void {
   try {
     const origin =
       req.headers.get('origin') ||
+      req.headers.get('referer')?.match(/^https?:\/\/[^/]+/)?.[0] ||
       `${req.headers.get('x-forwarded-proto') ?? 'https'}://${req.headers.get('host') ?? ''}`;
     if (!origin || !/^https?:\/\/.+\..+/.test(origin)) return;
-    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.')) {
-      // local agent-browser / curl — still useful as a *reachable* fallback,
-      // but never overwrite a real public origin with localhost.
-      const prev = liveStore.lastOrigin;
-      if (prev && !prev.url.startsWith('http://localhost') && !prev.url.startsWith('http://127.')) {
-        return;
+    const url = origin.replace(/\/+$/, '');
+    const isLocal = /^http:\/\/(localhost|127\.)/.test(url);
+    if (!isLocal) {
+      liveStore.origins.set(url, Date.now());
+      // prune entries older than 12h
+      const cutoff = Date.now() - 12 * 3600_000;
+      for (const [u, ts] of liveStore.origins) {
+        if (ts < cutoff) liveStore.origins.delete(u);
       }
     }
-    liveStore.lastOrigin = { url: origin.replace(/\/+$/, ''), ts: Date.now() };
   } catch {
     /* ignore */
   }
+}
+
+/** Most recently seen non-local origin (compat helper). */
+export function lastSeenOrigin(): { url: string; ts: number } | null {
+  let best: { url: string; ts: number } | null = null;
+  for (const [url, ts] of liveStore.origins) {
+    if (!best || ts > best.ts) best = { url, ts };
+  }
+  return best;
 }
