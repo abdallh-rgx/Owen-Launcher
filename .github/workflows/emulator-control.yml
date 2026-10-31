@@ -1,0 +1,153 @@
+name: Owen Emulator Control Room
+
+# Human-in-the-loop emulator session (up to ~5.5h inside GitHub's 6h job cap).
+#
+# Boots a headless Android 11 (API 30) x86_64 emulator — that image ships
+# ARM translation (libndk), which the aarch64-only OwenLauncher APK needs —
+# installs the APK with `adb install -g` (grant ALL runtime permissions),
+# launches it, then hands control to tools/control/driver.sh:
+#
+#   screenshot → posted to the Control Room site → YOU click the button
+#   location → the driver taps the emulator → repeat.
+#
+# You watch this Action's logs AND the Control Room site; every request
+# arrives with a REAL emulator screenshot. Answer "إنهاء الجلسة" on the
+# site (or let the job time out) to stop.
+
+on:
+  workflow_dispatch:
+    inputs:
+      control_url:
+        description: "control_url — رابط غرفة التحكم (انسخه من بطاقة التشغيل في الموقع)"
+        required: true
+        default: ""
+      control_token:
+        description: "control_token — التوكن الظاهر في الموقع"
+        required: false
+        default: "owen-ctl-7f4k9qz2m8"
+      apk_path:
+        description: "مسار APK داخل المستودع"
+        required: false
+        default: "owen-launcher-rs/dist/OwenLauncher-v1.8.0-release.apk"
+      hours:
+        description: "مدة الجلسة بالساعات (٢ حتى ٥٫٥)"
+        required: false
+        default: "5.5"
+      api_level:
+        description: "Android API level للمحاكي (٣٠ = يدعم ترجمة ARM)"
+        required: false
+        default: "30"
+
+concurrency:
+  group: control-room
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  AVD_NAME: owen-control
+  FORCE_COLOR: "1"
+
+jobs:
+  drive:
+    name: Emulator + driver (up to 6h)
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17 (for sdkmanager/avdmanager)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Free disk space (Fortnite data needs room)
+        run: |
+          df -h / | tail -1
+          sudo rm -rf /usr/local/lib/android/caches /opt/hostedtoolcache/CodeQL \
+                       /usr/share/dotnet /usr/local/lib/ryu /opt/ghc 2>/dev/null || true
+          sudo docker image prune -af >/dev/null 2>&1 || true
+          df -h / | tail -1
+
+      - name: Check KVM
+        run: |
+          if [ ! -e /dev/kvm ]; then
+            echo "::error::/dev/kvm missing — this runner cannot hardware-accelerate the emulator."
+            exit 1
+          fi
+          ls -l /dev/kvm
+
+      - name: Install emulator + system image (API ${{ inputs.api_level }})
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "emulator" "platform-tools" \
+            "system-images;android-${{ inputs.api_level }};google_apis;x86_64" \
+            >/dev/null
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed | grep -E "emulator|system-images" || true
+
+      - name: Create AVD (Pixel 4, 12 GB data partition)
+        run: |
+          echo "no" | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
+            -n "$AVD_NAME" \
+            -k "system-images;android-${{ inputs.api_level }};google_apis;x86_64" \
+            -d pixel_4 --force
+          CONFIG="$HOME/.android/avd/$AVD_NAME.avd/config.ini"
+          touch "$CONFIG"
+          for kv in "disk.dataPartition.size=12280M" "hw.ramSize=4096" \
+                    "hw.gpu.enabled=yes" "hw.gpu.mode=swiftshader_indirect" \
+                    "hw.keyboard=yes" "vm.heapSize=512"; do
+            key="${kv%%=*}"
+            if grep -q "^${key}=" "$CONFIG"; then
+              sed -i "s|^${key}=.*|${kv}|" "$CONFIG"
+            else
+              echo "$kv" >> "$CONFIG"
+            fi
+          done
+          cat "$CONFIG"
+
+      - name: Boot headless emulator
+        run: |
+          nohup "$ANDROID_HOME/emulator/emulator" -avd "$AVD_NAME" \
+            -no-window -no-audio -no-boot-anim -no-snapshot \
+            -gpu swiftshader_indirect -camera-back none -camera-front none \
+            -memory 4096 -cores 3 \
+            > /tmp/emulator.log 2>&1 &
+          echo "emulator launching…"
+          sleep 5
+          "$ANDROID_HOME/platform-tools/adb" wait-for-device
+          for i in $(seq 1 144); do
+            BOOT=$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; break; }
+            sleep 5
+            [ "$i" = "144" ] && { echo "::error::emulator did not boot in 12 min"; tail -50 /tmp/emulator.log; exit 1; }
+          done
+          "$ANDROID_HOME/platform-tools/adb" devices -l
+
+      - name: Run Control Room driver (screenshots ↔ your clicks)
+        env:
+          CONTROL_URL: ${{ inputs.control_url }}
+          CONTROL_TOKEN: ${{ inputs.control_token || 'owen-ctl-7f4k9qz2m8' }}
+          APK_PATH: ${{ inputs.apk_path || 'owen-launcher-rs/dist/OwenLauncher-v1.8.0-release.apk' }}
+          SESSION_HOURS: ${{ inputs.hours || '5.5' }}
+        run: |
+          # hours → minutes, clamped to ≤ 325 (leave boot/teardown room)
+          MINUTES=$(awk -v h="${SESSION_HOURS:-5.5}" 'BEGIN{m=h*60; if(m<10)m=10; if(m>325)m=325; printf "%d", m}')
+          echo "driver session: $MINUTES minutes"
+          export DRIVER_MAX_MINUTES="$MINUTES"
+          bash owen-launcher-rs/tools/control/driver.sh
+
+      - name: Upload session artifacts (screenshots + logs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owen-control-session
+          path: |
+            /tmp/owen-shots/
+            /tmp/owen-driver.log
+            /tmp/emulator.log
+          if-no-files-found: warn
+          retention-days: 7
