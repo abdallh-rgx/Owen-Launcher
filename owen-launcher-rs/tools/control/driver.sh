@@ -112,6 +112,13 @@ take_shot() {  # writes /tmp/owen-shot.png
   [ -s /tmp/owen-shot.png ]
 }
 
+# ضع الصورة base64 في ملف ثم حقنها بـ jq --rawfile — تمريرها كوسيطة
+# ينفجر بـ E2BIG (حد ١٢٨KB للوسيطة الواحدة في لينكس).
+shot_b64() { base64 -w0 /tmp/owen-shot.png > /tmp/owen-img.b64; }
+inject_img() { # $1=skeleton.json  $2=field  → payload.json
+  jq --rawfile img /tmp/owen-img.b64 --arg field "$2" '.[$field]=$img' "$1" > /tmp/owen-payload.json
+}
+
 # Downscale to a small JPEG for the live stream (PIL when available,
 # otherwise ship the PNG as-is). Prints: ORIG_W ORIG_H LIVE_W LIVE_H
 make_live_jpeg() {
@@ -144,13 +151,15 @@ frame_loop() {
       dims="$(make_live_jpeg)"
       ow="$(awk '{print $1}' <<<"$dims")"; lh="$(awk '{print $2}' <<<"$dims")"
       lw="$(awk '{print $3}' <<<"$dims")"; lh2="$(awk '{print $4}' <<<"$dims")"
-      b64="$(base64 -w0 /tmp/owen-live.jpg 2>/dev/null || true)"
-      if [ -n "$b64" ]; then
+      b64=""
+      base64 -w0 /tmp/owen-live.jpg > /tmp/owen-live.b64 2>/dev/null || true
+      if [ -s /tmp/owen-live.b64 ]; then
         app="$(focus_app)"
-        jq -n --arg img "$b64" --argjson w "${lw:-420}" --argjson h "${lh2:-880}" \
+        jq -n --argjson w "${lw:-420}" --argjson h "${lh2:-880}" \
               --argjson dw "$DEV_W" --argjson dh "$DEV_H" --arg a "${app:-}" \
-          '{image:$img, w:$w, h:$h, deviceW:$dw, deviceH:$dh, app:$a}' \
-        | post_json "$BASE/api/control/live/frame" >/dev/null
+          '{image:"", w:$w, h:$h, deviceW:$dw, deviceH:$dh, app:$a}' > /tmp/owen-frame.json
+        jq --rawfile img /tmp/owen-live.b64 '.image=$img' /tmp/owen-frame.json \
+          | post_json "$BASE/api/control/live/frame"
       fi
     fi
     sleep "$FRAME_IVL"
@@ -426,15 +435,17 @@ while [ $SECONDS -lt $DEADLINE ]; do
     rm -f /tmp/owen-flag-download-done
   fi
 
-  b64png="$(base64 -w0 /tmp/owen-shot.png)"
+  b64png=""
+  base64 -w0 /tmp/owen-shot.png > /tmp/owen-img.b64
   meta="$(jq -nc --arg app "$(focus_app)" --arg f "$(focus)" \
                      --arg u "$(uptime_str)" '{app:$app,focus:$f,uptime:$u}')"
-  resp="$(jq -n --arg sk "step-$STEP" --arg t "$local_title" --arg i "$local_instr" \
-                --arg img "$b64png" --argjson m "$meta" \
-          '{stepKey:$sk,title:$t,instruction:$i,image:$img,meta:$m}' \
-    | curl -sS -m 120 -X POST "$BASE/api/control/tasks" \
+  jq -n --arg sk "step-$STEP" --arg t "$local_title" --arg i "$local_instr" \
+        --argjson m "$meta" \
+    '{stepKey:$sk,title:$t,instruction:$i,meta:$m,image:""}' > /tmp/owen-task.json
+  inject_img /tmp/owen-task.json image
+  resp="$(curl -sS -m 120 -X POST "$BASE/api/control/tasks" \
         -H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json' \
-        --data-binary @- 2>/dev/null || true)"
+        --data-binary @/tmp/owen-payload.json 2>/dev/null || true)"
   TASK_ID="$(jq -r '.id // empty' <<<"$resp" 2>/dev/null)"
   if [ -z "$TASK_ID" ]; then
     log "post_task failed for step $STEP; retry in 6s"; sleep 6; continue
@@ -481,10 +492,12 @@ while [ $SECONDS -lt $DEADLINE ]; do
       log "human requested retake"
       if take_shot; then
         cp /tmp/owen-shot.png "$SHOTS_ARCHIVE/step-$(printf '%03d' "$STEP")-retake-$(date +%H%M%S).png"
-        b64="$(base64 -w0 /tmp/owen-shot.png)"
+        shot_b64
+        jq -n '{image:""}' > /tmp/owen-task.json
+        inject_img /tmp/owen-task.json image
         curl -sf -m 60 -X PATCH "$BASE/api/control/tasks/$TASK_ID" \
           -H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json' \
-          --data-binary "$(jq -n --arg img "$b64" '{image:$img}')" >/dev/null 2>&1 || true
+          --data-binary @/tmp/owen-payload.json >/dev/null 2>&1 || true
         shot_hash="$(md5sum /tmp/owen-shot.png | cut -d' ' -f1)"
       fi
       last_refresh=$SECONDS
@@ -497,10 +510,12 @@ while [ $SECONDS -lt $DEADLINE ]; do
         if [ "$h" != "$shot_hash" ]; then
           log "screen changed while pending — auto-refreshing the image"
           cp /tmp/owen-shot.png "$SHOTS_ARCHIVE/step-$(printf '%03d' "$STEP")-auto-$(date +%H%M%S).png"
-          b64="$(base64 -w0 /tmp/owen-shot.png)"
+          shot_b64
+          jq -n '{image:""}' > /tmp/owen-task.json
+          inject_img /tmp/owen-task.json image
           curl -sf -m 60 -X PATCH "$BASE/api/control/tasks/$TASK_ID" \
             -H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json' \
-            --data-binary "$(jq -n --arg img "$b64" '{image:$img}')" >/dev/null 2>&1 || true
+            --data-binary @/tmp/owen-payload.json >/dev/null 2>&1 || true
           shot_hash="$h"
         fi
       fi
@@ -556,12 +571,13 @@ while [ $SECONDS -lt $DEADLINE ]; do
   else
     : > /tmp/owen-after.png
   fi
-  b64a=""
-  [ -s /tmp/owen-after.png ] && b64a="$(base64 -w0 /tmp/owen-after.png)"
-  if [ -n "$b64a" ]; then
+  if [ -s /tmp/owen-after.png ]; then
+    base64 -w0 /tmp/owen-after.png > /tmp/owen-img.b64
+    jq -n '{status:"APPLIED",afterImage:""}' > /tmp/owen-task.json
+    inject_img /tmp/owen-task.json afterImage
     curl -sf -m 90 -X PATCH "$BASE/api/control/tasks/$TASK_ID" \
       -H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json' \
-      --data-binary "$(jq -n --arg img "$b64a" '{status:"APPLIED",afterImage:$img}')" >/dev/null 2>&1 || true
+      --data-binary @/tmp/owen-payload.json >/dev/null 2>&1 || true
   else
     curl -sf -m 20 -X PATCH "$BASE/api/control/tasks/$TASK_ID" \
       -H "x-owen-token: $CONTROL_TOKEN" -H 'content-type: application/json' \
