@@ -47,6 +47,31 @@ launch() {
   adb shell monkey -p com.epicgames.fortnite -c android.intent.category.LAUNCHER 1 2>&1 | tail -3
 }
 
+# The game boots through an Android runtime-permission gate ("Choose what to
+# allow Fortnite to access") BEFORE GameActivity ever loads libUE4 — the
+# engine wait loop dead-ends on it (round 17: 5 silent minutes, pid none).
+# Blind-tap "Continue" (bottom-right) + center, then re-check.
+dismiss_gates() {
+  local size W H focus
+  size=$(adb shell wm size 2>/dev/null | grep -o '[0-9]*x[0-9]*' | head -1)
+  W=${size%x*}; W=${W:-1080}
+  H=${size#*x}; H=${H:-2340}
+  echo "== gate dismissal (${W}x${H})"
+  for i in 1 2 3 4 5 6 7 8; do
+    sleep 5
+    focus=$(adb shell dumpsys window 2>/dev/null | grep -m1 -E 'mCurrentFocus|mFocusedApp' || true)
+    echo "  gate[$i]: ${focus:0:100}"
+    adb shell input tap $((W * 78 / 100)) $((H * 87 / 100)) >/dev/null 2>&1 || true
+    sleep 2
+    adb shell input tap $((W / 2)) $((H / 2)) >/dev/null 2>&1 || true
+    if adb shell 'grep -q libUE4.so /proc/$(pidof com.epicgames.fortnite)/maps 2>/dev/null' 2>/dev/null; then
+      echo "  gate[$i]: libUE4 mapped — engine is up"
+      return 0
+    fi
+  done
+  return 0
+}
+
 # post-launch diagnostics: what did the game actually do?
 diagnose() {
   sleep 20
@@ -62,6 +87,7 @@ diagnose() {
 echo "== strategy A: shell dumper on the stock game"
 adb install -r -t /tmp/fortnite-12.41.apk || { adb uninstall com.epicgames.fortnite >/dev/null 2>&1; adb install -t /tmp/fortnite-12.41.apk; }
 launch
+dismiss_gates
 diagnose
 # wait for libUE4.so to map (engine boot) — GObjects exists from module init
 for i in $(seq 1 60); do
@@ -94,6 +120,7 @@ if ! ok; then
     --min-bytes 1000000 >/tmp/shim-report.json || { cat /tmp/shim-report.json; exit 1; }
   adb install -r -t /tmp/fortnite-12.41-dump.apk
   launch
+  dismiss_gates
   echo "waiting for the in-process auto-dump (60s after load)…"
   for i in $(seq 1 40); do
     sleep 15

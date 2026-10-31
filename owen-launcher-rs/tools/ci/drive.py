@@ -188,6 +188,29 @@ def do_login(timeout):
     return False
 
 
+
+
+def dismiss_gates():
+    """The runtime-permission gate ("Choose what to allow Fortnite to access")
+    blocks GameActivity before libUE4 ever loads — blind-tap through it."""
+    import re as _re
+    r = adb("shell", "wm", "size")
+    m = _re.search(r"(\d+)x(\d+)", r.stdout or "")
+    w, h = (int(m.group(1)), int(m.group(2))) if m else (1080, 2340)
+    print(f"[gates] dismissal loop ({w}x{h})")
+    for i in range(8):
+        time.sleep(5)
+        f = adb("shell", "dumpsys", "window")
+        focus = next((l.strip()[:90] for l in (f.stdout or "").splitlines() if "mCurrentFocus" in l), "")
+        print(f"[gates] {i}: {focus}")
+        adb_ok("shell", "input", "tap", str(w * 78 // 100), str(h * 87 // 100))
+        time.sleep(2)
+        adb_ok("shell", "input", "tap", str(w // 2), str(h // 2))
+        m2 = adb("shell", "pidof", PKG)
+        if m2.stdout.strip():
+            return
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     apk = sys.argv[1] if len(sys.argv) > 1 else "/tmp/fortnite-12.41-owen.apk"
@@ -215,6 +238,7 @@ def main():
 
     # 2) launch + periodic screenshots in the background
     adb_ok("shell", "monkey", "-p", PKG, "-c", "android.intent.category.LAUNCHER", "1")
+    dismiss_gates()
     import threading
 
     stop_at = time.time() + DOWNLOAD_TIMEOUT + LOGIN_TIMEOUT + 1200

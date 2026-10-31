@@ -118,10 +118,14 @@ impl SigningKey {
     pub fn certificate_der(&self) -> Vec<u8> {
         match &self.cert_der {
             Some(der) => der.clone(),
-            // A minimal self-signed X.509 wrapper around the public key.
-            // Android only parses the certificate for display; verification
-            // uses the public key and signature.
-            None => crate::sign::x509_minimal(&self.public()),
+            // A FULLY PARSEABLE self-signed X.509. The old `x509_minimal`
+            // fallback (no issuer/serial/validity) sailed past our own
+            // verify_v2 but Android's conscrypt rejected it on-device with
+            // `INSTALL_PARSE_FAILED_NO_CERTIFICATES … ASN.1 FIELD_MISSING`
+            // (API 30 emulator, ogs-1241 round 17) — v2 verification DOES
+            // parse the signer certificate; a placeholder is not an option.
+            // This was the "الـ APK ليس APK صالح" root cause.
+            None => crate::sign_v1::self_signed_cert(&self.private),
         }
     }
 
