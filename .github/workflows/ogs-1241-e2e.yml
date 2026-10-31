@@ -48,6 +48,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
 
+      - name: Enable KVM (ubuntu-latest needs the udev unlock)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm || true
+
       - name: NDK r27c at the path the workspace expects
         run: |
           for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
@@ -110,6 +118,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
 
+      - name: Enable KVM (ubuntu-latest needs the udev unlock)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm || true
+
       - name: NDK r27c at the path the workspace expects
         run: |
           for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do export PATH="$d:$PATH"; done
@@ -162,6 +178,14 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with: { targets: aarch64-linux-android }
+
+      - name: Enable KVM (ubuntu-latest needs the udev unlock)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm || true
 
       - name: NDK r27c at the path the workspace expects
         run: |
