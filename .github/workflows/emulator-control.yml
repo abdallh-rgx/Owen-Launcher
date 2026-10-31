@@ -141,6 +141,7 @@ jobs:
           hw.cpu.arch=x86_64
           hw.cpu.ncore=3
           hw.device.name=pixel_4
+          hw.device.manufacturer=Google
           hw.gps=yes
           hw.gpu.enabled=yes
           hw.gpu.mode=swiftshader_indirect
@@ -154,7 +155,7 @@ jobs:
           hw.sensors.orientation=yes
           hw.sensors.proximity=yes
           hw.trackBall=no
-          image.sysdir.1=system-images/android-${{ inputs.api_level }}/google_apis/x86_64/
+          image.sysdir.1=$ANDROID_HOME/system-images/android-${{ inputs.api_level }}/google_apis/x86_64/
           runtime.network.latency=none
           runtime.network.speed=full
           sdcard.size=2048M
@@ -171,23 +172,66 @@ jobs:
           echo "AVD $AVD_NAME ready:"
           cat "$ANDROID_AVD_HOME/$AVD_NAME.avd/config.ini" | head -5
 
-      - name: Boot headless emulator
+      - name: Boot headless emulator (live boot-log bridge to the site)
+        env:
+          CONTROL_URL: ${{ inputs.control_url }}
+          CONTROL_TOKEN: ${{ inputs.control_token || 'owen-ctl-7f4k9qz2m8' }}
         run: |
-          nohup "$ANDROID_HOME/emulator/emulator" -avd "$AVD_NAME" \
-            -no-window -no-audio -no-boot-anim -no-snapshot \
+          ADB="$ANDROID_HOME/platform-tools/adb"
+          EMU="$ANDROID_HOME/emulator/emulator"
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+
+          rm -f /tmp/boot-finished
+          nohup "$EMU" -avd "$AVD_NAME" \
+            -no-window -no-audio -no-boot-anim -no-snapshot -verbose \
             -gpu swiftshader_indirect -camera-back none -camera-front none \
             -memory 4096 -cores 3 \
             > /tmp/emulator.log 2>&1 &
-          echo "emulator launching…"
-          sleep 5
-          "$ANDROID_HOME/platform-tools/adb" wait-for-device
-          for i in $(seq 1 144); do
-            BOOT=$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-            [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; break; }
+          EMU_PID=$!
+          echo "emulator launching (pid $EMU_PID) — streaming its log to the Control Room…"
+
+          # جسر السجل: أسطر إقلاع المحاكي تظهر مباشرة على الموقع
+          bash owen-launcher-rs/tools/control/boot_bridge.sh \
+            "${CONTROL_URL%/}" "$CONTROL_TOKEN" /tmp/boot-finished &
+          BRIDGE_PID=$!
+
+          # 1) انتظار ظهور المحاكي في adb — بحد أقصى ٨ دقائق
+          ok=""
+          for i in $(seq 1 96); do
+            if "$ADB" devices 2>/dev/null | grep -qE "^emulator-[0-9]+[[:space:]]+device"; then ok=1; break; fi
+            if ! kill -0 "$EMU_PID" 2>/dev/null; then
+              break
+            fi
             sleep 5
-            [ "$i" = "144" ] && { echo "::error::emulator did not boot in 12 min"; tail -50 /tmp/emulator.log; exit 1; }
           done
-          "$ANDROID_HOME/platform-tools/adb" devices -l
+          if [ -z "$ok" ]; then
+            touch /tmp/boot-finished; sleep 1
+            echo "::error::emulator never appeared in 'adb devices'"
+            echo "———— emulator.log (last 120 lines) ————"
+            tail -n 120 /tmp/emulator.log
+            exit 1
+          fi
+          echo "adb sees the emulator — waiting for full boot…"
+          "$ADB" wait-for-device || true
+
+          # 2) انتظار اكتمال الإقلاع — بحد أقصى ١٢ دقيقة
+          ok=""
+          for i in $(seq 1 144); do
+            BOOT=$("$ADB" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; ok=1; break; }
+            if ! kill -0 "$EMU_PID" 2>/dev/null; then
+              break
+            fi
+            sleep 5
+          done
+          touch /tmp/boot-finished
+          if [ -z "$ok" ]; then
+            echo "::error::emulator did not finish booting"
+            echo "———— emulator.log (last 120 lines) ————"
+            tail -n 120 /tmp/emulator.log
+            exit 1
+          fi
+          "$ADB" devices -l
 
       - name: Run Control Room driver v2 (live stream + signals ↔ your clicks)
         env:
