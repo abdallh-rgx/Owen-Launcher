@@ -68,10 +68,14 @@ have_image "$IMG" || { echo "::error::no usable x86_64 system image"; exit 1; }
 
 yes | timeout 240 "$SM" --licenses >/dev/null 2>&1 || true
 
-echo no | "$AVDM" --force --create avd -n "$AVD" --device pixel_5 \
-  --package "$IMG" --sdcard 2048M >/dev/null 2>&1 \
-  || echo no | "$AVDM" create avd -n "$AVD" --device pixel_5 --package "$IMG" >/dev/null 2>&1 \
-  || echo "::warning::avdmanager create failed (existing AVD?)"
+# create the AVD — the exact incantation that works (round 13 died on
+# `--force --create avd`: avdmanager wants `create avd --force …` FIRST).
+echo no | "$AVDM" create avd --force --name "$AVD" --device pixel_5 \
+  --package "$IMG" --sdcard 2048M 2>&1 | tail -3
+"$AVDM" list avd 2>/dev/null | head -8 || true
+if [ ! -f "$HOME/.android/avd/$AVD.ini" ]; then
+  echo "::error::AVD $AVD was not created (no $HOME/.android/avd/$AVD.ini)"; exit 1
+fi
 
 AVD_HOME="$HOME/.android/avd/$AVD.avd"
 if [ -f "$AVD_HOME/config.ini" ]; then
