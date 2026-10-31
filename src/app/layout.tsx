@@ -10,17 +10,16 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "Owen Launcher — Liquid Glass",
+  title: "غرفة تحكم أوين — Owen Control Room",
   description:
-    "Owen Launcher: the complete safe-Rust Fortnite mobile private-server stack — launcher, redirecter, LawinServer v2-compatible backend and the native PartyHub, behind a liquid-glass interface.",
+    "Owen Control Room: human-in-the-loop Android emulator control — live phone stream, button annotation, manual signals and full GitHub Actions run management for the Owen Launcher / OGS-12.41 pipeline.",
   keywords: [
     "Owen Launcher",
+    "Owen Control Room",
     "Fortnite",
     "private server",
-    "PartyHub",
-    "LawinServer",
-    "Reload Backend",
-    "Rust",
+    "OGS-12.41",
+    "emulator",
   ],
 };
 

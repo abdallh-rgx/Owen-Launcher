@@ -1,47 +1,77 @@
 "use client";
 
-/* Owen Control Room — غرفة تحكم أوين
+/* Owen Control Room — غرفة تحكم أوين (v2)
  *
- * Human-in-the-loop annotation UI: a GitHub Actions runner drives an Android
- * emulator and posts PENDING tasks (screenshot + instruction). The operator
- * clicks the button location on the screenshot, describes it, sets a wait
- * duration and submits; the runner polls the answer and taps the emulator.
- *
- * The page polls GET /api/control/state every POLL_INTERVAL_MS and renders
- * the current task, the runner pipeline status and the request history.
+ * أنت تحدد الأزرار — والباقي مُدار بالكامل:
+ *   • بث مباشر لشاشة الهاتف (long-poll ~1fps) — انقر عليه لتحديد الزر
+ *   • طلبات التعليق من الدرايفر على GitHub Actions (نفس نظام v1)
+ *   • إشارات يدوية: انتهى التحميل / ابدأ توليد SDK / إعادة فتح / كراش
+ *   • سجل مباشر (logcat + الدرايفر) مع تمييز الكراش
+ *   • إدارة التشغيل: ابدأ/أوقف جلسة GitHub Actions من الموقع مباشرة
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 import {
   HEARTBEAT_STALE_MS,
   POLL_INTERVAL_MS,
+  type LiveFrameDTO,
+  type LiveLogLineDTO,
+  type RunStatusDTO,
+  type SignalType,
   type StateDTO,
   type TaskDTO,
 } from "@/lib/control-types";
 import { Skeleton } from "@/components/ui/skeleton";
-/* لوحة المشغل القديمة (Liquid Glass + أدلة OGS) — محفوظة كتبويب بديل */
-import LauncherConsole from "@/components/launcher/launcher-console";
-import { ConnectionCard } from "@/components/control/connection-card";
 import { EmptyState } from "@/components/control/empty-state";
 import { HeaderBar } from "@/components/control/header-bar";
 import { HistoryList } from "@/components/control/history-list";
+import { LiveStreamCard } from "@/components/control/live-stream-card";
+import { LogConsoleCard } from "@/components/control/log-console-card";
 import { PipelineStatus } from "@/components/control/pipeline-status";
+import { RunPanel } from "@/components/control/run-panel";
+import { SignalsCard } from "@/components/control/signals-card";
 import { TaskCard } from "@/components/control/task-card";
+/* لوحة المشغل القديمة (Liquid Glass + أدلة OGS) — محفوظة كتبويب بديل */
+import LauncherConsole from "@/components/launcher/launcher-console";
 import {
   beepNewTask,
   type AnswerPayload,
   type ApiResult,
+  type Point,
 } from "@/components/control/utils";
 
 const CONSECUTIVE_FAILURES_FOR_ERROR = 2;
 const MUTED_STORAGE_KEY = "owen-ctl-muted";
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 export default function Page() {
+  /* تبويب بديل: لوحة المشغل الكاملة (Liquid Glass) */
+  const [view, setView] = useState<"control" | "launcher">("control");
+
+  /* ---------- الحالة العامة ---------- */
   const [state, setState] = useState<StateDTO | null>(null);
   const [connError, setConnError] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [view, setView] = useState<"control" | "launcher">("control");
+  const [now, setNow] = useState<number | null>(null);
+
+  /* ---------- البث المباشر ---------- */
+  const [liveFrame, setLiveFrame] = useState<LiveFrameDTO | null>(null);
+  const [liveLogs, setLiveLogs] = useState<LiveLogLineDTO[]>([]);
+  const [liveConnected, setLiveConnected] = useState(false);
+  const [lastFrameAt, setLastFrameAt] = useState<number | null>(null);
+  const [livePick, setLivePick] = useState<{ point: Point; at: number } | null>(
+    null,
+  );
+
+  /* ---------- إدارة التشغيل ---------- */
+  const [runInfo, setRunInfo] = useState<{
+    run: RunStatusDTO | null;
+    tokenAvailable: boolean;
+  } | null>(null);
+  const [launching, setLaunching] = useState(false);
 
   const ctrlRef = useRef<AbortController | null>(null);
   const failStreakRef = useRef(0);
@@ -54,7 +84,14 @@ export default function Page() {
     to: null,
   });
 
-  /* ---------- كتم الصوت (محفوظ في localStorage) ---------- */
+  /* ---------- ساعة كل ثانية (أعمار البث والأوقات النسبية) ---------- */
+  useEffect(() => {
+    setNow(Date.now());
+    const iv = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(iv);
+  }, []);
+
+  /* ---------- كتم الصوت ---------- */
   useEffect(() => {
     try {
       setMuted(window.localStorage.getItem(MUTED_STORAGE_KEY) === "1");
@@ -79,7 +116,7 @@ export default function Page() {
     });
   }, []);
 
-  /* ---------- وميض عنوان الصفحة عند وصول طلب جديد ---------- */
+  /* ---------- وميض العنوان عند طلب جديد ---------- */
   const stopTitleFlash = useCallback(() => {
     if (flashRef.current.iv !== null) window.clearInterval(flashRef.current.iv);
     if (flashRef.current.to !== null) window.clearTimeout(flashRef.current.to);
@@ -104,7 +141,7 @@ export default function Page() {
     return () => stopTitleFlash();
   }, [stopTitleFlash]);
 
-  /* ---------- جلب الحالة (استقصاء كل ثانيتين) ---------- */
+  /* ---------- جلب الحالة كل ثانيتين ---------- */
   const fetchState = useCallback(async () => {
     ctrlRef.current?.abort();
     const ctrl = new AbortController();
@@ -121,7 +158,6 @@ export default function Page() {
       failStreakRef.current = 0;
       setConnError(false);
 
-      // كشف الطلب الجديد → صافرة + وميض العنوان
       const id = data.current?.id ?? null;
       if (firstLoadRef.current) {
         firstLoadRef.current = false;
@@ -148,7 +184,6 @@ export default function Page() {
     };
   }, [fetchState]);
 
-  /* إعادة الجلب فور عودة التبويب إلى الواجهة */
   useEffect(() => {
     const onVis = () => {
       if (document.visibilityState === "visible") void fetchState();
@@ -156,6 +191,77 @@ export default function Page() {
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, [fetchState]);
+
+  /* ---------- البث المباشر: long-poll مستمر ---------- */
+  useEffect(() => {
+    let alive = true;
+    let frameSeq = 0;
+    let logSeq = 0;
+    let backoff = 300;
+
+    const poll = async () => {
+      while (alive) {
+        try {
+          const res = await fetch(
+            `/api/control/live?frameSince=${frameSeq}&logSince=${logSeq}&wait=1`,
+            { cache: "no-store" },
+          );
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const d = (await res.json()) as {
+            frame: LiveFrameDTO | null;
+            frameSeq: number;
+            logs: LiveLogLineDTO[] | null;
+            logSeq: number;
+          };
+          if (!alive) return;
+          if (d.frame && d.frame.seq > frameSeq) {
+            setLiveFrame(d.frame);
+            setLastFrameAt(d.frame.ts);
+          }
+          frameSeq = Math.max(frameSeq, d.frameSeq ?? 0);
+          if (d.logs && d.logs.length > 0) {
+            logSeq = Math.max(logSeq, d.logSeq ?? 0);
+            setLiveLogs((prev) => [...prev, ...d.logs!].slice(-600));
+          }
+          setLiveConnected(true);
+          backoff = 300;
+        } catch {
+          if (!alive) return;
+          setLiveConnected(false);
+          await sleep(backoff);
+          backoff = Math.min(backoff * 2, 5000);
+        }
+      }
+    };
+
+    void poll();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  /* ---------- حالة GitHub Run كل 20 ثانية ---------- */
+  useEffect(() => {
+    let alive = true;
+    const fetchRun = async () => {
+      try {
+        const res = await fetch("/api/control/run", { cache: "no-store" });
+        const d = (await res.json()) as {
+          run: RunStatusDTO | null;
+          tokenAvailable: boolean;
+        };
+        if (alive) setRunInfo(d);
+      } catch {
+        /* keep last known */
+      }
+    };
+    void fetchRun();
+    const iv = window.setInterval(() => void fetchRun(), 20_000);
+    return () => {
+      alive = false;
+      window.clearInterval(iv);
+    };
+  }, []);
 
   /* ---------- نداءات الـ API ---------- */
   const submitAnswer = useCallback(
@@ -209,13 +315,110 @@ export default function Page() {
     [fetchState],
   );
 
+  const sendSignal = useCallback(
+    async (type: SignalType, note?: string): Promise<ApiResult> => {
+      try {
+        const res = await fetch("/api/control/signals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type, note }),
+          cache: "no-store",
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+        };
+        if (!res.ok || !data.ok) {
+          toast.error(data.error ?? "فشل إرسال الإشارة");
+          return { ok: false, error: data.error };
+        }
+        toast.success("وصلت الإشارة — الدرايفر سيلتقطها خلال ثوانٍ");
+        await fetchState();
+        return { ok: true };
+      } catch {
+        toast.error("مشكلة في الاتصال بالموقع");
+        return { ok: false };
+      }
+    },
+    [fetchState],
+  );
+
+  const launchSession = useCallback(
+    async (hours: number): Promise<ApiResult> => {
+      setLaunching(true);
+      try {
+        const res = await fetch("/api/control/launch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ hours }),
+          cache: "no-store",
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          error?: string;
+          message?: string;
+        };
+        if (!res.ok || !data.ok) {
+          toast.error(data.error ?? "فشل إطلاق الجلسة");
+          return { ok: false, error: data.error };
+        }
+        toast.success(data.message ?? "تم إطلاق الجلسة");
+        return { ok: true };
+      } catch {
+        toast.error("مشكلة في الاتصال بالموقع");
+        return { ok: false };
+      } finally {
+        setLaunching(false);
+      }
+    },
+    [],
+  );
+
+  const cancelSession = useCallback(async (): Promise<ApiResult> => {
+    try {
+      const res = await fetch("/api/control/run/cancel", {
+        method: "POST",
+        cache: "no-store",
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !data.ok) {
+        toast.error(data.error ?? "تعذّر الإيقاف");
+        return { ok: false, error: data.error };
+      }
+      toast.success("تم إرسال أمر الإيقاف");
+      return { ok: true };
+    } catch {
+      toast.error("مشكلة في الاتصال بالموقع");
+      return { ok: false };
+    }
+  }, []);
+
+  /* ---------- النقر على البث ---------- */
   const current = state?.current ?? null;
+  const onLivePick = useCallback(
+    (p: Point) => {
+      if (!current) {
+        toast.info("لا يوجد طلب قيد الانتظار — سيصلك طلب من الدرايفر قريباً");
+        return;
+      }
+      setLivePick({ point: p, at: Date.now() });
+    },
+    [current],
+  );
+
   const runnerLive =
     state?.heartbeat != null &&
-    Date.now() - new Date(state.heartbeat.updatedAt).getTime() <
-      HEARTBEAT_STALE_MS;
+    now !== null &&
+    now - new Date(state.heartbeat.updatedAt).getTime() < HEARTBEAT_STALE_MS;
 
-  /* تبويب لوحة المشغل — التطبيق الكامل السابق (Liquid Glass) */
+  const liveAgeMs =
+    lastFrameAt !== null && now !== null ? Math.max(0, now - lastFrameAt) : null;
+  const nowSafe = now ?? Date.now();
+
+  /* تبويب لوحة المشغل — التطبيق الكامل السابق */
   if (view === "launcher") {
     return (
       <>
@@ -239,25 +442,25 @@ export default function Page() {
         connError={connError}
         muted={muted}
         onToggleMute={toggleMute}
+        liveAgeMs={liveAgeMs}
       />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <main className="mx-auto w-full max-w-[1500px] flex-1 px-4 py-5 sm:px-6 sm:py-6">
         {state === null ? (
-          /* الهيكل الأولي أثناء التحميل */
-          <div className="grid gap-5 lg:grid-cols-3 lg:gap-6">
-            <div className="space-y-5 lg:col-start-2 lg:col-span-2 lg:row-start-1">
-              <Skeleton className="h-[520px] w-full rounded-2xl bg-white/[0.05]" />
+          <div className="grid gap-5 xl:grid-cols-12">
+            <div className="space-y-5 xl:col-span-8">
+              <Skeleton className="h-[560px] w-full rounded-2xl bg-white/[0.05]" />
             </div>
-            <aside className="space-y-5 lg:col-start-1 lg:row-start-1">
-              <Skeleton className="h-72 w-full rounded-2xl bg-white/[0.05]" />
-              <Skeleton className="h-60 w-full rounded-2xl bg-white/[0.05]" />
-              <Skeleton className="h-80 w-full rounded-2xl bg-white/[0.05]" />
-            </aside>
+            <div className="space-y-5 xl:col-span-4">
+              <Skeleton className="h-64 w-full rounded-2xl bg-white/[0.05]" />
+              <Skeleton className="h-[420px] w-full rounded-2xl bg-white/[0.05]" />
+              <Skeleton className="h-56 w-full rounded-2xl bg-white/[0.05]" />
+            </div>
           </div>
         ) : (
-          <div className="grid items-start gap-5 lg:grid-cols-3 lg:gap-6">
-            {/* بطاقة المهمة الحالية — عمودان */}
-            <div className="lg:col-start-2 lg:col-span-2 lg:row-start-1">
+          <div className="grid items-start gap-5 xl:grid-cols-12">
+            {/* عمود الطلب — الأعرض */}
+            <div className="space-y-5 xl:col-span-8">
               <AnimatePresence mode="wait">
                 {current ? (
                   <motion.div
@@ -272,6 +475,7 @@ export default function Page() {
                       queueCount={state.queue.length}
                       onAnswer={(payload) => submitAnswer(current, payload)}
                       onRetake={() => retakeTask(current)}
+                      livePick={livePick}
                     />
                   </motion.div>
                 ) : (
@@ -288,30 +492,58 @@ export default function Page() {
               </AnimatePresence>
             </div>
 
-            {/* الشريط الجانبي — العمود الأيمن */}
+            {/* العمود الجانبي — إدارة + بث + إشارات */}
             <aside
-              className="space-y-5 lg:col-start-1 lg:row-start-1"
-              aria-label="لوحة التشغيل والمتابعة"
+              className="space-y-5 xl:col-span-4"
+              aria-label="لوحة التشغيل والبث المباشر"
             >
-              <ConnectionCard token={state.token} />
+              <RunPanel
+                run={runInfo?.run ?? null}
+                tokenAvailable={runInfo?.tokenAvailable ?? false}
+                launching={launching}
+                onLaunch={launchSession}
+                onCancel={cancelSession}
+                now={nowSafe}
+              />
+
+              <div className="xl:sticky xl:top-20">
+                <LiveStreamCard
+                  frame={liveFrame}
+                  ageMs={liveAgeMs}
+                  taskPending={current !== null}
+                  onPick={onLivePick}
+                />
+              </div>
+
+              <SignalsCard
+                signals={state.signals}
+                onSignal={sendSignal}
+                now={nowSafe}
+              />
+
               <PipelineStatus
                 heartbeat={state.heartbeat}
                 stats={state.stats}
               />
+
               <HistoryList recent={state.recent} />
             </aside>
           </div>
         )}
+
+        {/* السجل المباشر — عرض كامل العرض */}
+        <div className="mt-5">
+          <LogConsoleCard lines={liveLogs} liveConnected={liveConnected} />
+        </div>
       </main>
 
       <footer className="mt-auto border-t border-white/10 bg-black/30">
-        <div className="mx-auto w-full max-w-7xl px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-zinc-500">
-          Owen Control Room — القيادة اليدوية للمحاكي • يعمل الموقع بلا توقف،
-          والـ Action يشغّل المحاكي حتى ٦ ساعات
+        <div className="mx-auto w-full max-w-[1500px] px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-zinc-500">
+          Owen Control Room v2 — بث مباشر + إشارات + إدارة تشغيل كاملة •
+          المحاكي يعمل على GitHub Actions حتى ٦ ساعات والوكيل يراقب السجل
         </div>
       </footer>
 
-      {/* مبدّل إلى لوحة المشغل (التطبيق السابق) */}
       <button
         type="button"
         onClick={() => setView("launcher")}

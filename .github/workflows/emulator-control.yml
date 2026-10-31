@@ -7,18 +7,23 @@ name: Owen Emulator Control Room
 # installs the APK with `adb install -g` (grant ALL runtime permissions),
 # launches it, then hands control to tools/control/driver.sh:
 #
-#   screenshot → posted to the Control Room site → YOU click the button
-#   location → the driver taps the emulator → repeat.
+#   LIVE STREAM  → the site shows the phone screen ~1 fps; click it to
+#                  annotate, watch the internal download, spot crashes.
+#   SIGNALS      → you tell the driver when the internal download finished
+#                  and when to start SDK generation (MobileDumper).
+#   ASK LOOP     → screenshot task on the site → you click the button →
+#                  the driver taps the emulator → repeat.
 #
-# You watch this Action's logs AND the Control Room site; every request
-# arrives with a REAL emulator screenshot. Answer "إنهاء الجلسة" on the
-# site (or let the job time out) to stop.
+# The AVD is written BY HAND (config.ini + ini pointer) — no avdmanager:
+# avdmanager silently failed on fresh runners ("Auto-selecting single ABI"
+# then exit 0 with no AVD created → "touch: cannot touch .../config.ini").
+# Writing the two files directly is deterministic and needs no Java prompts.
 
 on:
   workflow_dispatch:
     inputs:
       control_url:
-        description: "control_url — رابط غرفة التحكم (انسخه من بطاقة التشغيل في الموقع)"
+        description: "control_url — رابط غرفة التحكم (يُملأ تلقائياً عند الإطلاق من الموقع)"
         required: true
         default: ""
       control_token:
@@ -29,6 +34,14 @@ on:
         description: "مسار APK داخل المستودع"
         required: false
         default: "owen-launcher-rs/dist/OwenLauncher-v1.8.0-release.apk"
+      dump_apk:
+        description: "مسار MobileDumper APK (اختياري — لإشارة «ابدأ توليد SDK»)"
+        required: false
+        default: ""
+      dump_pkg:
+        description: "اسم حزمة MobileDumper (افتراضي = حزمة أوين)"
+        required: false
+        default: ""
       hours:
         description: "مدة الجلسة بالساعات (٢ حتى ٥٫٥)"
         required: false
@@ -58,7 +71,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17 (for sdkmanager/avdmanager)
+      - name: Set up JDK 17 (for sdkmanager)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -89,35 +102,74 @@ jobs:
             >/dev/null
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed | grep -E "emulator|system-images" || true
 
-      - name: Create AVD (Pixel 4, 12 GB data partition)
+      - name: Install Pillow (live-stream JPEG downscaler)
         run: |
-          # [إصلاح] إنشاء المجلد الأساسي لضمان عدم فشل الأمر التالي
-          mkdir -p "$HOME/.android/avd"
-          
-          echo "no" | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
-            -n "$AVD_NAME" \
-            -k "system-images;android-${{ inputs.api_level }};google_apis;x86_64" \
-            -d pixel_4 --force
-            
-          # [إصلاح] التحقق من نجاح إنشاء مجلد المحاكي
-          if [ ! -d "$HOME/.android/avd/$AVD_NAME.avd" ]; then
-            echo "::error::فشل إنشاء مجلد المحاكي، تأكد من تحميل الـ system image بشكل صحيح."
-            exit 1
-          fi
-          
-          CONFIG="$HOME/.android/avd/$AVD_NAME.avd/config.ini"
-          touch "$CONFIG"
-          for kv in "disk.dataPartition.size=12280M" "hw.ramSize=4096" \
-                    "hw.gpu.enabled=yes" "hw.gpu.mode=swiftshader_indirect" \
-                    "hw.keyboard=yes" "vm.heapSize=512"; do
-            key="${kv%%=*}"
-            if grep -q "^${key}=" "$CONFIG"; then
-              sed -i "s|^${key}=.*|${kv}|" "$CONFIG"
-            else
-              echo "$kv" >> "$CONFIG"
-            fi
-          done
-          cat "$CONFIG"
+          python3 -m pip install --user --quiet pillow || true
+          python3 -c "from PIL import Image; print('Pillow OK')" || echo "Pillow missing — driver will stream PNG frames"
+
+      # ---------------------------------------------------------------------
+      # THE FIX: write the AVD by hand. avdmanager create avd exits 0 without
+      # creating anything on fresh runners → every later step failed with
+      # "touch: cannot touch '/home/runner/.android/avd/….avd/config.ini'".
+      # An AVD is just two small files — we write them directly.
+      # ---------------------------------------------------------------------
+      - name: Create AVD by hand (Pixel 4, 12 GB data, no avdmanager)
+        run: |
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+          mkdir -p "$ANDROID_AVD_HOME/$AVD_NAME.avd"
+
+          cat > "$ANDROID_AVD_HOME/$AVD_NAME.ini" <<EOF
+          avd.ini.encoding=UTF-8
+          path=$ANDROID_AVD_HOME/$AVD_NAME.avd
+          path.rel=avd/$AVD_NAME.avd
+          target=android-${{ inputs.api_level }}
+          EOF
+
+          cat > "$ANDROID_AVD_HOME/$AVD_NAME.avd/config.ini" <<EOF
+          avd.ini.encoding=UTF-8
+          AvdId=$AVD_NAME
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname=$AVD_NAME
+          disk.dataPartition.size=12280M
+          fastboot.forceColdBoot=yes
+          hw.accelerometer=yes
+          hw.audioInput=no
+          hw.battery=yes
+          hw.camera.back=none
+          hw.camera.front=none
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=3
+          hw.device.name=pixel_4
+          hw.gps=yes
+          hw.gpu.enabled=yes
+          hw.gpu.mode=swiftshader_indirect
+          hw.keyboard=yes
+          hw.lcd.density=440
+          hw.lcd.height=2280
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=4096
+          hw.sdCard=yes
+          hw.sensors.orientation=yes
+          hw.sensors.proximity=yes
+          hw.trackBall=no
+          image.sysdir.1=system-images/android-${{ inputs.api_level }}/google_apis/x86_64/
+          runtime.network.latency=none
+          runtime.network.speed=full
+          sdcard.size=2048M
+          showDeviceFrame=no
+          skin.dynamic=yes
+          tag.display=Google APIs
+          tag.id=google_apis
+          vm.heapSize=512
+          EOF
+
+          # sanity: the emulator itself lists AVDs straight from these files
+          "$ANDROID_HOME/emulator/emulator" -list-avds | grep -x "$AVD_NAME" \
+            || { echo "::error::AVD not listed after hand-write"; ls -la "$ANDROID_AVD_HOME"; exit 1; }
+          echo "AVD $AVD_NAME ready:"
+          cat "$ANDROID_AVD_HOME/$AVD_NAME.avd/config.ini" | head -5
 
       - name: Boot headless emulator
         run: |
@@ -137,11 +189,13 @@ jobs:
           done
           "$ANDROID_HOME/platform-tools/adb" devices -l
 
-      - name: Run Control Room driver (screenshots ↔ your clicks)
+      - name: Run Control Room driver v2 (live stream + signals ↔ your clicks)
         env:
           CONTROL_URL: ${{ inputs.control_url }}
           CONTROL_TOKEN: ${{ inputs.control_token || 'owen-ctl-7f4k9qz2m8' }}
           APK_PATH: ${{ inputs.apk_path || 'owen-launcher-rs/dist/OwenLauncher-v1.8.0-release.apk' }}
+          DUMP_APK: ${{ inputs.dump_apk || '' }}
+          DUMP_PKG: ${{ inputs.dump_pkg || '' }}
           SESSION_HOURS: ${{ inputs.hours || '5.5' }}
         run: |
           # hours → minutes, clamped to ≤ 325 (leave boot/teardown room)
@@ -150,7 +204,7 @@ jobs:
           export DRIVER_MAX_MINUTES="$MINUTES"
           bash owen-launcher-rs/tools/control/driver.sh
 
-      - name: Upload session artifacts (screenshots + logs)
+      - name: Upload session artifacts (screenshots + logs + SDK dumps)
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -158,6 +212,7 @@ jobs:
           path: |
             /tmp/owen-shots/
             /tmp/owen-driver.log
+            /tmp/owen-logcat.txt
             /tmp/emulator.log
           if-no-files-found: warn
           retention-days: 7

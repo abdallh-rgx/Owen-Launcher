@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, BellOff, Clock3, Inbox, Radar, WifiOff } from "lucide-react";
+import {
+  Bell,
+  BellOff,
+  Clock3,
+  Inbox,
+  Radar,
+  Radio,
+  WifiOff,
+} from "lucide-react";
 import { HEARTBEAT_STALE_MS, type HeartbeatDTO } from "@/lib/control-types";
 import { cn } from "@/lib/utils";
 import { arNum, baghdadTime } from "./utils";
@@ -12,6 +20,8 @@ interface HeaderBarProps {
   connError: boolean;
   muted: boolean;
   onToggleMute: () => void;
+  /** live screen stream freshness (null = never received a frame) */
+  liveAgeMs: number | null;
 }
 
 export function HeaderBar({
@@ -20,6 +30,7 @@ export function HeaderBar({
   connError,
   muted,
   onToggleMute,
+  liveAgeMs,
 }: HeaderBarProps) {
   // Null until mount so SSR HTML and first client render match.
   const [now, setNow] = useState<Date | null>(null);
@@ -82,6 +93,25 @@ export function HeaderBar({
             />
             {live ? "الخط متصل" : "بانتظار اتصال الـ Action…"}
           </span>
+
+          {liveAgeMs !== null && (
+            <span
+              role="status"
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                liveAgeMs < 6000
+                  ? "border-red-400/30 bg-red-500/10 text-red-300"
+                  : "border-white/10 bg-white/[0.04] text-zinc-400",
+              )}
+              title="بث مباشر لشاشة الهاتف"
+            >
+              <Radio
+                className={cn("size-3.5", liveAgeMs < 6000 && "animate-pulse")}
+                aria-hidden="true"
+              />
+              <span className="hidden sm:inline">بث مباشر</span>
+            </span>
+          )}
 
           <span
             role="status"

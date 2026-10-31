@@ -23,11 +23,13 @@ interface TaskCardProps {
   queueCount: number;
   onAnswer: (payload: AnswerPayload) => Promise<ApiResult>;
   onRetake: () => Promise<ApiResult>;
+  /** نقطة وصلت من النقر على البث المباشر (تُعبّأ كنقطة أولى) */
+  livePick?: { point: Point; at: number } | null;
 }
 
 const NEEDS_COORDS: ReadonlySet<ControlAction> = new Set(["tap", "swipe"]);
 
-export function TaskCard({ task, queueCount, onAnswer, onRetake }: TaskCardProps) {
+export function TaskCard({ task, queueCount, onAnswer, onRetake, livePick }: TaskCardProps) {
   const [action, setAction] = useState<ControlAction>("tap");
   const [p1, setP1] = useState<Point | null>(null);
   const [p2, setP2] = useState<Point | null>(null);
@@ -46,6 +48,20 @@ export function TaskCard({ task, queueCount, onAnswer, onRetake }: TaskCardProps
     setDescription("");
     setWaitMs(2000);
   }, [task.id]);
+
+  // نقطة من البث المباشر → عبّئها كنقطة أولى (أو ثانية في وضع السحب)
+  useEffect(() => {
+    if (!livePick) return;
+    if (action === "swipe") {
+      if (!p1) setP1(livePick.point);
+      else setP2(livePick.point);
+      setActivePoint(p1 ? 2 : 1);
+      toast.success(p1 ? "تم تحديد نقطة النهاية من البث" : "تم تحديد نقطة البداية من البث");
+    } else {
+      setP1(livePick.point);
+      toast.success("تم تحديد النقطة من البث — أكمل الوصف واضغط إرسال");
+    }
+  }, [livePick?.at]);
 
   const setPoint = (which: 1 | 2, pt: Point | null) => {
     if (which === 1) setP1(pt);
