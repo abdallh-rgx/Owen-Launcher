@@ -91,10 +91,20 @@ jobs:
 
       - name: Create AVD (Pixel 4, 12 GB data partition)
         run: |
+          # [إصلاح] إنشاء المجلد الأساسي لضمان عدم فشل الأمر التالي
+          mkdir -p "$HOME/.android/avd"
+          
           echo "no" | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
             -n "$AVD_NAME" \
             -k "system-images;android-${{ inputs.api_level }};google_apis;x86_64" \
             -d pixel_4 --force
+            
+          # [إصلاح] التحقق من نجاح إنشاء مجلد المحاكي
+          if [ ! -d "$HOME/.android/avd/$AVD_NAME.avd" ]; then
+            echo "::error::فشل إنشاء مجلد المحاكي، تأكد من تحميل الـ system image بشكل صحيح."
+            exit 1
+          fi
+          
           CONFIG="$HOME/.android/avd/$AVD_NAME.avd/config.ini"
           touch "$CONFIG"
           for kv in "disk.dataPartition.size=12280M" "hw.ramSize=4096" \
