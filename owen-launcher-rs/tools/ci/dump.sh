@@ -71,36 +71,39 @@ gate_tap_text() {
 }
 
 dismiss_gates() {
-  local size W H focus i
+  local size W H focus i tapped
   size=$(adb shell wm size 2>/dev/null | grep -o '[0-9]*x[0-9]*' | head -1)
   W=${size%x*}; W=${W:-1080}
   H=${size#*x}; H=${H:-2340}
-  echo "== gate dismissal (${W}x${H}, uiautomator-precise)"
-  for i in 1 2 3 4 5 6 7 8 9 10; do
+  echo "== gate dismissal (${W}x${H}; no early exit, verbose)"
+  for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
     sleep 4
     focus=$(adb shell dumpsys window 2>/dev/null | grep -m1 -E 'mCurrentFocus' || true)
-    echo "  gate[$i]: ${focus:0:96}"
-    case "$focus" in *permissioncontroller*|*GrantPermissions*|*packageinstaller*|*installer*)
-      gate_tap_text "Continue" || gate_tap_text "ALLOW" || gate_tap_text "Allow" || {
-        adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
-        # generic: tap android:id/button1 (the affirmative) from the dump
-        local xml b x1 y1 x2 y2
-        xml=$(adb shell cat /sdcard/ui.xml 2>/dev/null | tr -d '\r')
-        b=$(printf '%s' "$xml" | grep -o 'resource-id="android:id/button1"[^>]*bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | head -1)
-        if [ -n "$b" ]; then
-          b=$(printf '%s' "$b" | grep -o '\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]')
-          x1=$(printf '%s' "$b" | cut -d, -f1 | tr -d '['); y1=$(printf '%s' "$b" | cut -d, -f2 | tr -d ']')
-          x2=$(printf '%s' "$b" | cut -d, -f3 | tr -d '['); y2=$(printf '%s' "$b" | cut -d, -d4 | tr -d ']')
-          adb shell input tap $(((x1 + x2) / 2)) $(((y1 + y2) / 2)) >/dev/null 2>&1 && echo "  tapped button1"
+    echo "  gate[$i] $(date -u +%H:%M:%S): ${focus:0:92}"
+    tapped=0
+    case "$focus" in
+      *permissioncontroller*|*GrantPermissions*|*packageinstaller*)
+        # uiautomator first (exact node centers)
+        if gate_tap_text "Continue"; then tapped=1; fi
+        if [ $tapped -eq 0 ] && gate_tap_text "ALLOW"; then tapped=1; fi
+        if [ $tapped -eq 0 ] && gate_tap_text "Allow"; then tapped=1; fi
+        if [ $tapped -eq 0 ]; then
+          # blind spots: the A11 permission sheet's action row (Cancel |
+          # Continue) sits at the very bottom-right; try several candidates.
+          adb shell input tap $((W * 72 / 100)) $((H * 88 / 100)) >/dev/null 2>&1
+          sleep 1
+          adb shell input tap $((W * 80 / 100)) $((H * 90 / 100)) >/dev/null 2>&1
+          sleep 1
+          adb shell input tap $((W * 65 / 100)) $((H * 92 / 100)) >/dev/null 2>&1
+          echo "  gate[$i]: blind-tapped 3 Continue candidates"
         fi
-      }
-      ;;
+        ;;
     esac
-    if adb shell 'grep -q libUE4.so /proc/$(pidof com.epicgames.fortnite)/maps 2>/dev/null' 2>/dev/null; then
-      echo "  gate[$i]: libUE4 mapped — engine is up"
-      return 0
-    fi
+    # log whether the gate is gone
+    focus=$(adb shell dumpsys window 2>/dev/null | grep -m1 -E 'mCurrentFocus' || true)
+    case "$focus" in *permissioncontroller*) : ;; *) echo "  gate[$i]: focus left the permission controller";; esac
   done
+  echo "== gates done"
   return 0
 }
 

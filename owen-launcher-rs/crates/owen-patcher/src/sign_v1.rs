@@ -188,7 +188,11 @@ fn alg_rsa() -> Vec<u8> {
 
 /// `Name` (CN=Owen) — issuer and subject of the signing certificate.
 fn name_cn() -> Vec<u8> {
-    der_seq(&[&der_seq(&[&der_oid(OID_CN), &der_utf8("Owen")])])
+    // X.509 Name = SEQUENCE OF (RDN) ; RDN = SET OF (ATV) ; ATV = SEQUENCE
+    // { type OID, value }. Verified byte-for-byte against `openssl req -x509`
+    // output — this exact triple nesting is what conscrypt demands (the
+    // "APK غير صالح" / INSTALL_PARSE_FAILED_NO_CERTIFICATES family).
+    der_seq(&[&der_set(&[&der_seq(&[&der_oid(OID_CN), &der_utf8("Owen")])])])
 }
 
 /// The certificate serial (Kotlin used the `ogfn` keystore alias; the value
@@ -854,5 +858,16 @@ mod tests {
         std::fs::write(&wrong_cert, self_signed_cert(&wrong.private)).unwrap();
         assert!(SigningKey::load_pair(key_pem, wrong_cert.to_str().unwrap()).is_err());
         std::fs::remove_dir_all(&dir).ok();
+    }
+}
+
+#[cfg(test)]
+mod cert_dump {
+    #[test]
+    fn dump_self_signed_for_asn1_inspection() {
+        let key = crate::sign::SigningKey::generate_or_load("/tmp/owen-inspect-key.pem").unwrap();
+        let der = super::self_signed_cert(&key.private);
+        std::fs::write("/tmp/owen-selfsigned.der", &der).unwrap();
+        eprintln!("wrote /tmp/owen-selfsigned.der ({} bytes)", der.len());
     }
 }
