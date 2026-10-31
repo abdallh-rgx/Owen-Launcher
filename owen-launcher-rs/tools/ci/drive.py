@@ -214,14 +214,29 @@ def dismiss_gates():
     """The runtime-permission gate ("Choose what to allow Fortnite to access")
     blocks GameActivity before libUE4 ever loads. The gate is a real system
     view, so uiautomator sees its buttons — tap the exact node centers."""
-    for i in range(10):
+    import re as _re
+    r = adb("shell", "wm", "size")
+    m = _re.search(r"(\d+)x(\d+)", r.stdout or "")
+    w, h = (int(m.group(1)), int(m.group(2))) if m else (1080, 2340)
+    # VLM-derived from the actual screenshot: Continue sits at (896, 914) on
+    # 1080x2340 = (83%W, 39%H) — the dialog card is upper-middle, NOT bottom.
+    for i in range(12):
         time.sleep(4)
         f = adb("shell", "dumpsys", "window")
         focus = next((l.strip()[:96] for l in (f.stdout or "").splitlines() if "mCurrentFocus" in l), "")
-        print(f"[gates] {i}: {focus}")
+        print(f"[gates] {i}: {focus}", flush=True)
         low = focus.lower()
         if any(k in low for k in ("permissioncontroller", "grantpermissions", "packageinstaller", "installer")):
-            _ui_tap(r'text="Continue"') or _ui_tap(r'text="ALLOW"') or _ui_tap(r'text="Allow"') or _ui_tap(r'resource-id="android:id/button1"')
+            ok = (_ui_tap(r'text="Continue"') or _ui_tap(r'text="ALLOW"')
+                  or _ui_tap(r'text="Allow"') or _ui_tap(r'resource-id="android:id/button1"'))
+            if not ok:
+                # blind spot from the screenshot ground truth + neighbors
+                for x, y in ((w * 83 // 100, h * 39 // 100),
+                             (w * 66 // 100, h * 39 // 100),
+                             (w * 83 // 100, h * 35 // 100)):
+                    adb_ok("shell", "input", "tap", str(x), str(y))
+                    time.sleep(1)
+                print(f"[gates] {i}: blind-tapped the VLM-derived Continue spots", flush=True)
         m2 = adb("shell", "pidof", PKG)
         if m2.stdout.strip():
             return
