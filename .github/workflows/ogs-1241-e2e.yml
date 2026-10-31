@@ -94,6 +94,8 @@ jobs:
             /tmp/md-exe-run.log
             /tmp/sdk-img.log
             /tmp/og-dump.tar.zst
+            /tmp/dump-phase-screen.png
+            /tmp/shim-report.json
           if-no-files-found: ignore
 
       - name: Commit the dump into the repo (dumps/)

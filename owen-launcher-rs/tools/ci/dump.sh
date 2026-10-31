@@ -42,19 +42,35 @@ bash tools/ci/reassemble.sh /tmp/fortnite-12.41.apk
 # ---- the emulator (API 30 google_apis x86_64, ARM translation) ----------------
 bash tools/ci/emulator-up.sh
 
-launch() { adb shell monkey -p com.epicgames.fortnite -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1; }
+launch() {
+  echo "== launching com.epicgames.fortnite"
+  adb shell monkey -p com.epicgames.fortnite -c android.intent.category.LAUNCHER 1 2>&1 | tail -3
+}
+
+# post-launch diagnostics: what did the game actually do?
+diagnose() {
+  sleep 20
+  echo "== device state:"; adb devices || true
+  echo "== package:"; adb shell pm path com.epicgames.fortnite 2>&1 | head -2 || true
+  echo "== pid:"; adb shell pidof com.epicgames.fortnite 2>&1 | head -1 || true
+  echo "== fatal/crash tail:"; adb logcat -d 2>/dev/null | grep -iE "epicgames|fortnite|libUE4|AndroidRuntime|FATAL|SIGSEGV|SIGILL|ndk_translation" | tail -25 || true
+  adb exec-out screencap -p > /tmp/dump-phase-screen.png 2>/dev/null || true
+  echo "screenshot: $(wc -c < /tmp/dump-phase-screen.png 2>/dev/null || echo 0) bytes"
+}
 
 # ============================ Strategy A =====================================
 echo "== strategy A: shell dumper on the stock game"
 adb install -r -t /tmp/fortnite-12.41.apk || { adb uninstall com.epicgames.fortnite >/dev/null 2>&1; adb install -t /tmp/fortnite-12.41.apk; }
 launch
+diagnose
 # wait for libUE4.so to map (engine boot) — GObjects exists from module init
 for i in $(seq 1 60); do
   adb shell su 0 true >/dev/null 2>&1 || true
   if adb shell 'grep -q libUE4.so /proc/$(pidof com.epicgames.fortnite)/maps 2>/dev/null' 2>/dev/null; then break; fi
   sleep 5
 done
-PID=$(adb shell pidof com.epicgames.fortnite | tr -d '\r')
+# pidof exits 1 when the package is not running — never let that kill the script.
+PID=$(adb shell pidof com.epicgames.fortnite 2>/dev/null | tr -d '\r' || true)
 echo "game pid: ${PID:-none}"
 if [ -n "${PID:-}" ]; then
   adb push "$EXE" /data/local/tmp/MobileDumper-7 >/dev/null
