@@ -107,6 +107,12 @@ jobs:
           python3 -m pip install --user --quiet pillow || true
           python3 -c "from PIL import Image; print('Pillow OK')" || echo "Pillow missing — driver will stream PNG frames"
 
+      # ---------------------------------------------------------------------
+      # THE FIX: write the AVD by hand. avdmanager create avd exits 0 without
+      # creating anything on fresh runners → every later step failed with
+      # "touch: cannot touch '/home/runner/.android/avd/….avd/config.ini'".
+      # An AVD is just two small files — we write them directly.
+      # ---------------------------------------------------------------------
       - name: Create AVD by hand (Pixel 4, 12 GB data, no avdmanager)
         run: |
           export ANDROID_AVD_HOME="$HOME/.android/avd"
@@ -135,6 +141,7 @@ jobs:
           hw.cpu.arch=x86_64
           hw.cpu.ncore=3
           hw.device.name=pixel_4
+          hw.device.manufacturer=Google
           hw.gps=yes
           hw.gpu.enabled=yes
           hw.gpu.mode=swiftshader_indirect
@@ -159,53 +166,72 @@ jobs:
           vm.heapSize=512
           EOF
 
+          # sanity: the emulator itself lists AVDs straight from these files
           "$ANDROID_HOME/emulator/emulator" -list-avds | grep -x "$AVD_NAME" \
             || { echo "::error::AVD not listed after hand-write"; ls -la "$ANDROID_AVD_HOME"; exit 1; }
           echo "AVD $AVD_NAME ready:"
           cat "$ANDROID_AVD_HOME/$AVD_NAME.avd/config.ini" | head -5
 
-      - name: Boot headless emulator
+      - name: Boot headless emulator (live boot-log bridge to the site)
+        env:
+          CONTROL_URL: ${{ inputs.control_url }}
+          CONTROL_TOKEN: ${{ inputs.control_token || 'owen-ctl-7f4k9qz2m8' }}
         run: |
-          nohup "$ANDROID_HOME/emulator/emulator" -avd "$AVD_NAME" \
+          ADB="$ANDROID_HOME/platform-tools/adb"
+          EMU="$ANDROID_HOME/emulator/emulator"
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+
+          rm -f /tmp/boot-finished
+          nohup "$EMU" -avd "$AVD_NAME" \
             -no-window -no-audio -no-boot-anim -no-snapshot -verbose \
             -gpu swiftshader_indirect -camera-back none -camera-front none \
             -memory 4096 -cores 3 \
             > /tmp/emulator.log 2>&1 &
           EMU_PID=$!
-          echo "emulator launching…"
-          
-          sleep 5
-          if ! kill -0 $EMU_PID 2>/dev/null; then
-            echo "::error::Emulator process died immediately. Logs:"
-            cat /tmp/emulator.log
+          echo "emulator launching (pid $EMU_PID) — streaming its log to the Control Room…"
+
+          # جسر السجل: أسطر إقلاع المحاكي تظهر مباشرة على الموقع
+          bash owen-launcher-rs/tools/control/boot_bridge.sh \
+            "${CONTROL_URL%/}" "$CONTROL_TOKEN" /tmp/boot-finished &
+          BRIDGE_PID=$!
+
+          # 1) انتظار ظهور المحاكي في adb — بحد أقصى ٨ دقائق
+          ok=""
+          for i in $(seq 1 96); do
+            if "$ADB" devices 2>/dev/null | grep -qE "^emulator-[0-9]+[[:space:]]+device"; then ok=1; break; fi
+            if ! kill -0 "$EMU_PID" 2>/dev/null; then
+              break
+            fi
+            sleep 5
+          done
+          if [ -z "$ok" ]; then
+            touch /tmp/boot-finished; sleep 1
+            echo "::error::emulator never appeared in 'adb devices'"
+            echo "———— emulator.log (last 120 lines) ————"
+            tail -n 120 /tmp/emulator.log
             exit 1
           fi
+          echo "adb sees the emulator — waiting for full boot…"
+          "$ADB" wait-for-device || true
 
-          echo "Waiting for ADB to detect the emulator..."
-          ADB_WAIT=0
-          while ! "$ANDROID_HOME/platform-tools/adb" devices | grep -q "emulator-"; do
-            sleep 5
-            ADB_WAIT=$((ADB_WAIT+5))
-            if ! kill -0 $EMU_PID 2>/dev/null; then
-              echo "::error::Emulator died while waiting for ADB. Logs:"
-              cat /tmp/emulator.log
-              exit 1
-            fi
-            if [ $ADB_WAIT -ge 180 ]; then
-              echo "::error::Emulator did not appear in ADB within 3 minutes. Logs:"
-              cat /tmp/emulator.log
-              exit 1
-            fi
-          done
-          
-          echo "Device detected in ADB. Waiting for boot completion..."
+          # 2) انتظار اكتمال الإقلاع — بحد أقصى ١٢ دقيقة
+          ok=""
           for i in $(seq 1 144); do
-            BOOT=$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-            [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; break; }
+            BOOT=$("$ADB" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; ok=1; break; }
+            if ! kill -0 "$EMU_PID" 2>/dev/null; then
+              break
+            fi
             sleep 5
-            [ "$i" = "144" ] && { echo "::error::emulator did not boot in 12 min"; tail -50 /tmp/emulator.log; exit 1; }
           done
-          "$ANDROID_HOME/platform-tools/adb" devices -l
+          touch /tmp/boot-finished
+          if [ -z "$ok" ]; then
+            echo "::error::emulator did not finish booting"
+            echo "———— emulator.log (last 120 lines) ————"
+            tail -n 120 /tmp/emulator.log
+            exit 1
+          fi
+          "$ADB" devices -l
 
       - name: Run Control Room driver v2 (live stream + signals ↔ your clicks)
         env:
