@@ -107,12 +107,6 @@ jobs:
           python3 -m pip install --user --quiet pillow || true
           python3 -c "from PIL import Image; print('Pillow OK')" || echo "Pillow missing — driver will stream PNG frames"
 
-      # ---------------------------------------------------------------------
-      # THE FIX: write the AVD by hand. avdmanager create avd exits 0 without
-      # creating anything on fresh runners → every later step failed with
-      # "touch: cannot touch '/home/runner/.android/avd/….avd/config.ini'".
-      # An AVD is just two small files — we write them directly.
-      # ---------------------------------------------------------------------
       - name: Create AVD by hand (Pixel 4, 12 GB data, no avdmanager)
         run: |
           export ANDROID_AVD_HOME="$HOME/.android/avd"
@@ -154,7 +148,7 @@ jobs:
           hw.sensors.orientation=yes
           hw.sensors.proximity=yes
           hw.trackBall=no
-          image.sysdir.1=system-images/android-${{ inputs.api_level }}/google_apis/x86_64/
+          image.sysdir.1=$ANDROID_HOME/system-images/android-${{ inputs.api_level }}/google_apis/x86_64/
           runtime.network.latency=none
           runtime.network.speed=full
           sdcard.size=2048M
@@ -165,7 +159,6 @@ jobs:
           vm.heapSize=512
           EOF
 
-          # sanity: the emulator itself lists AVDs straight from these files
           "$ANDROID_HOME/emulator/emulator" -list-avds | grep -x "$AVD_NAME" \
             || { echo "::error::AVD not listed after hand-write"; ls -la "$ANDROID_AVD_HOME"; exit 1; }
           echo "AVD $AVD_NAME ready:"
@@ -174,13 +167,38 @@ jobs:
       - name: Boot headless emulator
         run: |
           nohup "$ANDROID_HOME/emulator/emulator" -avd "$AVD_NAME" \
-            -no-window -no-audio -no-boot-anim -no-snapshot \
+            -no-window -no-audio -no-boot-anim -no-snapshot -verbose \
             -gpu swiftshader_indirect -camera-back none -camera-front none \
             -memory 4096 -cores 3 \
             > /tmp/emulator.log 2>&1 &
+          EMU_PID=$!
           echo "emulator launching…"
+          
           sleep 5
-          "$ANDROID_HOME/platform-tools/adb" wait-for-device
+          if ! kill -0 $EMU_PID 2>/dev/null; then
+            echo "::error::Emulator process died immediately. Logs:"
+            cat /tmp/emulator.log
+            exit 1
+          fi
+
+          echo "Waiting for ADB to detect the emulator..."
+          ADB_WAIT=0
+          while ! "$ANDROID_HOME/platform-tools/adb" devices | grep -q "emulator-"; do
+            sleep 5
+            ADB_WAIT=$((ADB_WAIT+5))
+            if ! kill -0 $EMU_PID 2>/dev/null; then
+              echo "::error::Emulator died while waiting for ADB. Logs:"
+              cat /tmp/emulator.log
+              exit 1
+            fi
+            if [ $ADB_WAIT -ge 180 ]; then
+              echo "::error::Emulator did not appear in ADB within 3 minutes. Logs:"
+              cat /tmp/emulator.log
+              exit 1
+            fi
+          done
+          
+          echo "Device detected in ADB. Waiting for boot completion..."
           for i in $(seq 1 144); do
             BOOT=$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
             [ "$BOOT" = "1" ] && { echo "BOOTED after ~$((i*5))s"; break; }
