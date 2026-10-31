@@ -240,6 +240,7 @@ jobs:
           OWEN_LOGIN_TIMEOUT: "900"
           OWEN_MATCH_TIMEOUT: "1500"
         run: |
+          export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
           if [ -f /tmp/phase2/flags ]; then export WITH_OGS=$(sed -n 's/WITH_OGS=//p' /tmp/phase2/flags); fi
           echo "WITH_OGS=${WITH_OGS:-0}"
           python3 tools/ci/drive.py /tmp/fortnite-12.41-owen.apk || true

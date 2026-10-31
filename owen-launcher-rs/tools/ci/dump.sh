@@ -12,6 +12,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 export ANDROID_NDK_HOME="${ANDROID_NDK_HOME:-/home/z/ndk/android-ndk-r27c}"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+for d in "$ANDROID_HOME"/cmdline-tools/*/bin; do [ -d "$d" ] && export PATH="$d:$PATH"; done
 PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:/home/z/.cargo/bin:$PATH"
 
 OUT=/tmp/og-dump
