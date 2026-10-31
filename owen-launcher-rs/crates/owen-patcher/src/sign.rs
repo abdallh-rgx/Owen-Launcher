@@ -172,49 +172,44 @@ fn u64le(v: u64) -> [u8; 8] {
     v.to_le_bytes()
 }
 
-/// Spec-exact top-level digest: the whole APK contents are split into 1MB
-/// chunks in order (region 1, then the central directory, then the adjusted
-/// EOCD); every chunk is prefixed with 0xa5 (0x5a for the last one) + uint32
-/// length and SHA-256'd; the top-level digest is SHA-256 over
-/// `0x5a || uint32(total length) || concatenation of chunk digests`.
+/// Spec-exact content digest, ported from AOSP
+/// `ApkSigningBlockUtils.computeContentDigestsPer1MbChunk`:
+/// per-segment 1 MiB chunks → `sha256(0xa5||u32le(len)||chunk)` each →
+/// top = `sha256(0x5a||u32le(CHUNK COUNT)||chunk digests)`.
+/// Regions: [contents before the block][central directory][EOCD with the
+/// CD-offset field set to the block's start offset].
 fn top_digest(regions: &[&[u8]]) -> Vec<u8> {
-    // ONE continuous stream: [contents][CD][EOCD], chunked at 1 MiB
-    // boundaries ACROSS region borders — the per-region remainder is NOT its
-    // own chunk. This is what Android verifies (apksig concatenates then
-    // chunks); the per-region chunking here produced a different top digest
-    // whenever a region boundary did not land on a 1 MiB multiple —
-    // on-device: "SHA-256 digest of contents did not verify".
-    let mut total_len: u64 = 0;
-    let mut all: Vec<u8> = Vec::new();
+    // Ported 1:1 from AOSP ApkSigningBlockUtils.computeContentDigestsPer1MbChunk:
+    //  1. Each SEGMENT is split into consecutive 1 MiB chunks (the final chunk
+    //     of a segment is shorter; no chunks for empty segments).
+    //  2. Chunk digest = sha256(0xa5 || uint32le(chunk_len) || chunk).
+    //  3. Top digest = sha256(0x5a || uint32le(TOTAL CHUNK COUNT) || all chunk
+    //     digests in order).  — NOT total length, and NO special last chunk;
+    //     both of those produced "digest of contents did not verify" on-device.
+    let mut chunks: Vec<&[u8]> = Vec::new();
     for r in regions {
-        total_len += r.len() as u64;
-        all.extend_from_slice(r);
+        let mut rest: &[u8] = r;
+        while rest.len() > CHUNK_LIMIT as usize {
+            chunks.push(&rest[..CHUNK_LIMIT as usize]);
+            rest = &rest[CHUNK_LIMIT as usize..];
+        }
+        if !rest.is_empty() {
+            chunks.push(rest);
+        }
     }
-    let stream: &[u8] = &all;
-    let mut chunks: Vec<(usize, usize)> = Vec::new(); // (start, len)
-    let mut off = 0usize;
-    while stream.len() - off > CHUNK_LIMIT as usize {
-        chunks.push((off, CHUNK_LIMIT as usize));
-        off += CHUNK_LIMIT as usize;
-    }
-    if off < stream.len() || chunks.is_empty() {
-        chunks.push((off, stream.len() - off));
-    }
-    let n = chunks.len();
-    let mut sub_digests: Vec<u8> = Vec::with_capacity(32 * n);
-    for (i, (s, l)) in chunks.iter().enumerate() {
-        let c = &stream[*s..*s + *l];
-        let prefix: u8 = if i == n - 1 { 0x5a } else { 0xa5 };
+    let count = chunks.len() as u32;
+    let mut subs: Vec<u8> = Vec::with_capacity(32 * chunks.len());
+    for c in &chunks {
         let mut sc = Vec::with_capacity(5 + c.len());
-        sc.push(prefix);
+        sc.push(0xa5);
         sc.extend_from_slice(&(c.len() as u32).to_le_bytes());
         sc.extend_from_slice(c);
-        sub_digests.extend_from_slice(&Sha256::digest(&sc));
+        subs.extend_from_slice(&Sha256::digest(&sc));
     }
-    let mut top = Vec::with_capacity(5 + sub_digests.len());
+    let mut top = Vec::with_capacity(5 + subs.len());
     top.push(0x5a);
-    top.extend_from_slice(&u64le(total_len)[..4].to_vec());
-    top.extend_from_slice(&sub_digests);
+    top.extend_from_slice(&count.to_le_bytes());
+    top.extend_from_slice(&subs);
     Vec::from(&Sha256::digest(&top)[..])
 }
 

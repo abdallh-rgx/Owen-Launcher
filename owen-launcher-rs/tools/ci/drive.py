@@ -300,4 +300,12 @@ def main():
 
 
 if __name__ == "__main__":
+    if "--gates-only" in sys.argv:
+        # dump.sh uses this: bash's set -e traps made the shell version exit
+        # early; python is deterministic.
+        import time as _t
+    # minimal bootstrap: gates need no server
+    if "--gates-only" in sys.argv:
+        dismiss_gates()
+        sys.exit(0)
     main()

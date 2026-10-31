@@ -122,7 +122,7 @@ diagnose() {
 echo "== strategy A: shell dumper on the stock game"
 adb install -r -t /tmp/fortnite-12.41.apk || { adb uninstall com.epicgames.fortnite >/dev/null 2>&1; adb install -t /tmp/fortnite-12.41.apk; }
 launch
-dismiss_gates
+python3 tools/ci/drive.py --gates-only
 diagnose
 # wait for libUE4.so to map (engine boot) — GObjects exists from module init
 for i in $(seq 1 60); do
@@ -155,7 +155,7 @@ if ! ok; then
     --min-bytes 1000000 >/tmp/shim-report.json || { cat /tmp/shim-report.json; exit 1; }
   adb install -r -t /tmp/fortnite-12.41-dump.apk
   launch
-  dismiss_gates
+  python3 tools/ci/drive.py --gates-only
   echo "waiting for the in-process auto-dump (60s after load)…"
   for i in $(seq 1 40); do
     sleep 15
