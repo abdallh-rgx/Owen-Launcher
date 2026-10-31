@@ -127,6 +127,78 @@ export interface RunStatusDTO {
   event: string;
 }
 
+// ---------------------------------------------------------------------------
+// الطيار الآلي — مرآة آمنة للعميل من src/lib/autopilot.ts
+// ---------------------------------------------------------------------------
+
+export interface AutopilotDecisionDTO {
+  ts: number;
+  taskId: string;
+  seq: number;
+  screen: string;
+  summary: string;
+  action: string;
+  x: number | null;
+  y: number | null;
+  waitMs: number;
+  downloadPct: number | null;
+  evidence: string | null;
+  vlmFail: boolean;
+}
+
+export interface AutopilotEvidenceDTO {
+  kind: 'lobby' | 'in_match';
+  name: string;
+  url: string;
+  ts: number;
+  summary: string;
+}
+
+export interface AutopilotCrashDTO {
+  ts: number;
+  analysis: string;
+  excerpt: string;
+  restarted: boolean;
+}
+
+export interface AutopilotDTO {
+  enabled: boolean;
+  running: boolean;
+  startedAt: number;
+  lastTickAt: number;
+  screen: string | null;
+  downloadPct: number | null;
+  stepsAnswered: number;
+  vlmFailures: number;
+  humanGraceMs: number;
+  autoSdk: boolean;
+  autoRestart: boolean;
+  sdkSignalSent: boolean;
+  downloadDoneSignalSent: boolean;
+  alert: string | null;
+  lobbyEvidence: AutopilotEvidenceDTO | null;
+  matchEvidence: AutopilotEvidenceDTO | null;
+  evidence: AutopilotEvidenceDTO[];
+  decisions: AutopilotDecisionDTO[];
+  crashes: AutopilotCrashDTO[];
+}
+
+export const AUTOPILOT_SCREENS_AR: Record<string, string> = {
+  launcher_splash: 'شاشة بداية القاذفة',
+  launcher_home: 'القاذفة — القائمة الرئيسية',
+  downloading: 'تحميل بيانات اللعبة',
+  download_done: 'اكتمل التحميل',
+  fortnite_boot: 'إقلاع فورتنايت',
+  eula: 'اتفاقية الاستخدام',
+  login: 'تسجيل الدخول',
+  lobby: 'اللوبي',
+  match_loading: 'تحميل المباراة',
+  in_match: 'داخل المباراة',
+  crash_dialog: 'نافذة كراش',
+  android_home: 'شاشة أندرويد الرئيسية',
+  other: 'شاشة أخرى',
+};
+
 export interface ControlStats {
   pending: number;
   answered: number;
@@ -145,6 +217,7 @@ export interface StateDTO {
   queue: TaskDTO[];
   recent: TaskDTO[];
   signals: SignalDTO[];
+  autopilot: AutopilotDTO | null;
 }
 
 export const CONTROL_ACTIONS: ControlAction[] = [

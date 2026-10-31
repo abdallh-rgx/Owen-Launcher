@@ -1,13 +1,14 @@
 "use client";
 
-/* Owen Control Room — غرفة تحكم أوين (v2)
+/* Owen Control Room — غرفة تحكم أوين (v3 — طيار آلي كامل)
  *
- * أنت تحدد الأزرار — والباقي مُدار بالكامل:
- *   • بث مباشر لشاشة الهاتف (long-poll ~1fps) — انقر عليه لتحديد الزر
- *   • طلبات التعليق من الدرايفر على GitHub Actions (نفس نظام v1)
- *   • إشارات يدوية: انتهى التحميل / ابدأ توليد SDK / إعادة فتح / كراش
- *   • سجل مباشر (logcat + الدرايفر) مع تمييز الكراش
- *   • إدارة التشغيل: ابدأ/أوقف جلسة GitHub Actions من الموقع مباشرة
+ * الطيار الآلي يفعل كل شيء بنفسه:
+ *   • 🤖 يحلل كل لقطة بـ glm-4.6v ويضغط الأزرار تلقائياً (تدخلك اختياري)
+ *   • 🎯 يحفظ أدلة اللوبي + المباراة تلقائياً بمجرد رؤيتها
+ *   • 📡 بث مباشر لشاشة الهاتف (long-poll ~1fps)
+ *   • 🚨 يراقب الكراش ويحلل أسبابه ويعيد تشغيل التطبيق
+ *   • 🧩 يرسل إشارات download_done / start_sdk تلقائياً
+ *   • ⚙️ إدارة التشغيل: ابدأ/أوقف جلسة GitHub Actions من الموقع
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -24,6 +25,7 @@ import {
   type TaskDTO,
 } from "@/lib/control-types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AutopilotCard } from "@/components/control/autopilot-card";
 import { EmptyState } from "@/components/control/empty-state";
 import { HeaderBar } from "@/components/control/header-bar";
 import { HistoryList } from "@/components/control/history-list";
@@ -422,12 +424,14 @@ export default function Page() {
         muted={muted}
         onToggleMute={toggleMute}
         liveAgeMs={liveAgeMs}
+        autopilotEnabled={state?.autopilot?.enabled ?? null}
       />
 
       <main className="mx-auto w-full max-w-[1500px] flex-1 px-4 py-5 sm:px-6 sm:py-6">
         {state === null ? (
           <div className="grid gap-5 xl:grid-cols-12">
             <div className="space-y-5 xl:col-span-8">
+              <Skeleton className="h-[420px] w-full rounded-2xl bg-white/[0.05]" />
               <Skeleton className="h-[560px] w-full rounded-2xl bg-white/[0.05]" />
             </div>
             <div className="space-y-5 xl:col-span-4">
@@ -440,6 +444,13 @@ export default function Page() {
           <div className="grid items-start gap-5 xl:grid-cols-12">
             {/* عمود الطلب — الأعرض */}
             <div className="space-y-5 xl:col-span-8">
+              {/* الطيار الآلي — في الصدارة لأنه من يقود الآن */}
+              <AutopilotCard
+                autopilot={state.autopilot}
+                now={nowSafe}
+                onCommanded={() => void fetchState()}
+              />
+
               <AnimatePresence mode="wait">
                 {current ? (
                   <motion.div
@@ -465,7 +476,10 @@ export default function Page() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.25, ease: "easeOut" }}
                   >
-                    <EmptyState runnerLive={runnerLive} />
+                    <EmptyState
+                      runnerLive={runnerLive}
+                      autopilotEnabled={state.autopilot?.enabled ?? null}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -518,8 +532,9 @@ export default function Page() {
 
       <footer className="mt-auto border-t border-white/10 bg-black/30">
         <div className="mx-auto w-full max-w-[1500px] px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-center text-[11px] leading-relaxed text-zinc-500">
-          Owen Control Room v2 — بث مباشر + إشارات + إدارة تشغيل كاملة •
-          المحاكي يعمل على GitHub Actions حتى ٦ ساعات والوكيل يراقب السجل
+          Owen Control Room v3 — طيار آلي كامل (glm-4.6v) + بث مباشر + مراقبة
+          كراش • المحاكي يعمل على GitHub Actions حتى ٦ ساعات والطيار يدير كل
+          شيء بنفسه
         </div>
       </footer>
     </div>

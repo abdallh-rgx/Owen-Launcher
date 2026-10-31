@@ -1,13 +1,14 @@
 "use client";
 
-import { Radar } from "lucide-react";
+import { Bot, Radar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface EmptyStateProps {
   runnerLive: boolean;
+  autopilotEnabled: boolean | null;
 }
 
-export function EmptyState({ runnerLive }: EmptyStateProps) {
+export function EmptyState({ runnerLive, autopilotEnabled }: EmptyStateProps) {
   return (
     <Card className="items-center gap-6 rounded-2xl border-white/10 bg-white/[0.03] px-4 py-12 text-center shadow-2xl shadow-black/30 backdrop-blur-sm sm:py-16">
       <CardContent className="flex flex-col items-center gap-5">
@@ -21,14 +22,25 @@ export function EmptyState({ runnerLive }: EmptyStateProps) {
 
         <div className="space-y-2">
           <h2 className="text-lg font-bold text-zinc-100 sm:text-xl">
-            لا يوجد طلب حالياً
+            لا يوجد طلب معلّق حالياً
           </h2>
           <p className="mx-auto max-w-md text-sm leading-relaxed text-zinc-400">
-            {runnerLive
-              ? "الخط يعمل… سيظهر طلب جديد تلقائياً فور حاجته إلى قرار بشري."
-              : "شغّل الـ Action حتى يبدأ الخط — استخدم بطاقة التشغيل في الجانب."}
+            {autopilotEnabled
+              ? runnerLive
+                ? "الطيار الآلي يقود الجلسة بنفسه — يراقب الشاشة، يضغط الأزرار، وينتظر التحميلات. ستظهر قراراته في بطاقة الطيار الآلي بالأعلى ولا حاجة لأي تدخل منك."
+                : "شغّل الجلسة من بطاقة التشغيل بالجانب — وبمجرد اتصال الدرايفر سيتولى الطيار الآلي كل شيء تلقائياً."
+              : runnerLive
+                ? "الخط يعمل… سيظهر طلب جديد تلقائياً، والطيار الآلي متوقف حالياً — أعد تشغيله من بطاقة الطيار الآلي أو أجب بنفسك."
+                : "شغّل الـ Action حتى يبدأ الخط — استخدم بطاقة التشغيل في الجانب."}
           </p>
         </div>
+
+        {autopilotEnabled && (
+          <div className="flex items-center gap-2 rounded-full border border-amber-400/25 bg-amber-400/[0.07] px-4 py-1.5 text-[11px] text-amber-200">
+            <Bot className="size-4 animate-pulse" aria-hidden="true" />
+            القيادة الآلية الكاملة نشطة — glm-4.6v يرى الشاشة ويقرر
+          </div>
+        )}
 
         <div className="w-full max-w-sm space-y-2" aria-hidden="true">
           <div className="h-1.5 animate-pulse rounded-full bg-gradient-to-l from-amber-400/40 via-amber-400/10 to-transparent" />

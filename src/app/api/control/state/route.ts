@@ -2,12 +2,14 @@
 import { db } from '@/lib/db';
 import { CONTROL_TOKEN, taskDTO } from '@/lib/control';
 import { recordOrigin } from '@/lib/live-store';
+import { ensureAutopilot, autopilotDTO } from '@/lib/autopilot';
 import type { SignalDTO, SignalType, StateDTO } from '@/lib/control-types';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   recordOrigin(req);
+  ensureAutopilot(); // تشغيل الطيار الآلي عند أول زيارة إن لم يكن حياً
   try {
     const [hb, pending, answered, applied, cancelled, failed, total, signals] =
       await Promise.all([
@@ -60,6 +62,7 @@ export async function GET(req: Request) {
       queue: pendings.slice(1).map(taskDTO),
       recent: recent.map(taskDTO),
       signals: signalDTOs,
+      autopilot: autopilotDTO(),
     };
 
     return Response.json(state, {

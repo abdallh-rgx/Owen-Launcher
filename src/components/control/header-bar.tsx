@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Bell,
   BellOff,
+  Bot,
   Clock3,
   Inbox,
   Radar,
@@ -22,6 +23,8 @@ interface HeaderBarProps {
   onToggleMute: () => void;
   /** live screen stream freshness (null = never received a frame) */
   liveAgeMs: number | null;
+  /** autopilot status pill (null = غير معروف بعد) */
+  autopilotEnabled: boolean | null;
 }
 
 export function HeaderBar({
@@ -31,6 +34,7 @@ export function HeaderBar({
   muted,
   onToggleMute,
   liveAgeMs,
+  autopilotEnabled,
 }: HeaderBarProps) {
   // Null until mount so SSR HTML and first client render match.
   const [now, setNow] = useState<Date | null>(null);
@@ -65,6 +69,31 @@ export function HeaderBar({
 
         {/* الحالات — الجهة اليسرى */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {autopilotEnabled !== null && (
+            <span
+              role="status"
+              title={
+                autopilotEnabled
+                  ? "الطيار الآلي يجيب على الطلبات بنفسه — glm-4.6v"
+                  : "الطيار الآلي متوقف — الرد اليدوي مطلوب"
+              }
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                autopilotEnabled
+                  ? "border-amber-400/40 bg-amber-400/10 text-amber-300"
+                  : "border-white/10 bg-white/[0.04] text-zinc-500",
+              )}
+            >
+              <Bot
+                className={cn("size-3.5", autopilotEnabled && "animate-pulse")}
+                aria-hidden="true"
+              />
+              <span className="hidden sm:inline">
+                {autopilotEnabled ? "طيار آلي" : "يدوي"}
+              </span>
+            </span>
+          )}
+
           {connError && (
             <span
               role="status"

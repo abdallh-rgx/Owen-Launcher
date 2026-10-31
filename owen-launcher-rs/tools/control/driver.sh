@@ -20,8 +20,12 @@
 #       restart_app   → force-stop + relaunch OwenLauncher
 #       crash_report  → collects a full crash report right now
 #       note          → free text from the operator
-#   • ASK LOOP (v1) — screenshot → PENDING task on the site → the human
-#                    clicks the button → we tap + sleep(wait) → repeat.
+#   • ASK LOOP      — screenshot → PENDING task on the site → the AUTOPILOT
+#                    (glm-4.6v vision) answers with tap coordinates within
+#                    seconds (a human may still answer first) → we tap +
+#                    sleep(wait) → repeat. Evidence (lobby / in-match) is
+#                    captured server-side; download_done / start_sdk / crash
+#                    restart signals are sent automatically by the autopilot.
 #
 # Required env:
 #   CONTROL_URL     e.g. https://<preview-domain>   (no trailing slash)
@@ -434,14 +438,14 @@ while [ $SECONDS -lt $DEADLINE ]; do
   if ! take_shot; then log "screencap failed, retry in 3s"; sleep 3; continue; fi
   cp /tmp/owen-shot.png "$SHOTS_ARCHIVE/step-$(printf '%03d' "$STEP")-$(date +%H%M%S).png"
 
-  local_title="خطوة $STEP — حدّد الزر التالي"
-  local_instr="انقر على مكان الزر المطلوب (على لقطة الطلب هنا أو على البث المباشر)، ثم اكتب وظيفته وحدّد مدة الانتظار واضغط «إرسال». إذا كانت الشاشة مجرّد تحميل، اختر «انتظار فقط» مع المدة المناسبة."
+  local_title="خطوة $STEP — الطيار الآلي سيحدد الزر التالي"
+  local_instr="الطيار الآلي (glm-4.6v) يحلل هذه اللقطة ويجيب تلقائياً خلال ثوانٍ. إن أردت التدخل: انقر على الزر هنا أو على البث المباشر، اكتب وظيفته وحدد مدة الانتظار ثم أرسل — إجابتك تسبق الطيار."
   if [ "$STEP" -eq 1 ]; then
     local_title="خطوة 1 — أول لقطة بعد فتح التطبيق"
-    local_instr="هذه أول لقطة حقيقية من المحاكي بعد تشغيل OwenLauncher. انقر على الزر التالي المطلوب ضغطه (مثلاً زر التحميل/التثبيت)، اكتب وظيفته، وحدّد مدة الانتظار."
+    local_instr="أول لقطة حقيقية من المحاكي بعد تشغيل OwenLauncher. الطيار الآلي سيضغط الزر التالي بنفسه (مثلاً زر التثبيت) — أو انقر أنت إن سبقته."
   fi
   if [ -f /tmp/owen-flag-download-done ]; then
-    local_title="خطوة $STEP (بعد انتهاء التحميل ✅) — حدّد الزر التالي"
+    local_title="خطوة $STEP (بعد انتهاء التحميل ✅) — التقدّم للمرحلة التالية"
     rm -f /tmp/owen-flag-download-done
   fi
 
@@ -460,9 +464,9 @@ while [ $SECONDS -lt $DEADLINE ]; do
   if [ -z "$TASK_ID" ]; then
     log "post_task failed for step $STEP; retry in 6s"; sleep 6; continue
   fi
-  log "step $STEP posted as task $TASK_ID — waiting for the human"
-  PHASE="بانتظار إجابتك على الخطوة $STEP"
-  MESSAGE="الخطوة $STEP معروضة على الموقع — بانتظار تحديدك للزر"
+  log "step $STEP posted as task $TASK_ID — waiting for autopilot (or human)"
+  PHASE="بانتظار جواب الطيار الآلي على الخطوة $STEP"
+  MESSAGE="الخطوة $STEP معروضة — الطيار الآلي (glm-4.6v) يحللها الآن"
   hb_save
 
   ACTION=""; X=""; Y=""; X2=""; Y2=""; WAITMS="0"; DESC=""
