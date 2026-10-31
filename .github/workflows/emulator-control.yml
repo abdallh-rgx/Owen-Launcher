@@ -85,13 +85,21 @@ jobs:
           sudo docker image prune -af >/dev/null 2>&1 || true
           df -h / | tail -1
 
-      - name: Check KVM
+      - name: Check KVM (and make it usable by this user)
         run: |
           if [ ! -e /dev/kvm ]; then
             echo "::error::/dev/kvm missing — this runner cannot hardware-accelerate the emulator."
             exit 1
           fi
           ls -l /dev/kvm
+          # ubuntu-latest أحياناً لا يضع مستخدم runner في مجموعة kvm —
+          # المحاكي عندها يموت فوراً بـ «x86_64 emulation currently requires
+          # hardware acceleration». الحل القياسي في CI:
+          sudo chmod 666 /dev/kvm 2>/dev/null || true
+          # فحص حقيقي (لا يكفي وجود الملف):
+          "$ANDROID_HOME/emulator/emulator" -accel-check || {
+            echo "::error::KVM exists but is not usable (accel-check failed)"; exit 1;
+          }
 
       - name: Install emulator + system image (API ${{ inputs.api_level }})
         run: |
@@ -183,7 +191,7 @@ jobs:
 
           rm -f /tmp/boot-finished
           nohup "$EMU" -avd "$AVD_NAME" \
-            -no-window -no-audio -no-boot-anim -no-snapshot -verbose \
+            -no-window -no-audio -no-boot-anim -no-snapshot -verbose -no-metrics \
             -gpu swiftshader_indirect -camera-back none -camera-front none \
             -memory 4096 -cores 3 \
             > /tmp/emulator.log 2>&1 &
