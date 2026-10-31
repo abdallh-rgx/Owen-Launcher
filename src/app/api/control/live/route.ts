@@ -27,7 +27,17 @@ export async function GET(req: Request) {
       liveStore.frameSeq > frameSince || liveStore.logSeq > logSince;
 
     if (wait && !hasNews()) {
-      await waitForChange(WAIT_MS);
+      // استيقظ فوراً إذا انقطع العميل — تجنّب الكتابة على stream مغلق
+      await Promise.race([
+        waitForChange(WAIT_MS),
+        new Promise<void>((resolve) => {
+          if (req.signal.aborted) return resolve();
+          req.signal.addEventListener('abort', () => resolve(), { once: true });
+        }),
+      ]);
+      if (req.signal.aborted) {
+        return new Response(null, { status: 499 });
+      }
     }
 
     const frame: LiveFrame | null =
